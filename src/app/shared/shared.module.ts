@@ -37,6 +37,8 @@ import {ExpandableButtonComponent} from './components/expandable-button/expandab
     exports: [
         CommonModule,
         CustomMaterialModule,
+        FormsModule,
+        ReactiveFormsModule,
         ChipAutocompleteComponent,
         AutocompleteComponent,
         GetColorOnHoverDirective,

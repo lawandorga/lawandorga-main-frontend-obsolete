@@ -8,10 +8,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 @NgModule({
     imports: [
         FilemanagementRoutingModule,
-        SharedModule,
-        FormsModule,
-        ReactiveFormsModule,
-        CommonModule
+        SharedModule
     ],
     declarations: [
         FilesMainViewComponent,
