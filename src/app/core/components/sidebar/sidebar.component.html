@@ -1,0 +1,39 @@
+<!--
+  ~ rlcapp - record and organization management software for refugee law clinics
+  ~ Copyright (C) 2019  Dominik Walser
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, either version 3 of the
+  ~ License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+<div class="drawer-header">
+    <a (click)='showProfile()'><img src="/assets/img/empty-profile.png" alt="Profile"></a>
+    <span><a routerLink="/profile">{{ name }}</a></span>
+    <span><a routerLink="/profile">{{ email }}</a></span>
+</div>
+<mat-divider></mat-divider>
+<div class="sidebar__nav-holder">
+    <ng-material-multilevel-menu [items]="actualSidebarItems" (selectedItem)="selectedItem($event)"
+                                 (selectedLabel)="selectedLabel($event)" [configuration]="config">
+    </ng-material-multilevel-menu>
+    <div class="sidebar__other-links">
+        <ul>
+            <li class="is_clickable sidebar__other-links__items"
+                [routerLink]="legalNoticeUrl">Impressum
+            </li>
+            <li class="is_clickable sidebar__other-links__items"
+                [routerLink]="privacyStatementUrl">Datenschutzerklärung
+            </li>
+        </ul>
+    </div>
+</div>
