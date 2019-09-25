@@ -10,7 +10,8 @@
         "e2e": "ng e2e",
         "start:dev": "lite-server --baseDir=\"./dist\"",
         "build:dev": "ng build --watch",
-        "deploy": "env-cmd -f ./src/environments/prod.config.env node deploy_script.js"
+        "build:public-dev": "ng build --configuration=development",
+        "deploy:dev": "ng build --configuration=development && env-cmd -f src/environments/dev.config.env node deploy_script.js"
     },
     "private": true,
     "dependencies": {

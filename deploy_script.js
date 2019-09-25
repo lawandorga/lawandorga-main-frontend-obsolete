@@ -82,6 +82,8 @@ const getContentType = filename => {
 			return "image/jpeg";
 		case "svg":
 			return "image/svg+xml";
+		case "css":
+			return "text/css";
 	}
 };
 

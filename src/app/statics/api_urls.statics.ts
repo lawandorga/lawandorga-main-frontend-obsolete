@@ -16,7 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  ******************************************************************************/
 
-export const base = "http://127.0.0.1:8000/"
+
+import {environment} from "../../environments/environment";
+
+export const base = environment.apiUrl;
 export const LOGIN_API_URL = base + "api/login/";
 export const RECORDS_API_URL = base + "api/records/records/";
 export const CLIENTS_BY_BIRTHDAY_API_URL = base + "api/records/clients_by_birthday/";
