@@ -33,14 +33,14 @@ const deleteAllExistingFilesInAwsBucket = async () => {
 	console.log('files deleted');
 };
 
-const uploadFolderToBucket = async (folderToUpload, base_folder) => {
-	const files = await fs.readdir(folderToUpload);
+const uploadFolderToBucket = async (folder_to_upload, base_folder) => {
+	const files = await fs.readdir(folder_to_upload);
 	for (const file of files) {
-		const stat = await fs.lstat(path.join(folderToUpload, file));
+		const stat = await fs.lstat(path.join(folder_to_upload, file));
 		if (stat.isFile()) {
-			await uploadFileToBucket(file, folderToUpload, base_folder);
+			await uploadFileToBucket(file, folder_to_upload, base_folder);
 		} else if (stat.isDirectory()) {
-			await uploadFolderToBucket(path.join(folderToUpload, file), base_folder);
+			await uploadFolderToBucket(path.join(folder_to_upload, file), base_folder);
 		}
 	}
 };
