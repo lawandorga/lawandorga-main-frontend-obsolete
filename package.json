@@ -11,7 +11,8 @@
         "start:dev": "lite-server --baseDir=\"./dist\"",
         "build:dev": "ng build --watch",
         "build:public-dev": "ng build --configuration=development",
-        "deploy:dev": "ng build --configuration=development && env-cmd -f src/environments/dev.config.env node deploy_script.js"
+        "deploy:dev": "ng build --configuration=development && env-cmd -f src/environments/dev.config.env node deploy_script.js",
+        "deploy:prod": "ng build --configuration=production && env-cmd -f src/environments/prod.config.env node deploy_script.js"
     },
     "private": true,
     "dependencies": {

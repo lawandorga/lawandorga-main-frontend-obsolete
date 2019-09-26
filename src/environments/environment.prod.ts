@@ -18,5 +18,5 @@
 
 export const environment = {
     production: true,
-    apiUrl: "asd"
+    apiUrl: "https://rlc-intranet.herokuapp.com/"
 };
