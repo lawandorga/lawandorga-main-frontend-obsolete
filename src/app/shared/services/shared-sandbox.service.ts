@@ -16,29 +16,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  ******************************************************************************/
 
-import { Component, OnInit } from "@angular/core";
+import {Injectable} from "@angular/core";
 import {MatDialog} from "@angular/material/dialog";
-import {EditTextComponent} from "../../../shared/components/edit-text/edit-text.component";
-import {SharedSandboxService} from "../../../shared/services/shared-sandbox.service";
+import {EditTextComponent} from "../components/edit-text/edit-text.component";
 
-export interface Section {
-    id: string;
-    type: string;
-    status: string;
-}
+@Injectable()
+export class SharedSandboxService {
+    constructor(public dialog: MatDialog) {
 
-@Component({
-    selector: "app-dashboard",
-    templateUrl: "./dashboard.component.html",
-    styleUrls: ["./dashboard.component.scss"]
-})
-export class DashboardComponent {
-    constructor(public dialog: MatDialog, private sharedSB: SharedSandboxService) {
     }
 
-    onDialogClick(){
-        this.sharedSB.openEditTextDialog('curVal', 'new token', (result) => {
-            console.log('in component value', result);
+    openEditTextDialog(currentValue: string, description: string, callback, short: boolean = false) {
+        const dialogRef = this.dialog.open(EditTextComponent, {
+            data: {currentValue: 'currentValue', short: false, description: 'record token'}
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            callback(result);
         });
     }
 }

@@ -79,7 +79,7 @@ mat-icon{
     flex-direction: column;
     justify-content: space-between;
     height: calc(100% - 155px);
-    overflow: scroll;
+    overflow: auto;
 }
 
 .sidebar__other-links {
