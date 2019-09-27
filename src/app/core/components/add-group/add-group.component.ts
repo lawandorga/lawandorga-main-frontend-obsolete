@@ -17,7 +17,7 @@
  ******************************************************************************/
 
 import { Component, OnInit } from "@angular/core";
-import { MatDialogRef } from "@angular/material";
+import { MatDialogRef } from "@angular/material/dialog";
 import { CoreSandboxService } from "../../services/core-sandbox.service";
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 

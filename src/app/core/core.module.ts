@@ -17,7 +17,8 @@
  ******************************************************************************/
 
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { MatProgressSpinnerModule, MatTabsModule } from "@angular/material";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatTabsModule } from "@angular/material/tabs";
 import { StoreModule } from "@ngrx/store";
 import { EffectsModule } from "@ngrx/effects";
 import { NgModule } from "@angular/core";

@@ -19,7 +19,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FullGroup } from "../../models/group.model";
 import { CoreSandboxService } from "../../services/core-sandbox.service";
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { AddGroupMemberComponent } from "../add-group-member/add-group-member.component";
 import { PERMISSION_CAN_MANAGE_PERMISSIONS_RLC } from "../../../statics/permissions.statics";
 import { RestrictedRlc } from "../../models/rlc.model";

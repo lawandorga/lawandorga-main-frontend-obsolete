@@ -19,7 +19,8 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { SidebarComponent } from "./sidebar.component";
-import { MatDivider, MatIcon } from "@angular/material";
+import { MatDivider } from "@angular/material/divider";
+import { MatIcon } from "@angular/material/icon";
 import { RouterTestingModule } from "@angular/router/testing";
 import { AppSandboxService } from "../../services/app-sandbox.service";
 import { CoreSandboxService } from "../../services/core-sandbox.service";

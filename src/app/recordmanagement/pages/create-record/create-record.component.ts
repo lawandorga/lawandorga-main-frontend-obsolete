@@ -19,7 +19,9 @@
 import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { RecordsSandboxService } from "../../services/records-sandbox.service";
-import {DateAdapter, MatDatepickerInputEvent, MatDialog} from '@angular/material';
+import { DateAdapter } from '@angular/material/core';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatDialog } from '@angular/material/dialog';
 import { SelectClientDialogComponent } from "../../components/select-client-dialog/select-client-dialog.component";
 import { FullClient } from "../../models/client.model";
 import { OriginCountry } from "../../models/country.model";

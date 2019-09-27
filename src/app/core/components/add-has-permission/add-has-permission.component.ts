@@ -17,7 +17,7 @@
  ******************************************************************************/
 
 import {Component, Inject, Input, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CoreSandboxService } from "../../services/core-sandbox.service";
 import { RestrictedUser } from "../../models/user.model";
 import { RestrictedGroup } from "../../models/group.model";

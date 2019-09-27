@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  ******************************************************************************/
 
-import { ErrorStateMatcher } from "@angular/material";
+import { ErrorStateMatcher } from "@angular/material/core";
 import { FormControl, FormGroupDirective, NgForm } from "@angular/forms";
 
 export class CustomErrorStateMatcher implements ErrorStateMatcher {

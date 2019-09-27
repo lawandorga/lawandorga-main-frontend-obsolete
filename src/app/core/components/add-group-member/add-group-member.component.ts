@@ -17,7 +17,7 @@
  ******************************************************************************/
 
 import { Component, OnInit } from "@angular/core";
-import { MatDialogRef } from "@angular/material";
+import { MatDialogRef } from "@angular/material/dialog";
 import { CoreSandboxService } from "../../services/core-sandbox.service";
 import { FullGroup } from "../../models/group.model";
 import { RestrictedUser } from "../../models/user.model";

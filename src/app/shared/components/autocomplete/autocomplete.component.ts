@@ -29,7 +29,7 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { Filterable } from "../../models/filterable.model";
 import { Observable } from "rxjs";
 import { map, startWith } from "rxjs/operators";
-import {MatAutocompleteTrigger} from '@angular/material';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
 @Component({
     selector: "app-autocomplete",
