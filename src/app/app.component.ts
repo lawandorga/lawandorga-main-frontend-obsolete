@@ -33,7 +33,7 @@ import {LEGAL_NOTICE_FRONT_URL, MAIN_PAGE_FRONT_URL, PRIVACY_STATEMENT_FRONT_URL
     styleUrls: ["./app.component.scss"]
 })
 export class AppComponent implements OnDestroy{
-    @ViewChild('snav')
+    @ViewChild('snav', {static: true})
     snav;
 
     title = "rlcapp";

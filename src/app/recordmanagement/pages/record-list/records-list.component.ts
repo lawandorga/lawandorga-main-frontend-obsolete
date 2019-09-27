@@ -45,7 +45,7 @@ export class RecordsListComponent implements OnInit {
     timer = null;
 
     dataSource;
-    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatSort, {static: true}) sort: MatSort;
 
     constructor(
         private recordsSandbox: RecordsSandboxService,

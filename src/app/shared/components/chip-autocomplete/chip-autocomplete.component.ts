@@ -61,9 +61,9 @@ export class ChipAutocompleteComponent implements OnInit, OnChanges {
     @Input()
     placeholder: string;
 
-    @ViewChild("valueInput")
+    @ViewChild("valueInput", {static: true})
     valueInput: ElementRef<HTMLInputElement>;
-    @ViewChild("auto")
+    @ViewChild("auto", {static: true})
     matAutocomplete: MatAutocomplete;
 
     valuesForm: FormGroup;
