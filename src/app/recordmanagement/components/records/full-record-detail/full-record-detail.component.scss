@@ -30,7 +30,7 @@
 }
 
 .full-record-detail__button {
-    margin: 10px;
+    margin: 3px;
 }
 
 .full-record-detail__card {
@@ -44,7 +44,7 @@
     background-color: $c-real-background;
     max-width: 850px;
     z-index: 1;
-
+    padding: 0;
     position: sticky;
     position: -webkit-sticky; /* For macOS/iOS Safari */
     top: 0; /* Sets the sticky toolbar to be on top */

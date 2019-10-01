@@ -17,7 +17,7 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <form [formGroup]="recordEditForm" class="full-record-detail__big-form">
     <mat-toolbar class="full-record-detail__header">
-        <h1>Record: {{ record.token }}</h1>
+        <h1>{{ record.token }}</h1>
         <div>
             <button mat-flat-button color="warn" aria-label="Back" (click)="onBackClick()" type="button"
                     class="full-record-detail__button">
@@ -26,6 +26,14 @@
             <button mat-flat-button matSuffix color="primary" aria-label="Search" type="submit"
                     class="full-record-detail__button" (click)="onSaveClick()">
                 Save
+            </button>
+            <mat-menu #appMenu="matMenu">
+                <button mat-menu-item class="button-normal" (click)="onChangeRecordTokenClick()">change record token</button>
+                <button mat-menu-item class="button-normal">request deletion</button>
+            </mat-menu>
+
+            <button mat-icon-button [matMenuTriggerFor]="appMenu">
+                <mat-icon>more_vert</mat-icon>
             </button>
         </div>
     </mat-toolbar>

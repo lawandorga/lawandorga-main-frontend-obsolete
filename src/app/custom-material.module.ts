@@ -47,6 +47,7 @@ import { MatListModule } from "@angular/material/list";
 import { MatIconModule } from "@angular/material/icon";
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
+import {MatMenuModule} from "@angular/material/menu";
 
 @NgModule({
     imports: [
@@ -73,7 +74,8 @@ import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-mome
         MatTableModule,
         MatSortModule,
         MatToolbarModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatMenuModule
     ],
     exports: [
         MatButtonModule,
@@ -98,7 +100,8 @@ import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-mome
         MatTableModule,
         MatSortModule,
         MatToolbarModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatMenuModule
     ],
     declarations: [],
     providers: [
