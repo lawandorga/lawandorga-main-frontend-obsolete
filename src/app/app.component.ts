@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  ******************************************************************************/
 
-import { Component, ViewChild } from "@angular/core";
+import {Component, OnInit, ViewChild} from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { AuthState } from "./core/store/auth/auth.reducers";
 import { Observable } from "rxjs";
@@ -26,13 +26,14 @@ import { AppSandboxService } from "./core/services/app-sandbox.service";
 import {MediaMatcher} from '@angular/cdk/layout';
 import {ChangeDetectorRef, OnDestroy} from '@angular/core';
 import {LEGAL_NOTICE_FRONT_URL, MAIN_PAGE_FRONT_URL, PRIVACY_STATEMENT_FRONT_URL} from './statics/frontend_links.statics';
+import {environment} from "../environments/environment";
 
 @Component({
     selector: "app-root",
     templateUrl: "./app.component.html",
     styleUrls: ["./app.component.scss"]
 })
-export class AppComponent implements OnDestroy{
+export class AppComponent implements OnDestroy, OnInit{
     @ViewChild('snav')
     snav;
 
@@ -58,6 +59,14 @@ export class AppComponent implements OnDestroy{
         this.mobileQuery = media.matchMedia('(max-width: 600px)');
         this._mobileQueryListener = () => changeDetectorRef.detectChanges();
         this.mobileQuery.addListener(this._mobileQueryListener);
+    }
+    
+    ngOnInit(): void {
+        if (environment.production) {
+            if (location.protocol === 'http:') {
+                window.location.href = location.href.replace('http', 'https');
+            }
+        }
     }
 
     ngOnDestroy(): void {
