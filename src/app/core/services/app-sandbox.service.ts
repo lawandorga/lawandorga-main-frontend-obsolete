@@ -54,7 +54,7 @@ export class AppSandboxService {
     }
 
     logout() {
-        localStorage.clear();
+        this.resetToken();
         this.store.dispatch(new StartLoggingOut());
         this.router.navigate([LOGIN_FRONT_URL]);
     }
@@ -65,7 +65,7 @@ export class AppSandboxService {
     }
 
     startApp(): Observable<AuthState> {
-        const token = localStorage.getItem("token");
+        const token = this.loadToken();
         if (token !== null) {
             this.store.dispatch(new SetToken(token));
             this.store.dispatch(new ReloadStaticInformation());
@@ -88,5 +88,15 @@ export class AppSandboxService {
         this.store.dispatch(new ResetPassword({new_password, link_id}));
     }
 
+    saveToken(token: string): void {
+        localStorage.setItem("token", token);
+    }
 
+    loadToken(): string {
+        return localStorage.getItem("token");
+    }
+
+    resetToken(): void {
+        localStorage.clear();
+    }
 }
