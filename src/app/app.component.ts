@@ -60,7 +60,7 @@ export class AppComponent implements OnDestroy, OnInit{
         this._mobileQueryListener = () => changeDetectorRef.detectChanges();
         this.mobileQuery.addListener(this._mobileQueryListener);
     }
-    
+
     ngOnInit(): void {
         if (environment.production) {
             if (location.protocol === 'http:') {

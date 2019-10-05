@@ -41,6 +41,7 @@ import { StorageService } from "./shared/services/storage.service";
 import { SnackbarService } from "./shared/services/snackbar.service";
 import {FilesSandboxService} from './filemanagement/services/files-sandbox.service';
 import {SharedSandboxService} from "./shared/services/shared-sandbox.service";
+import {CookieService} from "ngx-cookie-service";
 
 const reduxMiddleware = LogRocket.reduxMiddleware();
 
@@ -81,6 +82,7 @@ export function logrocketMiddleware(reducer): ActionReducer<any, any> {
         StorageService,
         SnackbarService,
         SharedSandboxService,
+        CookieService,
         { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
     ],
     bootstrap: [AppComponent]
