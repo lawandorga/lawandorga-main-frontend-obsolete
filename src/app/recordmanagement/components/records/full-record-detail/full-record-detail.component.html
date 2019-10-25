@@ -27,14 +27,14 @@
                     class="full-record-detail__button" (click)="onSaveClick()">
                 Save
             </button>
-            <mat-menu #appMenu="matMenu">
-                <button mat-menu-item class="button-normal" (click)="onChangeRecordTokenClick()">change record token</button>
-                <button mat-menu-item class="button-normal">request deletion</button>
-            </mat-menu>
+<!--            <mat-menu #appMenu="matMenu">-->
+<!--                <button mat-menu-item class="button-normal" (click)="onChangeRecordTokenClick()">change record token</button>-->
+<!--                <button mat-menu-item class="button-normal" (click)="onRequestRecordDeletionClick()">request deletion</button>-->
+<!--            </mat-menu>-->
 
-            <button mat-icon-button [matMenuTriggerFor]="appMenu">
-                <mat-icon>more_vert</mat-icon>
-            </button>
+<!--            <button mat-icon-button [matMenuTriggerFor]="appMenu">-->
+<!--                <mat-icon>more_vert</mat-icon>-->
+<!--            </button>-->
         </div>
     </mat-toolbar>
     <div class="full-record-detail__sub-header">
@@ -109,10 +109,13 @@
         </mat-expansion-panel-header>
 
         <div class="full-record-detail__form">
-            <mat-form-field>
+            <mat-form-field appearance="outline" color="warn">
+                <mat-label>Official Note</mat-label>
                 <textarea matInput type="text" placeholder="official note" formControlName="official_note"
                           appAutoExpand></textarea>
             </mat-form-field>
+
+
             <mat-form-field>
                 <textarea matInput type="text" placeholder="note" formControlName="note" appAutoExpand></textarea>
             </mat-form-field>

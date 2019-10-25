@@ -17,7 +17,7 @@ export class EditTextComponent implements OnInit {
             this.text = data.currentValue;
         }
 
-        if (data.description){
+        if (data.description) {
             this.description = data.description;
         }
 

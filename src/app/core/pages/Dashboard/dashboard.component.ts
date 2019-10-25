@@ -37,8 +37,16 @@ export class DashboardComponent {
     }
 
     onDialogClick(){
-        this.sharedSB.openEditTextDialog('curVal', 'new token', (result) => {
-            console.log('in component value', result);
-        });
+        // this.sharedSB.openEditTextDialog('curVal', 'new token', (result) => {
+        //     console.log('in component value', result);
+        // });
+        this.sharedSB.openConfirmDialog({
+            // description: 'the description',
+            // confirmText: 'confirm',
+            // cancelText: 'cancel',
+            // title: 'please confirm'
+        }, (result) => {
+            console.log('result of confirm', result);
+        })
     }
 }

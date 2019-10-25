@@ -173,6 +173,7 @@ export class SidebarComponent implements OnInit {
         private appSB: AppSandboxService,
         private coreSB: CoreSandboxService
     ) {
+        this.actualSidebarItems = this.sidebarItemsOrg;
     }
 
     ngOnInit() {
@@ -278,7 +279,6 @@ export class SidebarComponent implements OnInit {
                 ACCEPT_NEW_USER_REQUESTS_FRONT_URL,
                 newSidebarItems
             ).newItems;
-
         this.actualSidebarItems = newSidebarItems;
     }
 

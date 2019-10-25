@@ -259,4 +259,9 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
             console.log('new record token should be', newToken);
         }, true)
     }
+
+    onRequestRecordDeletionClick(){
+
+    }
 }
+ 

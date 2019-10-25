@@ -26,6 +26,7 @@ import {GetColorOnHoverDirective} from './directives/get-color-on-hover.directiv
 import {AutoExpandDirective} from './directives/auto-expand.directive';
 import {ExpandableButtonComponent} from './components/expandable-button/expandable-button.component';
 import {EditTextComponent} from './components/edit-text/edit-text.component';
+import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
     imports: [
@@ -34,7 +35,7 @@ import {EditTextComponent} from './components/edit-text/edit-text.component';
         FormsModule,
         ReactiveFormsModule,
     ],
-    declarations: [ChipAutocompleteComponent, AutocompleteComponent, GetColorOnHoverDirective, AutoExpandDirective, ExpandableButtonComponent, EditTextComponent],
+    declarations: [ChipAutocompleteComponent, AutocompleteComponent, GetColorOnHoverDirective, AutoExpandDirective, ExpandableButtonComponent, EditTextComponent, ConfirmationDialogComponent],
     exports: [
         CommonModule,
         CustomMaterialModule,
@@ -46,10 +47,12 @@ import {EditTextComponent} from './components/edit-text/edit-text.component';
         AutoExpandDirective,
         ExpandableButtonComponent,
         ReactiveFormsModule,
-        EditTextComponent
+        EditTextComponent,
+        ConfirmationDialogComponent
     ],
     entryComponents: [
-        EditTextComponent
+        EditTextComponent,
+        ConfirmationDialogComponent
     ]
 })
 export class SharedModule {

@@ -59,10 +59,11 @@ export class AppComponent implements OnDestroy, OnInit{
         this.mobileQuery = media.matchMedia('(max-width: 600px)');
         this._mobileQueryListener = () => changeDetectorRef.detectChanges();
         this.mobileQuery.addListener(this._mobileQueryListener);
+        console.log('v1');
     }
 
     ngOnInit(): void {
-        if (environment.production) {
+        if (environment.onProdServer) {
             if (location.protocol === 'http:') {
                 window.location.href = location.href.replace('http', 'https');
             }
