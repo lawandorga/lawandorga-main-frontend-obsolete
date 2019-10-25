@@ -254,10 +254,14 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
     }
 
     onChangeRecordTokenClick() {
-        console.log('token', this.record.token);
-        this.sharedSB.openEditTextDialog(this.record.token, 'new record token', (newToken: string) => {
+        this.sharedSB.openEditTextDialog({
+            short: true,
+            descriptionLabel: 'record token',
+            text: this.record.token,
+            descriptionText: 'please enter new record token'
+        }, (newToken: string) => {
             console.log('new record token should be', newToken);
-        }, true)
+        })
     }
 
     onRequestRecordDeletionClick(){

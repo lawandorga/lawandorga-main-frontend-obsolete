@@ -9,8 +9,8 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 export class ConfirmationDialogComponent implements OnInit {
     title: string;
     description: string;
-    cancelText: string;
-    confirmText: string;
+    cancelLabel: string;
+    confirmLabel: string;
 
     constructor(
         public dialogRef: MatDialogRef<ConfirmationDialogComponent>,
@@ -20,8 +20,8 @@ export class ConfirmationDialogComponent implements OnInit {
         if (data.description) {
             this.description = data.description;
         }
-        this.confirmText = data.confirmText ? data.confirmText : "yes";
-        this.cancelText = data.cancelText ? data.cancelText : 'no';
+        this.confirmLabel = data.confirmLabel ? data.confirmLabel : "yes";
+        this.cancelLabel = data.cancelLabel ? data.cancelLabel : 'no';
     }
 
     ngOnInit() {

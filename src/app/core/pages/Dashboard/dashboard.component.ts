@@ -42,8 +42,8 @@ export class DashboardComponent {
         // });
         this.sharedSB.openConfirmDialog({
             // description: 'the description',
-            // confirmText: 'confirm',
-            // cancelText: 'cancel',
+            // confirmLabel: 'confirm',
+            // cancelLabel: 'cancel',
             // title: 'please confirm'
         }, (result) => {
             console.log('result of confirm', result);

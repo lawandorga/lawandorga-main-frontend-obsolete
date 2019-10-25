@@ -16,14 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  ******************************************************************************/
 
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {ShowGroupComponent} from './show-group.component';
-import {GroupDetailsComponent} from '../group-details/group-details.component';
-import {SharedModule} from '../../../shared/shared.module';
-import {CoreSandboxService} from '../../services/core-sandbox.service';
-import {RouterTestingModule} from '@angular/router/testing';
-import {SnackbarService} from '../../../shared/services/snackbar.service';
+import { ShowGroupComponent } from './show-group.component';
+import { GroupDetailsComponent } from '../group-details/group-details.component';
+import { SharedModule } from '../../../shared/shared.module';
+import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { RouterTestingModule } from '@angular/router/testing';
+import { SnackbarService } from '../../../shared/services/snackbar.service';
 
 describe('ShowGroupComponent', () => {
     let component: ShowGroupComponent;
@@ -33,9 +33,8 @@ describe('ShowGroupComponent', () => {
         TestBed.configureTestingModule({
             imports: [SharedModule, RouterTestingModule],
             declarations: [ShowGroupComponent, GroupDetailsComponent],
-            providers: [CoreSandboxService, SnackbarService],
-        })
-            .compileComponents();
+            providers: [CoreSandboxService, SnackbarService]
+        }).compileComponents();
     }));
 
     beforeEach(() => {

@@ -27,9 +27,9 @@ export class SharedSandboxService {
 
     }
 
-    openEditTextDialog(currentValue: string, description: string, callback, short: boolean = false) {
+    openEditTextDialog(data: EditTextParamsInterface, callback) {
         const dialogRef = this.dialog.open(EditTextComponent, {
-            data: {currentValue, short, description}
+            data
         });
 
         dialogRef.afterClosed().subscribe(result => {

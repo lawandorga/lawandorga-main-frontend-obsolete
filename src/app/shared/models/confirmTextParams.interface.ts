@@ -1,6 +1,6 @@
-interface ConfirmTextParamsInterface{
-    confirmText?: string,
-    cancelText?: string,
-    description?: string,
-    title?: string,
+interface ConfirmTextParamsInterface {
+    confirmLabel?: string;
+    cancelLabel?: string;
+    description?: string;
+    title?: string;
 }
