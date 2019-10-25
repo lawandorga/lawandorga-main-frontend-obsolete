@@ -1,0 +1,14 @@
+<div class="edit-text__dialog">
+    <div class="edit-text__flex-items-small">
+
+        <h1>Edit {{description}}</h1>
+    </div>
+    <mat-form-field class="edit-text__flex-items-big">
+        <textarea appAutoExpand *ngIf="!shortText" matInput placeholder="{{description}}" [(ngModel)]="text"></textarea>
+        <input *ngIf="shortText" matInput placeholder="{{description}}" [(ngModel)]="text">
+    </mat-form-field>
+    <div class="edit-text__flex-items-small edit-text__button-container">
+        <button mat-flat-button color="primary" (click)="onSave()" class="edit-text__buttons">save</button>
+        <button mat-flat-button color="warn" (click)="onClose()" class="edit-text__buttons">cancel</button>
+    </div>
+</div>

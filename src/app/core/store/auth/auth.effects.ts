@@ -103,7 +103,7 @@ export class AuthEffects {
                             user_states: any;
                             user_record_states;
                         }) => {
-                            localStorage.setItem("token", response.token);
+                            this.appSB.saveToken(response.token);
                             if (this.guard.lastVisitedUrl)
                                 this.router.navigate([
                                     this.guard.getLastVisitedUrl()

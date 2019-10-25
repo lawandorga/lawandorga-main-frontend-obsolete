@@ -123,7 +123,7 @@ export class HasPermissionsListComponent implements OnInit, OnChanges {
     }
 
     animationStarted($event) {
-        console.log("started", $event);
+        // console.log("started", $event);
     }
 
     onMouseEnter(id: number): void {

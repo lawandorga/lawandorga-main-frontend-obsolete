@@ -16,22 +16,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  ******************************************************************************/
 
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Observable } from "rxjs";
+import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Observable} from "rxjs";
 
-import { FullRecord } from "../../../models/record.model";
-import { RecordsSandboxService } from "../../../services/records-sandbox.service";
-import { FullClient } from "../../../models/client.model";
-import { OriginCountry } from "../../../models/country.model";
-import { FormControl, FormGroup } from "@angular/forms";
-import { RecordDocument } from "../../../models/record_document.model";
-import { RecordMessage } from "../../../models/record_message.model";
-import { Tag } from "../../../models/tag.model";
-import { State } from "../../../../core/models/state.model";
-import { CoreSandboxService } from "../../../../core/services/core-sandbox.service";
-import { dateInPastValidator } from "../../../../statics/validators.statics";
-import { alphabeticalSorterByField } from "../../../../shared/other/sorter-helper";
-import { tap } from "rxjs/internal/operators/tap";
+import {FullRecord} from "../../../models/record.model";
+import {RecordsSandboxService} from "../../../services/records-sandbox.service";
+import {FullClient} from "../../../models/client.model";
+import {OriginCountry} from "../../../models/country.model";
+import {FormControl, FormGroup} from "@angular/forms";
+import {RecordDocument} from "../../../models/record_document.model";
+import {RecordMessage} from "../../../models/record_message.model";
+import {Tag} from "../../../models/tag.model";
+import {State} from "../../../../core/models/state.model";
+import {CoreSandboxService} from "../../../../core/services/core-sandbox.service";
+import {dateInPastValidator} from "../../../../statics/validators.statics";
+import {alphabeticalSorterByField} from "../../../../shared/other/sorter-helper";
+import {tap} from "rxjs/internal/operators/tap";
+import {SharedSandboxService} from "../../../../shared/services/shared-sandbox.service";
 
 @Component({
     selector: "app-full-record-detail",
@@ -57,7 +58,7 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
 
     recordEditForm: FormGroup;
 
-    constructor(private recordSB: RecordsSandboxService) {
+    constructor(private recordSB: RecordsSandboxService, private sharedSB: SharedSandboxService) {
         this.recordEditForm = new FormGroup({
             client_name: new FormControl(""),
             client_birthday: new FormControl("", [dateInPastValidator]),
@@ -182,7 +183,7 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
         this.record.note = this.recordEditForm.value["note"];
         this.record.related_persons = this.recordEditForm.value[
             "related_persons"
-        ];
+            ];
         this.record.contact = this.recordEditForm.value["contact"];
         this.record.last_contact_date = CoreSandboxService.transformDate(
             this.recordEditForm.value["last_contact_date"]
@@ -192,22 +193,22 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
         this.record.foreign_token = this.recordEditForm.value["foreign_token"];
         this.record.additional_facts = this.recordEditForm.value[
             "additional_facts"
-        ];
+            ];
         this.record.first_correspondence = this.recordEditForm.value[
             "first_correspondence"
-        ];
+            ];
         this.record.circumstances = this.recordEditForm.value["circumstances"];
         this.record.lawyer = this.recordEditForm.value["lawyer"];
         this.record.related_persons = this.recordEditForm.value[
             "related_persons"
-        ];
+            ];
         this.record.consultant_team = this.recordEditForm.value[
             "consultant_team"
-        ];
+            ];
         this.record.next_steps = this.recordEditForm.value["next_steps"];
         this.record.status_described = this.recordEditForm.value[
             "status_described"
-        ];
+            ];
 
         this.client.note = this.recordEditForm.value["client_note"];
         this.client.name = this.recordEditForm.value["client_name"];
@@ -232,7 +233,7 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
     onSelectedRecordTagsChanged(newTags: Tag[]): void {
         this.record.tags = newTags;
         if (newTags.length === 0) {
-            this.recordTagErrors = { null: "true" };
+            this.recordTagErrors = {null: "true"};
         } else {
             this.recordTagErrors = null;
         }
@@ -251,4 +252,16 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
         event.stopPropagation();
         this.recordSB.downloadAllRecordDocuments();
     }
+
+    onChangeRecordTokenClick() {
+        console.log('token', this.record.token);
+        this.sharedSB.openEditTextDialog(this.record.token, 'new record token', (newToken: string) => {
+            console.log('new record token should be', newToken);
+        }, true)
+    }
+
+    onRequestRecordDeletionClick(){
+
+    }
 }
+ 

@@ -32,6 +32,7 @@ import { RecordsSandboxService } from "../../recordmanagement/services/records-s
 import {Observable} from 'rxjs';
 import {AuthState} from '../store/auth/auth.reducers';
 import {LOGIN_FRONT_URL} from '../../statics/frontend_links.statics';
+import {CookieService} from "ngx-cookie-service";
 
 @Injectable()
 export class AppSandboxService {
@@ -39,7 +40,8 @@ export class AppSandboxService {
 
     constructor(
         private store: Store<AppState>,
-        private router: Router
+        private router: Router,
+        private cookieService: CookieService
     ) {}
 
     isAuthenticated(): boolean {
@@ -54,7 +56,7 @@ export class AppSandboxService {
     }
 
     logout() {
-        localStorage.clear();
+        this.resetToken();
         this.store.dispatch(new StartLoggingOut());
         this.router.navigate([LOGIN_FRONT_URL]);
     }
@@ -65,8 +67,8 @@ export class AppSandboxService {
     }
 
     startApp(): Observable<AuthState> {
-        const token = localStorage.getItem("token");
-        if (token !== null) {
+        const token = this.loadToken();
+        if (token !== null && token !== '') {
             this.store.dispatch(new SetToken(token));
             this.store.dispatch(new ReloadStaticInformation());
         }
@@ -88,5 +90,15 @@ export class AppSandboxService {
         this.store.dispatch(new ResetPassword({new_password, link_id}));
     }
 
+    saveToken(token: string): void {
+        this.cookieService.set('token', token);
+    }
 
+    loadToken(): string {
+        return this.cookieService.get('token');
+    }
+
+    resetToken(): void {
+        this.cookieService.delete('token');
+    }
 }

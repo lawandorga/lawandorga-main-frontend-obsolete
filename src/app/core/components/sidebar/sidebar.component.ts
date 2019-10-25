@@ -16,11 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  ******************************************************************************/
 
-import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
-import { AppSandboxService } from "../../services/app-sandbox.service";
-import { FullUser } from "../../models/user.model";
-import { CoreSandboxService } from "../../services/core-sandbox.service";
+import {Component, OnInit} from "@angular/core";
+import {Router} from "@angular/router";
+import {AppSandboxService} from "../../services/app-sandbox.service";
+import {FullUser} from "../../models/user.model";
+import {CoreSandboxService} from "../../services/core-sandbox.service";
 import {
     PERMISSION_ACCEPT_NEW_USERS_RLC,
     PERMISSION_ACTIVATE_INACTIVE_USERS,
@@ -35,7 +35,8 @@ import {
     INACTIVE_USERS_FRONT_URL,
     LEGAL_NOTICE_FRONT_URL,
     OWN_PROFILE_FRONT_URL,
-    PERMISSIONS_FRONT_URL, PRIVACY_STATEMENT_FRONT_URL,
+    PERMISSIONS_FRONT_URL,
+    PRIVACY_STATEMENT_FRONT_URL,
     PROFILES_FRONT_URL,
     RECORDS_ADD_FRONT_URL,
     RECORDS_FRONT_URL,
@@ -171,13 +172,15 @@ export class SidebarComponent implements OnInit {
         private router: Router,
         private appSB: AppSandboxService,
         private coreSB: CoreSandboxService
-    ) {}
+    ) {
+        this.actualSidebarItems = this.sidebarItemsOrg;
+    }
 
     ngOnInit() {
         this.coreSB.hasPermissionFromStringForOwnRlc(
             PERMISSION_CAN_VIEW_RECORDS,
             hasPermission => {
-                if (this.show_tab_permissions.records !== hasPermission){
+                if (this.show_tab_permissions.records !== hasPermission) {
                     this.show_tab_permissions.records = hasPermission;
                     this.recheckSidebarItems();
                 }
@@ -187,7 +190,7 @@ export class SidebarComponent implements OnInit {
         this.coreSB.hasPermissionFromStringForOwnRlc(
             PERMISSION_CAN_ADD_RECORD_RLC,
             hasPermission => {
-                if (this.show_tab_permissions.add_record !== hasPermission){
+                if (this.show_tab_permissions.add_record !== hasPermission) {
                     this.show_tab_permissions.add_record = hasPermission;
                     this.recheckSidebarItems();
                 }
@@ -197,7 +200,7 @@ export class SidebarComponent implements OnInit {
         this.coreSB.hasPermissionFromStringForOwnRlc(
             PERMISSION_CAN_PERMIT_RECORD_PERMISSION_REQUESTS,
             hasPermission => {
-                if (this.show_tab_permissions.record_permission_request !== hasPermission){
+                if (this.show_tab_permissions.record_permission_request !== hasPermission) {
                     this.show_tab_permissions.record_permission_request = hasPermission;
                     this.recheckSidebarItems();
                 }
@@ -207,7 +210,7 @@ export class SidebarComponent implements OnInit {
         this.coreSB.hasPermissionFromStringForOwnRlc(
             PERMISSION_CAN_VIEW_PERMISSIONS_RLC,
             hasPermission => {
-                if (this.show_tab_permissions.permissions !== hasPermission){
+                if (this.show_tab_permissions.permissions !== hasPermission) {
                     this.show_tab_permissions.permissions = hasPermission;
                     this.recheckSidebarItems();
                 }
@@ -217,7 +220,7 @@ export class SidebarComponent implements OnInit {
         this.coreSB.hasPermissionFromStringForOwnRlc(
             PERMISSION_ACCEPT_NEW_USERS_RLC,
             hasPermission => {
-                if (this.show_tab_permissions.accept_new_user !== hasPermission){
+                if (this.show_tab_permissions.accept_new_user !== hasPermission) {
                     this.show_tab_permissions.accept_new_user = hasPermission;
                     this.recheckSidebarItems();
                 }
@@ -227,7 +230,7 @@ export class SidebarComponent implements OnInit {
         this.coreSB.hasPermissionFromStringForOwnRlc(
             PERMISSION_ACTIVATE_INACTIVE_USERS,
             hasPermission => {
-                if (this.show_tab_permissions.activate_inactive_users !== hasPermission){
+                if (this.show_tab_permissions.activate_inactive_users !== hasPermission) {
                     this.show_tab_permissions.activate_inactive_users = hasPermission;
                     this.recheckSidebarItems();
                 }
@@ -276,7 +279,6 @@ export class SidebarComponent implements OnInit {
                 ACCEPT_NEW_USER_REQUESTS_FRONT_URL,
                 newSidebarItems
             ).newItems;
-
         this.actualSidebarItems = newSidebarItems;
     }
 

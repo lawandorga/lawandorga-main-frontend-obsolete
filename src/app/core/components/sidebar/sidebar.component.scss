@@ -78,13 +78,11 @@ mat-icon{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100%;
+    height: calc(100% - 155px);
+    overflow: auto;
 }
 
 .sidebar__other-links {
-    position: sticky;
-    position: -webkit-sticky; /* For macOS/iOS Safari */
-    bottom: 0;
     list-style-type: none;
 }
 .sidebar__other-links li {

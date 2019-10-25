@@ -17,6 +17,9 @@
  ******************************************************************************/
 
 import { Component, OnInit } from "@angular/core";
+import {MatDialog} from "@angular/material/dialog";
+import {EditTextComponent} from "../../../shared/components/edit-text/edit-text.component";
+import {SharedSandboxService} from "../../../shared/services/shared-sandbox.service";
 
 export interface Section {
     id: string;
@@ -30,5 +33,20 @@ export interface Section {
     styleUrls: ["./dashboard.component.scss"]
 })
 export class DashboardComponent {
-    constructor() {}
+    constructor(public dialog: MatDialog, private sharedSB: SharedSandboxService) {
+    }
+
+    onDialogClick(){
+        // this.sharedSB.openEditTextDialog('curVal', 'new token', (result) => {
+        //     console.log('in component value', result);
+        // });
+        this.sharedSB.openConfirmDialog({
+            // description: 'the description',
+            // confirmText: 'confirm',
+            // cancelText: 'cancel',
+            // title: 'please confirm'
+        }, (result) => {
+            console.log('result of confirm', result);
+        })
+    }
 }

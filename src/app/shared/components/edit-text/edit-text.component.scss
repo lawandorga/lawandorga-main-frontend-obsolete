@@ -1,0 +1,26 @@
+.edit-text__dialog {
+  margin: 0 auto;
+  width: 50vw;
+  height: 33vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.edit-text__flex-items-small {
+  flex-grow: 0;
+
+}
+
+.edit-text__flex-items-big {
+  flex-grow: 1;
+}
+
+.edit-text__buttons {
+  margin: 5px;
+}
+
+.edit-text__button-container {
+  display: flex;
+  flex-direction: row-reverse;
+}

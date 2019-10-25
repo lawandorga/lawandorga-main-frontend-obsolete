@@ -10,7 +10,11 @@
         "e2e": "ng e2e",
         "start:dev": "lite-server --baseDir=\"./dist\"",
         "build:dev": "ng build --watch",
-        "deploy": "env-cmd -f ./src/environments/prod.config.env node deploy_script.js"
+        "build:public-dev": "ng build --configuration=development",
+        "build:local-prod": "ng build --configuration=local-production --watch",
+        "deploy:dev": "ng build --configuration=development && env-cmd -f src/environments/dev.config.env node deploy_script.js",
+        "deploy:prod": "ng build --configuration=production && env-cmd -f src/environments/prod.config.env node deploy_script.js",
+        "deploy:test": "ng build --configuration=test && env-cmd -f src/environments/test.config.env node deploy_script.js"
     },
     "private": true,
     "dependencies": {
@@ -39,6 +43,7 @@
         "logrocket-ngrx": "^0.1.1",
         "moment": "^2.24.0",
         "ng-material-multilevel-menu": "^4.9.6",
+        "ngx-cookie-service": "^2.2.0",
         "rxjs": "^6.5.1",
         "tar": "^4.4.10",
         "zone.js": "^0.9.0"

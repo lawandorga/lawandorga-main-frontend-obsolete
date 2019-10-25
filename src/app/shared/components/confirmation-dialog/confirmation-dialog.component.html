@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>{{title}}</h1>
+<div *ngIf="description">
+  <p>{{description}}</p>
+</div>
+
+<div mat-dialog-actions>
+    <button mat-flat-button (click)="onCancelClick()" class="confirmation-dialog__buttons">{{cancelText}}</button>
+    <button mat-flat-button (click)="onConfirmClick()" color="primary" class="confirmation-dialog__buttons">{{confirmText}}</button>
+</div>
