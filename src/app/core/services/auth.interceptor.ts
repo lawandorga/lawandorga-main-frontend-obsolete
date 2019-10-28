@@ -16,41 +16,40 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  ******************************************************************************/
 
-import { Injectable } from "@angular/core";
-import {
-    HttpEvent,
-    HttpHandler,
-    HttpInterceptor,
-    HttpRequest
-} from "@angular/common/http";
-import { AuthState } from "../store/auth/auth.reducers";
-import { Store } from "@ngrx/store";
-import { Observable } from "rxjs";
-import { catchError, switchMap, take } from "rxjs/operators";
-import { AppSandboxService } from "./app-sandbox.service";
+import { Injectable } from '@angular/core';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { AuthState } from '../store/auth/auth.reducers';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { catchError, switchMap, take } from 'rxjs/operators';
+import { AppSandboxService } from './app-sandbox.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
     constructor(
         private store: Store<AuthState>,
         private appSB: AppSandboxService
-    ) {}
+    ) {
+    }
 
     intercept(
         req: HttpRequest<any>,
         next: HttpHandler
     ): Observable<HttpEvent<any>> {
-        return this.store.select("auth").pipe(
+        return this.store.select('auth').pipe(
             take(1),
             switchMap((authState: AuthState) => {
                 // if (req.url.startsWith("http")) {
                 //     return next.handle(req);
                 // }
+                if (req.url.includes('amazonaws')) {
+                    return next.handle(req);
+                }
 
                 const copiedReq = req.clone({
                     headers: req.headers.set(
-                        "Authorization",
-                        "Token " + authState.token
+                        'Authorization',
+                        'Token ' + authState.token
                     )
                 });
                 return next.handle(copiedReq).pipe(
