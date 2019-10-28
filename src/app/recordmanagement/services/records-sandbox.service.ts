@@ -283,7 +283,7 @@ export class RecordsSandboxService {
             });
         let rlc_id = null;
         this.coreStateStore
-            .pipe(select((state: any) => state.api.rlc))
+            .pipe(select((state: any) => state.core.rlc))
             .subscribe(rlc => {
                 rlc_id = rlc.id;
             });
