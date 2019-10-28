@@ -93,6 +93,10 @@ export class StorageService {
     }
 
     uploadFiles(files: File[], file_dir: string, finished?) {
+        if (file_dir.indexOf('null') !== -1){
+            console.log('contains null');
+            return;
+        }
         this.filesToUpload = files.length;
         this.filesUploaded = 0;
         this.filesUploadFinished = finished ? finished : null;
