@@ -1,14 +1,32 @@
-<div class="edit-text__dialog">
-    <div class="edit-text__flex-items-small">
 
-        <h1>Edit {{description}}</h1>
-    </div>
+<!--
+  ~ law&orga - record and organization management software for refugee law clinics
+  ~ Copyright (C) 2019  Dominik Walser
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, either version 3 of the
+  ~ License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
+  -->
+
+<h1 mat-dialog-title>{{title}}</h1>
+<div mat-dialog-content>
+    <p *ngIf="descriptionText">{{descriptionText}}</p>
     <mat-form-field class="edit-text__flex-items-big">
-        <textarea appAutoExpand *ngIf="!shortText" matInput placeholder="{{description}}" [(ngModel)]="text"></textarea>
-        <input *ngIf="shortText" matInput placeholder="{{description}}" [(ngModel)]="text">
+        <textarea appAutoExpand *ngIf="!shortText" matInput placeholder="{{descriptionLabel}}" [(ngModel)]="text"></textarea>
+        <input *ngIf="shortText" matInput placeholder="{{descriptionLabel}}" [(ngModel)]="text">
     </mat-form-field>
-    <div class="edit-text__flex-items-small edit-text__button-container">
-        <button mat-flat-button color="primary" (click)="onSave()" class="edit-text__buttons">save</button>
-        <button mat-flat-button color="warn" (click)="onClose()" class="edit-text__buttons">cancel</button>
-    </div>
+</div>
+
+<div mat-dialog-actions>
+    <button mat-flat-button (click)="onClose()" class="edit-text__buttons">{{cancelLabel}}</button>
+    <button mat-flat-button (click)="onSave()" color="primary" class="edit-text__buttons">{{saveLabel}}</button>
 </div>

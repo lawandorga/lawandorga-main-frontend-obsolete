@@ -1,5 +1,5 @@
 /*
- * rlcapp - record and organization management software for refugee law clinics
+ * law&orga - record and organization management software for refugee law clinics
  * Copyright (C) 2019  Dominik Walser
  *
  * This program is free software: you can redistribute it and/or modify
@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
- ******************************************************************************/
+ */
 
 import { Component, OnInit } from "@angular/core";
 import {MatDialog} from "@angular/material/dialog";
@@ -42,8 +42,8 @@ export class DashboardComponent {
         // });
         this.sharedSB.openConfirmDialog({
             // description: 'the description',
-            // confirmText: 'confirm',
-            // cancelText: 'cancel',
+            // confirmLabel: 'confirm',
+            // cancelLabel: 'cancel',
             // title: 'please confirm'
         }, (result) => {
             console.log('result of confirm', result);

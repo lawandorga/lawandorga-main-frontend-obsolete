@@ -1,5 +1,5 @@
 /*
- * rlcapp - record and organization management software for refugee law clinics
+ * law&orga - record and organization management software for refugee law clinics
  * Copyright (C) 2019  Dominik Walser
  *
  * This program is free software: you can redistribute it and/or modify
@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
- ******************************************************************************/
+ */
 
 import {Injectable} from "@angular/core";
 import {MatDialog} from "@angular/material/dialog";
@@ -27,9 +27,9 @@ export class SharedSandboxService {
 
     }
 
-    openEditTextDialog(currentValue: string, description: string, callback, short: boolean = false) {
+    openEditTextDialog(data: EditTextParamsInterface, callback) {
         const dialogRef = this.dialog.open(EditTextComponent, {
-            data: {currentValue, short, description}
+            data
         });
 
         dialogRef.afterClosed().subscribe(result => {

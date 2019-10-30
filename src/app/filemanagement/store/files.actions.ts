@@ -1,5 +1,5 @@
 /*
- * rlcapp - record and organization management software for refugee law clinics
+ * law&orga - record and organization management software for refugee law clinics
  * Copyright (C) 2019  Dominik Walser
  *
  * This program is free software: you can redistribute it and/or modify
@@ -14,11 +14,11 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
- ******************************************************************************/
+ */
 
-import {Action} from '@ngrx/store';
+import { Action } from '@ngrx/store';
 
-export const LOAD_FILES = "LOAD_FILES";
+export const LOAD_FILES = 'LOAD_FILES';
 
 export class LoadFiles implements Action {
     readonly type = LOAD_FILES;

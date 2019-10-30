@@ -1,5 +1,5 @@
 /*
- * rlcapp - record and organization management software for refugee law clinics
+ * law&orga - record and organization management software for refugee law clinics
  * Copyright (C) 2019  Dominik Walser
  *
  * This program is free software: you can redistribute it and/or modify
@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
- ******************************************************************************/
+ */
 
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {Observable} from "rxjs";
@@ -254,10 +254,22 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
     }
 
     onChangeRecordTokenClick() {
-        console.log('token', this.record.token);
-        this.sharedSB.openEditTextDialog(this.record.token, 'new record token', (newToken: string) => {
+        this.sharedSB.openEditTextDialog({
+            short: true,
+            descriptionLabel: 'record token',
+            text: this.record.token,
+            descriptionText: 'please enter new record token'
+        }, (newToken: string) => {
             console.log('new record token should be', newToken);
-        }, true)
+            this.record.token = newToken;
+            this.record.last_contact_date = CoreSandboxService.transformDate(
+                this.recordEditForm.value["last_contact_date"]
+            );
+            this.client.birthday = CoreSandboxService.transformDate(
+                this.recordEditForm.value["client_birthday"]
+            );
+            this.recordSB.startSavingRecord(this.record, this.client);
+        })
     }
 
     onRequestRecordDeletionClick(){
