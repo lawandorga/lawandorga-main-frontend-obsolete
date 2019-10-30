@@ -261,6 +261,14 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
             descriptionText: 'please enter new record token'
         }, (newToken: string) => {
             console.log('new record token should be', newToken);
+            this.record.token = newToken;
+            this.record.last_contact_date = CoreSandboxService.transformDate(
+                this.recordEditForm.value["last_contact_date"]
+            );
+            this.client.birthday = CoreSandboxService.transformDate(
+                this.recordEditForm.value["client_birthday"]
+            );
+            this.recordSB.startSavingRecord(this.record, this.client);
         })
     }
 
