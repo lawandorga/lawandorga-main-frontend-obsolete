@@ -16,23 +16,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { MatSnackBar } from "@angular/material";
-import { CoreSandboxService } from "../../../services/core-sandbox.service";
-import { RestrictedRlc } from "../../../models/rlc.model";
-import {
-    dateInPastValidator,
-    matchValidator,
-    passwordValidator
-} from "../../../../statics/validators.statics";
-import { CustomErrorStateMatcher } from "../../../../statics/errror_state_matcher.statics";
+import { MatSnackBar } from '@angular/material';
+import { CoreSandboxService } from '../../../services/core-sandbox.service';
+import { RestrictedRlc } from '../../../models/rlc.model';
+import { dateInPastValidator, matchValidator, passwordValidator } from '../../../../statics/validators.statics';
+import { CustomErrorStateMatcher } from '../../../../statics/errror_state_matcher.statics';
 
 @Component({
-    selector: "app-register",
-    templateUrl: "./register.component.html",
-    styleUrls: ["./register.component.scss"]
+    selector: 'app-register',
+    templateUrl: './register.component.html',
+    styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
     // TODO: refactor this
@@ -53,24 +49,24 @@ export class RegisterComponent implements OnInit {
         date.setFullYear(date.getFullYear() - 20);
         this.userForm = new FormGroup(
             {
-                email: new FormControl("", [
+                email: new FormControl('', [
                     Validators.required,
                     Validators.email
                 ]),
-                name: new FormControl("", Validators.required),
-                password: new FormControl("", [
+                name: new FormControl('', Validators.required),
+                password: new FormControl('', [
                     Validators.required,
                     passwordValidator
                 ]),
-                password_confirm: new FormControl("", [Validators.required]),
-                phone_number: new FormControl(""),
-                street: new FormControl(""),
-                postal_code: new FormControl(""),
-                city: new FormControl(""),
+                password_confirm: new FormControl('', [Validators.required]),
+                phone_number: new FormControl(''),
+                street: new FormControl(''),
+                postal_code: new FormControl(''),
+                city: new FormControl(''),
                 birthday: new FormControl(date, [dateInPastValidator]),
-                rlc: new FormControl("", [Validators.required])
+                rlc: new FormControl('', [Validators.required])
             },
-            matchValidator("password", "password_confirm")
+            matchValidator('password', 'password_confirm')
         );
 
         this.coreSB.getAllRlcs().subscribe((rlcs: RestrictedRlc[]) => {
@@ -82,8 +78,8 @@ export class RegisterComponent implements OnInit {
 
     onRegisterClick() {
         if (this.userForm.errors && this.userForm.errors.mismatch) {
-            this.userForm.controls["password_confirm"].setErrors({
-                mismatch: "true"
+            this.userForm.controls['password_confirm'].setErrors({
+                mismatch: 'true'
             });
         }
 
@@ -93,17 +89,20 @@ export class RegisterComponent implements OnInit {
                 name: values.name,
                 email: values.email,
                 password: values.password,
-                birthday: CoreSandboxService.transformDateToString(
-                    values.birthday
-                ),
                 rlc: values.rlc
             };
-            if (values.phone_number !== "")
-                user["phone_number"] = values.phone_number;
-            if (values.street !== "") user["street"] = values.street;
-            if (values.postal_code !== "")
-                user["postal_code"] = values.postal_code;
-            if (values.city !== "") user["city"] = values.city;
+            const date = CoreSandboxService.transformDateToString(
+                values.birthday
+            );
+            if (date !== 'Invalid date') {
+                user['birthday'] = date;
+            }
+            if (values.phone_number !== '')
+                user['phone_number'] = values.phone_number;
+            if (values.street !== '') user['street'] = values.street;
+            if (values.postal_code !== '')
+                user['postal_code'] = values.postal_code;
+            if (values.city !== '') user['city'] = values.city;
 
             this.coreSB.registerUser(user);
         }
