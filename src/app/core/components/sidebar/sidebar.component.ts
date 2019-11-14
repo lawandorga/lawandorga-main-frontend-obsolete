@@ -130,6 +130,7 @@ export class SidebarComponent implements OnInit {
         link: string,
         itemsToSearch
     ): { removed: boolean; newItems; deleteMe: boolean } {
+        console.log('');
         for (const item of itemsToSearch) {
             if (item.link === link) {
                 return {
@@ -180,7 +181,10 @@ export class SidebarComponent implements OnInit {
         this.coreSB.hasPermissionFromStringForOwnRlc(
             PERMISSION_CAN_VIEW_RECORDS,
             hasPermission => {
+                console.log('hasperMission view records', hasPermission);
                 if (this.show_tab_permissions.records !== hasPermission) {
+                    console.log('actual value', this.show_tab_permissions.records);
+                    console.log('new value', hasPermission);
                     this.show_tab_permissions.records = hasPermission;
                     this.recheckSidebarItems();
                 }
@@ -245,6 +249,7 @@ export class SidebarComponent implements OnInit {
         this.timer = setInterval(() => {
             this.coreSB.startCheckingUserHasPermissions();
         }, this.checkPermissionInterval);
+        this.recheckSidebarItems();
     }
 
     recheckSidebarItems() {
