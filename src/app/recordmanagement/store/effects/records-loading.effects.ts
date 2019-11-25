@@ -24,7 +24,7 @@ import { catchError, map, mergeMap, switchMap } from "rxjs/operators";
 
 import { AppSandboxService } from "../../../core/services/app-sandbox.service";
 import {
-    START_LOADING_CLIENT_POSSIBILITIES,
+    START_LOADING_CLIENT_POSSIBILITIES, START_LOADING_RECORD_DELETION_REQUESTS,
     START_LOADING_RECORD_PERMISSION_REQUESTS,
     START_LOADING_RECORD_STATICS,
     START_LOADING_RECORDS,
@@ -32,7 +32,7 @@ import {
     StartLoadingClientPossibilities,
     StartLoadingRecords,
     StartLoadingSpecialRecord
-} from "../actions/records-start.actions";
+} from '../actions/records-start.actions';
 import {
     CLIENTS_BY_BIRTHDAY_API_URL,
     GetRecordsSearchApiURL,
@@ -299,6 +299,35 @@ export class RecordsLoadingEffects {
     @Effect()
     startLoadingRecordPermissionRequests = this.actions.pipe(
         ofType(START_LOADING_RECORD_PERMISSION_REQUESTS),
+        switchMap(() => {
+            return from(
+                this.http.get(RECORD_PERMISSIONS_LIST_API_URL).pipe(
+                    catchError(error => {
+                        this.snackbarService.showErrorSnackBar(
+                            `error at loading record permission list: ${
+                                error.error.detail
+                            }`
+                        );
+                        return [];
+                    }),
+                    mergeMap(response => {
+                        return [
+                            {
+                                type: SET_RECORD_PERMISSION_REQUESTS,
+                                payload: RecordPermissionRequest.getRecordPermissionRequestsFromJsonArray(
+                                    response
+                                )
+                            }
+                        ];
+                    })
+                )
+            );
+        })
+    );
+
+    @Effect()
+    startLoadingRecordDeletionRequests = this.actions.pipe(
+        ofType(START_LOADING_RECORD_DELETION_REQUESTS),
         switchMap(() => {
             return from(
                 this.http.get(RECORD_PERMISSIONS_LIST_API_URL).pipe(

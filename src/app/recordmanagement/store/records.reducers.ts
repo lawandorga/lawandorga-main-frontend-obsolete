@@ -16,17 +16,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { RestrictedRecord } from "../models/record.model";
+import { RestrictedRecord } from '../models/record.model';
 import {
     ADD_RECORD_DOCUMENT,
     ADD_RECORD_MESSAGE,
     RecordsActions,
     RESET_FULL_CLIENT_INFORMATION,
-    RESET_POSSIBLE_CLIENTS, RESET_SPECIAL_RECORD_REQUEST_STATE,
+    RESET_POSSIBLE_CLIENTS,
+    RESET_SPECIAL_RECORD_REQUEST_STATE,
     SET_CONSULTANTS,
     SET_COUNTRY_STATES,
     SET_ORIGIN_COUNTRIES,
     SET_POSSIBLE_CLIENTS,
+    SET_RECORD_DELETION_REQUESTS,
     SET_RECORD_DOCUMENT_TAGS,
     SET_RECORD_PERMISSION_REQUESTS,
     SET_RECORD_STATES,
@@ -36,18 +38,20 @@ import {
     SET_SPECIAL_ORIGIN_COUNTRY,
     SET_SPECIAL_RECORD,
     SET_SPECIAL_RECORD_DOCUMENTS,
-    SET_SPECIAL_RECORD_MESSAGES, SET_SPECIAL_RECORD_REQUEST_STATE,
+    SET_SPECIAL_RECORD_MESSAGES,
+    SET_SPECIAL_RECORD_REQUEST_STATE,
     UPDATE_RECORD_PERMISSION_REQUEST
 } from './actions/records.actions';
-import { OriginCountry } from "../models/country.model";
-import { Tag } from "../models/tag.model";
-import { FullClient } from "../models/client.model";
-import { RecordDocument } from "../models/record_document.model";
-import { RecordMessage } from "../models/record_message.model";
-import { RecordPermissionRequest } from "../models/record_permission.model";
-import {getIdObjects, getObjectsByField} from '../../shared/other/reducer-helper';
-import { RestrictedUser } from "../../core/models/user.model";
-import {State} from '../../core/models/state.model';
+import { OriginCountry } from '../models/country.model';
+import { Tag } from '../models/tag.model';
+import { FullClient } from '../models/client.model';
+import { RecordDocument } from '../models/record_document.model';
+import { RecordMessage } from '../models/record_message.model';
+import { RecordPermissionRequest } from '../models/record_permission.model';
+import { getIdObjects, getObjectsByField } from '../../shared/other/reducer-helper';
+import { RestrictedUser } from '../../core/models/user.model';
+import { State } from '../../core/models/state.model';
+import { RecordDeletionRequest } from '../models/record_deletion_request.model';
 
 export interface RecordsState {
     special_record: {
@@ -60,6 +64,7 @@ export interface RecordsState {
     };
     admin: {
         record_permission_requests: { [id: number]: RecordPermissionRequest };
+        record_deletion_requests: { [id: number]: RecordDeletionRequest };
     };
     records: { [id: number]: RestrictedRecord };
     consultants: { [id: number]: RestrictedUser };
@@ -81,7 +86,8 @@ export const initialState: RecordsState = {
         request_state: null,
     },
     admin: {
-        record_permission_requests: {}
+        record_permission_requests: {},
+        record_deletion_requests: {}
     },
     records: {},
     consultants: {},
@@ -247,6 +253,14 @@ export function recordsReducer(state = initialState, action: RecordsActions) {
                 special_record: {
                     ...state.special_record,
                     request_state: null
+                }
+            };
+        case SET_RECORD_DELETION_REQUESTS:
+            return {
+                ...state,
+                admin: {
+                    ...state.admin,
+                    record_deletion_requests: getIdObjects(action.payload)
                 }
             };
         default:

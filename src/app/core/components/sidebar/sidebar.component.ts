@@ -27,10 +27,10 @@ import {
     PERMISSION_CAN_ADD_RECORD_RLC,
     PERMISSION_CAN_PERMIT_RECORD_PERMISSION_REQUESTS,
     PERMISSION_CAN_VIEW_PERMISSIONS_RLC,
-    PERMISSION_CAN_VIEW_RECORDS
-} from "../../../statics/permissions.statics";
+    PERMISSION_CAN_VIEW_RECORDS, PERMISSION_PROCESS_RECORD_DELETION_REQUESTS
+} from '../../../statics/permissions.statics';
 import {
-    ACCEPT_NEW_USER_REQUESTS_FRONT_URL,
+    ACCEPT_NEW_USER_REQUESTS_FRONT_URL, DELETION_REQUESTS_FRONT_URL,
     GROUPS_FRONT_URL,
     INACTIVE_USERS_FRONT_URL,
     LEGAL_NOTICE_FRONT_URL,
@@ -64,7 +64,8 @@ export class SidebarComponent implements OnInit {
         record_permission_request: false,
         permissions: false,
         accept_new_user: false,
-        activate_inactive_users: false
+        activate_inactive_users: false,
+        process_record_deletion_requests: false
     };
 
     sidebarItemsOrg = [
@@ -111,6 +112,11 @@ export class SidebarComponent implements OnInit {
                     label: "Inactive Users",
                     icon: "perm_identity",
                     link: INACTIVE_USERS_FRONT_URL
+                },
+                {
+                    label: "Deletion Requests",
+                    icon: "delete_forever",
+                    link: DELETION_REQUESTS_FRONT_URL
                 }
             ]
         },
@@ -130,7 +136,6 @@ export class SidebarComponent implements OnInit {
         link: string,
         itemsToSearch
     ): { removed: boolean; newItems; deleteMe: boolean } {
-        console.log('');
         for (const item of itemsToSearch) {
             if (item.link === link) {
                 return {
@@ -181,10 +186,7 @@ export class SidebarComponent implements OnInit {
         this.coreSB.hasPermissionFromStringForOwnRlc(
             PERMISSION_CAN_VIEW_RECORDS,
             hasPermission => {
-                console.log('hasperMission view records', hasPermission);
                 if (this.show_tab_permissions.records !== hasPermission) {
-                    console.log('actual value', this.show_tab_permissions.records);
-                    console.log('new value', hasPermission);
                     this.show_tab_permissions.records = hasPermission;
                     this.recheckSidebarItems();
                 }
@@ -241,6 +243,16 @@ export class SidebarComponent implements OnInit {
             }
         );
 
+        this.coreSB.hasPermissionFromStringForOwnRlc(
+            PERMISSION_PROCESS_RECORD_DELETION_REQUESTS,
+            hasPermission => {
+                if (this.show_tab_permissions.process_record_deletion_requests !== hasPermission) {
+                    this.show_tab_permissions.process_record_deletion_requests = hasPermission;
+                    this.recheckSidebarItems();
+                }
+            }
+        );
+
         this.coreSB.getUser().subscribe((user: FullUser) => {
             this.name = user ? user.name : "";
             this.email = user ? user.email : "";
@@ -282,6 +294,11 @@ export class SidebarComponent implements OnInit {
         if (!this.show_tab_permissions.accept_new_user)
             newSidebarItems = SidebarComponent.removeLink(
                 ACCEPT_NEW_USER_REQUESTS_FRONT_URL,
+                newSidebarItems
+            ).newItems;
+        if (!this.show_tab_permissions.process_record_deletion_requests)
+            newSidebarItems = SidebarComponent.removeLink(
+                DELETION_REQUESTS_FRONT_URL,
                 newSidebarItems
             ).newItems;
         this.actualSidebarItems = newSidebarItems;

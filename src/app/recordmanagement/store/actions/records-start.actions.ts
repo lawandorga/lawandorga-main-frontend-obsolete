@@ -31,6 +31,7 @@ export const START_LOADING_CLIENT_POSSIBILITIES =
     "START_LOADING_CLIENT_POSSIBILITIES";
 export const START_LOADING_SPECIAL_RECORD = "START_LOADING_SPECIAL_RECORD";
 export const START_LOADING_RECORD_PERMISSION_REQUESTS = 'START_LOADING_RECORD_PERMISSION_REQUESTS';
+export const START_LOADING_RECORD_DELETION_REQUESTS = 'START_LOADING_RECORD_DELETION_REQUESTS';
 
 export const START_ADDING_NEW_RECORD = "START_ADDING_NEW_RECORD";
 export const START_ADDING_NEW_RECORD_DOCUMENT =
@@ -122,6 +123,10 @@ export class StartDecliningRecordPermissionRequest implements Action {
     constructor(public payload: RecordPermissionRequest){}
 }
 
+export class StartLoadingRecordDeletionRequests implements Action {
+    readonly type = START_LOADING_RECORD_DELETION_REQUESTS;
+}
+
 export type RecordStartActions =
     | StartRequestingReadPermission
     | StartLoadingRecords
@@ -135,4 +140,5 @@ export type RecordStartActions =
     | StartSettingRecordDocumentTags
     | StartLoadingRecordPermissionRequests
     | StartAdmittingRecordPermissionRequest
-    | StartDecliningRecordPermissionRequest;
+    | StartDecliningRecordPermissionRequest
+    | StartLoadingRecordDeletionRequests;
