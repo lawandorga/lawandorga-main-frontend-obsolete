@@ -24,4 +24,5 @@ interface EditTextParamsInterface {
   descriptionLabel: string;
   cancelLabel?: string;
   saveLabel?: string;
+  saveColor?: string;
 }

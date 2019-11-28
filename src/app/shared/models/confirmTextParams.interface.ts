@@ -21,4 +21,5 @@ interface ConfirmTextParamsInterface {
     cancelLabel?: string;
     description?: string;
     title?: string;
+    confirmColor?: string;
 }

@@ -25,6 +25,8 @@ import {RecordPermissionRequest} from '../../models/record_permission.model';
 
 export const START_REQUESTING_RECORD_PERMISSION =
     "START_REQUESTING_RECORD_PERMISSION";
+export const START_REQUESTING_RECORD_DELETION = "START_REQUESTING_RECORD_DELETION";
+
 export const START_LOADING_RECORDS = "START_LOADING_RECORDS";
 export const START_LOADING_RECORD_STATICS = "START_LOADING_RECORD_STATICS";
 export const START_LOADING_CLIENT_POSSIBILITIES =
@@ -54,6 +56,11 @@ export class StartRequestingReadPermission implements Action {
     constructor(public payload: RestrictedRecord) {}
 }
 
+export class StartRequestingRecordDeletion implements Action {
+    readonly type = START_REQUESTING_RECORD_DELETION;
+
+    constructor(public payload: {record: RestrictedRecord, explanation: string}) {}
+}
 
 export class StartLoadingRecords implements Action {
     readonly type = START_LOADING_RECORDS;
@@ -129,6 +136,7 @@ export class StartLoadingRecordDeletionRequests implements Action {
 
 export type RecordStartActions =
     | StartRequestingReadPermission
+    | StartRequestingRecordDeletion
     | StartLoadingRecords
     | StartLoadingRecordStatics
     | StartLoadingClientPossibilities

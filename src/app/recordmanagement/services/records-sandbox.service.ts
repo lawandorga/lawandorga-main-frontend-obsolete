@@ -32,12 +32,12 @@ import {
     StartAddingNewRecordMessage,
     StartAdmittingRecordPermissionRequest,
     StartDecliningRecordPermissionRequest,
-    StartLoadingClientPossibilities,
+    StartLoadingClientPossibilities, StartLoadingRecordDeletionRequests,
     StartLoadingRecordPermissionRequests,
     StartLoadingRecords,
     StartLoadingRecordStatics,
     StartLoadingSpecialRecord,
-    StartRequestingReadPermission,
+    StartRequestingReadPermission, StartRequestingRecordDeletion,
     StartSavingRecord,
     StartSettingRecordDocumentTags
 } from '../store/actions/records.actions';
@@ -405,5 +405,13 @@ export class RecordsSandboxService {
                     state.records.special_record.request_state
             )
         );
+    }
+
+    startRequestingRecordDeletion(record: RestrictedRecord, explanation: string){
+        this.recordStore.dispatch(new StartRequestingRecordDeletion({record, explanation}));
+    }
+
+    startLoadingRecordDeletionRequests(){
+        this.recordStore.dispatch(new StartLoadingRecordDeletionRequests());
     }
 }

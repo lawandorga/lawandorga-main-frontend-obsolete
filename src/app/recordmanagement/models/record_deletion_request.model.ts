@@ -38,13 +38,13 @@ export class RecordDeletionRequest {
         this.state = state;
     }
 
-    static getRecordPermissionRequestsFromJsonArray(
+    static getRecordDeletionRequestsFromJsonArray(
         jsonArray
     ): RecordDeletionRequest[] {
         const recordPermissions: RecordDeletionRequest[] = [];
         Object.values(jsonArray).map(jsonRecordPermission => {
             recordPermissions.push(
-                RecordDeletionRequest.getRecordPermissionRequestFromJson(
+                RecordDeletionRequest.getRecordDeletionRequestFromJson(
                     jsonRecordPermission
                 )
             );
@@ -52,7 +52,7 @@ export class RecordDeletionRequest {
         return recordPermissions;
     }
 
-    static getRecordPermissionRequestFromJson(json): RecordDeletionRequest {
+    static getRecordDeletionRequestFromJson(json): RecordDeletionRequest {
         return new RecordDeletionRequest(
             json.id,
             RestrictedUser.getRestrictedUserFromJson(json.request_from),

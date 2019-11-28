@@ -18,7 +18,7 @@
   -->
 
 <h1 mat-dialog-title>{{title}}</h1>
-<div mat-dialog-content>
+<div mat-dialog-content class="edit-text__content">
     <p *ngIf="descriptionText">{{descriptionText}}</p>
     <mat-form-field class="edit-text__flex-items-big">
         <textarea appAutoExpand *ngIf="!shortText" matInput placeholder="{{descriptionLabel}}" [(ngModel)]="text"></textarea>
@@ -27,6 +27,6 @@
 </div>
 
 <div mat-dialog-actions>
-    <button mat-flat-button (click)="onClose()" class="edit-text__buttons">{{cancelLabel}}</button>
-    <button mat-flat-button (click)="onSave()" color="primary" class="edit-text__buttons">{{saveLabel}}</button>
+    <button mat-stroked-button (click)="onClose()" class="edit-text__buttons">{{cancelLabel}}</button>
+    <button mat-flat-button (click)="onSave()" color="{{saveColor}}" class="edit-text__buttons">{{saveLabel}}</button>
 </div>

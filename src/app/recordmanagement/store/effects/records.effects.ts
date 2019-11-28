@@ -24,23 +24,23 @@ import { from, of } from "rxjs";
 
 import {
     START_ADMITTING_RECORD_PERMISSION_REQUEST,
-    START_DECLINING_RECORD_PERMISSION_REQUEST,
+    START_DECLINING_RECORD_PERMISSION_REQUEST, START_REQUESTING_RECORD_DELETION,
     START_REQUESTING_RECORD_PERMISSION,
     START_SAVING_RECORD,
     START_SETTING_RECORD_DOCUMENT_TAGS,
     StartAdmittingRecordPermissionRequest,
     StartDecliningRecordPermissionRequest,
-    StartRequestingReadPermission,
+    StartRequestingReadPermission, StartRequestingRecordDeletion,
     StartSavingRecord,
     StartSettingRecordDocumentTags,
     UPDATE_RECORD_PERMISSION_REQUEST
-} from "../actions/records.actions";
+} from '../actions/records.actions';
 import {
     GetRecordDocumentApiUrl,
     GetRecordPermissionRequestApiUrl,
-    GetSpecialRecordApiURL,
+    GetSpecialRecordApiURL, RECORD_DELETIONS_API_URL,
     RECORD_PERMISSIONS_LIST_API_URL
-} from "../../../statics/api_urls.statics";
+} from '../../../statics/api_urls.statics';
 import { FullRecord, RestrictedRecord } from "../../models/record.model";
 import { Tag } from "../../models/tag.model";
 import { FullClient } from "../../models/client.model";
@@ -209,6 +209,39 @@ export class RecordsEffects {
                                     payload: changedRequest
                                 }
                             ];
+                        })
+                    )
+            );
+        })
+    );
+
+    @Effect()
+    startRequestingRecordDeletion = this.actions.pipe(
+        ofType(START_REQUESTING_RECORD_DELETION),
+        map((action: StartRequestingRecordDeletion) => {
+            return action.payload;
+        }),
+        mergeMap((payload: {record: RestrictedRecord, explanation: string}) => {
+            return from(
+                this.http
+                    .post(
+                        RECORD_DELETIONS_API_URL,
+                        {
+                            record_id: payload.record.id,
+                            explanation: payload.explanation
+                        }
+                    )
+                    .pipe(
+                        catchError(error => {
+                            this.recordSB.showError(`error at requesting record deletion: ${error.error.detail}`);
+                            return [];
+                        }),
+                        mergeMap((response: { error }) => {
+                            if (response.error) {
+                                this.recordSB.showError("sending error");
+                                return [];
+                            }
+                            return [];
                         })
                     )
             );

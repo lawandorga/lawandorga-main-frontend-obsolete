@@ -39,14 +39,14 @@ import {
     GetSpecialRecordApiURL,
     RECORD_PERMISSIONS_LIST_API_URL,
     RECORDS_STATICS_API_URL,
-    RECORDS_API_URL
-} from "../../../statics/api_urls.statics";
+    RECORDS_API_URL, RECORD_DELETIONS_API_URL
+} from '../../../statics/api_urls.statics';
 import { FullRecord, RestrictedRecord } from "../../models/record.model";
 import {
     SET_CONSULTANTS,
     SET_COUNTRY_STATES,
     SET_ORIGIN_COUNTRIES,
-    SET_POSSIBLE_CLIENTS,
+    SET_POSSIBLE_CLIENTS, SET_RECORD_DELETION_REQUESTS,
     SET_RECORD_DOCUMENT_TAGS,
     SET_RECORD_PERMISSION_REQUESTS,
     SET_RECORD_STATES,
@@ -69,6 +69,7 @@ import { RESET_FULL_CLIENT_INFORMATION } from "../actions/records.actions";
 import { RecordPermissionRequest } from "../../models/record_permission.model";
 import { SnackbarService } from "../../../shared/services/snackbar.service";
 import {State} from '../../../core/models/state.model';
+import { RecordDeletionRequest } from '../../models/record_deletion_request.model';
 
 @Injectable()
 export class RecordsLoadingEffects {
@@ -330,10 +331,10 @@ export class RecordsLoadingEffects {
         ofType(START_LOADING_RECORD_DELETION_REQUESTS),
         switchMap(() => {
             return from(
-                this.http.get(RECORD_PERMISSIONS_LIST_API_URL).pipe(
+                this.http.get(RECORD_DELETIONS_API_URL).pipe(
                     catchError(error => {
                         this.snackbarService.showErrorSnackBar(
-                            `error at loading record permission list: ${
+                            `error at loading record deletion list: ${
                                 error.error.detail
                             }`
                         );
@@ -342,8 +343,8 @@ export class RecordsLoadingEffects {
                     mergeMap(response => {
                         return [
                             {
-                                type: SET_RECORD_PERMISSION_REQUESTS,
-                                payload: RecordPermissionRequest.getRecordPermissionRequestsFromJsonArray(
+                                type: SET_RECORD_DELETION_REQUESTS,
+                                payload: RecordDeletionRequest.getRecordDeletionRequestsFromJsonArray(
                                     response
                                 )
                             }
