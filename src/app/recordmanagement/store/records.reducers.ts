@@ -40,6 +40,7 @@ import {
     SET_SPECIAL_RECORD_DOCUMENTS,
     SET_SPECIAL_RECORD_MESSAGES,
     SET_SPECIAL_RECORD_REQUEST_STATE,
+    UPDATE_RECORD_DELETION_REQUEST,
     UPDATE_RECORD_PERMISSION_REQUEST
 } from './actions/records.actions';
 import { OriginCountry } from '../models/country.model';
@@ -263,6 +264,17 @@ export function recordsReducer(state = initialState, action: RecordsActions) {
                     record_deletion_requests: getIdObjects(action.payload)
                 }
             };
+        case UPDATE_RECORD_DELETION_REQUEST:
+            return {
+                ...state,
+                admin: {
+                    ...state.admin,
+                    record_deletion_requests: {
+                        ...state.admin.record_deletion_requests,
+                        [action.payload.id]: action.payload
+                    }
+                }
+            }
         default:
             return state;
     }

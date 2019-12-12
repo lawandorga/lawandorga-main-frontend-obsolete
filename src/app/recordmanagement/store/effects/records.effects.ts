@@ -16,37 +16,45 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Injectable } from "@angular/core";
-import { Actions, Effect, ofType } from "@ngrx/effects";
-import { HttpClient } from "@angular/common/http";
-import { catchError, map, mergeMap, switchMap } from "rxjs/operators";
-import { from, of } from "rxjs";
+import { Injectable } from '@angular/core';
+import { Actions, Effect, ofType } from '@ngrx/effects';
+import { HttpClient } from '@angular/common/http';
+import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
+import { from, of } from 'rxjs';
 
 import {
     START_ADMITTING_RECORD_PERMISSION_REQUEST,
-    START_DECLINING_RECORD_PERMISSION_REQUEST, START_REQUESTING_RECORD_DELETION,
+    START_DECLINING_RECORD_PERMISSION_REQUEST,
+    START_PROCESSING_RECORD_DELETION_REQUEST,
+    START_REQUESTING_RECORD_DELETION,
     START_REQUESTING_RECORD_PERMISSION,
     START_SAVING_RECORD,
     START_SETTING_RECORD_DOCUMENT_TAGS,
     StartAdmittingRecordPermissionRequest,
     StartDecliningRecordPermissionRequest,
-    StartRequestingReadPermission, StartRequestingRecordDeletion,
+    StartProcessingRecordDeletionRequest,
+    StartRequestingReadPermission,
+    StartRequestingRecordDeletion,
     StartSavingRecord,
     StartSettingRecordDocumentTags,
+    UPDATE_RECORD_DELETION_REQUEST,
     UPDATE_RECORD_PERMISSION_REQUEST
 } from '../actions/records.actions';
 import {
     GetRecordDocumentApiUrl,
     GetRecordPermissionRequestApiUrl,
-    GetSpecialRecordApiURL, RECORD_DELETIONS_API_URL,
+    GetSpecialRecordApiURL,
+    PROCESS_RECORD_DELETIONS_API_URL,
+    RECORD_DELETIONS_API_URL,
     RECORD_PERMISSIONS_LIST_API_URL
 } from '../../../statics/api_urls.statics';
-import { FullRecord, RestrictedRecord } from "../../models/record.model";
-import { Tag } from "../../models/tag.model";
-import { FullClient } from "../../models/client.model";
-import { AppSandboxService } from "../../../core/services/app-sandbox.service";
-import { RecordsSandboxService } from "../../services/records-sandbox.service";
-import { RecordPermissionRequest } from "../../models/record_permission.model";
+import { FullRecord, RestrictedRecord } from '../../models/record.model';
+import { Tag } from '../../models/tag.model';
+import { FullClient } from '../../models/client.model';
+import { AppSandboxService } from '../../../core/services/app-sandbox.service';
+import { RecordsSandboxService } from '../../services/records-sandbox.service';
+import { RecordPermissionRequest } from '../../models/record_permission.model';
+import { RecordDeletionRequest } from '../../models/record_deletion_request.model';
 
 @Injectable()
 export class RecordsEffects {
@@ -107,7 +115,7 @@ export class RecordsEffects {
                         }),
                         mergeMap((response: { error }) => {
                             if (response.error) {
-                                this.recordSB.showError("sending error");
+                                this.recordSB.showError('sending error');
                                 return [];
                             }
                             return [];
@@ -125,24 +133,21 @@ export class RecordsEffects {
         }),
         mergeMap((record: RestrictedRecord) => {
             return from(
-                this.http
-                    .post(
-                        GetRecordPermissionRequestApiUrl(record.id.toString()),
-                        {}
-                    )
-                    .pipe(
-                        catchError(error => {
-                            this.recordSB.showError(`error at requesting record permission: ${error.error.detail}`);
+                this.http.post(GetRecordPermissionRequestApiUrl(record.id.toString()), {}).pipe(
+                    catchError(error => {
+                        this.recordSB.showError(
+                            `error at requesting record permission: ${error.error.detail}`
+                        );
+                        return [];
+                    }),
+                    mergeMap((response: { error }) => {
+                        if (response.error) {
+                            this.recordSB.showError('sending error');
                             return [];
-                        }),
-                        mergeMap((response: { error }) => {
-                            if (response.error) {
-                                this.recordSB.showError("sending error");
-                                return [];
-                            }
-                            return [];
-                        })
-                    )
+                        }
+                        return [];
+                    })
+                )
             );
         })
     );
@@ -158,11 +163,13 @@ export class RecordsEffects {
                 this.http
                     .post(RECORD_PERMISSIONS_LIST_API_URL, {
                         id: request.id,
-                        action: "accept"
+                        action: 'accept'
                     })
                     .pipe(
                         catchError(error => {
-                            this.recordSB.showError(`error at admitting record permission request: ${error.error.detail}`);
+                            this.recordSB.showError(
+                                `error at admitting record permission request: ${error.error.detail}`
+                            );
                             return [];
                         }),
                         mergeMap((response: { error }) => {
@@ -192,11 +199,13 @@ export class RecordsEffects {
                 this.http
                     .post(RECORD_PERMISSIONS_LIST_API_URL, {
                         id: request.id,
-                        action: "decline"
+                        action: 'decline'
                     })
                     .pipe(
                         catchError(error => {
-                            this.recordSB.showError(`error at declining record permission request: ${error.error.detail}`);
+                            this.recordSB.showError(
+                                `error at declining record permission request: ${error.error.detail}`
+                            );
                             return [];
                         }),
                         mergeMap((response: { error }) => {
@@ -221,27 +230,71 @@ export class RecordsEffects {
         map((action: StartRequestingRecordDeletion) => {
             return action.payload;
         }),
-        mergeMap((payload: {record: RestrictedRecord, explanation: string}) => {
+        mergeMap((payload: { record: RestrictedRecord; explanation: string }) => {
             return from(
                 this.http
-                    .post(
-                        RECORD_DELETIONS_API_URL,
-                        {
-                            record_id: payload.record.id,
-                            explanation: payload.explanation
-                        }
-                    )
+                    .post(RECORD_DELETIONS_API_URL, {
+                        record_id: payload.record.id,
+                        explanation: payload.explanation
+                    })
                     .pipe(
                         catchError(error => {
-                            this.recordSB.showError(`error at requesting record deletion: ${error.error.detail}`);
+                            this.recordSB.showError(
+                                `error at requesting record deletion: ${error.error.detail}`
+                            );
                             return [];
                         }),
                         mergeMap((response: { error }) => {
                             if (response.error) {
-                                this.recordSB.showError("sending error");
+                                this.recordSB.showError('sending error');
                                 return [];
                             }
                             return [];
+                        })
+                    )
+            );
+        })
+    );
+
+    @Effect()
+    startProcessingRecordDeletionRequest = this.actions.pipe(
+        ofType(START_PROCESSING_RECORD_DELETION_REQUEST),
+        map((action: StartProcessingRecordDeletionRequest) => {
+            return action.payload;
+        }),
+        mergeMap((payload: { request: RecordDeletionRequest; action: string }) => {
+            if (payload.action !== 'accept' && payload.action !== 'decline') {
+                console.log('Unsupported method at processing record deletion request!');
+                return [];
+            }
+
+            return from(
+                this.http
+                    .post(PROCESS_RECORD_DELETIONS_API_URL, {
+                        request_id: payload.request.id,
+                        action: payload.action
+                    })
+                    .pipe(
+                        catchError(error => {
+                            this.recordSB.showError(
+                                `error at processing record deletion: ${error.error.detail}`
+                            );
+                            return [];
+                        }),
+                        mergeMap((response: { error }) => {
+                            if (response.error) {
+                                this.recordSB.showError('sending error');
+                                return [];
+                            }
+                            const changedRequest = RecordDeletionRequest.getRecordDeletionRequestFromJson(
+                                response
+                            );
+                            return [
+                                {
+                                    type: UPDATE_RECORD_DELETION_REQUEST,
+                                    payload: changedRequest
+                                }
+                            ];
                         })
                     )
             );

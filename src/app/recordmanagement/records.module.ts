@@ -42,6 +42,7 @@ import {RecordsPermitRequestsComponent} from './pages/records-permit-requests/re
 import {RecordPermissionsProcessedPipe, RecordPermissionsRequestedPipe} from './pipes/record_permission.pipe';
 import {RecordDocumentItemDetailComponent} from './components/records/documents/record-document-item-detail/record-document-item-detail.component';
 import { RecordDeletionRequestsComponent } from './pages/record-deletion-requests/record-deletion-requests.component';
+import { RecordDeletionsProcessedPipe, RecordDeletionsRequestedPipe } from './pipes/record_deletions.pipe';
 
 @NgModule({
     imports: [
@@ -71,7 +72,9 @@ import { RecordDeletionRequestsComponent } from './pages/record-deletion-request
         RecordPermissionsRequestedPipe,
         RecordPermissionsProcessedPipe,
         RecordDocumentItemDetailComponent,
-        RecordDeletionRequestsComponent
+        RecordDeletionRequestsComponent,
+        RecordDeletionsRequestedPipe,
+        RecordDeletionsProcessedPipe
     ],
     entryComponents: [SelectClientDialogComponent],
     providers: []

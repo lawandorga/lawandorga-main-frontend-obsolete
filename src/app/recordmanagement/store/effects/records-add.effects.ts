@@ -16,16 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Injectable } from "@angular/core";
-import { Actions, Effect, ofType } from "@ngrx/effects";
-import { HttpClient } from "@angular/common/http";
-import { select, Store } from "@ngrx/store";
-import { catchError, map, mergeMap, switchMap } from "rxjs/operators";
-import { from, of } from "rxjs";
+import { Injectable } from '@angular/core';
+import { Actions, Effect, ofType } from '@ngrx/effects';
+import { HttpClient } from '@angular/common/http';
+import { select, Store } from '@ngrx/store';
+import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
+import { from } from 'rxjs';
 
-import { AppSandboxService } from "../../../core/services/app-sandbox.service";
-import { RecordsSandboxService } from "../../services/records-sandbox.service";
-import { RecordState } from "../../models/states.model";
+import { AppSandboxService } from '../../../core/services/app-sandbox.service';
+import { RecordsSandboxService } from '../../services/records-sandbox.service';
+import { RecordState } from '../../models/states.model';
 import {
     START_ADDING_NEW_RECORD,
     START_ADDING_NEW_RECORD_DOCUMENT,
@@ -33,18 +33,15 @@ import {
     StartAddingNewRecord,
     StartAddingNewRecordDocument,
     StartAddingNewRecordMessage
-} from "../actions/records-start.actions";
+} from '../actions/records-start.actions';
 import {
     CREATE_RECORD_API_URL,
     GetAddRecordMessageApiUrl,
     GetCreateRecordDocumentApiUrl
-} from "../../../statics/api_urls.statics";
-import { RecordDocument } from "../../models/record_document.model";
-import {
-    ADD_RECORD_DOCUMENT,
-    ADD_RECORD_MESSAGE
-} from "../actions/records.actions";
-import { RecordMessage } from "../../models/record_message.model";
+} from '../../../statics/api_urls.statics';
+import { RecordDocument } from '../../models/record_document.model';
+import { ADD_RECORD_DOCUMENT, ADD_RECORD_MESSAGE } from '../actions/records.actions';
+import { RecordMessage } from '../../models/record_message.model';
 
 @Injectable()
 export class RecordsAddEffects {
@@ -54,7 +51,8 @@ export class RecordsAddEffects {
         private appSB: AppSandboxService,
         private recordSB: RecordsSandboxService,
         private recordStore: Store<RecordState>
-    ) {}
+    ) {
+    }
 
     @Effect()
     startAddingNewRecord = this.actions.pipe(
@@ -66,7 +64,9 @@ export class RecordsAddEffects {
             return from(
                 this.http.post(CREATE_RECORD_API_URL, newRecord).pipe(
                     catchError(error => {
-                        this.recordSB.showError('error at creating new record: ' + error.error.detail);
+                        this.recordSB.showError(
+                            'error at creating new record: ' + error.error.detail
+                        );
                         return [];
                     }),
                     mergeMap(response => {
@@ -87,19 +87,16 @@ export class RecordsAddEffects {
         mergeMap((newDocument: any) => {
             return from(
                 this.http
-                    .post(
-                        GetCreateRecordDocumentApiUrl(newDocument.record_id),
-                        newDocument
-                    )
+                    .post(GetCreateRecordDocumentApiUrl(newDocument.record_id), newDocument)
                     .pipe(
                         catchError(error => {
-                            this.recordSB.showError('error at creating new record document: ' + error.error.detail);
+                            this.recordSB.showError(
+                                'error at creating new record document: ' + error.error.detail
+                            );
                             return [];
                         }),
                         mergeMap(response => {
-                            const document = RecordDocument.getRecordDocumentFromJson(
-                                response
-                            );
+                            const document = RecordDocument.getRecordDocumentFromJson(response);
                             return [
                                 {
                                     type: ADD_RECORD_DOCUMENT,
@@ -121,9 +118,7 @@ export class RecordsAddEffects {
         mergeMap((newMessage: any) => {
             let record_id = null;
             this.recordStore
-                .pipe(
-                    select((state: any) => state.records.special_record.record)
-                )
+                .pipe(select((state: any) => state.records.special_record.record))
                 .subscribe(record => {
                     record_id = record.id;
                 })
@@ -135,18 +130,18 @@ export class RecordsAddEffects {
                     })
                     .pipe(
                         catchError(error => {
-                            this.recordSB.showError('error at creating new record message: ' + error.error.detail);
+                            this.recordSB.showError(
+                                'error at creating new record message: ' + error.error.detail
+                            );
                             return [];
                         }),
                         mergeMap((response: { error }) => {
                             if (response.error) {
-                                this.recordSB.showError("sending error");
+                                this.recordSB.showError('sending error');
                                 return [];
                             }
 
-                            const new_message = RecordMessage.getRecordMessageFromJson(
-                                response
-                            );
+                            const new_message = RecordMessage.getRecordMessageFromJson(response);
                             return [
                                 {
                                     type: ADD_RECORD_MESSAGE,

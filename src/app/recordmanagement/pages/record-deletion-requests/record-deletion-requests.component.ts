@@ -21,6 +21,9 @@ import { RecordsSandboxService } from '../../services/records-sandbox.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { RecordDeletionRequest } from '../../models/record_deletion_request.model';
+import { RestrictedUser } from '../../../core/models/user.model';
+import { GetProfileFrontUrl, GetRecordFrontUrl } from '../../../statics/frontend_links.statics';
+import { RecordPermissionRequest } from '../../models/record_permission.model';
 
 @Component({
     selector: 'app-record-deletion-requests',
@@ -30,10 +33,45 @@ import { RecordDeletionRequest } from '../../models/record_deletion_request.mode
 export class RecordDeletionRequestsComponent implements OnInit {
     recordDeletionRequests: Observable<RecordDeletionRequest[]>;
 
+    toProcessColumns = [
+        "request_from",
+        "record",
+        "requested",
+        "state",
+        "explanation",
+        "accept"
+    ];
+
+    alreadyProcessedColumns = [
+        "request_from",
+        "record",
+        "requested",
+        "state",
+        "processor",
+        "processed_on"
+    ];
+
     constructor(private recordSB: RecordsSandboxService, private router: Router) {
     }
 
     ngOnInit() {
         this.recordSB.startLoadingRecordDeletionRequests();
+        this.recordDeletionRequests = this.recordSB.getRecordDeletionRequests();
+    }
+
+    onUserClick(user: RestrictedUser) {
+        this.router.navigateByUrl(GetProfileFrontUrl(user));
+    }
+
+    onRequestClick(request: RecordDeletionRequest) {
+        this.router.navigateByUrl(GetRecordFrontUrl(request.record));
+    }
+
+    admitRequest(request: RecordDeletionRequest) {
+        this.recordSB.admitRecordDeletionRequest(request);
+    }
+
+    declineRequest(request: RecordDeletionRequest) {
+        this.recordSB.declineRecordDeletionRequest(request);
     }
 }

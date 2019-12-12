@@ -282,15 +282,18 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
             saveLabel: 'delete',
             saveColor: 'warn'
         }, (deletion_description: string) => {
-            this.sharedSB.openConfirmDialog({
-                description: 'are you sure you want to delete the record?',
-                confirmLabel: 'delete',
-                confirmColor: 'warn'
-            }, (delete_record: boolean) => {
-                if (delete_record){
-                    this.recordSB.startRequestingRecordDeletion(this.record, deletion_description);
-                }
-            })
+            if (deletion_description){
+                this.sharedSB.openConfirmDialog({
+                    description: 'are you sure you want to delete the record?',
+                    confirmLabel: 'delete',
+                    confirmColor: 'warn'
+                }, (delete_record: boolean) => {
+                    if (delete_record){
+                        this.recordSB.startRequestingRecordDeletion(this.record, deletion_description);
+                    }
+                })
+            }
+
         })
     }
 }

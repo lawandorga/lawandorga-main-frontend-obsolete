@@ -24,10 +24,11 @@ export class RecordDeletionRequest {
         public id: string,
         public request_from: RestrictedUser,
         public request_processed: RestrictedUser | null,
-        public record: TokenRecord,
         public requested: Date,
         public processed_on: Date,
-        public state: string
+        public state: string,
+        public explanation: string,
+        public record?: TokenRecord
     ) {
         this.id = id;
         this.request_from = request_from;
@@ -36,6 +37,7 @@ export class RecordDeletionRequest {
         this.requested = requested;
         this.processed_on = processed_on;
         this.state = state;
+        this.explanation = explanation;
     }
 
     static getRecordDeletionRequestsFromJsonArray(
@@ -57,10 +59,11 @@ export class RecordDeletionRequest {
             json.id,
             RestrictedUser.getRestrictedUserFromJson(json.request_from),
             RestrictedUser.getRestrictedUserFromJson(json.request_processed),
-            TokenRecord.getTokenRecordFromJson(json.record),
             new Date(json.requested),
             new Date(json.processed_on),
-            json.state
+            json.state,
+            json.explanation,
+            TokenRecord.getTokenRecordFromJson(json.record)
         );
     }
 }
