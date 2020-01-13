@@ -61,8 +61,9 @@ export class RecordsAddEffects {
             return action.payload;
         }),
         switchMap((newRecord: any) => {
+            const privateKeyPlaceholderHeader = this.appSB.getPrivateKeyPlaceholder();
             return from(
-                this.http.post(CREATE_RECORD_API_URL, newRecord).pipe(
+                this.http.post(CREATE_RECORD_API_URL, newRecord, privateKeyPlaceholderHeader).pipe(
                     catchError(error => {
                         this.recordSB.showError(
                             'error at creating new record: ' + error.error.detail
@@ -123,11 +124,12 @@ export class RecordsAddEffects {
                     record_id = record.id;
                 })
                 .unsubscribe();
+            const privateKeyPlaceholderHeader = this.appSB.getPrivateKeyPlaceholder();
             return from(
                 this.http
                     .post(GetAddRecordMessageApiUrl(record_id), {
                         message: newMessage
-                    })
+                    }, privateKeyPlaceholderHeader)
                     .pipe(
                         catchError(error => {
                             this.recordSB.showError(

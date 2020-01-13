@@ -101,8 +101,9 @@ export class RecordsLoadingEffects {
                     }),
                     mergeMap(response => {
                         const loadedRecords: Array<RestrictedRecord> = [];
+                        console.log('response from loading records', response);
                         Object.values(response).map(record => {
-                            if (Object.keys(record).indexOf("note") > -1) {
+                            if (record['has_permission']) {
                                 loadedRecords.push(
                                     FullRecord.getFullRecordFromJson(record)
                                 );

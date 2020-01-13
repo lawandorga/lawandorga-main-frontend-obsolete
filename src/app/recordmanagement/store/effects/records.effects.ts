@@ -72,12 +72,13 @@ export class RecordsEffects {
             return action.payload;
         }),
         switchMap((payload: { record: FullRecord; client: FullClient }) => {
+            const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
             return from(
                 this.http
                     .patch(GetSpecialRecordApiURL(payload.record.id), {
                         record: payload.record,
                         client: payload.client
-                    })
+                    }, privateKeyPlaceholder)
                     .pipe(
                         catchError(error => {
                             this.recordSB.showError(
