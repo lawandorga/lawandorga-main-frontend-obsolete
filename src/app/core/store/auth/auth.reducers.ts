@@ -16,15 +16,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { AuthActions, LOGOUT, SET_TOKEN } from "./auth.actions";
+import { AuthActions, LOGOUT, SET_TOKEN, SET_USERS_PRIVATE_KEY } from './auth.actions';
 
 export interface AuthState {
     token: string;
+    users_private_key: string;
     authenticated: boolean;
 }
 
 const initialState: AuthState = {
     token: null,
+    users_private_key: null,
     authenticated: false
 };
 
@@ -35,6 +37,11 @@ export function authReducer(state = initialState, action: AuthActions) {
                 ...state,
                 token: action.payload,
                 authenticated: true
+            };
+        case SET_USERS_PRIVATE_KEY:
+            return {
+                ...state,
+                users_private_key: action.payload
             };
         case LOGOUT:
             return initialState;

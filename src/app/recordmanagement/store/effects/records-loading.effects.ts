@@ -18,7 +18,7 @@
 
 import { Injectable } from "@angular/core";
 import { Actions, Effect, ofType } from "@ngrx/effects";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { from } from "rxjs";
 import { catchError, map, mergeMap, switchMap } from "rxjs/operators";
 
@@ -70,6 +70,7 @@ import { RecordPermissionRequest } from "../../models/record_permission.model";
 import { SnackbarService } from "../../../shared/services/snackbar.service";
 import {State} from '../../../core/models/state.model';
 import { RecordDeletionRequest } from '../../models/record_deletion_request.model';
+import { AuthState } from '../../../core/store/auth/auth.reducers';
 
 @Injectable()
 export class RecordsLoadingEffects {
@@ -229,7 +230,7 @@ export class RecordsLoadingEffects {
         }),
         switchMap((id: string) => {
             return from(
-                this.http.get(GetSpecialRecordApiURL(id)).pipe(
+                this.http.get(GetSpecialRecordApiURL(id), this.appSB.getPrivateKeyPlaceholder()).pipe(
                     catchError(error => {
                         this.snackbarService.showErrorSnackBar(
                             `error at loading special record: ${
