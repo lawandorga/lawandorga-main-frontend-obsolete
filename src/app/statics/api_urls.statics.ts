@@ -47,11 +47,12 @@ export const PROCESS_RECORD_DELETIONS_API_URL = base + 'api/records/process_reco
 const CHECK_USER_ACTIVATION_API_URL = base + "api/check_user_activation_link/";
 const ACTIVATE_USER_ACTIVATION_API_URL = "base + api/activate_user_activation_link/";
 const RESET_PASSWORD_API_URL = base + "api/reset_password/";
-const SPECIAL_RECORD_BASE_API_URL = base + "api/records/e_record/";
-const DOWNLOAD_SIGNING_BASE_API_URL = base + "api/storage_down/";
+const SPECIAL_RECORD_BASE_API_URL = base + "api/records/e_record/";     // deprecated??? is it?
+const DOWNLOAD_SIGNING_BASE_API_URL = base + "api/storage_down/";       // deprecated
 const RECORD_DOCUMENT_BASE_API_URL = base + "api/records/documents/";
 const PERMISSION_FOR_GROUP_BASE_API_URL = base + "api/permissions_for_group/";
 const DOWNLOAD_ALL_RECORD_DOCUMENTS_BASE_API_URL = base + "api/records/documents_download/";
+const DOWNLOAD_ENCRYPTED_RECORD_DOCUMENT_BASE_API_URL = base + "api/records/e_record/documents/"
 
 export const GetSpecialProfileApiURL = (id: string | number) => {
     return `${PROFILES_API_URL}${id}/`;
@@ -121,3 +122,10 @@ export const GetDownloadAllRecordDocumentsApiUrl = (record_id: string) => {
     return `${DOWNLOAD_ALL_RECORD_DOCUMENTS_BASE_API_URL}${record_id}/`;
 };
 
+export const GetSpecialRecordUploadDocumentsApiUrl = (record_id: string) => {
+    return `${SPECIAL_RECORD_BASE_API_URL}${record_id}/documents/`;
+};
+
+export const GetDownloadEncryptedRecordDocumentApiUrl = (document_id: string) => {
+    return `${DOWNLOAD_ENCRYPTED_RECORD_DOCUMENT_BASE_API_URL}${document_id}/`;
+};

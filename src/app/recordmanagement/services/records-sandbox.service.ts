@@ -59,6 +59,7 @@ import { RecordPermissionRequest } from '../models/record_permission.model';
 import { GetRecordFrontUrl, RECORDS_FRONT_URL } from '../../statics/frontend_links.statics';
 import { State } from '../../core/models/state.model';
 import { RecordDeletionRequest } from '../models/record_deletion_request.model';
+import { RecordDocument } from '../models/record_document.model';
 
 @Injectable({
     providedIn: 'root'
@@ -263,43 +264,51 @@ export class RecordsSandboxService {
     }
 
     uploadRecordDocuments(files: File[]) {
+        // TODO: ! encryption
+
         let record_id = null;
         this.recordStore
             .pipe(select((state: any) => state.records.special_record.record))
             .subscribe(record => {
                 record_id = record.id;
             });
-        let rlc_id = null;
-        this.coreStateStore.pipe(select((state: any) => state.api.rlc)).subscribe(rlc => {
-            rlc_id = rlc.id;
-        });
-        this.storageService.uploadFiles(files, getRecordFolder(rlc_id, record_id), () => {
-            this.snackbarService.showSuccessSnackBar('upload finished');
-            for (const file of files) {
-                const information = {
-                    record_id,
-                    filename: file.name
-                };
-                this.recordStore.dispatch(new StartAddingNewRecordDocument(information));
-            }
-        });
+        // let rlc_id = null;
+        // this.coreStateStore.pipe(select((state: any) => state.core.rlc)).subscribe(rlc => {
+        //     rlc_id = rlc.id;
+        // });
+        console.log('upload record documents');
+        this.storageService.uploadEncryptedRecordDocuments(files, record_id);
+        // this.storageService.uploadFiles(files, getRecordFolder(rlc_id, record_id), () => {
+        //     this.snackbarService.showSuccessSnackBar('upload finished');
+        //     for (const file of files) {
+        //         const information = {
+        //             record_id,
+        //             filename: file.name
+        //         };
+        //         this.recordStore.dispatch(new StartAddingNewRecordDocument(information));
+        //     }
+        // });
     }
 
-    downloadRecordDocument(file_name: string) {
-        let record_id = null;
-        this.recordStore
-            .pipe(select((state: any) => state.records.special_record.record))
-            .subscribe(record => {
-                record_id = record.id;
-            });
-        let rlc_id = null;
-        this.coreStateStore.pipe(select((state: any) => state.api.rlc)).subscribe(rlc => {
-            rlc_id = rlc.id;
-        });
-        this.storageService.downloadFile(getRecordFolder(rlc_id, record_id) + '/' + file_name);
+    downloadRecordDocument(document: RecordDocument) {
+        // TODO: ! encryption
+        // let record_id = null;
+        // this.recordStore
+        //     .pipe(select((state: any) => state.records.special_record.record))
+        //     .subscribe(record => {
+        //         record_id = record.id;
+        //     });
+        // let rlc_id = null;
+        // this.coreStateStore.pipe(select((state: any) => state.api.rlc)).subscribe(rlc => {
+        //     rlc_id = rlc.id;
+        // });
+        // this.storageService.downloadFile(getRecordFolder(rlc_id, record_id) + '/' + file_name);
+        this.storageService.downloadEncryptedRecordDocument(document)
     }
 
     downloadAllRecordDocuments() {
+        // TODO: ! encryption
+
         let record_id = null;
         let record_token = null;
         this.recordStore
