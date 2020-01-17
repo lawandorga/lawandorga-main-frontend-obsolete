@@ -28,19 +28,15 @@ import { RecordsSandboxService } from '../../services/records-sandbox.service';
 import { RecordState } from '../../models/states.model';
 import {
     START_ADDING_NEW_RECORD,
-    START_ADDING_NEW_RECORD_DOCUMENT,
     START_ADDING_NEW_RECORD_MESSAGE,
     StartAddingNewRecord,
-    StartAddingNewRecordDocument,
     StartAddingNewRecordMessage
 } from '../actions/records-start.actions';
 import {
     CREATE_RECORD_API_URL,
     GetAddRecordMessageApiUrl,
-    GetCreateRecordDocumentApiUrl
 } from '../../../statics/api_urls.statics';
-import { RecordDocument } from '../../models/record_document.model';
-import { ADD_RECORD_DOCUMENT, ADD_RECORD_MESSAGE } from '../actions/records.actions';
+import { ADD_RECORD_MESSAGE } from '../actions/records.actions';
 import { RecordMessage } from '../../models/record_message.model';
 
 @Injectable()
@@ -75,37 +71,6 @@ export class RecordsAddEffects {
                         return [];
                     })
                 )
-            );
-        })
-    );
-
-    @Effect()
-    startAddingNewRecordDocument = this.actions.pipe(
-        ofType(START_ADDING_NEW_RECORD_DOCUMENT),
-        map((action: StartAddingNewRecordDocument) => {
-            return action.payload;
-        }),
-        mergeMap((newDocument: any) => {
-            return from(
-                this.http
-                    .post(GetCreateRecordDocumentApiUrl(newDocument.record_id), newDocument)
-                    .pipe(
-                        catchError(error => {
-                            this.recordSB.showError(
-                                'error at creating new record document: ' + error.error.detail
-                            );
-                            return [];
-                        }),
-                        mergeMap(response => {
-                            const document = RecordDocument.getRecordDocumentFromJson(response);
-                            return [
-                                {
-                                    type: ADD_RECORD_DOCUMENT,
-                                    payload: document
-                                }
-                            ];
-                        })
-                    )
             );
         })
     );

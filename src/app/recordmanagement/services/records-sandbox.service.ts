@@ -25,6 +25,7 @@ import { Observable } from 'rxjs';
 
 import { RecordsState } from '../store/records.reducers';
 import {
+    AddRecordDocument,
     ResetFullClientInformation,
     ResetPossibleClients,
     SetSpecialRecordRequestState,
@@ -264,51 +265,26 @@ export class RecordsSandboxService {
     }
 
     uploadRecordDocuments(files: File[]) {
-        // TODO: ! encryption
-
         let record_id = null;
         this.recordStore
             .pipe(select((state: any) => state.records.special_record.record))
             .subscribe(record => {
                 record_id = record.id;
             });
-        // let rlc_id = null;
-        // this.coreStateStore.pipe(select((state: any) => state.core.rlc)).subscribe(rlc => {
-        //     rlc_id = rlc.id;
-        // });
-        console.log('upload record documents');
-        this.storageService.uploadEncryptedRecordDocuments(files, record_id);
-        // this.storageService.uploadFiles(files, getRecordFolder(rlc_id, record_id), () => {
-        //     this.snackbarService.showSuccessSnackBar('upload finished');
-        //     for (const file of files) {
-        //         const information = {
-        //             record_id,
-        //             filename: file.name
-        //         };
-        //         this.recordStore.dispatch(new StartAddingNewRecordDocument(information));
-        //     }
-        // });
+        this.storageService.uploadEncryptedRecordDocuments(files, record_id, (response) => {
+            const documents = RecordDocument.getRecordDocumentsFromJsonArray(response);
+            console.log('documents after uplaoding');
+            for (const document of documents){
+                this.recordStore.dispatch(new AddRecordDocument(document))
+            }
+        });
     }
 
     downloadRecordDocument(document: RecordDocument) {
-        // TODO: ! encryption
-        // let record_id = null;
-        // this.recordStore
-        //     .pipe(select((state: any) => state.records.special_record.record))
-        //     .subscribe(record => {
-        //         record_id = record.id;
-        //     });
-        // let rlc_id = null;
-        // this.coreStateStore.pipe(select((state: any) => state.api.rlc)).subscribe(rlc => {
-        //     rlc_id = rlc.id;
-        // });
-        // this.storageService.downloadFile(getRecordFolder(rlc_id, record_id) + '/' + file_name);
-        this.storageService.downloadEncryptedRecordDocument(document)
+        this.storageService.downloadEncryptedRecordDocument(document);
     }
 
     downloadAllRecordDocuments() {
-        // TODO: ! encryption
-
         let record_id = null;
         let record_token = null;
         this.recordStore
@@ -317,7 +293,6 @@ export class RecordsSandboxService {
                 record_id = record.id;
                 record_token = record.token;
             });
-        // this.storageService.downloadAllFilesFromRecord(record_id, record_token);
         this.storageService.downloadAllEncryptedRecordDocuments(record_id, record_token);
     }
 

@@ -236,14 +236,6 @@ export class CoreSandboxService {
         this.snackbarService.showErrorSnackBar(message);
     }
 
-    uploadProfilePicture(file: File) {
-        this.storageService.uploadFile(file, "profile_pictures");
-    }
-
-    downloadSingleFile(filekey: string) {
-        this.storageService.downloadFile(filekey);
-    }
-
     relogUser() {
         this.router.navigate(["login"]);
     }

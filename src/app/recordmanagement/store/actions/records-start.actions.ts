@@ -37,8 +37,6 @@ export const START_LOADING_RECORD_PERMISSION_REQUESTS = 'START_LOADING_RECORD_PE
 export const START_LOADING_RECORD_DELETION_REQUESTS = 'START_LOADING_RECORD_DELETION_REQUESTS';
 
 export const START_ADDING_NEW_RECORD = "START_ADDING_NEW_RECORD";
-export const START_ADDING_NEW_RECORD_DOCUMENT =
-    "START_ADDING_NEW_RECORD_DOCUMENT";
 export const START_ADDING_NEW_RECORD_MESSAGE =
     "START_ADDING_NEW_RECORD_MESSAGE";
 
@@ -97,12 +95,6 @@ export class StartAddingNewRecord implements Action {
     constructor(public payload: any) {}
 }
 
-export class StartAddingNewRecordDocument implements Action {
-    readonly type = START_ADDING_NEW_RECORD_DOCUMENT;
-
-    constructor(public payload: any) {}
-}
-
 export class StartAddingNewRecordMessage implements Action {
     readonly type = START_ADDING_NEW_RECORD_MESSAGE;
 
@@ -150,7 +142,6 @@ export type RecordStartActions =
     | StartLoadingSpecialRecord
     | StartSavingRecord
     | StartAddingNewRecord
-    | StartAddingNewRecordDocument
     | StartAddingNewRecordMessage
     | StartSettingRecordDocumentTags
     | StartLoadingRecordPermissionRequests

@@ -60,6 +60,7 @@ export class RecordDocumentsListComponent implements OnInit {
     ngOnInit() {}
 
     dropped($event) {
+        console.log('dropped fies here', $event.dataTransfer.files);
         event.preventDefault();
         const files = $event.dataTransfer.files;
         this.recordSB.uploadRecordDocuments(files);
@@ -78,9 +79,5 @@ export class RecordDocumentsListComponent implements OnInit {
 
     dragover($event) {
         $event.preventDefault();
-    }
-
-    onDownloadAllClick() {
-        this.recordSB.downloadAllRecordDocuments();
     }
 }
