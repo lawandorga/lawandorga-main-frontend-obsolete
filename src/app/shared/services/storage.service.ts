@@ -19,6 +19,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpEventType, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import * as FileSaver from 'file-saver';
+import * as mime from 'mime';
+
 
 import {
     GetDownloadAllRecordDocumentsApiUrl,
@@ -31,6 +33,7 @@ import { SnackbarService } from './snackbar.service';
 import { Subject } from 'rxjs';
 import { AppSandboxService } from '../../core/services/app-sandbox.service';
 import { RecordDocument } from '../../recordmanagement/models/record_document.model';
+import { FullRecord } from '../../recordmanagement/models/record.model';
 
 @Injectable()
 export class StorageService {
@@ -61,16 +64,16 @@ export class StorageService {
         }
 
         const blob = new Blob(byteArrays, {
-            type: contentType
+            type: contentType,
         });
         return blob;
     }
 
-    public static saveZipFile(bytes, filename: string) {
+    public static saveFile(bytes, filename: string) {
         /**
          * base64 bytes of file
          */
-        FileSaver.saveAs(StorageService.b64toBlob(bytes, 'application/zip', 512), filename);
+        FileSaver.saveAs(StorageService.b64toBlob(bytes, mime.getType(filename), 512), filename);
     }
 
     uploadFile(file: File, fileDir: string, finished?) {
@@ -81,7 +84,7 @@ export class StorageService {
     }
 
     uploadFiles(files: File[], file_dir: string, finished?) {
-        // TODO: ! encryption
+        // TODO: ! encryption deprecated
         this.filesToUpload = files.length;
         this.filesUploaded = 0;
         this.filesUploadFinished = finished ? finished : null;
@@ -153,8 +156,15 @@ export class StorageService {
     downloadEncryptedRecordDocument(document: RecordDocument){
         const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
         this.http.get(GetDownloadEncryptedRecordDocumentApiUrl(document.id.toString()), privateKeyPlaceholder).subscribe((response) => {
-            console.log('response', response);
-            StorageService.saveZipFile(response, document.name)
+            StorageService.saveFile(response, document.name)
+        })
+    }
+
+    downloadAllEncryptedRecordDocuments(record_id: string, record_token: string){
+        const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
+        this.http.get(GetDownloadAllRecordDocumentsApiUrl(record_id), privateKeyPlaceholder).subscribe((response) => {
+            console.log('response from download all: ', response);
+            StorageService.saveFile(response, `${record_token}_documents.zip`);
         })
     }
 
@@ -172,7 +182,7 @@ export class StorageService {
     downloadAllFilesFromRecord(record: string, record_token: string): void {
         // TODO: ! encryption
         this.http.get(GetDownloadAllRecordDocumentsApiUrl(record)).subscribe((response: any) => {
-            StorageService.saveZipFile(response, `${record_token}_documents.zip`);
+            StorageService.saveFile(response, `${record_token}_documents.zip`);
         });
     }
 }

@@ -119,7 +119,7 @@ export const GetActivateUserApiUrl = (link: string) => {
 };
 
 export const GetDownloadAllRecordDocumentsApiUrl = (record_id: string) => {
-    return `${DOWNLOAD_ALL_RECORD_DOCUMENTS_BASE_API_URL}${record_id}/`;
+    return GetSpecialRecordUploadDocumentsApiUrl(record_id);
 };
 
 export const GetSpecialRecordUploadDocumentsApiUrl = (record_id: string) => {

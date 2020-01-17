@@ -41,7 +41,7 @@
         "hammerjs": "^2.0.8",
         "logrocket": "^0.6.21",
         "logrocket-ngrx": "^0.1.1",
-        "mime-types": "^2.1.26",
+        "mime": "^2.4.4",
         "moment": "^2.24.0",
         "ng-material-multilevel-menu": "^4.9.6",
         "ngx-cookie-service": "^2.2.0",

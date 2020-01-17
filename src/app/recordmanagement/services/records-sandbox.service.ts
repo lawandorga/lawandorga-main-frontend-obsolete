@@ -317,7 +317,8 @@ export class RecordsSandboxService {
                 record_id = record.id;
                 record_token = record.token;
             });
-        this.storageService.downloadAllFilesFromRecord(record_id, record_token);
+        // this.storageService.downloadAllFilesFromRecord(record_id, record_token);
+        this.storageService.downloadAllEncryptedRecordDocuments(record_id, record_token);
     }
 
     startAddingNewRecordMessage(message: string) {
