@@ -91,7 +91,6 @@ export class StorageService {
     downloadAllEncryptedRecordDocuments(record_id: string, record_token: string){
         const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
         this.http.get(GetDownloadAllRecordDocumentsApiUrl(record_id), privateKeyPlaceholder).subscribe((response) => {
-            console.log('response from download all: ', response);
             StorageService.saveFile(response, `${record_token}_documents.zip`);
         })
     }

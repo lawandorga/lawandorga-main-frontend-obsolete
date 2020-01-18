@@ -271,7 +271,6 @@ export class RecordsSandboxService {
             });
         this.storageService.uploadEncryptedRecordDocuments(files, record_id, (response) => {
             const documents = RecordDocument.getRecordDocumentsFromJsonArray(response);
-            console.log('documents after uplaoding');
             for (const document of documents){
                 this.recordStore.dispatch(new AddRecordDocument(document))
             }

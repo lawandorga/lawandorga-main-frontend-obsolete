@@ -60,7 +60,6 @@ export class RecordDocumentsListComponent implements OnInit {
     ngOnInit() {}
 
     dropped($event) {
-        console.log('dropped fies here', $event.dataTransfer.files);
         event.preventDefault();
         const files = $event.dataTransfer.files;
         this.recordSB.uploadRecordDocuments(files);

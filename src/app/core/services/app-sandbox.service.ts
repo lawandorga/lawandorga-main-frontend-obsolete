@@ -60,7 +60,6 @@ export class AppSandboxService {
     }
 
     logout() {
-        console.log('start logging out??');
         this.resetTokenAndUsersPrivateKey();
         this.store.dispatch(new StartLoggingOut());
         this.router.navigate([LOGIN_FRONT_URL]);

@@ -250,7 +250,7 @@ export class AuthEffects {
         // not on prod
         if (!isDevMode()) {
             // for logging
-            LogRocket.identify(response.user.id);
+            // LogRocket.identify(response.user.id); TODO: remove logrocket completely
             // keep this console.log
             console.log("identified: ", response.user.id);
         }
