@@ -53,7 +53,7 @@ export class SidebarComponent implements OnInit {
     name = "";
     email = "";
     timer = null;
-    checkPermissionInterval = 15000;
+    checkPermissionInterval = 30000;
 
     legalNoticeUrl = LEGAL_NOTICE_FRONT_URL;
     privacyStatementUrl = PRIVACY_STATEMENT_FRONT_URL;

@@ -30,7 +30,6 @@ import {
     ResetPossibleClients,
     SetSpecialRecordRequestState,
     StartAddingNewRecord,
-    StartAddingNewRecordDocument,
     StartAddingNewRecordMessage,
     StartAdmittingRecordPermissionRequest,
     StartDecliningRecordPermissionRequest,
@@ -55,9 +54,8 @@ import { FullRecord, RestrictedRecord } from '../models/record.model';
 import { StorageService } from '../../shared/services/storage.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { CoreState } from '../../core/store/core.reducers';
-import { getRecordFolder } from '../../statics/storage_folders.statics';
 import { RecordPermissionRequest } from '../models/record_permission.model';
-import { GetRecordFrontUrl, RECORDS_FRONT_URL } from '../../statics/frontend_links.statics';
+import { RECORDS_FRONT_URL } from '../../statics/frontend_links.statics';
 import { State } from '../../core/models/state.model';
 import { RecordDeletionRequest } from '../models/record_deletion_request.model';
 import { RecordDocument } from '../models/record_document.model';

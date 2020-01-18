@@ -101,8 +101,8 @@ export class RecordsLoadingEffects {
                     }),
                     mergeMap(response => {
                         const loadedRecords: Array<RestrictedRecord> = [];
-                        console.log('response from loading records', response);
                         Object.values(response).map(record => {
+                            // TODO: refactor, all are 'restricted' in full view
                             if (record['has_permission']) {
                                 loadedRecords.push(
                                     FullRecord.getFullRecordFromJson(record)
