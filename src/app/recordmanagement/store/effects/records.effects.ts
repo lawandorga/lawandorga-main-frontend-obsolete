@@ -160,12 +160,13 @@ export class RecordsEffects {
             return action.payload;
         }),
         mergeMap((request: RecordPermissionRequest) => {
+            const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
             return from(
                 this.http
                     .post(RECORD_PERMISSIONS_LIST_API_URL, {
                         id: request.id,
                         action: 'accept'
-                    })
+                    }, privateKeyPlaceholder)
                     .pipe(
                         catchError(error => {
                             this.recordSB.showError(
