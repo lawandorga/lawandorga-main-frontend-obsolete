@@ -49,6 +49,9 @@ export class AuthInterceptor implements HttpInterceptor {
                 return next.handle(clonedRequest).pipe(
                     catchError((error, caught) => {
                         if (error.status === 401) {
+                            if (error.url && error.url.includes('logout')){
+                               return [];
+                            }
                             this.appSB.saveLocation();
                             this.appSB.logout();
                             return [];

@@ -109,6 +109,7 @@ import { HasPermission, Permission } from "../models/permission.model";
 import { RestrictedRlc } from "../models/rlc.model";
 import { NewUserRequest } from "../models/new_user_request.model";
 import { AppSandboxService } from '../services/app-sandbox.service';
+import { placeholdersToParams } from '@angular/compiler/src/render3/view/i18n/util';
 
 @Injectable()
 export class CoreEffects {
@@ -654,12 +655,13 @@ export class CoreEffects {
             return action.payload;
         }),
         switchMap((newUserRequest: NewUserRequest) => {
+            const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
             return from(
                 this.http
                     .post(NEW_USER_REQUEST_ADMIT_API_URL, {
                         id: newUserRequest.id,
                         action: "accept"
-                    })
+                    }, privateKeyPlaceholder)
                     .pipe(
                         catchError(error => {
                             this.snackbar.showErrorSnackBar(
@@ -834,12 +836,13 @@ export class CoreEffects {
             return action.payload;
         }),
         switchMap((id: string) => {
+            const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
             return from(
                 this.http
                     .post(INACTIVE_USERS_API_URL, {
                         method: "activate",
                         user_id: id
-                    })
+                    }, privateKeyPlaceholder)
                     .pipe(
                         catchError(error => {
                             this.snackbar.showErrorSnackBar(
