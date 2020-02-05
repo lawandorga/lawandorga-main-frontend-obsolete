@@ -262,7 +262,7 @@ export class RecordsSandboxService {
         this.location.back();
     }
 
-    uploadRecordDocuments(files: File[]) {
+     uploadRecordDocuments(files: File[]) {
         let record_id = null;
         this.recordStore
             .pipe(select((state: any) => state.records.special_record.record))
