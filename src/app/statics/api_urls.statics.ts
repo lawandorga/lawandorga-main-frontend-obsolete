@@ -22,7 +22,7 @@ import {environment} from "../../environments/environment";
 export const base = environment.apiUrl;
 export const LOGIN_API_URL = base + "api/login/";
 export const RECORDS_API_URL = base + "api/records/e_records/";
-export const CLIENTS_BY_BIRTHDAY_API_URL = base + "api/records/clients_by_birthday/";
+export const CLIENTS_BY_BIRTHDAY_API_URL = base + "api/records/e_clients_by_birthday/";
 export const RECORDS_STATICS_API_URL = base + "api/records/statics/";
 export const PROFILES_API_URL = base + "api/profiles/";
 export const CREATE_PROFILE_API_URL = base + "api/create_profile/";

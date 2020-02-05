@@ -196,11 +196,12 @@ export class RecordsLoadingEffects {
             return action.payload;
         }),
         switchMap((birthday: Date) => {
+            const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
             return from(
                 this.http
                     .post(CLIENTS_BY_BIRTHDAY_API_URL, {
                         birthday: CoreSandboxService.transformDateToString(birthday)
-                    })
+                    }, privateKeyPlaceholder)
                     .pipe(
                         catchError(error => {
                             this.snackbarService.showErrorSnackBar(
