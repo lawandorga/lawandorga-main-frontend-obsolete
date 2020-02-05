@@ -19,7 +19,7 @@
     <mat-toolbar class="full-record-detail__header">
         <h1>{{ record.token }}</h1>
         <div>
-            <button mat-flat-button color="warn" aria-label="Back" (click)="onBackClick()" type="button"
+            <button mat-stroked-button aria-label="Back" (click)="onBackClick()" type="button"
                     class="full-record-detail__button">
                 Back
             </button>
@@ -29,7 +29,7 @@
             </button>
             <mat-menu #appMenu="matMenu">
                 <button mat-menu-item class="button-normal" (click)="onChangeRecordTokenClick()">change record token</button>
-<!--                <button mat-menu-item class="button-normal" (click)="onRequestRecordDeletionClick()">request deletion</button>-->
+                <button mat-menu-item class="button-normal" (click)="onRequestRecordDeletionClick()">request deletion</button>
             </mat-menu>
 
             <button mat-icon-button [matMenuTriggerFor]="appMenu">

@@ -35,8 +35,8 @@ import {
     ResetPassword,
     START_LOGGING_OUT,
     LOGOUT,
-    StartLoggingOut
-} from "./auth.actions";
+    SET_USERS_PRIVATE_KEY
+} from './auth.actions';
 import LogRocket from "logrocket";
 import {
     FORGOT_PASSWORD_API_URL,
@@ -59,8 +59,6 @@ import { CoreSandboxService } from "../../services/core-sandbox.service";
 import { HasPermission, Permission } from "../../models/permission.model";
 import { RestrictedRlc } from "../../models/rlc.model";
 import { AppSandboxService } from "../../services/app-sandbox.service";
-import { RecordPermissionRequest } from "../../../recordmanagement/models/record_permission.model";
-import { UPDATE_RECORD_PERMISSION_REQUEST } from "../../../recordmanagement/store/actions/records.actions";
 import { LOGIN_FRONT_URL } from "../../../statics/frontend_links.statics";
 import { State } from "../../models/state.model";
 
@@ -94,6 +92,7 @@ export class AuthEffects {
                     mergeMap(
                         (response: {
                             token: string;
+                            users_private_key: string,
                             user: any;
                             all_permissions: any;
                             permissions: any;
@@ -103,7 +102,7 @@ export class AuthEffects {
                             user_states: any;
                             user_record_states;
                         }) => {
-                            this.appSB.saveToken(response.token);
+                            this.appSB.saveTokenAndUsersPrivateKey(response.token, response.users_private_key);
                             if (this.guard.lastVisitedUrl)
                                 this.router.navigate([
                                     this.guard.getLastVisitedUrl()
@@ -116,6 +115,10 @@ export class AuthEffects {
                                 {
                                     type: SET_TOKEN,
                                     payload: response.token
+                                },
+                                {
+                                    type: SET_USERS_PRIVATE_KEY,
+                                    payload: response.users_private_key
                                 },
                                 ...AuthEffects.getStaticInformation(response)
                             ];
@@ -247,7 +250,7 @@ export class AuthEffects {
         // not on prod
         if (!isDevMode()) {
             // for logging
-            LogRocket.identify(response.user.id);
+            // LogRocket.identify(response.user.id); TODO: remove logrocket completely
             // keep this console.log
             console.log("identified: ", response.user.id);
         }

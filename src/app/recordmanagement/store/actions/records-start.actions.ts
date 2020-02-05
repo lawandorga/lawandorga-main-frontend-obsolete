@@ -22,19 +22,21 @@ import {FullRecord, RestrictedRecord} from '../../models/record.model';
 import {FullClient} from '../../models/client.model';
 import {Tag} from '../../models/tag.model';
 import {RecordPermissionRequest} from '../../models/record_permission.model';
+import { RecordDeletionRequest } from '../../models/record_deletion_request.model';
 
 export const START_REQUESTING_RECORD_PERMISSION =
     "START_REQUESTING_RECORD_PERMISSION";
+export const START_REQUESTING_RECORD_DELETION = "START_REQUESTING_RECORD_DELETION";
+
 export const START_LOADING_RECORDS = "START_LOADING_RECORDS";
 export const START_LOADING_RECORD_STATICS = "START_LOADING_RECORD_STATICS";
 export const START_LOADING_CLIENT_POSSIBILITIES =
     "START_LOADING_CLIENT_POSSIBILITIES";
 export const START_LOADING_SPECIAL_RECORD = "START_LOADING_SPECIAL_RECORD";
 export const START_LOADING_RECORD_PERMISSION_REQUESTS = 'START_LOADING_RECORD_PERMISSION_REQUESTS';
+export const START_LOADING_RECORD_DELETION_REQUESTS = 'START_LOADING_RECORD_DELETION_REQUESTS';
 
 export const START_ADDING_NEW_RECORD = "START_ADDING_NEW_RECORD";
-export const START_ADDING_NEW_RECORD_DOCUMENT =
-    "START_ADDING_NEW_RECORD_DOCUMENT";
 export const START_ADDING_NEW_RECORD_MESSAGE =
     "START_ADDING_NEW_RECORD_MESSAGE";
 
@@ -44,8 +46,8 @@ export const START_SETTING_RECORD_DOCUMENT_TAGS =
 export const START_SAVING_RECORD = "START_SAVING_RECORD";
 
 export const START_ADMITTING_RECORD_PERMISSION_REQUEST = "START_ADMITTING_RECORD_PERMISSION_REQUEST";
-
 export const START_DECLINING_RECORD_PERMISSION_REQUEST = "START_DECLINING_RECORD_PERMISSION_REQUEST";
+export const START_PROCESSING_RECORD_DELETION_REQUEST = "START_PROCESSING_RECORD_DELETION_REQUEST";
 
 export class StartRequestingReadPermission implements Action {
     readonly type = START_REQUESTING_RECORD_PERMISSION;
@@ -53,6 +55,11 @@ export class StartRequestingReadPermission implements Action {
     constructor(public payload: RestrictedRecord) {}
 }
 
+export class StartRequestingRecordDeletion implements Action {
+    readonly type = START_REQUESTING_RECORD_DELETION;
+
+    constructor(public payload: {record: RestrictedRecord, explanation: string}) {}
+}
 
 export class StartLoadingRecords implements Action {
     readonly type = START_LOADING_RECORDS;
@@ -88,12 +95,6 @@ export class StartAddingNewRecord implements Action {
     constructor(public payload: any) {}
 }
 
-export class StartAddingNewRecordDocument implements Action {
-    readonly type = START_ADDING_NEW_RECORD_DOCUMENT;
-
-    constructor(public payload: any) {}
-}
-
 export class StartAddingNewRecordMessage implements Action {
     readonly type = START_ADDING_NEW_RECORD_MESSAGE;
 
@@ -122,17 +123,29 @@ export class StartDecliningRecordPermissionRequest implements Action {
     constructor(public payload: RecordPermissionRequest){}
 }
 
+export class StartLoadingRecordDeletionRequests implements Action {
+    readonly type = START_LOADING_RECORD_DELETION_REQUESTS;
+}
+
+export class StartProcessingRecordDeletionRequest implements Action {
+    readonly type = START_PROCESSING_RECORD_DELETION_REQUEST;
+
+    constructor(public payload: {request: RecordDeletionRequest, action: string}) {}
+}
+
 export type RecordStartActions =
     | StartRequestingReadPermission
+    | StartRequestingRecordDeletion
     | StartLoadingRecords
     | StartLoadingRecordStatics
     | StartLoadingClientPossibilities
     | StartLoadingSpecialRecord
     | StartSavingRecord
     | StartAddingNewRecord
-    | StartAddingNewRecordDocument
     | StartAddingNewRecordMessage
     | StartSettingRecordDocumentTags
     | StartLoadingRecordPermissionRequests
     | StartAdmittingRecordPermissionRequest
-    | StartDecliningRecordPermissionRequest;
+    | StartDecliningRecordPermissionRequest
+    | StartLoadingRecordDeletionRequests
+    | StartProcessingRecordDeletionRequest;

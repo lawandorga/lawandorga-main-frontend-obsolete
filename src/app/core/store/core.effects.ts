@@ -108,6 +108,8 @@ import { FullGroup, RestrictedGroup } from "../models/group.model";
 import { HasPermission, Permission } from "../models/permission.model";
 import { RestrictedRlc } from "../models/rlc.model";
 import { NewUserRequest } from "../models/new_user_request.model";
+import { AppSandboxService } from '../services/app-sandbox.service';
+import { placeholdersToParams } from '@angular/compiler/src/render3/view/i18n/util';
 
 @Injectable()
 export class CoreEffects {
@@ -115,7 +117,8 @@ export class CoreEffects {
         private actions: Actions,
         private http: HttpClient,
         private coreSB: CoreSandboxService,
-        private snackbar: SnackbarService
+        private snackbar: SnackbarService,
+        private appSB: AppSandboxService
     ) {}
 
     @Effect()
@@ -307,13 +310,14 @@ export class CoreEffects {
             return action.payload;
         }),
         switchMap((toAdd: { user_id: string; group_id: string }) => {
+            const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
             return from(
                 this.http
                     .post(GROUP_MEMBER_API_URL, {
                         action: "add",
                         user_id: toAdd.user_id,
                         group_id: toAdd.group_id
-                    })
+                    }, privateKeyPlaceholder)
                     .pipe(
                         catchError(error => {
                             this.snackbar.showErrorSnackBar(
@@ -487,8 +491,9 @@ export class CoreEffects {
             return action.payload;
         }),
         switchMap((toAdd: any) => {
+            const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
             return from(
-                this.http.post(HAS_PERMISSION_API_URL, toAdd).pipe(
+                this.http.post(HAS_PERMISSION_API_URL, toAdd, privateKeyPlaceholder).pipe(
                     catchError(error => {
                         this.snackbar.showErrorSnackBar(
                             "error at creating hasPermission: " +
@@ -650,12 +655,13 @@ export class CoreEffects {
             return action.payload;
         }),
         switchMap((newUserRequest: NewUserRequest) => {
+            const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
             return from(
                 this.http
                     .post(NEW_USER_REQUEST_ADMIT_API_URL, {
                         id: newUserRequest.id,
                         action: "accept"
-                    })
+                    }, privateKeyPlaceholder)
                     .pipe(
                         catchError(error => {
                             this.snackbar.showErrorSnackBar(
@@ -830,12 +836,13 @@ export class CoreEffects {
             return action.payload;
         }),
         switchMap((id: string) => {
+            const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
             return from(
                 this.http
                     .post(INACTIVE_USERS_API_URL, {
                         method: "activate",
                         user_id: id
-                    })
+                    }, privateKeyPlaceholder)
                     .pipe(
                         catchError(error => {
                             this.snackbar.showErrorSnackBar(

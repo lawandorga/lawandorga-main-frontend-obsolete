@@ -29,6 +29,7 @@ export class ConfirmationDialogComponent implements OnInit {
     description: string;
     cancelLabel: string;
     confirmLabel: string;
+    confirmColor: string;
 
     constructor(
         public dialogRef: MatDialogRef<ConfirmationDialogComponent>,
@@ -40,6 +41,7 @@ export class ConfirmationDialogComponent implements OnInit {
         }
         this.confirmLabel = data.confirmLabel ? data.confirmLabel : "yes";
         this.cancelLabel = data.cancelLabel ? data.cancelLabel : 'no';
+        this.confirmColor = data.confirmColor ? data.confirmColor : 'primary';
     }
 
     ngOnInit() {

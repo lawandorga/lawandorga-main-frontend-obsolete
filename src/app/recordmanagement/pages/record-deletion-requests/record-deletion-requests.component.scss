@@ -1,4 +1,4 @@
-/*
+/*!
  * law&orga - record and organization management software for refugee law clinics
  * Copyright (C) 2019  Dominik Walser
  *
@@ -16,13 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-interface EditTextParamsInterface {
-  short: boolean;
-  title?: string;
-  text?: string;
-  descriptionText?: string;
-  descriptionLabel: string;
-  cancelLabel?: string;
-  saveLabel?: string;
-  saveColor?: string;
+.records-deletion-requests__card {
+    max-width: 850px;
+}
+
+.records-deletion-requests__to-process-column__header {
+    padding-right: 15px;
+}
+
+.records-deletion-requests__to-process-column__content {
+    padding-right: 15px;
+    width: 125px;
 }

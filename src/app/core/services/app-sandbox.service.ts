@@ -16,23 +16,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Injectable } from "@angular/core";
-import { AppState } from "../../store/app.reducers";
-import { select, Store } from "@ngrx/store";
-import { take } from "rxjs/operators";
+import { Injectable } from '@angular/core';
+import { AppState } from '../../store/app.reducers';
+import { select, Store } from '@ngrx/store';
+import { switchMap, take } from 'rxjs/operators';
 import {
     ForgotPassword,
-    Logout,
-    ReloadStaticInformation, ResetPassword,
-    SetToken, StartLoggingOut,
+    ReloadStaticInformation,
+    ResetPassword,
+    SetUsersPrivateKey,
+    SetToken,
+    StartLoggingOut,
     TryLogin
 } from '../store/auth/auth.actions';
-import { Router } from "@angular/router";
-import { RecordsSandboxService } from "../../recordmanagement/services/records-sandbox.service";
-import {Observable} from 'rxjs';
-import {AuthState} from '../store/auth/auth.reducers';
-import {LOGIN_FRONT_URL} from '../../statics/frontend_links.statics';
-import {CookieService} from "ngx-cookie-service";
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { AuthState } from '../store/auth/auth.reducers';
+import { LOGIN_FRONT_URL } from '../../statics/frontend_links.statics';
+import { CookieService } from 'ngx-cookie-service';
+import { HttpHeaders } from '@angular/common/http';
+import { RequestOptions } from '@angular/http';
 
 @Injectable()
 export class AppSandboxService {
@@ -41,7 +44,8 @@ export class AppSandboxService {
     constructor(
         private store: Store<AppState>,
         private router: Router,
-        private cookieService: CookieService
+        private cookieService: CookieService,
+        private authStore: Store<AuthState>
     ) {}
 
     isAuthenticated(): boolean {
@@ -56,49 +60,61 @@ export class AppSandboxService {
     }
 
     logout() {
-        this.resetToken();
+        this.resetTokenAndUsersPrivateKey();
         this.store.dispatch(new StartLoggingOut());
         this.router.navigate([LOGIN_FRONT_URL]);
     }
 
     login(username: string, password: string) {
         this.store.dispatch(new TryLogin({ username, password }));
-
     }
 
     startApp(): Observable<AuthState> {
-        const token = this.loadToken();
-        if (token !== null && token !== '') {
-            this.store.dispatch(new SetToken(token));
+        const loginInformation = this.loadTokenAndUsersPrivateKey();
+        if (loginInformation.token !== null && loginInformation.token !== '') {
+            this.store.dispatch(new SetToken(loginInformation.token));
+            this.store.dispatch(new SetUsersPrivateKey(loginInformation.users_private_key));
             this.store.dispatch(new ReloadStaticInformation());
         }
-        return this.store.pipe(select("auth"));
+        return this.store.pipe(select('auth'));
     }
 
     getAuthState(): Observable<AuthState> {
-        return this.store.pipe(select("auth"));
+        return this.store.pipe(select('auth'));
     }
-    saveLocation(){
+
+    saveLocation() {
         this.savedLocation = this.router.url;
     }
 
     forgotPassword(email: string): void {
-        this.store.dispatch(new ForgotPassword({email}));
+        this.store.dispatch(new ForgotPassword({ email }));
     }
 
     resetPassword(new_password: string, link_id: string): void {
-        this.store.dispatch(new ResetPassword({new_password, link_id}));
+        this.store.dispatch(new ResetPassword({ new_password, link_id }));
     }
 
-    saveToken(token: string): void {
+    saveTokenAndUsersPrivateKey(token: string, users_private_key: string): void {
         this.cookieService.set('token', token);
+        this.cookieService.set('users_private_key', users_private_key);
     }
 
-    loadToken(): string {
-        return this.cookieService.get('token');
+    loadTokenAndUsersPrivateKey(): any {
+        return {
+            token: this.cookieService.get('token'),
+            users_private_key: this.cookieService.get('users_private_key')
+        };
     }
 
-    resetToken(): void {
+    resetTokenAndUsersPrivateKey(): void {
         this.cookieService.delete('token');
+        this.cookieService.delete('users_private_key');
+    }
+
+    getPrivateKeyPlaceholder(): any {
+        let headers = new HttpHeaders();
+        headers = headers.append('private-key', 'placeholder');
+        return {headers};
     }
 }

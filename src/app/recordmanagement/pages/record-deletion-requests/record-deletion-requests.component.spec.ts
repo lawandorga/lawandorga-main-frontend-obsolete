@@ -16,13 +16,28 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-interface EditTextParamsInterface {
-  short: boolean;
-  title?: string;
-  text?: string;
-  descriptionText?: string;
-  descriptionLabel: string;
-  cancelLabel?: string;
-  saveLabel?: string;
-  saveColor?: string;
-}
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { RecordDeletionRequestsComponent } from './record-deletion-requests.component';
+
+describe('RecordDeletionRequestsComponent', () => {
+  let component: RecordDeletionRequestsComponent;
+  let fixture: ComponentFixture<RecordDeletionRequestsComponent>;
+
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [ RecordDeletionRequestsComponent ]
+    })
+    .compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(RecordDeletionRequestsComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

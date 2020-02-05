@@ -16,18 +16,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import {Tag} from './tag.model';
+import { Tag } from './tag.model';
 
 export class TokenRecord {
-    constructor(
-        public id: number,
-        public token: string
-    ) {
+    constructor(public id: number, public token: string) {
         this.id = id;
         this.token = token;
     }
 
     static getTokenRecordFromJson(json: any): TokenRecord {
+        if (!json) {
+            return new TokenRecord(-1, 'DELETED');
+        }
         return new TokenRecord(json.id, json.record_token);
     }
 }
@@ -94,7 +94,7 @@ export class FullRecord extends RestrictedRecord {
         public circumstances: string,
         public next_steps: string,
         public status_described: string,
-        public additional_facts: string,
+        public additional_facts: string
     ) {
         super(id, token, last_contact_date, state, tags, working_on_record, official_note, false);
         this.created_on = created_on;
@@ -117,7 +117,7 @@ export class FullRecord extends RestrictedRecord {
         this.additional_facts = additional_facts;
     }
 
-    static getFullRecordFromJson(json){
+    static getFullRecordFromJson(json) {
         return new FullRecord(
             json.id,
             json.record_token,

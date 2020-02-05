@@ -23,6 +23,7 @@ import { AuthGuardService } from "../core/services/auth-guard.service";
 import { CreateRecordComponent } from "./pages/create-record/create-record.component";
 import { RecordComponent } from "./pages/record/record.component";
 import { RecordsPermitRequestsComponent } from "./pages/records-permit-requests/records-permit-requests.component";
+import { RecordDeletionRequestsComponent } from './pages/record-deletion-requests/record-deletion-requests.component';
 
 const recordsRoutes: Routes = [
     {
@@ -39,9 +40,13 @@ const recordsRoutes: Routes = [
         component: RecordsPermitRequestsComponent
     },
     {
+        path: "deletion_requests",
+        component: RecordDeletionRequestsComponent
+    },
+    {
         path: ":id",
         component: RecordComponent
-    },
+    }
 ];
 
 @NgModule({

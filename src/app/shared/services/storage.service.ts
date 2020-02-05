@@ -16,41 +16,34 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import * as FileSaver from "file-saver";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import * as FileSaver from 'file-saver';
+import * as mime from 'mime';
+
 
 import {
     GetDownloadAllRecordDocumentsApiUrl,
-    GetDownloadApiUrl,
-    GetUploadApiUrl,
-    UPLOAD_SIGNING_BASE_API_URL
-} from "../../statics/api_urls.statics";
-import { SnackbarService } from "./snackbar.service";
+    GetDownloadEncryptedRecordDocumentApiUrl,
+    GetSpecialRecordUploadDocumentsApiUrl
+} from '../../statics/api_urls.statics';
+import { SnackbarService } from './snackbar.service';
+import { AppSandboxService } from '../../core/services/app-sandbox.service';
+import { RecordDocument } from '../../recordmanagement/models/record_document.model';
 
 @Injectable()
 export class StorageService {
-    filesToUpload: number;
-    filesUploaded: number;
-    filesUploadFinished;
 
-    constructor(
-        private http: HttpClient,
-        private snackbarService: SnackbarService
-    ) {}
+    constructor(private http: HttpClient, private snackbarService: SnackbarService, private appSB: AppSandboxService) {}
 
     private static b64toBlob(b64Data, contentType, sliceSize) {
-        contentType = contentType || "application/zip";
+        contentType = contentType || 'application/zip';
         sliceSize = sliceSize || 512;
-        const b64DataString = b64Data.substr(b64Data.indexOf(",") + 1);
+        const b64DataString = b64Data.substr(b64Data.indexOf(',') + 1);
         const byteCharacters = atob(b64DataString);
         const byteArrays = [];
 
-        for (
-            let offset = 0;
-            offset < byteCharacters.length;
-            offset += sliceSize
-        ) {
+        for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
             const slice = byteCharacters.slice(offset, offset + sliceSize);
 
             const byteNumbers = new Array(slice.length);
@@ -64,117 +57,42 @@ export class StorageService {
         }
 
         const blob = new Blob(byteArrays, {
-            type: contentType
+            type: contentType,
         });
         return blob;
     }
 
-    public static saveZipFile(bytes, filename: string) {
+    public static saveFile(bytes, filename: string) {
         /**
          * base64 bytes of file
          */
-        FileSaver.saveAs(
-            StorageService.b64toBlob(bytes, "application/zip", 512),
-            filename
-        );
+        FileSaver.saveAs(StorageService.b64toBlob(bytes, mime.getType(filename), 512), filename);
     }
 
-    uploadFile(file: File, fileDir: string, finished?) {
-        this.http
-            .get(GetUploadApiUrl(file, fileDir))
-            .subscribe((response: any) => {
-                this.uploadFileDirect(
-                    file,
-                    response.data,
-                    response.url,
-                    finished
-                );
-            });
-    }
 
-    uploadFiles(files: File[], file_dir: string, finished?) {
-        if (file_dir.indexOf('null') !== -1){
-            console.log('contains null');
-            return;
+    uploadEncryptedRecordDocuments(files: File[], record_id, callbackFinishedFn?: Function) {
+        const formData = new FormData();
+        for (const file of files){
+            formData.append('files', file)
         }
-        this.filesToUpload = files.length;
-        this.filesUploaded = 0;
-        this.filesUploadFinished = finished ? finished : null;
-
-        const file_names = [];
-        const file_types = [];
-        for (const file of files) {
-            file_names.push(file.name);
-            file_types.push(file.type);
-        }
-
-        this.http
-            .post(UPLOAD_SIGNING_BASE_API_URL, {
-                file_names,
-                file_types,
-                file_dir
+        const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
+        this.http.post(GetSpecialRecordUploadDocumentsApiUrl(record_id), formData, privateKeyPlaceholder)
+            .subscribe(res => {
+                callbackFinishedFn(res);
             })
-            .subscribe((response: any) => {
-                const presigned_posts = response.presigned_posts;
-                for (const post of presigned_posts) {
-                    const file = Array.from(files).filter(
-                        (filterFile: File) => {
-                            return (
-                                post.data.fields.key ===
-                                `${file_dir}/${filterFile.name}`
-                            );
-                        }
-                    )[0];
-                    this.uploadFileDirect(file, post.data, post.url, () => {
-                        this.filesUploaded++;
-                        if (
-                            this.filesUploaded === this.filesToUpload &&
-                            this.filesUploadFinished
-                        )
-                            this.filesUploadFinished();
-                    });
-                }
-            });
     }
 
-    private uploadFileDirect(
-        file: File,
-        s3Data: { url: string; fields: any },
-        url: string,
-        callbackFn?
-    ) {
-        const v4form = new FormData();
-        v4form.append("x-amz-credential", s3Data.fields["x-amz-credential"]);
-        v4form.append("x-amz-algorithm", s3Data.fields["x-amz-algorithm"]);
-        v4form.append("key", s3Data.fields["key"]);
-        v4form.append("x-amz-signature", s3Data.fields["x-amz-signature"]);
-        v4form.append("policy", s3Data.fields["policy"]);
-        v4form.append("x-amz-date", s3Data.fields["x-amz-date"]);
-        v4form.append("file", file);
-
-        this.http.post(s3Data.url, v4form).subscribe((response: any) => {
-            if (!response) {
-                callbackFn();
-            }
-        });
+    downloadEncryptedRecordDocument(document: RecordDocument){
+        const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
+        this.http.get(GetDownloadEncryptedRecordDocumentApiUrl(document.id.toString()), privateKeyPlaceholder).subscribe((response) => {
+            StorageService.saveFile(response, document.name)
+        })
     }
 
-    downloadFile(filekey: string) {
-        this.http.get(GetDownloadApiUrl(filekey)).subscribe((response: any) => {
-            if (!response.error) window.location.href = response.data;
-            else {
-                this.snackbarService.showErrorSnackBar(
-                    "file not found, can't download"
-                );
-            }
-        });
-    }
-
-    downloadAllFilesFromRecord(record: string, record_token: string): void {
-        this.http
-            .get(GetDownloadAllRecordDocumentsApiUrl(record))
-            .subscribe((response: any) => {
-                StorageService.saveZipFile(response, `${record_token}_documents.zip`);
-            });
+    downloadAllEncryptedRecordDocuments(record_id: string, record_token: string){
+        const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
+        this.http.get(GetDownloadAllRecordDocumentsApiUrl(record_id), privateKeyPlaceholder).subscribe((response) => {
+            StorageService.saveFile(response, `${record_token}_documents.zip`);
+        })
     }
 }

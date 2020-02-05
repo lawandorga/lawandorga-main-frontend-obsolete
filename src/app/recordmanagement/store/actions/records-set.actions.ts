@@ -26,6 +26,7 @@ import { Tag } from "../../models/tag.model";
 import { RecordMessage } from "../../models/record_message.model";
 import { RecordPermissionRequest } from "../../models/record_permission.model";
 import {State} from '../../../core/models/state.model';
+import { RecordDeletionRequest } from '../../models/record_deletion_request.model';
 
 export const SET_SPECIAL_RECORD = "SET_SPECIAL_RECORD";
 export const SET_SPECIAL_CLIENT = "SET_SPECIAL_CLIENT";
@@ -42,7 +43,7 @@ export const SET_POSSIBLE_CLIENTS = "SET_POSSIBLE_CLIENTS";
 export const SET_RECORD_DOCUMENT_TAGS = "SET_RECORD_DOCUMENT_TAGS";
 export const SET_RECORD_PERMISSION_REQUESTS = "SET_RECORD_PERMISSION_REQUESTS";
 export const SET_SPECIAL_RECORD_REQUEST_STATE = "SET_SPECIAL_RECORD_REQUEST_STATE";
-
+export const SET_RECORD_DELETION_REQUESTS = "SET_RECORD_DELETION_REQUESTS";
 
 export class SetRecords implements Action {
     readonly type = SET_RECORDS;
@@ -134,6 +135,12 @@ export class SetSpecialRecordRequestState implements Action {
     constructor(public payload: string) {}
 }
 
+export class SetRecordDeletionRequests implements Action {
+    readonly type = SET_RECORD_DELETION_REQUESTS;
+
+    constructor(public payload: RecordDeletionRequest[]) {}
+}
+
 export type RecordsSetActions =
     | SetRecords
     | SetConsultants
@@ -149,4 +156,5 @@ export type RecordsSetActions =
     | SetRecordMessages
     | SetRecordDocumentTags
     | SetRecordPermissionRequests
-    | SetSpecialRecordRequestState;
+    | SetSpecialRecordRequestState
+    | SetRecordDeletionRequests;

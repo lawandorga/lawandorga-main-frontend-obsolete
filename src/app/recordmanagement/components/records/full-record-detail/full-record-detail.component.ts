@@ -260,20 +260,41 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
             text: this.record.token,
             descriptionText: 'please enter new record token'
         }, (newToken: string) => {
-            console.log('new record token should be', newToken);
-            this.record.token = newToken;
-            this.record.last_contact_date = CoreSandboxService.transformDate(
-                this.recordEditForm.value["last_contact_date"]
-            );
-            this.client.birthday = CoreSandboxService.transformDate(
-                this.recordEditForm.value["client_birthday"]
-            );
-            this.recordSB.startSavingRecord(this.record, this.client);
+            if (newToken){
+                this.record.token = newToken;
+                this.record.last_contact_date = CoreSandboxService.transformDate(
+                    this.recordEditForm.value["last_contact_date"]
+                );
+                this.client.birthday = CoreSandboxService.transformDate(
+                    this.recordEditForm.value["client_birthday"]
+                );
+                this.recordSB.startSavingRecord(this.record, this.client);
+            }
         })
     }
 
     onRequestRecordDeletionClick(){
+        this.sharedSB.openEditTextDialog({
+            short: false,
+            descriptionLabel: 'record deletion',
+            text: '',
+            descriptionText: 'please explain why you want to delete this record',
+            saveLabel: 'delete',
+            saveColor: 'warn'
+        }, (deletion_description: string) => {
+            if (deletion_description){
+                this.sharedSB.openConfirmDialog({
+                    description: 'are you sure you want to delete the record?',
+                    confirmLabel: 'delete',
+                    confirmColor: 'warn'
+                }, (delete_record: boolean) => {
+                    if (delete_record){
+                        this.recordSB.startRequestingRecordDeletion(this.record, deletion_description);
+                    }
+                })
+            }
 
+        })
     }
 }
  

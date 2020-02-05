@@ -73,14 +73,10 @@ export class RecordDocumentsListComponent implements OnInit {
 
     onDocumentClick(document: RecordDocument, $event) {
         $event.stopPropagation();
-        this.recordSB.downloadRecordDocument(document.name);
+        this.recordSB.downloadRecordDocument(document);
     }
 
     dragover($event) {
         $event.preventDefault();
-    }
-
-    onDownloadAllClick() {
-        this.recordSB.downloadAllRecordDocuments();
     }
 }

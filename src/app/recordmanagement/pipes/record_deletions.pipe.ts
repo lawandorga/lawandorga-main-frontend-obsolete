@@ -16,36 +16,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { AuthActions, LOGOUT, SET_TOKEN, SET_USERS_PRIVATE_KEY } from './auth.actions';
+import { Pipe, PipeTransform } from '@angular/core';
+import { RecordDeletionRequest } from '../models/record_deletion_request.model';
 
-export interface AuthState {
-    token: string;
-    users_private_key: string;
-    authenticated: boolean;
+@Pipe({name: 'recordDeletionRequested'})
+export class RecordDeletionsRequestedPipe implements PipeTransform {
+    transform(allDeletionRequests: RecordDeletionRequest[]): any {
+        return allDeletionRequests.filter(request => request.state === 're');
+    }
 }
 
-const initialState: AuthState = {
-    token: null,
-    users_private_key: null,
-    authenticated: false
-};
-
-export function authReducer(state = initialState, action: AuthActions) {
-    switch (action.type) {
-        case SET_TOKEN:
-            return {
-                ...state,
-                token: action.payload,
-                authenticated: true
-            };
-        case SET_USERS_PRIVATE_KEY:
-            return {
-                ...state,
-                users_private_key: action.payload
-            };
-        case LOGOUT:
-            return initialState;
-        default:
-            return state;
+@Pipe({name: 'recordDeletionProcessed'})
+export class RecordDeletionsProcessedPipe implements PipeTransform {
+    transform(allDeletionRequests: RecordDeletionRequest[]): any {
+        return allDeletionRequests.filter(request => request.state !== 're');
     }
 }

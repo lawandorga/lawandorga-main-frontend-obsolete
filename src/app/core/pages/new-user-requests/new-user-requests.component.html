@@ -33,25 +33,38 @@
                                 {{userRequest.request_from.name}}
                             </mat-panel-title>
                             <mat-panel-description class="new-user-requests__action-buttons-container">
-                                <button mat-flat-button color="warn" (click)="onDeclineClick($event, userRequest)">
+                                <button mat-flat-button color="warn" (click)="onDeclineClick($event, userRequest)"
+                                        i18n="@@decline">
                                     decline
                                 </button>
-                                <button mat-flat-button color="primary" (click)="onAcceptClick($event, userRequest)">
+                                <button mat-flat-button color="primary" (click)="onAcceptClick($event, userRequest)"
+                                        i18n="@@admit">
                                     admit
                                 </button>
                             </mat-panel-description>
                         </mat-expansion-panel-header>
 
-                        <p>requested: {{(userRequest.requested | date)}}</p>
-                        <p>email: {{userRequest.request_from.email}}</p>
+                        <p>
+                            <ng-container i18n="@@requested">requested</ng-container>
+                            : {{(userRequest.requested | date)}}</p>
+                        <p>
+                            <ng-container i18n="@@email">email</ng-container>
+                            : {{userRequest.request_from.email}}</p>
                         <p *ngIf="userRequest.request_from.birthday">
-                            birthday: {{(userRequest.request_from.birthday | date)}}</p>
-                        <p *ngIf="userRequest.request_from.phone_number">phone
-                            number: {{userRequest.request_from.phone_number}}</p>
-                        <p *ngIf="userRequest.request_from.street">street: {{userRequest.request_from.street}}</p>
-                        <p *ngIf="userRequest.request_from.city">city: {{userRequest.request_from.city}}</p>
-                        <p *ngIf="userRequest.request_from.postal_code">postal
-                            code: {{userRequest.request_from.postal_code}}</p>
+                            <ng-container i18n="@@birthday">birthday</ng-container>
+                            : {{(userRequest.request_from.birthday | date)}}</p>
+                        <p *ngIf="userRequest.request_from.phone_number">
+                            <ng-container i18n="@@phone_number">phone number</ng-container>
+                            : {{userRequest.request_from.phone_number}}</p>
+                        <p *ngIf="userRequest.request_from.street">
+                            <ng-container i18n="@@street">street</ng-container>
+                            : {{userRequest.request_from.street}}</p>
+                        <p *ngIf="userRequest.request_from.city">
+                            <ng-container i18n="@@city">city</ng-container>
+                            : {{userRequest.request_from.city}}</p>
+                        <p *ngIf="userRequest.request_from.postal_code">
+                            <ng-container i18n="@@postal_code">postal code</ng-container>
+                            : {{userRequest.request_from.postal_code}}</p>
                     </mat-expansion-panel>
                 </mat-accordion>
 
@@ -64,20 +77,25 @@
             <ng-template #alreadyProcessedTable>
                 <table mat-table [dataSource]="(newUserRequests | async | newUserRequestProcessed)">
                     <ng-container matColumnDef="id">
-                        <th mat-header-cell *matHeaderCellDef class="new-user-requests__processed__header">id</th>
+                        <th mat-header-cell *matHeaderCellDef class="new-user-requests__processed__header" i18n="@@id">
+                            id
+                        </th>
                         <td mat-cell *matCellDef="let newUserRequest">
                             {{ newUserRequest.id }}
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="from">
-                        <th mat-header-cell *matHeaderCellDef class="new-user-requests__processed__header">from</th>
+                        <th mat-header-cell *matHeaderCellDef class="new-user-requests__processed__header"
+                            i18n="@@from">from
+                        </th>
                         <td mat-cell *matCellDef="let newUserRequest" class="new-user-requests__processed__content">
                             {{ newUserRequest.request_from.name }}
 
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="processor">
-                        <th mat-header-cell *matHeaderCellDef class="new-user-requests__processed__header">processor
+                        <th mat-header-cell *matHeaderCellDef class="new-user-requests__processed__header"
+                            i18n="@@processor">processor
                         </th>
                         <td mat-cell *matCellDef="let newUserRequest"
                             class="new-user-requests__processed__content is_clickable"
@@ -86,8 +104,11 @@
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="processed_date">
-                        <th mat-header-cell *matHeaderCellDef class="new-user-requests__processed__header">process date</th>
-                        <td mat-cell *matCellDef="let newUserRequest" class="new-user-requests__processed__content-small">
+                        <th mat-header-cell *matHeaderCellDef class="new-user-requests__processed__header"
+                            i18n="@@process_date">process date
+                        </th>
+                        <td mat-cell *matCellDef="let newUserRequest"
+                            class="new-user-requests__processed__content-small">
                             {{ (newUserRequest.processed_on | date) }}
                         </td>
                     </ng-container>

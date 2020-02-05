@@ -18,6 +18,7 @@
 
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { SharedSandboxService } from '../../services/shared-sandbox.service';
 
 @Component({
     selector: 'app-edit-text',
@@ -32,6 +33,7 @@ export class EditTextComponent implements OnInit {
     descriptionLabel: string;
     cancelLabel: string;
     saveLabel: string;
+    saveColor: string;
 
     constructor(
         public dialogRef: MatDialogRef<EditTextComponent>,
@@ -46,6 +48,7 @@ export class EditTextComponent implements OnInit {
         this.saveLabel = data.saveLabel ? data.saveLabel : 'save';
         this.cancelLabel = data.cancelLabel ? data.cancelLabel : 'back';
         this.text = data.text ? data.text : '';
+        this.saveColor = data.saveColor ? data.saveColor : 'primary';
     }
 
     ngOnInit() {}

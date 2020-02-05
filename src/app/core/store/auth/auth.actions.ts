@@ -21,6 +21,7 @@ import { Action } from "@ngrx/store";
 export const TRY_LOGIN = "TRY_LOGIN";
 export const TRY_RELOAD_STATIC_INFORMATION = "TRY_RELOAD_STATIC_INFORMATION";
 export const SET_TOKEN = "SET_TOKEN";
+export const SET_USERS_PRIVATE_KEY = "SET_USERS_PRIVATE_KEY";
 export const LOGOUT = "LOGOUT";
 export const FORGOT_PASSWORD = "FORGOT_PASSWORD";
 export const RESET_PASSWORD = "RESET_PASSWORD";
@@ -38,6 +39,12 @@ export class ReloadStaticInformation implements Action {
 
 export class SetToken implements Action {
     readonly type = SET_TOKEN;
+
+    constructor(public payload: string) {}
+}
+
+export class SetUsersPrivateKey implements Action {
+    readonly type = SET_USERS_PRIVATE_KEY;
 
     constructor(public payload: string) {}
 }
@@ -69,4 +76,5 @@ export type AuthActions =
     | Logout
     | ResetPassword
     | ForgotPassword
-    | StartLoggingOut;
+    | StartLoggingOut
+    | SetUsersPrivateKey;

@@ -18,13 +18,13 @@
 
 import { Injectable } from "@angular/core";
 import { Actions, Effect, ofType } from "@ngrx/effects";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { from } from "rxjs";
 import { catchError, map, mergeMap, switchMap } from "rxjs/operators";
 
 import { AppSandboxService } from "../../../core/services/app-sandbox.service";
 import {
-    START_LOADING_CLIENT_POSSIBILITIES,
+    START_LOADING_CLIENT_POSSIBILITIES, START_LOADING_RECORD_DELETION_REQUESTS,
     START_LOADING_RECORD_PERMISSION_REQUESTS,
     START_LOADING_RECORD_STATICS,
     START_LOADING_RECORDS,
@@ -32,21 +32,21 @@ import {
     StartLoadingClientPossibilities,
     StartLoadingRecords,
     StartLoadingSpecialRecord
-} from "../actions/records-start.actions";
+} from '../actions/records-start.actions';
 import {
     CLIENTS_BY_BIRTHDAY_API_URL,
     GetRecordsSearchApiURL,
     GetSpecialRecordApiURL,
     RECORD_PERMISSIONS_LIST_API_URL,
     RECORDS_STATICS_API_URL,
-    RECORDS_API_URL
-} from "../../../statics/api_urls.statics";
+    RECORDS_API_URL, RECORD_DELETIONS_API_URL
+} from '../../../statics/api_urls.statics';
 import { FullRecord, RestrictedRecord } from "../../models/record.model";
 import {
     SET_CONSULTANTS,
     SET_COUNTRY_STATES,
     SET_ORIGIN_COUNTRIES,
-    SET_POSSIBLE_CLIENTS,
+    SET_POSSIBLE_CLIENTS, SET_RECORD_DELETION_REQUESTS,
     SET_RECORD_DOCUMENT_TAGS,
     SET_RECORD_PERMISSION_REQUESTS,
     SET_RECORD_STATES,
@@ -69,6 +69,8 @@ import { RESET_FULL_CLIENT_INFORMATION } from "../actions/records.actions";
 import { RecordPermissionRequest } from "../../models/record_permission.model";
 import { SnackbarService } from "../../../shared/services/snackbar.service";
 import {State} from '../../../core/models/state.model';
+import { RecordDeletionRequest } from '../../models/record_deletion_request.model';
+import { AuthState } from '../../../core/store/auth/auth.reducers';
 
 @Injectable()
 export class RecordsLoadingEffects {
@@ -100,7 +102,8 @@ export class RecordsLoadingEffects {
                     mergeMap(response => {
                         const loadedRecords: Array<RestrictedRecord> = [];
                         Object.values(response).map(record => {
-                            if (Object.keys(record).indexOf("note") > -1) {
+                            // TODO: refactor, all are 'restricted' in full view
+                            if (record['has_permission']) {
                                 loadedRecords.push(
                                     FullRecord.getFullRecordFromJson(record)
                                 );
@@ -193,11 +196,12 @@ export class RecordsLoadingEffects {
             return action.payload;
         }),
         switchMap((birthday: Date) => {
+            const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
             return from(
                 this.http
                     .post(CLIENTS_BY_BIRTHDAY_API_URL, {
                         birthday: CoreSandboxService.transformDateToString(birthday)
-                    })
+                    }, privateKeyPlaceholder)
                     .pipe(
                         catchError(error => {
                             this.snackbarService.showErrorSnackBar(
@@ -228,7 +232,7 @@ export class RecordsLoadingEffects {
         }),
         switchMap((id: string) => {
             return from(
-                this.http.get(GetSpecialRecordApiURL(id)).pipe(
+                this.http.get(GetSpecialRecordApiURL(id), this.appSB.getPrivateKeyPlaceholder()).pipe(
                     catchError(error => {
                         this.snackbarService.showErrorSnackBar(
                             `error at loading special record: ${
@@ -315,6 +319,35 @@ export class RecordsLoadingEffects {
                             {
                                 type: SET_RECORD_PERMISSION_REQUESTS,
                                 payload: RecordPermissionRequest.getRecordPermissionRequestsFromJsonArray(
+                                    response
+                                )
+                            }
+                        ];
+                    })
+                )
+            );
+        })
+    );
+
+    @Effect()
+    startLoadingRecordDeletionRequests = this.actions.pipe(
+        ofType(START_LOADING_RECORD_DELETION_REQUESTS),
+        switchMap(() => {
+            return from(
+                this.http.get(RECORD_DELETIONS_API_URL).pipe(
+                    catchError(error => {
+                        this.snackbarService.showErrorSnackBar(
+                            `error at loading record deletion list: ${
+                                error.error.detail
+                            }`
+                        );
+                        return [];
+                    }),
+                    mergeMap(response => {
+                        return [
+                            {
+                                type: SET_RECORD_DELETION_REQUESTS,
+                                payload: RecordDeletionRequest.getRecordDeletionRequestsFromJsonArray(
                                     response
                                 )
                             }
