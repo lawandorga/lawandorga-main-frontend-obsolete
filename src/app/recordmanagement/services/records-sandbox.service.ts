@@ -213,21 +213,25 @@ export class RecordsSandboxService {
         consultants: RestrictedUser[],
         tags: Tag[]
     ) {
-        let newRecord = {};
-        if (client) {
-            newRecord = {
-                client_id: client.id
-            };
-        } else {
-            newRecord = {
-                client_birthday: CoreSandboxService.transformDateToString(
-                    new Date(createFormValues.client_birthday)
-                ),
-                client_name: createFormValues.client_name
-            };
-        }
-        newRecord = {
-            ...newRecord,
+        // let newRecord = {};
+        // if (client) {
+        //     newRecord = {
+        //         client_id: client.id
+        //     };
+        // } else {
+        //     newRecord = {
+        //         client_birthday: CoreSandboxService.transformDateToString(
+        //             new Date(createFormValues.client_birthday)
+        //         ),
+        //         client_name: createFormValues.client_name
+        //     };
+        // }
+        const newRecord = {
+            //...newRecord,
+            client_birthday: CoreSandboxService.transformDateToString(
+                new Date(createFormValues.client_birthday)
+            ),
+            client_name: createFormValues.client_name,
             client_phone_number: createFormValues.client_phone_number,
             client_note: createFormValues.client_note,
             first_contact_date: CoreSandboxService.transformDateToString(
