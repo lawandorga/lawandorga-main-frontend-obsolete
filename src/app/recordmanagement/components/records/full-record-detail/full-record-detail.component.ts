@@ -16,28 +16,28 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import {Component, OnDestroy, OnInit} from "@angular/core";
-import {Observable} from "rxjs";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 
-import {FullRecord} from "../../../models/record.model";
-import {RecordsSandboxService} from "../../../services/records-sandbox.service";
-import {FullClient} from "../../../models/client.model";
-import {OriginCountry} from "../../../models/country.model";
-import {FormControl, FormGroup} from "@angular/forms";
-import {RecordDocument} from "../../../models/record_document.model";
-import {RecordMessage} from "../../../models/record_message.model";
-import {Tag} from "../../../models/tag.model";
-import {State} from "../../../../core/models/state.model";
-import {CoreSandboxService} from "../../../../core/services/core-sandbox.service";
-import {dateInPastValidator} from "../../../../statics/validators.statics";
-import {alphabeticalSorterByField} from "../../../../shared/other/sorter-helper";
-import {tap} from "rxjs/internal/operators/tap";
-import {SharedSandboxService} from "../../../../shared/services/shared-sandbox.service";
+import { FullRecord } from '../../../models/record.model';
+import { RecordsSandboxService } from '../../../services/records-sandbox.service';
+import { FullClient } from '../../../models/client.model';
+import { OriginCountry } from '../../../models/country.model';
+import { FormControl, FormGroup } from '@angular/forms';
+import { RecordDocument } from '../../../models/record_document.model';
+import { RecordMessage } from '../../../models/record_message.model';
+import { Tag } from '../../../models/tag.model';
+import { State } from '../../../../core/models/state.model';
+import { CoreSandboxService } from '../../../../core/services/core-sandbox.service';
+import { dateInPastValidator } from '../../../../statics/validators.statics';
+import { alphabeticalSorterByField } from '../../../../shared/other/sorter-helper';
+import { tap } from 'rxjs/internal/operators/tap';
+import { SharedSandboxService } from '../../../../shared/services/shared-sandbox.service';
 
 @Component({
-    selector: "app-full-record-detail",
-    templateUrl: "./full-record-detail.component.html",
-    styleUrls: ["./full-record-detail.component.scss"]
+    selector: 'app-full-record-detail',
+    templateUrl: './full-record-detail.component.html',
+    styleUrls: ['./full-record-detail.component.scss']
 })
 export class FullRecordDetailComponent implements OnInit, OnDestroy {
     allCountries: Observable<OriginCountry[]>;
@@ -57,28 +57,29 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
     record_messages: RecordMessage[];
 
     recordEditForm: FormGroup;
+    user_working_on_record = false;
 
-    constructor(private recordSB: RecordsSandboxService, private sharedSB: SharedSandboxService) {
+    constructor(private recordSB: RecordsSandboxService, private coreSB: CoreSandboxService, private sharedSB: SharedSandboxService) {
         this.recordEditForm = new FormGroup({
-            client_name: new FormControl(""),
-            client_birthday: new FormControl("", [dateInPastValidator]),
-            client_phone: new FormControl(""),
-            client_note: new FormControl(""),
-            note: new FormControl(""),
-            official_note: new FormControl(""),
-            last_contact_date: new FormControl("", [dateInPastValidator]),
-            state: new FormControl(""),
-            consultant_team: new FormControl(""),
-            lawyer: new FormControl(""),
-            related_persons: new FormControl(""),
-            contact: new FormControl(""),
-            bamf_token: new FormControl(""),
-            foreign_token: new FormControl(""),
-            first_correspondence: new FormControl(""),
-            circumstances: new FormControl(""),
-            next_steps: new FormControl(""),
-            status_described: new FormControl(""),
-            additional_facts: new FormControl("")
+            client_name: new FormControl(''),
+            client_birthday: new FormControl('', [dateInPastValidator]),
+            client_phone: new FormControl(''),
+            client_note: new FormControl(''),
+            note: new FormControl(''),
+            official_note: new FormControl(''),
+            last_contact_date: new FormControl('', [dateInPastValidator]),
+            state: new FormControl(''),
+            consultant_team: new FormControl(''),
+            lawyer: new FormControl(''),
+            related_persons: new FormControl(''),
+            contact: new FormControl(''),
+            bamf_token: new FormControl(''),
+            foreign_token: new FormControl(''),
+            first_correspondence: new FormControl(''),
+            circumstances: new FormControl(''),
+            next_steps: new FormControl(''),
+            status_described: new FormControl(''),
+            additional_facts: new FormControl('')
         });
     }
 
@@ -90,7 +91,7 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
         this.allCountries = this.recordSB.getOriginCountries();
         this.allRecordTags = this.recordSB.getRecordTags().pipe(
             tap(results => {
-                alphabeticalSorterByField(results, "name");
+                alphabeticalSorterByField(results, 'name');
             })
         );
         this.allRecordStates = this.recordSB.getRecordStates();
@@ -124,50 +125,50 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
     }
 
     loadValues() {
-        this.recordEditForm.controls["client_name"].setValue(this.client.name);
-        this.recordEditForm.controls["client_birthday"].setValue(
+        this.recordEditForm.controls['client_name'].setValue(this.client.name);
+        this.recordEditForm.controls['client_birthday'].setValue(
             this.client.birthday
         );
-        this.recordEditForm.controls["client_phone"].setValue(
+        this.recordEditForm.controls['client_phone'].setValue(
             this.client.phone_number
         );
-        this.recordEditForm.controls["client_note"].setValue(this.client.note);
+        this.recordEditForm.controls['client_note'].setValue(this.client.note);
 
-        this.recordEditForm.controls["official_note"].setValue(
+        this.recordEditForm.controls['official_note'].setValue(
             this.record.official_note
         );
-        this.recordEditForm.controls["state"].setValue(this.record.state);
-        this.recordEditForm.controls["note"].setValue(this.record.note);
-        this.recordEditForm.controls["contact"].setValue(this.record.contact);
-        this.recordEditForm.controls["bamf_token"].setValue(
+        this.recordEditForm.controls['state'].setValue(this.record.state);
+        this.recordEditForm.controls['note'].setValue(this.record.note);
+        this.recordEditForm.controls['contact'].setValue(this.record.contact);
+        this.recordEditForm.controls['bamf_token'].setValue(
             this.record.bamf_token
         );
-        this.recordEditForm.controls["foreign_token"].setValue(
+        this.recordEditForm.controls['foreign_token'].setValue(
             this.record.foreign_token
         );
-        this.recordEditForm.controls["first_correspondence"].setValue(
+        this.recordEditForm.controls['first_correspondence'].setValue(
             this.record.first_correspondence
         );
-        this.recordEditForm.controls["circumstances"].setValue(
+        this.recordEditForm.controls['circumstances'].setValue(
             this.record.circumstances
         );
-        this.recordEditForm.controls["lawyer"].setValue(this.record.lawyer);
-        this.recordEditForm.controls["related_persons"].setValue(
+        this.recordEditForm.controls['lawyer'].setValue(this.record.lawyer);
+        this.recordEditForm.controls['related_persons'].setValue(
             this.record.related_persons
         );
-        this.recordEditForm.controls["consultant_team"].setValue(
+        this.recordEditForm.controls['consultant_team'].setValue(
             this.record.consultant_team
         );
-        this.recordEditForm.controls["last_contact_date"].setValue(
+        this.recordEditForm.controls['last_contact_date'].setValue(
             this.record.last_contact_date
         );
-        this.recordEditForm.controls["additional_facts"].setValue(
+        this.recordEditForm.controls['additional_facts'].setValue(
             this.record.additional_facts
         );
-        this.recordEditForm.controls["next_steps"].setValue(
+        this.recordEditForm.controls['next_steps'].setValue(
             this.record.next_steps
         );
-        this.recordEditForm.controls["status_described"].setValue(
+        this.recordEditForm.controls['status_described'].setValue(
             this.record.status_described
         );
 
@@ -177,46 +178,53 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
         this.givenRecordState = this.recordSB.getRecordStateByAbbreviation(
             this.record.state
         );
+
+        this.coreSB.getUser().subscribe((user) => {
+            this.record.working_on_record.forEach((currentUser) => {
+                if (currentUser['id'] === user.id)
+                    this.user_working_on_record = true;
+            })
+        });
     }
 
     onSaveClick() {
-        this.record.note = this.recordEditForm.value["note"];
+        this.record.note = this.recordEditForm.value['note'];
         this.record.related_persons = this.recordEditForm.value[
-            "related_persons"
+            'related_persons'
             ];
-        this.record.contact = this.recordEditForm.value["contact"];
+        this.record.contact = this.recordEditForm.value['contact'];
         this.record.last_contact_date = CoreSandboxService.transformDate(
-            this.recordEditForm.value["last_contact_date"]
+            this.recordEditForm.value['last_contact_date']
         );
-        this.record.official_note = this.recordEditForm.value["official_note"];
-        this.record.bamf_token = this.recordEditForm.value["bamf_token"];
-        this.record.foreign_token = this.recordEditForm.value["foreign_token"];
+        this.record.official_note = this.recordEditForm.value['official_note'];
+        this.record.bamf_token = this.recordEditForm.value['bamf_token'];
+        this.record.foreign_token = this.recordEditForm.value['foreign_token'];
         this.record.additional_facts = this.recordEditForm.value[
-            "additional_facts"
+            'additional_facts'
             ];
         this.record.first_correspondence = this.recordEditForm.value[
-            "first_correspondence"
+            'first_correspondence'
             ];
-        this.record.circumstances = this.recordEditForm.value["circumstances"];
-        this.record.lawyer = this.recordEditForm.value["lawyer"];
+        this.record.circumstances = this.recordEditForm.value['circumstances'];
+        this.record.lawyer = this.recordEditForm.value['lawyer'];
         this.record.related_persons = this.recordEditForm.value[
-            "related_persons"
+            'related_persons'
             ];
         this.record.consultant_team = this.recordEditForm.value[
-            "consultant_team"
+            'consultant_team'
             ];
-        this.record.next_steps = this.recordEditForm.value["next_steps"];
+        this.record.next_steps = this.recordEditForm.value['next_steps'];
         this.record.status_described = this.recordEditForm.value[
-            "status_described"
+            'status_described'
             ];
 
-        this.client.note = this.recordEditForm.value["client_note"];
-        this.client.name = this.recordEditForm.value["client_name"];
+        this.client.note = this.recordEditForm.value['client_note'];
+        this.client.name = this.recordEditForm.value['client_name'];
         this.client.birthday = CoreSandboxService.transformDate(
-            this.recordEditForm.value["client_birthday"]
+            this.recordEditForm.value['client_birthday']
         );
         this.client.origin_country = this.origin_country.id;
-        this.client.phone_number = this.recordEditForm.value["client_phone"];
+        this.client.phone_number = this.recordEditForm.value['client_phone'];
 
         this.recordSB.startSavingRecord(this.record, this.client);
     }
@@ -233,7 +241,7 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
     onSelectedRecordTagsChanged(newTags: Tag[]): void {
         this.record.tags = newTags;
         if (newTags.length === 0) {
-            this.recordTagErrors = {null: "true"};
+            this.recordTagErrors = { null: 'true' };
         } else {
             this.recordTagErrors = null;
         }
@@ -244,8 +252,8 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
     }
 
     adjustTextAreaHeight(o) {
-        o.style.height = "1px";
-        o.style.height = 25 + o.scrollHeight + "px";
+        o.style.height = '1px';
+        o.style.height = 25 + o.scrollHeight + 'px';
     }
 
     downloadAllRecordDocuments(event) {
@@ -260,20 +268,20 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
             text: this.record.token,
             descriptionText: 'please enter new record token'
         }, (newToken: string) => {
-            if (newToken){
+            if (newToken) {
                 this.record.token = newToken;
                 this.record.last_contact_date = CoreSandboxService.transformDate(
-                    this.recordEditForm.value["last_contact_date"]
+                    this.recordEditForm.value['last_contact_date']
                 );
                 this.client.birthday = CoreSandboxService.transformDate(
-                    this.recordEditForm.value["client_birthday"]
+                    this.recordEditForm.value['client_birthday']
                 );
                 this.recordSB.startSavingRecord(this.record, this.client);
             }
-        })
+        });
     }
 
-    onRequestRecordDeletionClick(){
+    onRequestRecordDeletionClick() {
         this.sharedSB.openEditTextDialog({
             short: false,
             descriptionLabel: 'record deletion',
@@ -282,19 +290,34 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
             saveLabel: 'delete',
             saveColor: 'warn'
         }, (deletion_description: string) => {
-            if (deletion_description){
+            if (deletion_description) {
                 this.sharedSB.openConfirmDialog({
                     description: 'are you sure you want to delete the record?',
                     confirmLabel: 'delete',
                     confirmColor: 'warn'
                 }, (delete_record: boolean) => {
-                    if (delete_record){
+                    if (delete_record) {
                         this.recordSB.startRequestingRecordDeletion(this.record, deletion_description);
                     }
-                })
+                });
             }
 
-        })
+        });
+    }
+
+    onYieldingRecordClick() {
+        this.sharedSB.openConfirmDialog({
+            confirmLabel: 'sure',
+            cancelLabel: 'cancel',
+            description: 'are you sure you want to yield from record?',
+            title: 'Yield Record',
+            confirmColor: 'warn'
+        }, (result) => {
+            if (result){
+                // yield record
+                this.recordSB.startYieldingRecord(this.record);
+            }
+        });
     }
 }
  

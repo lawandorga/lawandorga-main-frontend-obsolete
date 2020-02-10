@@ -24,7 +24,7 @@ import {CoreSandboxService} from "../../services/core-sandbox.service";
 import {
     PERMISSION_ACCEPT_NEW_USERS_RLC,
     PERMISSION_ACTIVATE_INACTIVE_USERS,
-    PERMISSION_CAN_ADD_RECORD_RLC,
+    PERMISSION_CAN_ADD_RECORD_RLC, PERMISSION_CAN_CONSULT,
     PERMISSION_CAN_PERMIT_RECORD_PERMISSION_REQUESTS,
     PERMISSION_CAN_VIEW_PERMISSIONS_RLC,
     PERMISSION_CAN_VIEW_RECORDS, PERMISSION_PROCESS_RECORD_DELETION_REQUESTS
@@ -37,7 +37,7 @@ import {
     OWN_PROFILE_FRONT_URL,
     PERMISSIONS_FRONT_URL,
     PRIVACY_STATEMENT_FRONT_URL,
-    PROFILES_FRONT_URL,
+    PROFILES_FRONT_URL, RECORD_POOL_FRONT_URL,
     RECORDS_ADD_FRONT_URL,
     RECORDS_FRONT_URL,
     RECORDS_PERMIT_REQUEST_FRONT_URL
@@ -65,7 +65,8 @@ export class SidebarComponent implements OnInit {
         permissions: false,
         accept_new_user: false,
         activate_inactive_users: false,
-        process_record_deletion_requests: false
+        process_record_deletion_requests: false,
+        record_pool: false
     };
 
     sidebarItemsOrg = [
@@ -78,6 +79,11 @@ export class SidebarComponent implements OnInit {
             label: "Create Record",
             icon: "create_new_folder",
             link: RECORDS_ADD_FRONT_URL
+        },
+        {
+            label: "Record Pool",
+            icon: "library_books",
+            link: RECORD_POOL_FRONT_URL
         },
         {
             label: "Profiles",
@@ -253,6 +259,16 @@ export class SidebarComponent implements OnInit {
             }
         );
 
+        this.coreSB.hasPermissionFromStringForOwnRlc(
+            PERMISSION_CAN_CONSULT,
+            hasPermission => {
+                if (this.show_tab_permissions.record_pool !== hasPermission) {
+                    this.show_tab_permissions.record_pool = hasPermission;
+                    this.recheckSidebarItems();
+                }
+            }
+        );
+
         this.coreSB.getUser().subscribe((user: FullUser) => {
             this.name = user ? user.name : "";
             this.email = user ? user.email : "";
@@ -299,6 +315,11 @@ export class SidebarComponent implements OnInit {
         if (!this.show_tab_permissions.process_record_deletion_requests)
             newSidebarItems = SidebarComponent.removeLink(
                 DELETION_REQUESTS_FRONT_URL,
+                newSidebarItems
+            ).newItems;
+        if (!this.show_tab_permissions.record_pool)
+            newSidebarItems = SidebarComponent.removeLink(
+                RECORD_POOL_FRONT_URL,
                 newSidebarItems
             ).newItems;
         this.actualSidebarItems = newSidebarItems;

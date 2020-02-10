@@ -32,10 +32,10 @@ import {
     StartAddingNewRecord,
     StartAddingNewRecordMessage,
     StartAdmittingRecordPermissionRequest,
-    StartDecliningRecordPermissionRequest,
+    StartDecliningRecordPermissionRequest, StartEnlistingPoolConsultant,
     StartLoadingClientPossibilities,
     StartLoadingRecordDeletionRequests,
-    StartLoadingRecordPermissionRequests,
+    StartLoadingRecordPermissionRequests, StartLoadingRecordPool,
     StartLoadingRecords,
     StartLoadingRecordStatics,
     StartLoadingSpecialRecord,
@@ -43,7 +43,7 @@ import {
     StartRequestingReadPermission,
     StartRequestingRecordDeletion,
     StartSavingRecord,
-    StartSettingRecordDocumentTags
+    StartSettingRecordDocumentTags, StartYieldingRecord
 } from '../store/actions/records.actions';
 import { FullClient } from '../models/client.model';
 import { OriginCountry } from '../models/country.model';
@@ -105,6 +105,26 @@ export class RecordsSandboxService {
             select((state: any) => {
                 const values = state.records.consultants;
                 return asArray ? Object.values(values) : values;
+            })
+        );
+    };
+
+    startEnlistingPoolConsultant(){
+        this.recordStore.dispatch(new StartEnlistingPoolConsultant());
+    }
+
+    getPoolRecords(): Observable<number | any> {
+        return this.recordStore.pipe(
+            select((state: any) => {
+                return state.records.pool_records
+            })
+        );
+    }
+
+    getPoolConsultants(): Observable<number | any> {
+        return this.recordStore.pipe(
+            select((state: any) => {
+                return state.records.pool_consultants
             })
         );
     }
@@ -191,6 +211,10 @@ export class RecordsSandboxService {
 
     startLoadingRecordStatics() {
         this.recordStore.dispatch(new StartLoadingRecordStatics());
+    }
+
+    startYieldingRecord(record: FullRecord){
+        this.recordStore.dispatch(new StartYieldingRecord(record));
     }
 
     resetPossibleClients() {
@@ -380,5 +404,9 @@ export class RecordsSandboxService {
         this.recordStore.dispatch(
             new StartProcessingRecordDeletionRequest({ request, action: 'accept' })
         );
+    }
+
+    startLoadingRecordPool(){
+        this.recordStore.dispatch(new StartLoadingRecordPool());
     }
 }

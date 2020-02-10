@@ -25,7 +25,7 @@ import { catchError, map, mergeMap, switchMap } from "rxjs/operators";
 import { AppSandboxService } from "../../../core/services/app-sandbox.service";
 import {
     START_LOADING_CLIENT_POSSIBILITIES, START_LOADING_RECORD_DELETION_REQUESTS,
-    START_LOADING_RECORD_PERMISSION_REQUESTS,
+    START_LOADING_RECORD_PERMISSION_REQUESTS, START_LOADING_RECORD_POOL,
     START_LOADING_RECORD_STATICS,
     START_LOADING_RECORDS,
     START_LOADING_SPECIAL_RECORD,
@@ -39,13 +39,13 @@ import {
     GetSpecialRecordApiURL,
     RECORD_PERMISSIONS_LIST_API_URL,
     RECORDS_STATICS_API_URL,
-    RECORDS_API_URL, RECORD_DELETIONS_API_URL
+    RECORDS_API_URL, RECORD_DELETIONS_API_URL, RECORD_POOL_API_URL
 } from '../../../statics/api_urls.statics';
 import { FullRecord, RestrictedRecord } from "../../models/record.model";
 import {
     SET_CONSULTANTS,
     SET_COUNTRY_STATES,
-    SET_ORIGIN_COUNTRIES,
+    SET_ORIGIN_COUNTRIES, SET_POOL_CONSULTANTS, SET_POOL_RECORDS,
     SET_POSSIBLE_CLIENTS, SET_RECORD_DELETION_REQUESTS,
     SET_RECORD_DOCUMENT_TAGS,
     SET_RECORD_PERMISSION_REQUESTS,
@@ -357,4 +357,38 @@ export class RecordsLoadingEffects {
             );
         })
     );
+
+    @Effect()
+    startLoadingRecordPool = this.actions.pipe(
+        ofType(START_LOADING_RECORD_POOL),
+        switchMap(() => {
+            return from(
+                this.http.get(RECORD_POOL_API_URL).pipe(
+                    catchError(error => {
+                        this.snackbarService.showErrorSnackBar(`error at loading record pool: ${error.error.detail}`);
+                        return [];
+                    }),
+                    mergeMap(response => {
+                        if (response['type'] === 'records'){
+                            return [
+                                {
+                                    type: SET_POOL_RECORDS,
+                                    payload: response['entries'].length
+                                }
+                            ]
+                        }
+                        else if (response['type'] === 'consultants'){
+                            return [
+                                {
+                                    type: SET_POOL_CONSULTANTS,
+                                    payload: response['entries'].length
+                                }
+                            ]
+                        }
+                        return [];
+                    })
+                )
+            );
+        })
+    )
 }

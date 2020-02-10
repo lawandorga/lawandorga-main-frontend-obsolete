@@ -20,23 +20,27 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
-import { from, of } from 'rxjs';
+import { from } from 'rxjs';
 
 import {
     START_ADMITTING_RECORD_PERMISSION_REQUEST,
     START_DECLINING_RECORD_PERMISSION_REQUEST,
+    START_ENLISTING_POOL_CONSULTANT,
     START_PROCESSING_RECORD_DELETION_REQUEST,
     START_REQUESTING_RECORD_DELETION,
     START_REQUESTING_RECORD_PERMISSION,
     START_SAVING_RECORD,
     START_SETTING_RECORD_DOCUMENT_TAGS,
+    START_YIELDING_RECORD,
     StartAdmittingRecordPermissionRequest,
     StartDecliningRecordPermissionRequest,
+    StartLoadingRecordPool,
     StartProcessingRecordDeletionRequest,
     StartRequestingReadPermission,
     StartRequestingRecordDeletion,
     StartSavingRecord,
     StartSettingRecordDocumentTags,
+    StartYieldingRecord,
     UPDATE_RECORD_DELETION_REQUEST,
     UPDATE_RECORD_PERMISSION_REQUEST
 } from '../actions/records.actions';
@@ -44,6 +48,8 @@ import {
     GetRecordDocumentApiUrl,
     GetRecordPermissionRequestApiUrl,
     GetSpecialRecordApiURL,
+    POOL_CONSULTANT_API_URL,
+    POOL_RECORD_API_URL,
     PROCESS_RECORD_DELETIONS_API_URL,
     RECORD_DELETIONS_API_URL,
     RECORD_PERMISSIONS_LIST_API_URL
@@ -55,6 +61,7 @@ import { AppSandboxService } from '../../../core/services/app-sandbox.service';
 import { RecordsSandboxService } from '../../services/records-sandbox.service';
 import { RecordPermissionRequest } from '../../models/record_permission.model';
 import { RecordDeletionRequest } from '../../models/record_deletion_request.model';
+import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
 
 @Injectable()
 export class RecordsEffects {
@@ -62,8 +69,10 @@ export class RecordsEffects {
         private actions: Actions,
         private http: HttpClient,
         private appSB: AppSandboxService,
-        private recordSB: RecordsSandboxService
-    ) {}
+        private recordSB: RecordsSandboxService,
+        private coreSB: CoreSandboxService
+    ) {
+    }
 
     @Effect()
     startSavingRecord = this.actions.pipe(
@@ -300,6 +309,73 @@ export class RecordsEffects {
                         })
                     )
             );
+        })
+    );
+
+    @Effect()
+    startYieldingRecord = this.actions.pipe(
+        ofType(START_YIELDING_RECORD),
+        map((action: StartYieldingRecord) => {
+            return action.payload;
+        }),
+        mergeMap((payload: FullRecord) => {
+            const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
+            return from(
+                this.http
+                    .post(POOL_RECORD_API_URL, {
+                        record: payload.id
+                    }, privateKeyPlaceholder)
+                    .pipe(
+                        catchError(error => {
+                            this.recordSB.showError(
+                                `error at yielding record: ${error.error.detail}`
+                            );
+                            return [];
+                        }),
+                        mergeMap((response: { error }) => {
+                            if (response.error) {
+                                this.recordSB.showError('sending error');
+                                return [];
+                            }
+                            console.log('response from yielding record', response);
+                            if (response['action'] === 'created') {
+                                this.coreSB.showSuccessSnackBar('record added to record pool');
+                            } else if (response['action'] === 'matched') {
+                                this.coreSB.showSuccessSnackBar('record matched with consultant from pool, you are no longer responsible for this record');
+                            }
+                            return [{ type: StartLoadingRecordPool }];
+                        })
+                    )
+            );
+        })
+    );
+
+    @Effect()
+    startEnlistingPoolConsultant = this.actions.pipe(
+        ofType(START_ENLISTING_POOL_CONSULTANT),
+        switchMap(() => {
+            return from(this.http.post(POOL_CONSULTANT_API_URL, {}).pipe(catchError(error => {
+                    this.recordSB.showError(
+                        `error at enlisting to consultant pool: ${error.error.detail}`
+                    );
+                    return [];
+                }),
+                mergeMap(response => {
+                    if (response.error) {
+                        this.recordSB.showError('sending error');
+                        return [];
+                    }
+
+                    console.log('response from enlisting to consultant pool', response);
+                    if (response['action'] === 'created') {
+                        this.coreSB.showSuccessSnackBar('you enlisted successfully to consultant pool');
+                    } else if (response['action'] === 'matched') {
+                        this.coreSB.showSuccessSnackBar('you matched successfully, you are now responsible for another record');
+
+                    }
+                    return [{ type: StartLoadingRecordPool }];
+                })
+            ));
         })
     );
 }
