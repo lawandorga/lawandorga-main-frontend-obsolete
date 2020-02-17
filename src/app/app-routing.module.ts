@@ -26,6 +26,11 @@ const appRoutes: Routes = [
         path: "records",
         loadChildren: "./recordmanagement/records.module#RecordsModule",
         canActivate: [AuthGuardService]
+    },
+    {
+        path: "files",
+        loadChildren: "./filemanagement/filemanagement.module#FilemanagementModule",
+        canActivate: [AuthGuardService]
     }
 ];
 

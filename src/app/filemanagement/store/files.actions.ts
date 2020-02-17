@@ -17,11 +17,41 @@
  */
 
 import { Action } from '@ngrx/store';
+import { FullFolder } from '../models/folder.model';
+import { TableEntry } from '../models/table-entry.model';
 
-export const LOAD_FILES = 'LOAD_FILES';
+export const START_LOADING_FOLDER = 'START_LOADING_FOLDER';
+export const SET_CURRENT_FOLDER = 'SET_CURRENT_FOLDER';
+export const SET_FOLDERS = "SET_FOLDERS";
+export const SET_FILES = "SET_FILES";
 
-export class LoadFiles implements Action {
-    readonly type = LOAD_FILES;
+export class StartLoadingFolder implements Action {
+    readonly type = START_LOADING_FOLDER;
+
+    constructor(public payload: string) {
+    }
 }
 
-export type FilesActions = LoadFiles;
+export class SetCurrentFolder implements Action {
+    readonly type = SET_CURRENT_FOLDER;
+
+    constructor(public payload: FullFolder) {}
+}
+
+export class SetFolders implements Action {
+    readonly type = SET_FOLDERS;
+
+    constructor(public payload: TableEntry[]) {
+    }
+}
+
+export class SetFiles implements Action {
+    readonly type = SET_FILES;
+
+    constructor(public payload: TableEntry[]) {
+    }
+}
+export type FilesActions = StartLoadingFolder
+    | SetCurrentFolder
+    | SetFolders
+    | SetFiles;

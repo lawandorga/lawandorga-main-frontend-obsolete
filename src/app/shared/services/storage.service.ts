@@ -23,6 +23,7 @@ import * as mime from 'mime';
 
 
 import {
+    FILES_UPLOAD_BASE_API_URL,
     GetDownloadAllRecordDocumentsApiUrl,
     GetDownloadEncryptedRecordDocumentApiUrl,
     GetSpecialRecordUploadDocumentsApiUrl
@@ -30,6 +31,7 @@ import {
 import { SnackbarService } from './snackbar.service';
 import { AppSandboxService } from '../../core/services/app-sandbox.service';
 import { RecordDocument } from '../../recordmanagement/models/record_document.model';
+import { createUrlResolverWithoutPackagePrefix } from '@angular/compiler';
 
 @Injectable()
 export class StorageService {
@@ -92,6 +94,62 @@ export class StorageService {
         const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
         this.http.get(GetDownloadAllRecordDocumentsApiUrl(record_id), privateKeyPlaceholder).subscribe((response) => {
             StorageService.saveFile(response, `${record_token}_documents.zip`);
+        })
+    }
+
+    upload(path: string, stuff: any){
+        console.log('stuff: ', stuff);
+        const formData = new FormData();
+        let maxitems = stuff.length;
+        let currentItems = 0;
+        const paths = [];
+        for (let i = 0; i < stuff.length; ++i){
+            if (!Array.isArray(stuff[i]) ){
+                console.log('a file', stuff[i]);
+                formData.append('files', stuff[i]);
+                paths.push(stuff[i].name + ';' + stuff[i].size);
+                currentItems++;
+                if (currentItems === maxitems){
+                    formData.append('paths', JSON.stringify(paths));
+                    this.http.post(FILES_UPLOAD_BASE_API_URL, formData).subscribe(response => {
+                        console.log('response from upload: ', response);
+                    });
+                }
+            } else {
+                console.log('a folder', stuff[i]);
+                maxitems += stuff[i].length - 1;
+                // const a = stuff[i];
+                // console.log('a', a);
+
+                // formData.append('folders', stuff[i]);
+                for (const fileInFolder of stuff[i]){
+                    console.log('current filinfolder', fileInFolder);
+                    // paths.push(fileInFolder.fullPath)
+                    // formData.append('paths', fileInFolder.fullPath + ';;');
+                    fileInFolder.file((file => {
+                        paths.push(fileInFolder.fullPath + ';' + file.size)
+                        console.log('conversion successfull', file);
+                        formData.append('files', file);
+                        currentItems++;
+                        if (currentItems === maxitems){
+                            formData.append('paths', JSON.stringify(paths));
+                            this.http.post(FILES_UPLOAD_BASE_API_URL, formData).subscribe(response => {
+                                console.log('response from upload: ', response);
+                            });
+                        }
+                    }));
+                    // formData.append('folders', fileInFolder.file());
+                }
+                // for (let j = 0; j < a.length; ++j){
+                //     console.log('current filinfolder2', a[j]);
+                //     formData.append('folders', a[j]);
+                // }
+            }
+        }
+
+
+        this.http.post(FILES_UPLOAD_BASE_API_URL, formData).subscribe(response => {
+            console.log('response from upload: ', response);
         })
     }
 }

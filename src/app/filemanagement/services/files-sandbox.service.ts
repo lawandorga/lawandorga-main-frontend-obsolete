@@ -20,6 +20,12 @@ import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {CoreSandboxService} from '../../core/services/core-sandbox.service';
 import {SnackbarService} from '../../shared/services/snackbar.service';
+import { FilesState } from '../store/files.reducers';
+import { select, Store } from '@ngrx/store';
+import { StartLoadingFolder } from '../store/files.actions';
+import { Observable } from 'rxjs';
+import { TableEntry } from '../models/table-entry.model';
+import { StorageService } from '../../shared/services/storage.service';
 
 @Injectable({
     providedIn: "root"
@@ -27,12 +33,39 @@ import {SnackbarService} from '../../shared/services/snackbar.service';
 export class FilesSandboxService {
     constructor(
         private router: Router,
+        private filesStore: Store<FilesState>,
         private coreSB: CoreSandboxService,
-        private snackbarService: SnackbarService
+        private snackbarService: SnackbarService,
+        private storage: StorageService
     ) {
 
     }
 
+    startLoadingFolderInformation(path: string){
+        console.log('dispatch effect');
+        this.filesStore.dispatch(new StartLoadingFolder(path));
+    }
 
+    getFolders(asArray: boolean = true): Observable<TableEntry[]> {
+        return this.filesStore.pipe(
+            select((state: any) => {
+                const values = state.files.folders;
+                return asArray ? Object.values(values) : values;
+            })
+        )
+    }
+
+    getFiles(asArray: boolean = true): Observable<TableEntry[]> {
+        return this.filesStore.pipe(
+            select((state: any) => {
+                const values = state.files.files;
+                return asArray ? Object.values(values) : values;
+            })
+        )
+    }
+
+    upload(stuff){
+        this.storage.upload("ressorts", stuff);
+    }
 }
 

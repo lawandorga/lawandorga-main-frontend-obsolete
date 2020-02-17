@@ -30,7 +30,7 @@ import {
     PERMISSION_CAN_VIEW_RECORDS, PERMISSION_PROCESS_RECORD_DELETION_REQUESTS
 } from '../../../statics/permissions.statics';
 import {
-    ACCEPT_NEW_USER_REQUESTS_FRONT_URL, DELETION_REQUESTS_FRONT_URL,
+    ACCEPT_NEW_USER_REQUESTS_FRONT_URL, DELETION_REQUESTS_FRONT_URL, FILES_FRONT_URL,
     GROUPS_FRONT_URL,
     INACTIVE_USERS_FRONT_URL,
     LEGAL_NOTICE_FRONT_URL,
@@ -88,6 +88,11 @@ export class SidebarComponent implements OnInit {
             label: "Groups",
             icon: "group",
             link: GROUPS_FRONT_URL
+        },
+        {
+            label: "Files",
+            icon: "folder_open",
+            link: FILES_FRONT_URL
         },
         {
             label: "Admin",

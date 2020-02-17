@@ -20,6 +20,7 @@ import {RestrictedUser} from '../core/models/user.model';
 import {RestrictedRecord, TokenRecord} from '../recordmanagement/models/record.model';
 import {RestrictedGroup} from '../core/models/group.model';
 import {Permission} from '../core/models/permission.model';
+import { FullFolder } from '../filemanagement/models/folder.model';
 
 export const MAIN_PAGE_FRONT_URL = "";
 export const REGISTER_FRONT_URL = "register";
@@ -37,6 +38,7 @@ export const LEGAL_NOTICE_FRONT_URL = "legal_notice";
 export const PRIVACY_STATEMENT_FRONT_URL = "privacy_statement";
 export const INACTIVE_USERS_FRONT_URL = "inactive_users";
 export const DELETION_REQUESTS_FRONT_URL = "records/deletion_requests";
+export const FILES_FRONT_URL = "files";
 
 export const GetProfileFrontUrl = (profile: RestrictedUser | string): string => {
     if (profile instanceof RestrictedUser)
@@ -68,4 +70,15 @@ export const GetPermissionFrontUrl = (permission: Permission | string): string =
         return `${PERMISSIONS_FRONT_URL}/${permission.id}`;
     else
         return `${PERMISSIONS_FRONT_URL}/${permission}`;
+};
+
+export const GetFolderFrontUrl = (currentPath: string, folder: FullFolder | string) => {
+    if (!currentPath.endsWith("/") && currentPath !== ''){
+        currentPath = currentPath + '/';
+    }
+    if (folder instanceof FullFolder){
+        return `files?path=${currentPath}${folder.name}`
+    } else {
+        return `files?path=${currentPath}${folder}`;
+    }
 };

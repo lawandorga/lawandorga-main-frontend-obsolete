@@ -17,21 +17,34 @@
  */
 
 
-import {FilesActions, LOAD_FILES} from './files.actions';
+import { FilesActions, SET_FILES, SET_FOLDERS } from './files.actions';
+import { FullFolder } from '../models/folder.model';
+import { getIdObjects } from '../../shared/other/reducer-helper';
+import { TableEntry } from '../models/table-entry.model';
 
 export interface FilesState {
-    files: any;
+    current_folder: FullFolder,
+    folders: { [id: number]: TableEntry },
+    files: { [id: number]: TableEntry }
 }
 
 export const initialState: FilesState = {
+    current_folder: null,
+    folders: {},
     files: {}
 };
 
 export function filesReducer(state = initialState, action: FilesActions) {
     switch (action.type) {
-        case LOAD_FILES:
+        case SET_FOLDERS:
             return {
-                ...state
+                ...state,
+                folders: getIdObjects(action.payload)
+            };
+        case SET_FILES:
+            return {
+                ...state,
+                files: getIdObjects(action.payload)
             };
         default:
             return state;

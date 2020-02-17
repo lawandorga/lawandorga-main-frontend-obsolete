@@ -22,14 +22,28 @@ import {FilesMainViewComponent} from './components/files-main-view/files-main-vi
 import {FilemanagementRoutingModule} from './filemanagement-routing.module';
 import {SharedModule} from '../shared/shared.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { ListFileItemComponent } from './components/list-file-item/list-file-item.component';
+import { ListFolderItemComponent } from './components/list-folder-item/list-folder-item.component';
+import { PathInformationComponent } from './components/path-information/path-information.component';
+import { FolderViewComponent } from './components/folder-view/folder-view.component';
+import { StoreModule } from '@ngrx/store';
+import { filesReducer } from './store/files.reducers';
+import { EffectsModule } from '@ngrx/effects';
+import { FilesEffects } from './store/file.effects';
 
 @NgModule({
     imports: [
         FilemanagementRoutingModule,
-        SharedModule
+        SharedModule,
+        StoreModule.forFeature('files', filesReducer),
+        EffectsModule.forFeature([FilesEffects])
     ],
     declarations: [
         FilesMainViewComponent,
+        ListFileItemComponent,
+        ListFolderItemComponent,
+        PathInformationComponent,
+        FolderViewComponent,
     ]
 })
 export class FilemanagementModule {

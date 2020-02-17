@@ -43,6 +43,9 @@ export const INACTIVE_USERS_API_URL = base + 'api/inactive_users/';
 export const USER_HAS_PERMISSIONS_API_URL = base + 'api/user_has_permissions/';
 export const RECORD_DELETIONS_API_URL = base + 'api/records/record_deletion_requests/';
 export const PROCESS_RECORD_DELETIONS_API_URL = base + 'api/records/process_record_deletion_request/';
+export const FOLDER_INFORMATION_BASE_API_URL = base + 'api/files/folder';
+export const FILES_UPLOAD_BASE_API_URL = base + 'api/files/upload';
+
 
 const CHECK_USER_ACTIVATION_API_URL = base + "api/check_user_activation_link/";
 const ACTIVATE_USER_ACTIVATION_API_URL = "base + api/activate_user_activation_link/";
@@ -129,3 +132,9 @@ export const GetSpecialRecordUploadDocumentsApiUrl = (record_id: string) => {
 export const GetDownloadEncryptedRecordDocumentApiUrl = (document_id: string) => {
     return `${DOWNLOAD_ENCRYPTED_RECORD_DOCUMENT_BASE_API_URL}${document_id}/`;
 };
+
+export const GetFolderInformationApiUrl = (path: string) => {
+    if (path)
+        return `${FOLDER_INFORMATION_BASE_API_URL}?path=${path}`;
+    return `${FOLDER_INFORMATION_BASE_API_URL}`;
+}

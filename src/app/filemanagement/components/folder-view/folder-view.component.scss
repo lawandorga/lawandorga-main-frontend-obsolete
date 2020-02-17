@@ -1,4 +1,4 @@
-/*
+/*!
  * law&orga - record and organization management software for refugee law clinics
  * Copyright (C) 2019  Dominik Walser
  *
@@ -16,23 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import {RouterModule, Routes} from '@angular/router';
-import {FilesMainViewComponent} from './components/files-main-view/files-main-view.component';
-import {NgModule} from '@angular/core';
-import {AuthGuardService} from '../core/services/auth-guard.service';
-import { FolderViewComponent } from './components/folder-view/folder-view.component';
+.folder-view__column-header{
+    padding-right: 15px;
+}
 
-const fileRoutes: Routes = [
-    {
-        path: "",
-        pathMatch: 'full',
-        component: FolderViewComponent
-    }
-];
-
-@NgModule({
-    imports: [RouterModule.forChild(fileRoutes)],
-    exports: [RouterModule],
-    providers: [AuthGuardService]
-})
-export class FilemanagementRoutingModule {}
+.folder-view__column-content {
+    padding-right: 15px;
+    width: 125px;
+}
