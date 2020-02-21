@@ -30,6 +30,7 @@ import { StoreModule } from '@ngrx/store';
 import { filesReducer } from './store/files.reducers';
 import { EffectsModule } from '@ngrx/effects';
 import { FilesEffects } from './store/file.effects';
+import { StorageSizePipe } from './pipes/storage-size.pipe';
 
 @NgModule({
     imports: [
@@ -44,6 +45,7 @@ import { FilesEffects } from './store/file.effects';
         ListFolderItemComponent,
         PathInformationComponent,
         FolderViewComponent,
+        StorageSizePipe,
     ]
 })
 export class FilemanagementModule {

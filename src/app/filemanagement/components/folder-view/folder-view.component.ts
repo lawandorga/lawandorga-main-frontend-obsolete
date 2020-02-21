@@ -2,8 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FilesSandboxService } from '../../services/files-sandbox.service';
 import { FilesTypes, TableEntry } from '../../models/table-entry.model';
-import { GetFolderInformationApiUrl } from '../../../statics/api_urls.statics';
-import { GetFolderFrontUrl } from '../../../statics/frontend_links.statics';
+import { GetFolderFrontUrlRelative } from '../../../statics/frontend_links.statics';
 
 @Component({
     selector: 'app-folder-view',
@@ -21,7 +20,8 @@ export class FolderViewComponent implements OnInit {
         "type",
         "name",
         "size",
-        "las_edited"
+        "last_edited",
+        "more"
     ];
 
     constructor(private route: ActivatedRoute, private fileSB: FilesSandboxService, private router: Router) {}
@@ -55,29 +55,16 @@ export class FolderViewComponent implements OnInit {
     onEntryClick(entry: TableEntry): void {
         console.log('click on: ', entry);
         if (entry.type === FilesTypes.Folder){
-            console.log('new path: ', GetFolderFrontUrl(this.path, entry.name));
-            this.router.navigateByUrl(GetFolderFrontUrl(this.path, entry.name)).catch(error => {
+            console.log('new path: ', GetFolderFrontUrlRelative(this.path, entry.name));
+            this.router.navigateByUrl(GetFolderFrontUrlRelative(this.path, entry.name)).catch(error => {
                 console.log('error at redirecting: ', error);
             });
         }
     }
 
-    onUploadClick(){
-
-    }
-
-    filesInputSelected(event){
-        event.preventDefault();
-        console.log('input', this.fileInput.nativeElement);
-        console.log('input', this.fileInput.nativeElement.files);
-    }
 
     dropped($event){
         $event.preventDefault();
-        // console.log('event', $event);
-        const files = $event.dataTransfer.files;
-        // console.log('files', files);
-        // console.log($event.DataTransfer);
 
         const items = $event.dataTransfer.items;
         const all = [];
@@ -92,7 +79,8 @@ export class FolderViewComponent implements OnInit {
                         // console.log('file: ', result);
                         all.push(result);
                         if (count === items.length){
-                           this.fileSB.upload(all);
+                           this.fileSB.upload(all, this.path);
+                           this.fileSB.startLoadingFolderInformation(this.path);
                         }
                     })
                 } else if (entry.isDirectory) {
@@ -101,7 +89,9 @@ export class FolderViewComponent implements OnInit {
                         // console.log('folder: ', result);
                         all.push(result);
                         if (count === items.length){
-                            this.fileSB.upload(all);
+                            this.fileSB.upload(all, this.path);
+                            this.fileSB.startLoadingFolderInformation(this.path);
+
                         }
                     })
                 }
@@ -139,5 +129,15 @@ export class FolderViewComponent implements OnInit {
                 }
             );
         });
+    }
+
+    onDeleteClick(entry){
+        // console.log('i want to delete: ', entry);
+        this.fileSB.startDeleting([entry], this.path);
+    }
+
+    onDownloadClick(entry){
+        // console.log('i want to download: ', entry);
+        this.fileSB.startDownloading([entry], this.path);
     }
 }

@@ -72,13 +72,20 @@ export const GetPermissionFrontUrl = (permission: Permission | string): string =
         return `${PERMISSIONS_FRONT_URL}/${permission}`;
 };
 
-export const GetFolderFrontUrl = (currentPath: string, folder: FullFolder | string) => {
+export const GetFolderFrontUrlRelative = (currentPath: string, folder: FullFolder | string) => {
     if (!currentPath.endsWith("/") && currentPath !== ''){
         currentPath = currentPath + '/';
     }
     if (folder instanceof FullFolder){
-        return `files?path=${currentPath}${folder.name}`
+        return `${FILES_FRONT_URL}?path=${currentPath}${folder.name}`
     } else {
-        return `files?path=${currentPath}${folder}`;
+        return `${FILES_FRONT_URL}?path=${currentPath}${folder}`;
     }
+};
+
+export const GetFolderFrontUrlAbsolute = (path: string) => {
+    if (path === ''){
+        return `${FILES_FRONT_URL}`
+    }
+    return `${FILES_FRONT_URL}?path=${path}`
 };

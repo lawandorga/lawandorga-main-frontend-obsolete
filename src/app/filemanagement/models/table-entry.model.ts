@@ -43,6 +43,7 @@ export class TableEntry {
     }
 
     static getTableEntryFromJson(json: any, type: FilesTypes) {
+        console.log('get table entry from json', json);
         if (!json.creator){
             json.creator = {id: -1, name: ''}
         }

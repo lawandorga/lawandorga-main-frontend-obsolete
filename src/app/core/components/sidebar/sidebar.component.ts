@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import {Component, OnInit} from "@angular/core";
+import { Component, isDevMode, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {AppSandboxService} from "../../services/app-sandbox.service";
 import {FullUser} from "../../models/user.model";
@@ -263,10 +263,12 @@ export class SidebarComponent implements OnInit {
             this.email = user ? user.email : "";
         });
 
-        this.timer = setInterval(() => {
-            this.coreSB.startCheckingUserHasPermissions();
-        }, this.checkPermissionInterval);
-        this.recheckSidebarItems();
+        if (!isDevMode()){
+            this.timer = setInterval(() => {
+                this.coreSB.startCheckingUserHasPermissions();
+            }, this.checkPermissionInterval);
+            this.recheckSidebarItems();
+        }
     }
 
     recheckSidebarItems() {

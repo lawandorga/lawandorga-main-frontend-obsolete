@@ -21,18 +21,33 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { HttpClient } from '@angular/common/http';
 import { FilesSandboxService } from '../services/files-sandbox.service';
-import { SET_FILES, SET_FOLDERS, START_LOADING_FOLDER, StartLoadingFolder } from './files.actions';
+import {
+    SET_FILES,
+    SET_FOLDERS,
+    START_DELETING_FILES_AND_FOLDERS, START_DOWNLOAD_FILES_AND_FOLDERS,
+    START_LOADING_FOLDER,
+    StartDeletingFilesAndFolders, StartDownloadFilesAndFolders,
+    StartLoadingFolder
+} from './files.actions';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { from } from 'rxjs';
-import { GetFolderInformationApiUrl } from '../../statics/api_urls.statics';
-import { TableEntry } from '../models/table-entry.model';
+import {
+    FILES_DELETE_BASE_API_URL,
+    FILES_DOWNLOAD_BASE_API_URL,
+    GetFolderInformationApiUrl
+} from '../../statics/api_urls.statics';
+import { FilesTypes, TableEntry } from '../models/table-entry.model';
+import { CoreSandboxService } from '../../core/services/core-sandbox.service';
+import { StorageService } from '../../shared/services/storage.service';
 
 @Injectable()
 export class FilesEffects{
     constructor(
         private actions: Actions,
         private http: HttpClient,
-        private fileSB: FilesSandboxService
+        private fileSB: FilesSandboxService,
+        private coreSB: CoreSandboxService,
+        private storageService: StorageService
     ) {}
 
     @Effect()
@@ -51,6 +66,7 @@ export class FilesEffects{
                     }),
                     mergeMap((response: any) => {
                         console.log('response from loading folder', response);
+                        console.log('i send these folders', response.folders);
                         const folders = TableEntry.getFolderTableEntriesFromJsonArray(response.folders);
                         const files = TableEntry.getFileTableEntriesFromJsonArray(response.files);
 
@@ -61,4 +77,60 @@ export class FilesEffects{
         })
     )
 
+
+    @Effect()
+    startDeletingFilesAndFolders = this.actions.pipe(
+        ofType(START_DELETING_FILES_AND_FOLDERS),
+        map((action: StartDeletingFilesAndFolders) => {
+            return action.payload;
+        }),
+        mergeMap((payload: { entries: TableEntry[]; path: string }) => {
+            // payload.entries.map((entry: TableEntry) => {
+            //     if (entry.type === FilesTypes.Folder){
+            //         entry.type = 'Folder';
+            //     }
+            // });
+            return from(
+                this.http.post(FILES_DELETE_BASE_API_URL, {
+                    'entries': payload.entries,
+                    'path': payload.path
+                }).pipe( catchError(error => {
+                        console.log('error: ', error);
+                        return [];
+                    }),
+                    mergeMap((response: any) => {
+                        this.coreSB.showSuccessSnackBar('successfully deleted files and folders')
+                        console.log('response from deletion', response);
+                        return [];
+                    }))
+            );
+        })
+    )
+
+    @Effect()
+    startDownloadFilesAndFolders = this.actions.pipe(
+        ofType(START_DOWNLOAD_FILES_AND_FOLDERS),
+        map((action: StartDownloadFilesAndFolders) => {
+            return action.payload;
+        }),
+        mergeMap((payload: { entries: TableEntry[], path: string}) => {
+            return from(
+                this.http.post(FILES_DOWNLOAD_BASE_API_URL, {
+                    'entries': payload.entries,
+                    'path': payload.path
+                }).pipe( catchError(error => {
+                        console.log('error: ', error);
+                        return [];
+                    }),
+                    mergeMap((response: any) => {
+                        console.log('response from deletion', response);
+                        if (payload.path === ''){
+                            payload.path = 'root'
+                        }
+                        StorageService.saveFile(response, payload.path + '.zip');
+                        return [];
+                    }))
+            );
+        })
+    )
 }

@@ -15,24 +15,27 @@
   ~ You should have received a copy of the GNU Affero General Public License
   ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
   -->
-
+<div class="horizontal">
+    <h1>Files</h1>
+    <app-path-information [path]="path"></app-path-information>
+</div>
 <mat-card>
     <mat-card-content>
-        <h1>Files</h1>
         <div (drop)="dropped($event)" (dragover)="dragover($event)">
-            <div>
-              <button mat-flat-button color="primary" (click)="filesInput.click()">select files</button>
-              <input hidden type="file" id="your-files" #filesInput multiple (change)="filesInputSelected($event)" webkitDirectory>
-            </div>
+<!--            <div>-->
+<!--              <button mat-flat-button color="primary" (click)="filesInput.click()">select files</button>-->
+<!--              <input hidden type="file" id="your-files" #filesInput multiple (change)="filesInputSelected($event)" webkitDirectory>-->
+<!--            </div>-->
             <div>
 
 
             </div>
-            <table mat-table [dataSource]="entries">
+            <table mat-table [dataSource]="entries" class="folder-view__table">
                 <ng-container matColumnDef="type">
                     <th mat-header-cell *matHeaderCellDef class="folder-view__column-header"></th>
-                    <td mat-cell *matCellDef="let entry" class="folder-view__column-content">
+                    <td mat-cell *matCellDef="let entry" class="folder-view__column-content folder-view__small-column">
                         <div *ngIf="entry.type === 0"><mat-icon>folder</mat-icon></div>
+                        <div *ngIf="entry.type === 1"><mat-icon>attach_file</mat-icon></div>
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="name">
@@ -52,16 +55,28 @@
                     <th mat-header-cell *matHeaderCellDef class="folder-view__column-header">
                         size
                     </th>
-                    <td mat-cell *matCellDef="let entry" class="folder-view__column-content">
-                        {{ entry.size / 1000 }}
+                    <td mat-cell *matCellDef="let entry" class="folder-view__column-content folder-view__small-column">
+                        {{ entry.size | storageSize}}
                     </td>
                 </ng-container>
-                <ng-container matColumnDef="las_edited">
+                <ng-container matColumnDef="last_edited">
                     <th mat-header-cell *matHeaderCellDef class="folder-view__column-header">
                         last edited
                     </th>
-                    <td mat-cell *matCellDef="let entry" class="folder-view__column-content">
-                        {{ entry.last_edited | date }}
+                    <td mat-cell *matCellDef="let entry" class="folder-view__column-content folder-view__small-column">
+                        {{ entry.last_edited | date:'short' }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="more">
+                    <th mat-header-cell *matHeaderCellDef class="folder-view__column-header"></th>
+                    <td mat-cell *matCellDef="let entry" class="folder-view__column-content folder-view__small-column">
+                        <mat-menu #actionMenu="matMenu">
+                            <button mat-menu-item class="button-normal" (click)="onDownloadClick(entry)"><mat-icon>cloud</mat-icon>download</button>
+                            <button mat-menu-item class="button-normal" (click)="onDeleteClick(entry)"><mat-icon>delete_forever</mat-icon>delete</button>
+                        </mat-menu>
+                        <button mat-icon-button [matMenuTriggerFor]="actionMenu">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
                     </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="columns"></tr>

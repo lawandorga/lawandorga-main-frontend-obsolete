@@ -32,6 +32,7 @@ import { SnackbarService } from './snackbar.service';
 import { AppSandboxService } from '../../core/services/app-sandbox.service';
 import { RecordDocument } from '../../recordmanagement/models/record_document.model';
 import { createUrlResolverWithoutPackagePrefix } from '@angular/compiler';
+import { FilesSandboxService } from '../../filemanagement/services/files-sandbox.service';
 
 @Injectable()
 export class StorageService {
@@ -98,58 +99,49 @@ export class StorageService {
     }
 
     upload(path: string, stuff: any){
-        console.log('stuff: ', stuff);
+        this.getFilesAndPathsFromDrop(stuff, (formData, paths) => {
+            formData.append('paths', JSON.stringify(paths));
+            formData.append('path', path)
+            this.http.post(FILES_UPLOAD_BASE_API_URL, formData).subscribe(response => {
+                // TODO?
+            })
+        });
+
+    }
+
+    getFilesAndPathsFromDrop(dropped: any, callback: Function){
         const formData = new FormData();
-        let maxitems = stuff.length;
+        let maxItems = dropped.length;
         let currentItems = 0;
         const paths = [];
-        for (let i = 0; i < stuff.length; ++i){
-            if (!Array.isArray(stuff[i]) ){
-                console.log('a file', stuff[i]);
-                formData.append('files', stuff[i]);
-                paths.push(stuff[i].name + ';' + stuff[i].size);
+        for (let i = 0; i < dropped.length; ++i){
+            if (!Array.isArray(dropped[i]) ){
+                console.log('a file', dropped[i]);
+                formData.append('files', dropped[i]);
+                paths.push(dropped[i].name + ';' + dropped[i].size);
                 currentItems++;
-                if (currentItems === maxitems){
-                    formData.append('paths', JSON.stringify(paths));
-                    this.http.post(FILES_UPLOAD_BASE_API_URL, formData).subscribe(response => {
-                        console.log('response from upload: ', response);
-                    });
+                if (currentItems === maxItems){
+                    // formData.append('paths', JSON.stringify(paths));
+                    callback(formData, paths);
                 }
             } else {
-                console.log('a folder', stuff[i]);
-                maxitems += stuff[i].length - 1;
-                // const a = stuff[i];
-                // console.log('a', a);
-
-                // formData.append('folders', stuff[i]);
-                for (const fileInFolder of stuff[i]){
+                console.log('a folder', dropped[i]);
+                maxItems += dropped[i].length - 1;
+                for (const fileInFolder of dropped[i]){
                     console.log('current filinfolder', fileInFolder);
-                    // paths.push(fileInFolder.fullPath)
-                    // formData.append('paths', fileInFolder.fullPath + ';;');
                     fileInFolder.file((file => {
                         paths.push(fileInFolder.fullPath + ';' + file.size)
                         console.log('conversion successfull', file);
                         formData.append('files', file);
                         currentItems++;
-                        if (currentItems === maxitems){
-                            formData.append('paths', JSON.stringify(paths));
-                            this.http.post(FILES_UPLOAD_BASE_API_URL, formData).subscribe(response => {
-                                console.log('response from upload: ', response);
-                            });
+                        if (currentItems === maxItems){
+                            // formData.append('paths', JSON.stringify(paths));
+                            callback(formData, paths);
                         }
                     }));
-                    // formData.append('folders', fileInFolder.file());
                 }
-                // for (let j = 0; j < a.length; ++j){
-                //     console.log('current filinfolder2', a[j]);
-                //     formData.append('folders', a[j]);
-                // }
             }
         }
-
-
-        this.http.post(FILES_UPLOAD_BASE_API_URL, formData).subscribe(response => {
-            console.log('response from upload: ', response);
-        })
     }
+
 }

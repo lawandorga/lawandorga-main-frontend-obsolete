@@ -24,6 +24,8 @@ export const START_LOADING_FOLDER = 'START_LOADING_FOLDER';
 export const SET_CURRENT_FOLDER = 'SET_CURRENT_FOLDER';
 export const SET_FOLDERS = "SET_FOLDERS";
 export const SET_FILES = "SET_FILES";
+export const START_DELETING_FILES_AND_FOLDERS = "START_DELETING_FILES_AND_FOLDERS";
+export const START_DOWNLOAD_FILES_AND_FOLDERS = "START_DOWNLOAD_FILES_AND_FOLDERS";
 
 export class StartLoadingFolder implements Action {
     readonly type = START_LOADING_FOLDER;
@@ -51,7 +53,22 @@ export class SetFiles implements Action {
     constructor(public payload: TableEntry[]) {
     }
 }
+
+export class StartDeletingFilesAndFolders implements Action {
+    readonly type = START_DELETING_FILES_AND_FOLDERS;
+
+    constructor(public payload: { entries: TableEntry[]; path: string}) {}
+}
+
+export class StartDownloadFilesAndFolders implements Action {
+    readonly type = START_DOWNLOAD_FILES_AND_FOLDERS;
+
+    constructor(public payload: { entries: TableEntry[], path: string }) {}
+}
+
 export type FilesActions = StartLoadingFolder
     | SetCurrentFolder
     | SetFolders
-    | SetFiles;
+    | SetFiles
+    | StartDeletingFilesAndFolders
+    | StartDownloadFilesAndFolders;

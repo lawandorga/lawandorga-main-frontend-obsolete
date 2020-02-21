@@ -22,7 +22,7 @@ import {CoreSandboxService} from '../../core/services/core-sandbox.service';
 import {SnackbarService} from '../../shared/services/snackbar.service';
 import { FilesState } from '../store/files.reducers';
 import { select, Store } from '@ngrx/store';
-import { StartLoadingFolder } from '../store/files.actions';
+import { StartDeletingFilesAndFolders, StartDownloadFilesAndFolders, StartLoadingFolder } from '../store/files.actions';
 import { Observable } from 'rxjs';
 import { TableEntry } from '../models/table-entry.model';
 import { StorageService } from '../../shared/services/storage.service';
@@ -64,8 +64,17 @@ export class FilesSandboxService {
         )
     }
 
-    upload(stuff){
-        this.storage.upload("ressorts", stuff);
+    upload(stuff: any, path: string){
+        this.storage.upload(path, stuff);
+        this.startLoadingFolderInformation(path);
+    }
+
+    startDeleting(stuff: TableEntry[], path: string){
+        this.filesStore.dispatch(new StartDeletingFilesAndFolders({'entries': stuff, path}));
+    }
+
+    startDownloading(stuff: TableEntry[], path: string){
+        this.filesStore.dispatch(new StartDownloadFilesAndFolders({'entries': stuff, path}));
     }
 }
 
