@@ -36,7 +36,7 @@ import {
     FILES_DOWNLOAD_BASE_API_URL,
     GetFolderInformationApiUrl
 } from '../../statics/api_urls.statics';
-import { FilesTypes, TableEntry } from '../models/table-entry.model';
+import { TableEntry } from '../models/table-entry.model';
 import { CoreSandboxService } from '../../core/services/core-sandbox.service';
 import { StorageService } from '../../shared/services/storage.service';
 
@@ -57,7 +57,6 @@ export class FilesEffects{
             return action.payload;
         }),
         mergeMap((path: string) => {
-            console.log('effect fired');
             return from(
                 this.http.get(GetFolderInformationApiUrl(path)).pipe(
                     catchError(error => {
@@ -65,8 +64,8 @@ export class FilesEffects{
                         return []
                     }),
                     mergeMap((response: any) => {
-                        console.log('response from loading folder', response);
-                        console.log('i send these folders', response.folders);
+                        // console.log('response from loading folder', response);
+                        // console.log('i send these folders', response.folders);
                         const folders = TableEntry.getFolderTableEntriesFromJsonArray(response.folders);
                         const files = TableEntry.getFileTableEntriesFromJsonArray(response.files);
 
@@ -75,7 +74,7 @@ export class FilesEffects{
                 )
             );
         })
-    )
+    );
 
 
     @Effect()
@@ -100,12 +99,15 @@ export class FilesEffects{
                     }),
                     mergeMap((response: any) => {
                         this.coreSB.showSuccessSnackBar('successfully deleted files and folders')
-                        console.log('response from deletion', response);
-                        return [];
+                        // console.log('response from deletion', response);
+                        return [{
+                            type: START_LOADING_FOLDER,
+                            payload: payload.path
+                        }];
                     }))
             );
         })
-    )
+    );
 
     @Effect()
     startDownloadFilesAndFolders = this.actions.pipe(
@@ -123,9 +125,11 @@ export class FilesEffects{
                         return [];
                     }),
                     mergeMap((response: any) => {
-                        console.log('response from deletion', response);
-                        if (payload.path === ''){
-                            payload.path = 'root'
+                        // console.log('response from deletion', response);
+                        if (payload.entries.length === 1){
+                            payload.path = payload.entries[0].name;
+                        } else if (payload.path === ''){
+                            payload.path = 'root';
                         }
                         StorageService.saveFile(response, payload.path + '.zip');
                         return [];

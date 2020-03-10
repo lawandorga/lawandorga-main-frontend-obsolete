@@ -1,5 +1,9 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { GetFolderFrontUrlAbsolute, GetFolderFrontUrlRelative } from '../../../statics/frontend_links.statics';
+import {
+    FILES_FRONT_URL,
+    GetFolderFrontUrlAbsolute,
+    GetFolderFrontUrlRelative
+} from '../../../statics/frontend_links.statics';
 import { Router } from '@angular/router';
 
 @Component({
@@ -44,5 +48,9 @@ export class PathInformationComponent implements OnInit, OnChanges {
         this.router.navigateByUrl(GetFolderFrontUrlAbsolute(newLink)).catch(error => {
             console.log('error at redirecting: ', error);
         });
+    }
+
+    onHomeCLick(){
+        this.router.navigateByUrl(FILES_FRONT_URL);
     }
 }

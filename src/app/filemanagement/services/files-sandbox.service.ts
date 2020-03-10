@@ -42,7 +42,6 @@ export class FilesSandboxService {
     }
 
     startLoadingFolderInformation(path: string){
-        console.log('dispatch effect');
         this.filesStore.dispatch(new StartLoadingFolder(path));
     }
 
@@ -65,8 +64,9 @@ export class FilesSandboxService {
     }
 
     upload(stuff: any, path: string){
-        this.storage.upload(path, stuff);
-        this.startLoadingFolderInformation(path);
+        this.storage.upload(path, stuff, (response) => {
+            this.startLoadingFolderInformation(path);
+        });
     }
 
     startDeleting(stuff: TableEntry[], path: string){

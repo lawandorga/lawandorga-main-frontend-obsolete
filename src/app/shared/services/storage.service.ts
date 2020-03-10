@@ -98,12 +98,13 @@ export class StorageService {
         })
     }
 
-    upload(path: string, stuff: any){
+    upload(path: string, stuff: any, callbackFn){
         this.getFilesAndPathsFromDrop(stuff, (formData, paths) => {
             formData.append('paths', JSON.stringify(paths));
             formData.append('path', path)
             this.http.post(FILES_UPLOAD_BASE_API_URL, formData).subscribe(response => {
                 // TODO?
+                callbackFn(response);
             })
         });
 
@@ -116,7 +117,7 @@ export class StorageService {
         const paths = [];
         for (let i = 0; i < dropped.length; ++i){
             if (!Array.isArray(dropped[i]) ){
-                console.log('a file', dropped[i]);
+                // console.log('a file', dropped[i]);
                 formData.append('files', dropped[i]);
                 paths.push(dropped[i].name + ';' + dropped[i].size);
                 currentItems++;
@@ -125,13 +126,13 @@ export class StorageService {
                     callback(formData, paths);
                 }
             } else {
-                console.log('a folder', dropped[i]);
+                // console.log('a folder', dropped[i]);
                 maxItems += dropped[i].length - 1;
                 for (const fileInFolder of dropped[i]){
-                    console.log('current filinfolder', fileInFolder);
+                    // console.log('current filinfolder', fileInFolder);
                     fileInFolder.file((file => {
                         paths.push(fileInFolder.fullPath + ';' + file.size)
-                        console.log('conversion successfull', file);
+                        // console.log('conversion successfull', file);
                         formData.append('files', file);
                         currentItems++;
                         if (currentItems === maxItems){

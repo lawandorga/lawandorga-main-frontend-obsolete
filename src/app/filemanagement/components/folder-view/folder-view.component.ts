@@ -30,9 +30,9 @@ export class FolderViewComponent implements OnInit {
         this.route.queryParamMap.subscribe(map => {
             if (map.get('path')) {
                 this.path = map.get('path');
-                console.log('path set: ', this.path);
+                // console.log('path set: ', this.path);
             } else {
-                console.log('root');
+                // console.log('root');
                 this.path = '';
             }
             this.fileSB.startLoadingFolderInformation(this.path);
@@ -53,9 +53,9 @@ export class FolderViewComponent implements OnInit {
     }
 
     onEntryClick(entry: TableEntry): void {
-        console.log('click on: ', entry);
+        // console.log('click on: ', entry);
         if (entry.type === FilesTypes.Folder){
-            console.log('new path: ', GetFolderFrontUrlRelative(this.path, entry.name));
+            // console.log('new path: ', GetFolderFrontUrlRelative(this.path, entry.name));
             this.router.navigateByUrl(GetFolderFrontUrlRelative(this.path, entry.name)).catch(error => {
                 console.log('error at redirecting: ', error);
             });
@@ -91,7 +91,6 @@ export class FolderViewComponent implements OnInit {
                         if (count === items.length){
                             this.fileSB.upload(all, this.path);
                             this.fileSB.startLoadingFolderInformation(this.path);
-
                         }
                     })
                 }
