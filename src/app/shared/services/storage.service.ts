@@ -101,7 +101,7 @@ export class StorageService {
     upload(path: string, stuff: any, callbackFn){
         this.getFilesAndPathsFromDrop(stuff, (formData, paths) => {
             formData.append('paths', JSON.stringify(paths));
-            formData.append('path', path)
+            formData.append('path', path);
             this.http.post(FILES_UPLOAD_BASE_API_URL, formData).subscribe(response => {
                 // TODO?
                 callbackFn(response);

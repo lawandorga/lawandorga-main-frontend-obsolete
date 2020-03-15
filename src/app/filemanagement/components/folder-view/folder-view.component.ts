@@ -64,39 +64,46 @@ export class FolderViewComponent implements OnInit {
 
 
     dropped($event){
+        // console.log('something dropped here', $event);
+        // console.log($event.dataTransfer.files);
+        // console.log($event.dataTransfer.items);
         $event.preventDefault();
 
         const items = $event.dataTransfer.items;
         const all = [];
         let count = 0;
+        // console.log('items length: ', items.length);
+        const itemsLength = items.length;
         for (let i = 0; i < items.length; i++) {
             const item = items[i];
-            if (item.kind === 'file') {
-                const entry = item.webkitGetAsEntry();
-                if (entry.isFile) {
-                    this.parseFileEntry(entry).then(result => {
-                        count = count + 1;
-                        // console.log('file: ', result);
-                        all.push(result);
-                        if (count === items.length){
-                           this.fileSB.upload(all, this.path);
-                           this.fileSB.startLoadingFolderInformation(this.path);
-                        }
-                    })
-                } else if (entry.isDirectory) {
-                    this.parseDirectoryEntry(entry).then(result => {
-                        count = count + 1;
-                        // console.log('folder: ', result);
-                        all.push(result);
-                        if (count === items.length){
-                            this.fileSB.upload(all, this.path);
-                            this.fileSB.startLoadingFolderInformation(this.path);
-                        }
-                    })
-                }
+            // console.log('current item: ', item);
+            const entry = item.webkitGetAsEntry();
+            // console.log('entry main: ', entry);
+            if (entry.isFile) {
+                this.parseFileEntry(entry).then(result => {
+                    count = count + 1;
+                    // console.log('file: ', result);
+                    all.push(result);
+                    // console.log('comparison count', count);
+                    // console.log('comparison length', items.length);
+                    if (count === itemsLength){
+                        // console.log('item count reached, want to upload now');
+                       this.fileSB.upload(all, this.path);
+                       this.fileSB.startLoadingFolderInformation(this.path);
+                    }
+                })
+            } else if (entry.isDirectory) {
+                this.parseDirectoryEntry(entry).then(result => {
+                    count = count + 1;
+                    // console.log('folder: ', result);
+                    all.push(result);
+                    if (count === itemsLength){
+                        this.fileSB.upload(all, this.path);
+                        this.fileSB.startLoadingFolderInformation(this.path);
+                    }
+                })
             }
         }
-        // this.fileSB.upload(all);
     }
 
     dragover($event) {

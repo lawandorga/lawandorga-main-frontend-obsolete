@@ -41,7 +41,8 @@
                     <td
                         mat-cell
                         *matCellDef="let entry"
-                        class="folder-view__column-content is_clickable"
+                        class="folder-view__column-content"
+                        [class.is_clickable]="entry.type === 0"
                         (click)="onEntryClick(entry)"
                     >
                         {{ entry.name }}
