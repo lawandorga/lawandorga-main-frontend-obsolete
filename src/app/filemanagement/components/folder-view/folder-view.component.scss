@@ -16,6 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
+.folder-view__mat-card {
+    height: calc(100vh - 207px);
+}
+
 .folder-view__column-header{
     padding-right: 15px;
 }

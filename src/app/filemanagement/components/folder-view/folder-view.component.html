@@ -19,9 +19,9 @@
     <h1>Files</h1>
     <app-path-information [path]="path"></app-path-information>
 </div>
-<mat-card>
+<mat-card class="folder-view__mat-card"  (drop)="dropped($event)" (dragover)="dragover($event)">
     <mat-card-content>
-        <div (drop)="dropped($event)" (dragover)="dragover($event)">
+        <div>
             <div>
 
 
