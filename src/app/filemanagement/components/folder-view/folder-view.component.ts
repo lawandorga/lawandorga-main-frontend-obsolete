@@ -39,12 +39,14 @@ export class FolderViewComponent implements OnInit {
         });
 
         this.fileSB.getFolders().subscribe((folders) => {
+            folders = folders.sort((a: TableEntry, b: TableEntry) => (a.name > b.name ? 1 : -1));
             this.entries = this.entries.filter((entry) => {
                 return entry.type !== FilesTypes.Folder
             });
             this.entries.push(...folders);
         });
         this.fileSB.getFiles().subscribe((files) => {
+            files = files.sort((a: TableEntry, b: TableEntry) => (a.name > b.name ? 1 : -1));
             this.entries = this.entries.filter((entry) => {
                 return entry.type !== FilesTypes.File
             });

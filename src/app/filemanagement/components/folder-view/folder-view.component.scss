@@ -17,7 +17,7 @@
  */
 
 .folder-view__mat-card {
-    height: calc(100vh - 207px);
+    height: calc(100vh - 227px);
 }
 
 .folder-view__column-header{
@@ -36,4 +36,9 @@
 
 .folder-view__table {
     width: 100%;
+}
+
+.folder-view__drop-zone{
+    text-align: center;
+    margin-top: 15px;
 }
