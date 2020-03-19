@@ -31,6 +31,7 @@ import { filesReducer } from './store/files.reducers';
 import { EffectsModule } from '@ngrx/effects';
 import { FilesEffects } from './store/file.effects';
 import { StorageSizePipe } from './pipes/storage-size.pipe';
+import { TableEntryInformationComponent } from './components/table-entry-information/table-entry-information.component';
 
 @NgModule({
     imports: [
@@ -46,6 +47,7 @@ import { StorageSizePipe } from './pipes/storage-size.pipe';
         PathInformationComponent,
         FolderViewComponent,
         StorageSizePipe,
+        TableEntryInformationComponent,
     ]
 })
 export class FilemanagementModule {

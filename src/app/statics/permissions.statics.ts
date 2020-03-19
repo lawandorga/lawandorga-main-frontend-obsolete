@@ -28,3 +28,4 @@ export const PERMISSION_ACCEPT_NEW_USERS_RLC = 'accept_new_users_rlc';
 export const PERMISSION_ACTIVATE_INACTIVE_USERS = 'activate_inactive_users_rlc';
 export const PERMISSION_CAN_ADD_RECORD_RLC = "add_record_rlc";
 export const PERMISSION_PROCESS_RECORD_DELETION_REQUESTS = "process_record_deletion_requests";
+export const PERMISSION_MANAGE_FOLDER_PERMISSIONS_RLC = "manage_folder_permissions_rlc";

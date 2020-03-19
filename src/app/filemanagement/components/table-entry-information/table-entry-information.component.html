@@ -1,0 +1,40 @@
+<!--
+  ~ law&orga - record and organization management software for refugee law clinics
+  ~ Copyright (C) 2020  Dominik Walser
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, either version 3 of the
+  ~ License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
+  -->
+
+<div *ngIf="entry; else notLoaded">
+  <div>
+    <h1>{{ entry.name }}</h1>
+  </div>
+  <mat-divider class="folder-view__divider"></mat-divider>
+  <div>
+    <h3>{{ entry.size | storageSize}}</h3>
+    <h3>last edited: {{ entry.last_edited | date:'short' }}</h3>
+    <h3 *ngIf="entry.type===1">129 files</h3>
+    <h3>creator: {{ entry.creator }}</h3>
+    <h3>created: {{ entry.created | date:'short' }}</h3>
+  </div>
+  <mat-divider class="folder-view__divider"></mat-divider>
+  <div *ngIf="entry.type===0 && showPermissions">
+    <h2>Folder permissions:</h2>
+
+  </div>
+
+</div>
+<ng-template #notLoaded>
+  <h2>folder information could't be loaded</h2>
+</ng-template>

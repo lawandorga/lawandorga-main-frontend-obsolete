@@ -16,17 +16,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { HttpClient } from '@angular/common/http';
 import { FilesSandboxService } from '../services/files-sandbox.service';
 import {
+    SET_CURRENT_FOLDER,
     SET_FILES,
     SET_FOLDERS,
-    START_DELETING_FILES_AND_FOLDERS, START_DOWNLOAD_FILES_AND_FOLDERS,
+    START_DELETING_FILES_AND_FOLDERS,
+    START_DOWNLOAD_FILES_AND_FOLDERS,
     START_LOADING_FOLDER,
-    StartDeletingFilesAndFolders, StartDownloadFilesAndFolders,
+    StartDeletingFilesAndFolders,
+    StartDownloadFilesAndFolders,
     StartLoadingFolder
 } from './files.actions';
 import { catchError, map, mergeMap } from 'rxjs/operators';
@@ -41,7 +43,7 @@ import { CoreSandboxService } from '../../core/services/core-sandbox.service';
 import { StorageService } from '../../shared/services/storage.service';
 
 @Injectable()
-export class FilesEffects{
+export class FilesEffects {
     constructor(
         private actions: Actions,
         private http: HttpClient,
@@ -61,21 +63,27 @@ export class FilesEffects{
                 this.http.get(GetFolderInformationApiUrl(path)).pipe(
                     catchError(error => {
                         console.log('error: ', error);
-                        return []
+                        return [];
                     }),
                     mergeMap((response: any) => {
-                        // console.log('response from loading folder', response);
-                        // console.log('i send these folders', response.folders);
-                        const folders = TableEntry.getFolderTableEntriesFromJsonArray(response.folders);
+                        console.log('response from loading folder', response);
+                        const folders = TableEntry.getFolderTableEntriesFromJsonArray(
+                            response.folders
+                        );
                         const files = TableEntry.getFileTableEntriesFromJsonArray(response.files);
-
-                        return [{type: SET_FOLDERS, payload: folders}, {type: SET_FILES, payload: files}];
+                        const current_folder = TableEntry.getFolderTableEntryFromJson(
+                            response.current_folder
+                        );
+                        return [
+                            { type: SET_FOLDERS, payload: folders },
+                            { type: SET_FILES, payload: files },
+                            { type: SET_CURRENT_FOLDER, payload: current_folder }
+                        ];
                     })
                 )
             );
         })
     );
-
 
     @Effect()
     startDeletingFilesAndFolders = this.actions.pipe(
@@ -90,21 +98,29 @@ export class FilesEffects{
             //     }
             // });
             return from(
-                this.http.post(FILES_DELETE_BASE_API_URL, {
-                    'entries': payload.entries,
-                    'path': payload.path
-                }).pipe( catchError(error => {
-                        console.log('error: ', error);
-                        return [];
-                    }),
-                    mergeMap((response: any) => {
-                        this.coreSB.showSuccessSnackBar('successfully deleted files and folders')
-                        // console.log('response from deletion', response);
-                        return [{
-                            type: START_LOADING_FOLDER,
-                            payload: payload.path
-                        }];
-                    }))
+                this.http
+                    .post(FILES_DELETE_BASE_API_URL, {
+                        entries: payload.entries,
+                        path: payload.path
+                    })
+                    .pipe(
+                        catchError(error => {
+                            console.log('error: ', error);
+                            return [];
+                        }),
+                        mergeMap((response: any) => {
+                            this.coreSB.showSuccessSnackBar(
+                                'successfully deleted files and folders'
+                            );
+                            // console.log('response from deletion', response);
+                            return [
+                                {
+                                    type: START_LOADING_FOLDER,
+                                    payload: payload.path
+                                }
+                            ];
+                        })
+                    )
             );
         })
     );
@@ -115,26 +131,30 @@ export class FilesEffects{
         map((action: StartDownloadFilesAndFolders) => {
             return action.payload;
         }),
-        mergeMap((payload: { entries: TableEntry[], path: string}) => {
+        mergeMap((payload: { entries: TableEntry[]; path: string }) => {
             return from(
-                this.http.post(FILES_DOWNLOAD_BASE_API_URL, {
-                    'entries': payload.entries,
-                    'path': payload.path
-                }).pipe( catchError(error => {
-                        console.log('error: ', error);
-                        return [];
-                    }),
-                    mergeMap((response: any) => {
-                        // console.log('response from deletion', response);
-                        if (payload.entries.length === 1){
-                            payload.path = payload.entries[0].name;
-                        } else if (payload.path === ''){
-                            payload.path = 'root';
-                        }
-                        StorageService.saveFile(response, payload.path + '.zip');
-                        return [];
-                    }))
+                this.http
+                    .post(FILES_DOWNLOAD_BASE_API_URL, {
+                        entries: payload.entries,
+                        path: payload.path
+                    })
+                    .pipe(
+                        catchError(error => {
+                            console.log('error: ', error);
+                            return [];
+                        }),
+                        mergeMap((response: any) => {
+                            // console.log('response from deletion', response);
+                            if (payload.entries.length === 1) {
+                                payload.path = payload.entries[0].name;
+                            } else if (payload.path === '') {
+                                payload.path = 'root';
+                            }
+                            StorageService.saveFile(response, payload.path + '.zip');
+                            return [];
+                        })
+                    )
             );
         })
-    )
+    );
 }

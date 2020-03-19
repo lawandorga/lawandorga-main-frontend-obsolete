@@ -17,13 +17,13 @@
  */
 
 
-import { FilesActions, SET_FILES, SET_FOLDERS } from './files.actions';
+import { FilesActions, SET_CURRENT_FOLDER, SET_FILES, SET_FOLDERS } from './files.actions';
 import { FullFolder } from '../models/folder.model';
 import { getIdObjects } from '../../shared/other/reducer-helper';
 import { TableEntry } from '../models/table-entry.model';
 
 export interface FilesState {
-    current_folder: FullFolder,
+    current_folder: TableEntry,
     folders: { [id: number]: TableEntry },
     files: { [id: number]: TableEntry }
 }
@@ -45,6 +45,11 @@ export function filesReducer(state = initialState, action: FilesActions) {
             return {
                 ...state,
                 files: getIdObjects(action.payload)
+            };
+        case SET_CURRENT_FOLDER:
+            return {
+                ...state,
+                current_folder: action.payload
             };
         default:
             return state;

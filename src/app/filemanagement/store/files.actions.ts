@@ -37,7 +37,7 @@ export class StartLoadingFolder implements Action {
 export class SetCurrentFolder implements Action {
     readonly type = SET_CURRENT_FOLDER;
 
-    constructor(public payload: FullFolder) {}
+    constructor(public payload: TableEntry) {}
 }
 
 export class SetFolders implements Action {

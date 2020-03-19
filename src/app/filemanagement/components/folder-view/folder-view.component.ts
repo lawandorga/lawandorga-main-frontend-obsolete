@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FilesSandboxService } from '../../services/files-sandbox.service';
 import { FilesTypes, TableEntry } from '../../models/table-entry.model';
 import { GetFolderFrontUrlRelative } from '../../../statics/frontend_links.statics';
+import { createUrlResolverWithoutPackagePrefix } from '@angular/compiler';
 
 @Component({
     selector: 'app-folder-view',
@@ -12,6 +13,10 @@ import { GetFolderFrontUrlRelative } from '../../../statics/frontend_links.stati
 export class FolderViewComponent implements OnInit {
     entries: TableEntry[] = [];
     path: string;
+    informationOpened = false;
+    informationEntry: TableEntry;
+
+    currentFolder: TableEntry;
 
     @ViewChild("filesInput")
     fileInput: ElementRef<HTMLInputElement>;
@@ -51,6 +56,9 @@ export class FolderViewComponent implements OnInit {
                 return entry.type !== FilesTypes.File
             });
             this.entries.push(...files);
+        });
+        this.fileSB.getCurrentFolder().subscribe((currentFolder: TableEntry) => {
+            this.currentFolder = currentFolder;
         })
     }
 
@@ -147,5 +155,19 @@ export class FolderViewComponent implements OnInit {
     onDownloadClick(entry){
         // console.log('i want to download: ', entry);
         this.fileSB.startDownloading([entry], this.path);
+    }
+
+    toggleInformationDrawer(){
+        this.informationOpened = !this.informationOpened;
+    }
+
+    onCurrentFolderInformation(){
+        this.informationEntry = this.currentFolder;
+        this.informationOpened = true;
+    }
+
+    onFolderInformation(entry: TableEntry){
+        this.informationEntry = entry;
+        this.informationOpened = true;
     }
 }

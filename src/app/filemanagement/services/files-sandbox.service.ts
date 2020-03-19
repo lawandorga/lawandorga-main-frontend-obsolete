@@ -63,6 +63,14 @@ export class FilesSandboxService {
         )
     }
 
+    getCurrentFolder(): Observable<TableEntry> {
+        return this.filesStore.pipe(
+            select((state: any) => {
+                return state.files.current_folder;
+            })
+        );
+    }
+
     upload(stuff: any, path: string){
         // console.log('i want to upload: ', stuff);
         // console.log('i want to upload here: ', path);
