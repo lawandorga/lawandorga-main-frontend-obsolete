@@ -18,7 +18,7 @@ export class FolderViewComponent implements OnInit {
 
     currentFolder: TableEntry;
 
-    @ViewChild("filesInput")
+    @ViewChild("fileInput")
     fileInput: ElementRef<HTMLInputElement>;
 
     columns = [
@@ -44,14 +44,14 @@ export class FolderViewComponent implements OnInit {
         });
 
         this.fileSB.getFolders().subscribe((folders) => {
-            folders = folders.sort((a: TableEntry, b: TableEntry) => (a.name > b.name ? 1 : -1));
+            folders = folders.sort((a: TableEntry, b: TableEntry) => (a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1));
             this.entries = this.entries.filter((entry) => {
                 return entry.type !== FilesTypes.Folder
             });
             this.entries.push(...folders);
         });
         this.fileSB.getFiles().subscribe((files) => {
-            files = files.sort((a: TableEntry, b: TableEntry) => (a.name > b.name ? 1 : -1));
+            files = files.sort((a: TableEntry, b: TableEntry) => (a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1));
             this.entries = this.entries.filter((entry) => {
                 return entry.type !== FilesTypes.File
             });
@@ -72,32 +72,21 @@ export class FolderViewComponent implements OnInit {
         }
     }
 
-
     dropped($event){
-        // console.log('something dropped here', $event);
-        // console.log($event.dataTransfer.files);
-        // console.log($event.dataTransfer.items);
         $event.preventDefault();
 
         const items = $event.dataTransfer.items;
         const all = [];
         let count = 0;
-        // console.log('items length: ', items.length);
         const itemsLength = items.length;
         for (let i = 0; i < items.length; i++) {
             const item = items[i];
-            // console.log('current item: ', item);
             const entry = item.webkitGetAsEntry();
-            // console.log('entry main: ', entry);
             if (entry.isFile) {
                 this.parseFileEntry(entry).then(result => {
                     count = count + 1;
-                    // console.log('file: ', result);
                     all.push(result);
-                    // console.log('comparison count', count);
-                    // console.log('comparison length', items.length);
                     if (count === itemsLength){
-                        // console.log('item count reached, want to upload now');
                        this.fileSB.upload(all, this.path);
                        this.fileSB.startLoadingFolderInformation(this.path);
                     }
@@ -105,7 +94,6 @@ export class FolderViewComponent implements OnInit {
             } else if (entry.isDirectory) {
                 this.parseDirectoryEntry(entry).then(result => {
                     count = count + 1;
-                    // console.log('folder: ', result);
                     all.push(result);
                     if (count === itemsLength){
                         this.fileSB.upload(all, this.path);
@@ -118,6 +106,15 @@ export class FolderViewComponent implements OnInit {
 
     dragover($event) {
         $event.preventDefault();
+    }
+
+    filesSelected($event){
+        console.log('i should upload shit');
+        console.log('my event', $event);
+        event.preventDefault();
+        const files = Array.from(this.fileInput.nativeElement.files);
+        this.fileSB.upload(files, this.path);
+        this.fileSB.startLoadingFolderInformation(this.path);
     }
 
     parseFileEntry(fileEntry) {
@@ -163,10 +160,10 @@ export class FolderViewComponent implements OnInit {
 
     onCurrentFolderInformation(){
         this.informationEntry = this.currentFolder;
-        this.informationOpened = true;
+        this.informationOpened = !this.informationOpened;
     }
 
-    onFolderInformation(entry: TableEntry){
+    onFolderInformation(entry: TableEntry) {
         this.informationEntry = entry;
         this.informationOpened = true;
     }

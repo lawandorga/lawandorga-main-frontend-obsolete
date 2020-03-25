@@ -15,11 +15,14 @@
   ~ You should have received a copy of the GNU Affero General Public License
   ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
   -->
-<div class="horizontal">
-    <h1>Files</h1>
+<mat-toolbar>
+    <span>Files</span>
     <app-path-information [path]="path"></app-path-information>
+
+    <span class="spacer"></span>
     <button mat-icon-button (click)="onCurrentFolderInformation()"><mat-icon>info</mat-icon></button>
-</div>
+
+</mat-toolbar>
 <mat-card class="folder-view__mat-card"  (drop)="dropped($event)" (dragover)="dragover($event)">
     <mat-card-content class="folder-view__card-content">
         <mat-drawer-container class="folder-view__drawer-container">
@@ -81,10 +84,15 @@
                     </table>
                 </div>
                 <h2 class="folder-view__drop-zone">drop files and folders here</h2>
+                <div class="folder-view__upload-button-container">
+                    <button mat-icon-button class="folder-view__upload-button" (click)="fileInput.click()"><mat-icon>add</mat-icon></button>
+                    <input hidden type="file" id="your-files" #fileInput multiple (change)="filesSelected($event)">
+                </div>
             </mat-drawer-content>
             <mat-drawer [(opened)]="informationOpened" disableClose mode="side" position="end" class="folder-view__drawer">
                 <app-table-entry-information [entry]="informationEntry"></app-table-entry-information>
             </mat-drawer>
         </mat-drawer-container>
+
     </mat-card-content>
 </mat-card>

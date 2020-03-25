@@ -16,6 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
+@import "~src/styles/basic.scss";
+
+
 .folder-view__mat-card {
     height: calc(100vh - 227px);
 }
@@ -40,7 +43,8 @@
 
 .folder-view__drop-zone{
     text-align: center;
-    margin-top: 15px;
+    margin-top: 60px;
+    color: grey;
 }
 
 .folder-view__drawer-container {
@@ -59,4 +63,15 @@
 
 .folder-view__divider {
     margin-bottom: 30px;
+}
+
+.folder-view__upload-button-container {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+}
+
+.folder-view__upload-button{
+    background: $c-primary-l;
+    color: $c-primary-variant
 }
