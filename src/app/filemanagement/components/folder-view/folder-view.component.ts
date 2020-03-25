@@ -4,6 +4,7 @@ import { FilesSandboxService } from '../../services/files-sandbox.service';
 import { FilesTypes, TableEntry } from '../../models/table-entry.model';
 import { GetFolderFrontUrlRelative } from '../../../statics/frontend_links.statics';
 import { createUrlResolverWithoutPackagePrefix } from '@angular/compiler';
+import { SharedSandboxService } from '../../../shared/services/shared-sandbox.service';
 
 @Component({
     selector: 'app-folder-view',
@@ -18,18 +19,17 @@ export class FolderViewComponent implements OnInit {
 
     currentFolder: TableEntry;
 
-    @ViewChild("fileInput")
+    @ViewChild('fileInput')
     fileInput: ElementRef<HTMLInputElement>;
 
-    columns = [
-        "type",
-        "name",
-        "size",
-        "last_edited",
-        "more"
-    ];
+    columns = ['type', 'name', 'size', 'last_edited', 'more'];
 
-    constructor(private route: ActivatedRoute, private fileSB: FilesSandboxService, private router: Router) {}
+    constructor(
+        private route: ActivatedRoute,
+        private fileSB: FilesSandboxService,
+        private router: Router,
+        private sharedSB: SharedSandboxService
+    ) {}
 
     ngOnInit() {
         this.route.queryParamMap.subscribe(map => {
@@ -43,36 +43,42 @@ export class FolderViewComponent implements OnInit {
             this.fileSB.startLoadingFolderInformation(this.path);
         });
 
-        this.fileSB.getFolders().subscribe((folders) => {
-            folders = folders.sort((a: TableEntry, b: TableEntry) => (a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1));
-            this.entries = this.entries.filter((entry) => {
-                return entry.type !== FilesTypes.Folder
+        this.fileSB.getFolders().subscribe(folders => {
+            folders = folders.sort((a: TableEntry, b: TableEntry) =>
+                a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
+            );
+            this.entries = this.entries.filter(entry => {
+                return entry.type !== FilesTypes.Folder;
             });
             this.entries.push(...folders);
         });
-        this.fileSB.getFiles().subscribe((files) => {
-            files = files.sort((a: TableEntry, b: TableEntry) => (a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1));
-            this.entries = this.entries.filter((entry) => {
-                return entry.type !== FilesTypes.File
+        this.fileSB.getFiles().subscribe(files => {
+            files = files.sort((a: TableEntry, b: TableEntry) =>
+                a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
+            );
+            this.entries = this.entries.filter(entry => {
+                return entry.type !== FilesTypes.File;
             });
             this.entries.push(...files);
         });
         this.fileSB.getCurrentFolder().subscribe((currentFolder: TableEntry) => {
             this.currentFolder = currentFolder;
-        })
+        });
     }
 
     onEntryClick(entry: TableEntry): void {
         // console.log('click on: ', entry);
-        if (entry.type === FilesTypes.Folder){
+        if (entry.type === FilesTypes.Folder) {
             // console.log('new path: ', GetFolderFrontUrlRelative(this.path, entry.name));
-            this.router.navigateByUrl(GetFolderFrontUrlRelative(this.path, entry.name)).catch(error => {
-                console.log('error at redirecting: ', error);
-            });
+            this.router
+                .navigateByUrl(GetFolderFrontUrlRelative(this.path, entry.name))
+                .catch(error => {
+                    console.log('error at redirecting: ', error);
+                });
         }
     }
 
-    dropped($event){
+    dropped($event) {
         $event.preventDefault();
 
         const items = $event.dataTransfer.items;
@@ -86,20 +92,20 @@ export class FolderViewComponent implements OnInit {
                 this.parseFileEntry(entry).then(result => {
                     count = count + 1;
                     all.push(result);
-                    if (count === itemsLength){
-                       this.fileSB.upload(all, this.path);
-                       this.fileSB.startLoadingFolderInformation(this.path);
+                    if (count === itemsLength) {
+                        this.fileSB.upload(all, this.path);
+                        this.fileSB.startLoadingFolderInformation(this.path);
                     }
-                })
+                });
             } else if (entry.isDirectory) {
                 this.parseDirectoryEntry(entry).then(result => {
                     count = count + 1;
                     all.push(result);
-                    if (count === itemsLength){
+                    if (count === itemsLength) {
                         this.fileSB.upload(all, this.path);
                         this.fileSB.startLoadingFolderInformation(this.path);
                     }
-                })
+                });
             }
         }
     }
@@ -108,7 +114,7 @@ export class FolderViewComponent implements OnInit {
         $event.preventDefault();
     }
 
-    filesSelected($event){
+    filesSelected($event) {
         console.log('i should upload shit');
         console.log('my event', $event);
         event.preventDefault();
@@ -144,21 +150,29 @@ export class FolderViewComponent implements OnInit {
         });
     }
 
-    onDeleteClick(entry){
-        // console.log('i want to delete: ', entry);
-        this.fileSB.startDeleting([entry], this.path);
+    onDeleteClick(entry) {
+
+        this.sharedSB.openConfirmDialog({
+            description: 'are you sure you want to delete it?',
+            confirmLabel: 'delete',
+            confirmColor: 'warn'
+        }, (delete_it: boolean) => {
+            if (delete_it){
+                this.fileSB.startDeleting([entry], this.path);
+            }
+        })
     }
 
-    onDownloadClick(entry){
+    onDownloadClick(entry) {
         // console.log('i want to download: ', entry);
         this.fileSB.startDownloading([entry], this.path);
     }
 
-    toggleInformationDrawer(){
+    toggleInformationDrawer() {
         this.informationOpened = !this.informationOpened;
     }
 
-    onCurrentFolderInformation(){
+    onCurrentFolderInformation() {
         this.informationEntry = this.currentFolder;
         this.informationOpened = !this.informationOpened;
     }

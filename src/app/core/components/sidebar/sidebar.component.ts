@@ -49,14 +49,12 @@ import {
     styleUrls: ["./sidebar.component.scss"]
 })
 export class SidebarComponent implements OnInit {
-    active = false;
     name = "";
     email = "";
     timer = null;
     checkPermissionInterval = 30000;
 
     legalNoticeUrl = LEGAL_NOTICE_FRONT_URL;
-    privacyStatementUrl = PRIVACY_STATEMENT_FRONT_URL;
 
     show_tab_permissions = {
         records: false,
@@ -323,9 +321,5 @@ export class SidebarComponent implements OnInit {
     selectedItem(event) {
         if (event.label === "Logout") this.logout();
         else this.router.navigate([event.link]);
-    }
-
-    selectedLabel(event) {
-        // console.log("selected label", event);
     }
 }
