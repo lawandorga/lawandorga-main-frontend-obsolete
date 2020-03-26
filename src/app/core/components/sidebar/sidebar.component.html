@@ -17,19 +17,26 @@
   -->
 
 <div class="drawer-header">
-    <a (click)='showProfile()'><img src="/assets/img/empty-profile.png" alt="Profile"></a>
-    <span><a routerLink="/profile">{{ name }}</a></span>
-    <span><a routerLink="/profile">{{ email }}</a></span>
+    <a (click)="showProfile()"><img src="/assets/img/empty-profile.png" alt="Profile"/></a>
+    <span
+        ><a routerLink="/profile">{{ name }}</a></span
+    >
+    <span
+        ><a routerLink="/profile">{{ email }}</a></span
+    >
 </div>
 <mat-divider></mat-divider>
 <div class="sidebar__nav-holder">
-    <ng-material-multilevel-menu [items]="actualSidebarItems" (selectedItem)="selectedItem($event)"
-                                 (selectedLabel)="selectedLabel($event)" [configuration]="config">
+    <ng-material-multilevel-menu
+        [items]="actualSidebarItems"
+        (selectedItem)="selectedItem($event)"
+        [configuration]="config"
+    >
     </ng-material-multilevel-menu>
     <div class="sidebar__other-links">
         <ul>
-            <li class="is_clickable sidebar__other-links__items"
-                [routerLink]="legalNoticeUrl">Impressum
+            <li class="is_clickable sidebar__other-links__items" [routerLink]="legalNoticeUrl">
+                Impressum
             </li>
             <li class="is_clickable sidebar__other-links__items">
                 <a href="http://rlc-deutschland.de/datenschutz/">Datenschutzerklärung</a>

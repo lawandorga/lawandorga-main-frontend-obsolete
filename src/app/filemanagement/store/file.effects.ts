@@ -48,8 +48,7 @@ export class FilesEffects {
         private actions: Actions,
         private http: HttpClient,
         private fileSB: FilesSandboxService,
-        private coreSB: CoreSandboxService,
-        private storageService: StorageService
+        private coreSB: CoreSandboxService
     ) {}
 
     @Effect()
