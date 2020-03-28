@@ -84,15 +84,15 @@
                     </table>
                 </div>
                 <h2 class="folder-view__drop-zone">drop files and folders here</h2>
-                <div class="folder-view__upload-button-container">
-                    <button mat-icon-button class="folder-view__upload-button" (click)="fileInput.click()"><mat-icon>add</mat-icon></button>
-                    <input hidden type="file" id="your-files" #fileInput multiple (change)="filesSelected($event)">
-                </div>
+
             </mat-drawer-content>
             <mat-drawer [(opened)]="informationOpened" disableClose mode="side" position="end" class="folder-view__drawer">
                 <app-table-entry-information [entry]="informationEntry"></app-table-entry-information>
             </mat-drawer>
         </mat-drawer-container>
-
+        <div class="folder-view__upload-button-container">
+            <button mat-icon-button class="folder-view__upload-button" (click)="fileInput.click()"><mat-icon>add</mat-icon></button>
+            <input hidden type="file" id="your-files" #fileInput multiple (change)="filesSelected($event)">
+        </div>
     </mat-card-content>
 </mat-card>

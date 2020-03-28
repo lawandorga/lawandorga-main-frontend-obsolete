@@ -24,7 +24,7 @@
   <div>
     <h3>{{ entry.size | storageSize}}</h3>
     <h3>last edited: {{ entry.last_edited | date:'short' }}</h3>
-    <h3 *ngIf="entry.type===1">129 files</h3>
+    <h3 *ngIf="entry.type===0">129 files</h3>
     <h3>creator: {{ entry.creator.name }}</h3>
     <h3>created: {{ entry.created | date:'short' }}</h3>
   </div>

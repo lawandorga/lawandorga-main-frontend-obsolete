@@ -76,6 +76,7 @@ export class FilesSandboxService {
         // console.log('i want to upload here: ', path);
         this.storage.upload(path, stuff, (response) => {
             this.startLoadingFolderInformation(path);
+            this.snackbarService.showSuccessSnackBar("file uploaded sucessfully")
         });
     }
 

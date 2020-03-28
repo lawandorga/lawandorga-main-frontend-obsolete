@@ -44,7 +44,7 @@ export class PathInformationComponent implements OnInit, OnChanges {
                break
             }
         }
-        console.log('clicked on path: ', newLink);
+        // console.log('clicked on path: ', newLink);
         this.router.navigateByUrl(GetFolderFrontUrlAbsolute(newLink)).catch(error => {
             console.log('error at redirecting: ', error);
         });

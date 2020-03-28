@@ -16,37 +16,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit } from "@angular/core";
-import {MatDialog} from "@angular/material/dialog";
-import {EditTextComponent} from "../../../shared/components/edit-text/edit-text.component";
-import {SharedSandboxService} from "../../../shared/services/shared-sandbox.service";
-
-export interface Section {
-    id: string;
-    type: string;
-    status: string;
-}
+import { Component, OnInit } from '@angular/core';
+import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { FullUser } from '../../models/user.model';
 
 @Component({
     selector: "app-dashboard",
     templateUrl: "./dashboard.component.html",
     styleUrls: ["./dashboard.component.scss"]
 })
-export class DashboardComponent {
-    constructor(public dialog: MatDialog, private sharedSB: SharedSandboxService) {
-    }
+export class DashboardComponent implements OnInit {
+    name = "";
 
-    onDialogClick(){
-        // this.sharedSB.openEditTextDialog('curVal', 'new token', (result) => {
-        //     console.log('in component value', result);
-        // });
-        this.sharedSB.openConfirmDialog({
-            // description: 'the description',
-            // confirmLabel: 'confirm',
-            // cancelLabel: 'cancel',
-            // title: 'please confirm'
-        }, (result) => {
-            console.log('result of confirm', result);
-        })
+    constructor(private coreSB: CoreSandboxService) {}
+
+    ngOnInit(): void {
+        this.coreSB.getUser().subscribe((user: FullUser) => {
+            if (user)
+                this.name = user.name;
+        });
     }
 }
