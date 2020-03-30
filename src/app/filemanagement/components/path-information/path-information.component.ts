@@ -16,6 +16,7 @@ export class PathInformationComponent implements OnInit, OnChanges {
     path: string;
 
     parts: string[];
+    this_folder: string;
 
     constructor(private router: Router) {}
 
@@ -31,6 +32,9 @@ export class PathInformationComponent implements OnInit, OnChanges {
 
     getParts(path: string) {
         this.parts = path.split('/');
+        console.log('parts: ', this.parts);
+        this.this_folder = this.parts.pop();
+        console.log('after removing last: ', this.parts);
     }
 
     onPartClick(part: string){

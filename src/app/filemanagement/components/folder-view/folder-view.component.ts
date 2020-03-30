@@ -150,10 +150,20 @@ export class FolderViewComponent implements OnInit {
         });
     }
 
-    onDeleteClick(entry) {
+    onDeleteClick(entry: TableEntry) {
+        let desc = 'are you sure you want to delete the ';
+        if (entry.type === 1){
+            // file
+            desc += 'file ';
+        } else {
+            // folder
+            desc += 'folder ';
+        }
+        desc += entry.name + '?';
+
 
         this.sharedSB.openConfirmDialog({
-            description: 'are you sure you want to delete it?',
+            description: desc,
             confirmLabel: 'delete',
             confirmColor: 'warn'
         }, (delete_it: boolean) => {
@@ -164,12 +174,7 @@ export class FolderViewComponent implements OnInit {
     }
 
     onDownloadClick(entry) {
-        // console.log('i want to download: ', entry);
         this.fileSB.startDownloading([entry], this.path);
-    }
-
-    toggleInformationDrawer() {
-        this.informationOpened = !this.informationOpened;
     }
 
     onCurrentFolderInformation() {

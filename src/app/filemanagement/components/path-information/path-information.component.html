@@ -16,7 +16,9 @@
   ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
   -->
 
-<div class="path-information__container is_clickable">
-    <mat-icon class="" (click)="onHomeCLick()">home</mat-icon>
-    <h3 class="path-information__parts" *ngFor="let part of parts" (click)="onPartClick(part)"> {{part}}/ </h3>
+<div class="path-information__container">
+    <mat-icon class="is_clickable" (click)="onHomeCLick()">home</mat-icon>
+    <h3 class="path-information__parts">/</h3>
+    <h3 class="path-information__parts is_clickable" *ngFor="let part of parts" (click)="onPartClick(part)"> {{part}}/ </h3>
+    <h3 class="path-information__parts">{{this_folder}}</h3>
 </div>
