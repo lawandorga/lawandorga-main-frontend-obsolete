@@ -32,6 +32,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { FilesEffects } from './store/file.effects';
 import { StorageSizePipe } from './pipes/storage-size.pipe';
 import { TableEntryInformationComponent } from './components/table-entry-information/table-entry-information.component';
+import { TableEntryInformationFolderPermissionComponent } from './components/table-entry-information-folder-permission/table-entry-information-folder-permission.component';
+import { AddPermissionForFolderComponent } from './components/add-permission-for-folder/add-permission-for-folder.component';
 
 @NgModule({
     imports: [
@@ -48,6 +50,11 @@ import { TableEntryInformationComponent } from './components/table-entry-informa
         FolderViewComponent,
         StorageSizePipe,
         TableEntryInformationComponent,
+        TableEntryInformationFolderPermissionComponent,
+        AddPermissionForFolderComponent,
+    ],
+    entryComponents: [
+        AddPermissionForFolderComponent
     ]
 })
 export class FilemanagementModule {

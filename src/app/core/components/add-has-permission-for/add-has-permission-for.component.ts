@@ -59,7 +59,9 @@ export class AddHasPermissionForComponent implements OnInit {
         this.allGroups = this.coreSB.getGroups().pipe(tap(results => {
             alphabeticalSorterByField(results, 'name')
         }));
-        this.allPermissions = this.coreSB.getAllPermissions();
+        this.allPermissions = this.coreSB.getAllPermissions().pipe(tap(results => {
+            alphabeticalSorterByField(results, 'name')
+        }));
 
         this.coreSB.getRlc().subscribe((rlc: RestrictedRlc) => {
             this.ownRlc = rlc;

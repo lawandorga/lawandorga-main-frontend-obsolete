@@ -16,25 +16,33 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, Input, OnInit } from '@angular/core';
-import { TableEntry } from '../../models/table-entry.model';
+import { Component, Input, OnChanges, OnInit, SimpleChange, SimpleChanges } from '@angular/core';
+import { FilesTypes, TableEntry } from '../../models/table-entry.model';
 import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
 import { PERMISSION_MANAGE_FOLDER_PERMISSIONS_RLC } from '../../../statics/permissions.statics';
+import { FilesSandboxService } from '../../services/files-sandbox.service';
+import { Observable } from 'rxjs';
+import { FolderPermission } from '../../models/folder_permission.model';
 
 @Component({
     selector: 'app-table-entry-information',
     templateUrl: './table-entry-information.component.html',
     styleUrls: ['./table-entry-information.component.scss']
 })
-export class TableEntryInformationComponent implements OnInit {
+export class TableEntryInformationComponent implements OnInit, OnChanges {
     @Input()
     entry: TableEntry;
 
+
+
     showPermissions = false;
 
-    constructor(private coreSB: CoreSandboxService) {}
+    folderEnum: number;
+
+    constructor(private coreSB: CoreSandboxService, private fileSB: FilesSandboxService) {}
 
     ngOnInit() {
+        this.folderEnum =  FilesTypes.Folder;
         this.coreSB.hasPermissionFromStringForOwnRlc(
             PERMISSION_MANAGE_FOLDER_PERMISSIONS_RLC,
             hasPermission => {
@@ -43,5 +51,14 @@ export class TableEntryInformationComponent implements OnInit {
                 }
             }
         );
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        const currentItem: SimpleChange = changes.entry;
+        if (currentItem){
+            if (this.showPermissions && this.entry.type === FilesTypes.Folder){
+                this.fileSB.startLoadingFolderPermissions('' + this.entry.id);
+            }
+        }
     }
 }

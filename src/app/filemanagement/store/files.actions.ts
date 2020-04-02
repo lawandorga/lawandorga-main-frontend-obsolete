@@ -17,8 +17,9 @@
  */
 
 import { Action } from '@ngrx/store';
-import { FullFolder } from '../models/folder.model';
 import { TableEntry } from '../models/table-entry.model';
+import { FolderPermission } from '../models/folder_permission.model';
+import { RestrictedGroup } from '../../core/models/group.model';
 
 export const START_LOADING_FOLDER = 'START_LOADING_FOLDER';
 export const SET_CURRENT_FOLDER = 'SET_CURRENT_FOLDER';
@@ -26,6 +27,10 @@ export const SET_FOLDERS = "SET_FOLDERS";
 export const SET_FILES = "SET_FILES";
 export const START_DELETING_FILES_AND_FOLDERS = "START_DELETING_FILES_AND_FOLDERS";
 export const START_DOWNLOAD_FILES_AND_FOLDERS = "START_DOWNLOAD_FILES_AND_FOLDERS";
+export const START_LOADING_FOLDER_PERMISSIONS = "START_LOADING_FOLDER_PERMISSIONS";
+export const SET_FOLDER_PERMISSIONS = "SET_FOLDER_PERMISSIONS";
+export const RESET_FOLDER_PERMISSIONS = "RESET_FOLDER_PERMISSIONS";
+export const START_CREATING_FOLDER_PERMISSION = "START_CREATING_FOLDER_PERMISSION";
 
 export class StartLoadingFolder implements Action {
     readonly type = START_LOADING_FOLDER;
@@ -66,9 +71,35 @@ export class StartDownloadFilesAndFolders implements Action {
     constructor(public payload: { entries: TableEntry[], path: string }) {}
 }
 
+export class StartLoadingFolderPermissions implements Action {
+    readonly type = START_LOADING_FOLDER_PERMISSIONS;
+
+    constructor(public payload: string) {}
+}
+
+export class SetFolderPermissions implements Action {
+    readonly type = SET_FOLDER_PERMISSIONS;
+
+    constructor(public payload: FolderPermission[]) {}
+}
+
+export class ResetFolderPermissions implements Action {
+    readonly type = RESET_FOLDER_PERMISSIONS;
+}
+
+export class StartCreatingFolderPermission implements Action {
+    readonly type = START_CREATING_FOLDER_PERMISSION;
+
+    constructor(public payload: {group: RestrictedGroup, folder: TableEntry, permission: string}){}
+}
+
 export type FilesActions = StartLoadingFolder
     | SetCurrentFolder
     | SetFolders
     | SetFiles
     | StartDeletingFilesAndFolders
-    | StartDownloadFilesAndFolders;
+    | StartDownloadFilesAndFolders
+    | StartLoadingFolderPermissions
+    | SetFolderPermissions
+    | ResetFolderPermissions
+    | StartCreatingFolderPermission;

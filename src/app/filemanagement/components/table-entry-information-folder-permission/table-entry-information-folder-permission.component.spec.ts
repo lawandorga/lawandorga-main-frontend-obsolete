@@ -18,21 +18,21 @@
 
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ListFolderItemComponent } from './list-folder-item.component';
+import { TableEntryInformationFolderPermissionComponent } from './table-entry-information-folder-permission.component';
 
-describe('ListFolderItemComponent', () => {
-  let component: ListFolderItemComponent;
-  let fixture: ComponentFixture<ListFolderItemComponent>;
+describe('TableEntryInformationFolderPermissionComponent', () => {
+  let component: TableEntryInformationFolderPermissionComponent;
+  let fixture: ComponentFixture<TableEntryInformationFolderPermissionComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ListFolderItemComponent ]
+      declarations: [ TableEntryInformationFolderPermissionComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ListFolderItemComponent);
+    fixture = TestBed.createComponent(TableEntryInformationFolderPermissionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

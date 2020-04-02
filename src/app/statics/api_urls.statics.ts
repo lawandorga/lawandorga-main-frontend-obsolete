@@ -47,6 +47,7 @@ export const FOLDER_INFORMATION_BASE_API_URL = base + 'api/files/folder';
 export const FILES_UPLOAD_BASE_API_URL = base + 'api/files/upload';
 export const FILES_DELETE_BASE_API_URL = base + 'api/files/delete';
 export const FILES_DOWNLOAD_BASE_API_URL = base + 'api/files/download';
+export const FILES_PERMISSION_FOR_FOLDER_BASE_API_URL = base + 'api/files/permission_for_folder/';
 
 const CHECK_USER_ACTIVATION_API_URL = base + "api/check_user_activation_link/";
 const ACTIVATE_USER_ACTIVATION_API_URL = "base + api/activate_user_activation_link/";
@@ -56,7 +57,9 @@ const DOWNLOAD_SIGNING_BASE_API_URL = base + "api/storage_down/";       // depre
 const RECORD_DOCUMENT_BASE_API_URL = base + "api/records/documents/";
 const PERMISSION_FOR_GROUP_BASE_API_URL = base + "api/permissions_for_group/";
 const DOWNLOAD_ALL_RECORD_DOCUMENTS_BASE_API_URL = base + "api/records/documents_download/";
-const DOWNLOAD_ENCRYPTED_RECORD_DOCUMENT_BASE_API_URL = base + "api/records/e_record/documents/"
+const DOWNLOAD_ENCRYPTED_RECORD_DOCUMENT_BASE_API_URL = base + "api/records/e_record/documents/";
+const FILES_FOLDER_PERMISSIONS_BASE_API_URL = base + 'api/files/folder_permissions/';
+
 
 export const GetSpecialProfileApiURL = (id: string | number) => {
     return `${PROFILES_API_URL}${id}/`;
@@ -138,4 +141,8 @@ export const GetFolderInformationApiUrl = (path: string) => {
     if (path)
         return `${FOLDER_INFORMATION_BASE_API_URL}?path=${path}`;
     return `${FOLDER_INFORMATION_BASE_API_URL}`;
-}
+};
+
+export const GetFolderPermissionsApiUrl = (id: string) => {
+    return `${FILES_FOLDER_PERMISSIONS_BASE_API_URL}${id}/`;
+};

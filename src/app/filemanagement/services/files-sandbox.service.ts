@@ -22,10 +22,19 @@ import {CoreSandboxService} from '../../core/services/core-sandbox.service';
 import {SnackbarService} from '../../shared/services/snackbar.service';
 import { FilesState } from '../store/files.reducers';
 import { select, Store } from '@ngrx/store';
-import { StartDeletingFilesAndFolders, StartDownloadFilesAndFolders, StartLoadingFolder } from '../store/files.actions';
+import {
+    StartCreatingFolderPermission,
+    StartDeletingFilesAndFolders,
+    StartDownloadFilesAndFolders,
+    StartLoadingFolder,
+    StartLoadingFolderPermissions
+} from '../store/files.actions';
 import { Observable } from 'rxjs';
 import { TableEntry } from '../models/table-entry.model';
 import { StorageService } from '../../shared/services/storage.service';
+import { FolderPermission } from '../models/folder_permission.model';
+import { Table } from 'aws-sdk/clients/glue';
+import { RestrictedGroup } from '../../core/models/group.model';
 
 @Injectable({
     providedIn: "root"
@@ -72,11 +81,9 @@ export class FilesSandboxService {
     }
 
     upload(stuff: any, path: string){
-        // console.log('i want to upload: ', stuff);
-        // console.log('i want to upload here: ', path);
         this.storage.upload(path, stuff, (response) => {
             this.startLoadingFolderInformation(path);
-            this.snackbarService.showSuccessSnackBar("file uploaded sucessfully")
+            this.snackbarService.showSuccessSnackBar("uploaded sucessfully")
         });
     }
 
@@ -86,6 +93,24 @@ export class FilesSandboxService {
 
     startDownloading(stuff: TableEntry[], path: string){
         this.filesStore.dispatch(new StartDownloadFilesAndFolders({'entries': stuff, path}));
+    }
+
+    startLoadingFolderPermissions(folder_id: string){
+        console.log('folder permissions fired');
+        this.filesStore.dispatch(new StartLoadingFolderPermissions(folder_id));
+    }
+
+    getFolderPermissions(asArray: boolean = true): Observable<FolderPermission[]> {
+        return this.filesStore.pipe(
+            select((state: any) => {
+                const values = state.files.folder_permissions;
+                return asArray ? Object.values(values) : values;
+            })
+        );
+    }
+
+    startCreatingFolderPermission(folder: TableEntry, group: RestrictedGroup, permission: string){
+        this.filesStore.dispatch(new StartCreatingFolderPermission({group, folder, permission}));
     }
 }
 

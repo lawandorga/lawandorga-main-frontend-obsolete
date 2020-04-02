@@ -18,21 +18,21 @@
 
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ListFolderItemComponent } from './list-folder-item.component';
+import { AddPermissionForFolderComponent } from './add-permission-for-folder.component';
 
-describe('ListFolderItemComponent', () => {
-  let component: ListFolderItemComponent;
-  let fixture: ComponentFixture<ListFolderItemComponent>;
+describe('AddPermissionForFolderComponent', () => {
+  let component: AddPermissionForFolderComponent;
+  let fixture: ComponentFixture<AddPermissionForFolderComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ListFolderItemComponent ]
+      declarations: [ AddPermissionForFolderComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ListFolderItemComponent);
+    fixture = TestBed.createComponent(AddPermissionForFolderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

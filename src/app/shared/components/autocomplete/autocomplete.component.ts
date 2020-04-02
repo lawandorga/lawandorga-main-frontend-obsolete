@@ -151,6 +151,7 @@ export class AutocompleteComponent implements OnInit, OnChanges {
                         this.valueForm.controls["value"].value
                 ).length === 0
             ) {
+                this.valueForm.controls["value"].setValue("");
                 this.selectionError = {
                     notInAllValues: true
                 };

@@ -22,25 +22,28 @@ import { HttpClient } from '@angular/common/http';
 import { FilesSandboxService } from '../services/files-sandbox.service';
 import {
     SET_CURRENT_FOLDER,
-    SET_FILES,
-    SET_FOLDERS,
+    SET_FILES, SET_FOLDER_PERMISSIONS,
+    SET_FOLDERS, START_CREATING_FOLDER_PERMISSION,
     START_DELETING_FILES_AND_FOLDERS,
     START_DOWNLOAD_FILES_AND_FOLDERS,
-    START_LOADING_FOLDER,
+    START_LOADING_FOLDER, START_LOADING_FOLDER_PERMISSIONS, StartCreatingFolderPermission,
     StartDeletingFilesAndFolders,
     StartDownloadFilesAndFolders,
-    StartLoadingFolder
+    StartLoadingFolder, StartLoadingFolderPermissions
 } from './files.actions';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { from } from 'rxjs';
 import {
     FILES_DELETE_BASE_API_URL,
-    FILES_DOWNLOAD_BASE_API_URL,
-    GetFolderInformationApiUrl
+    FILES_DOWNLOAD_BASE_API_URL, FILES_PERMISSION_FOR_FOLDER_BASE_API_URL,
+    GetFolderInformationApiUrl, GetFolderPermissionsApiUrl
 } from '../../statics/api_urls.statics';
 import { TableEntry } from '../models/table-entry.model';
 import { CoreSandboxService } from '../../core/services/core-sandbox.service';
 import { StorageService } from '../../shared/services/storage.service';
+import { FolderPermission } from '../models/folder_permission.model';
+import { RestrictedGroup } from '../../core/models/group.model';
+import { parseTwoDigitYear } from 'moment';
 
 @Injectable()
 export class FilesEffects {
@@ -65,7 +68,6 @@ export class FilesEffects {
                         return [];
                     }),
                     mergeMap((response: any) => {
-                        console.log('response from loading folder', response);
                         const folders = TableEntry.getFolderTableEntriesFromJsonArray(
                             response.folders
                         );
@@ -91,11 +93,6 @@ export class FilesEffects {
             return action.payload;
         }),
         mergeMap((payload: { entries: TableEntry[]; path: string }) => {
-            // payload.entries.map((entry: TableEntry) => {
-            //     if (entry.type === FilesTypes.Folder){
-            //         entry.type = 'Folder';
-            //     }
-            // });
             return from(
                 this.http
                     .post(FILES_DELETE_BASE_API_URL, {
@@ -150,6 +147,65 @@ export class FilesEffects {
                                 payload.path = 'root';
                             }
                             StorageService.saveFile(response, payload.path + '.zip');
+                            return [];
+                        })
+                    )
+            );
+        })
+    );
+
+    @Effect()
+    startLoadingFolderPermissions = this.actions.pipe(
+        ofType(START_LOADING_FOLDER_PERMISSIONS),
+        map((action: StartLoadingFolderPermissions) => {
+            return action.payload;
+        }),
+        mergeMap((payload: string) => {
+            return from(
+                this.http
+                    .get(GetFolderPermissionsApiUrl(payload))
+                    .pipe(
+                        catchError(error => {
+                            console.log('error: ', error);
+                            return [];
+                        }),
+                        mergeMap((response: any) => {
+                            console.log('response from get folder permissions', response);
+                            let folderPermissions = FolderPermission.getFolderPermissionsFromJsonArray(response.SEE, 'see');
+                            folderPermissions = folderPermissions.concat(FolderPermission.getFolderPermissionsFromJsonArray(response.READ, 'read'));
+                            folderPermissions = folderPermissions.concat(FolderPermission.getFolderPermissionsFromJsonArray(response.WRITE, 'write'));
+                            console.log('folder permissions: ', folderPermissions);
+                            return [{
+                                type: SET_FOLDER_PERMISSIONS,
+                                payload: folderPermissions
+                            }];
+                        })
+                    )
+            );
+        })
+    );
+
+    @Effect()
+    startCreatingFolderPermission = this.actions.pipe(
+        ofType(START_CREATING_FOLDER_PERMISSION),
+        map((action: StartCreatingFolderPermission) => {
+            return action.payload;
+        }),
+        mergeMap((payload: { folder: TableEntry, group: RestrictedGroup, permission: string }) => {
+            return from(
+                this.http
+                    .post(FILES_PERMISSION_FOR_FOLDER_BASE_API_URL, {
+                        group: payload.group.id,
+                        folder: payload.folder.id,
+                        permission: payload.permission
+                    })
+                    .pipe(
+                        catchError(error => {
+                            console.log('error: ', error);
+                            return [];
+                        }),
+                        mergeMap((response: any) => {
+                            console.log('response: ', response);
                             return [];
                         })
                     )
