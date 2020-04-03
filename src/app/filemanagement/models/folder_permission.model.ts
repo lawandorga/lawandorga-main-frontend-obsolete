@@ -18,37 +18,46 @@
 
 import { RestrictedGroup } from '../../core/models/group.model';
 
+export enum FolderPermissionFrom {
+    Parent,
+    Children
+}
+
 export class FolderPermission {
     constructor(
         public id: string,
         public group: RestrictedGroup,
         public permission: string,
-        public folderId: string
+        public folderId: string,
+        public from: FolderPermissionFrom
     ) {
         this.id = id;
         this.group = group;
         this.permission = permission;
         this.folderId = folderId;
+        this.from = from;
     }
 
-    static getFolderPermissionFromJson(json: any, permission: string): FolderPermission {
+    static getFolderPermissionFromJson(json: any, from: FolderPermissionFrom): FolderPermission {
         console.log('json: ', json);
-        if (json.general){
-            return new FolderPermission('-1', null, permission, '-1');
-        }
+        // if (json.general){
+        //     return new FolderPermission('-1', null, permission, '-1');
+        // }
         return new FolderPermission(
             json.id,
-            new RestrictedGroup(json.group.id, json.group.name),
-            permission,
-            json.folder
+            new RestrictedGroup(json.group_has_permission.id, json.group_has_permission.name),
+            json.permission.name,
+            json.folder,
+            from
         )
     }
 
-    static getFolderPermissionsFromJsonArray(jsonArray: any, permission: string): FolderPermission[] {
+    static getFolderPermissionsFromJsonArray(jsonArray: any, from: FolderPermissionFrom): FolderPermission[] {
         const folderPermissions: FolderPermission[] = [];
         console.log('jsonArray: ', jsonArray);
         Object.values(jsonArray).map(folderPermissionJson => {
-            folderPermissions.push(FolderPermission.getFolderPermissionFromJson(folderPermissionJson, permission))
+            console.log('mapped json: ', folderPermissionJson);
+            folderPermissions.push(FolderPermission.getFolderPermissionFromJson(folderPermissionJson, from));
         });
         return folderPermissions;
     }

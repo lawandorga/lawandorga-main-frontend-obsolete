@@ -67,6 +67,7 @@ export class AddPermissionForFolderComponent implements OnInit {
         console.log('i want to add a permission for group ', this.selectedGroup);
         console.log('my folder is: ', this.data);
         // const entry = TableEntry(this.data);
-        // this.fileSB.startCreatingFolderPermission(this.data, this.selectedGroup, 'read');
+        this.fileSB.startCreatingFolderPermission(this.data, this.selectedGroup, 'read');
+        this.dialogRef.close();
     }
 }

@@ -18,12 +18,20 @@
 
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { FolderPermission } from '../../models/folder_permission.model';
+import { FolderPermission, FolderPermissionFrom } from '../../models/folder_permission.model';
 import { FilesSandboxService } from '../../services/files-sandbox.service';
 import { Router } from '@angular/router';
 import { TableEntry } from '../../models/table-entry.model';
 import { MatDialog } from '@angular/material/dialog';
 import { AddPermissionForFolderComponent } from '../add-permission-for-folder/add-permission-for-folder.component';
+import { HasPermission, Permission } from '../../../core/models/permission.model';
+import {
+    PERMISSION_MANAGE_FOLDER_PERMISSIONS_RLC,
+    PERMISSION_READ_ALL_FOLDERS_RLC,
+    PERMISSION_WRITE_ALL_FOLDERS_RLC
+} from '../../../statics/permissions.statics';
+import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
+
 
 @Component({
     selector: 'app-table-entry-information-folder-permission',
@@ -35,29 +43,46 @@ export class TableEntryInformationFolderPermissionComponent implements OnInit {
     folderEntry: TableEntry;
 
     folderPermissions: Observable<FolderPermission[]>;
+    folderHasPermissions: Observable<HasPermission[]>;
 
-    columns = ['icon', 'group_name', 'action'];
+    columns = ['permission', 'group_name', 'action'];
+    columnsHas = ['permission', 'group_name'];
 
-    constructor(private fileSB: FilesSandboxService, private router: Router, public dialog: MatDialog) {}
+    permissionFromChildren = FolderPermissionFrom.Children;
+    PERMISSION_WRITE_ALL_ID: string;
+    PERMISSION_READ_ALL_ID: string;
+    PERMISSION_MANAGE_ID: string;
+
+    groups: any;
+
+    constructor(private coreSB: CoreSandboxService, private fileSB: FilesSandboxService, private router: Router, public dialog: MatDialog) {}
 
     ngOnInit() {
+        this.coreSB.startLoadingGroups();
         this.folderPermissions = this.fileSB.getFolderPermissions();
-    }
-
-    getIconToShow(folderPermission: FolderPermission): string {
-        if (folderPermission.id === '-1'){
-            return 'general';
-        } else if (folderPermission.permission === 'see'){
-            return 'down';
-        } else if (folderPermission.folderId !== this.folderEntry.id){
-            return 'up';
-        } else {
-            return 'delete'
-        }
+        this.folderHasPermissions = this.fileSB.getFolderHasPermissions();
+        this.coreSB.getAllPermissions().subscribe((permissions: Permission[]) => {
+            for (const permission of permissions){
+                if (permission.name === PERMISSION_WRITE_ALL_FOLDERS_RLC){
+                    this.PERMISSION_WRITE_ALL_ID = permission.id;
+                } else if (permission.name === PERMISSION_READ_ALL_FOLDERS_RLC){
+                    this.PERMISSION_READ_ALL_ID = permission.id;
+                } else if (permission.name === PERMISSION_MANAGE_FOLDER_PERMISSIONS_RLC){
+                    this.PERMISSION_MANAGE_ID = permission.id;
+                }
+            }
+        });
+        this.coreSB.getGroups(false).subscribe((groups: any) => {
+            this.groups = groups;
+        })
     }
 
     onAddFolderPermissionClick(){
         console.log('addFolderPermissionClick');
         this.dialog.open(AddPermissionForFolderComponent, {data: this.folderEntry});
+    }
+
+    onRemoveFolderPermissionClick(folderPermission: FolderPermission){
+        this.fileSB.startDeletingFolderPermission(folderPermission);
     }
 }

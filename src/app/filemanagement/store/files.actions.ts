@@ -20,6 +20,7 @@ import { Action } from '@ngrx/store';
 import { TableEntry } from '../models/table-entry.model';
 import { FolderPermission } from '../models/folder_permission.model';
 import { RestrictedGroup } from '../../core/models/group.model';
+import { HasPermission } from '../../core/models/permission.model';
 
 export const START_LOADING_FOLDER = 'START_LOADING_FOLDER';
 export const SET_CURRENT_FOLDER = 'SET_CURRENT_FOLDER';
@@ -31,6 +32,8 @@ export const START_LOADING_FOLDER_PERMISSIONS = "START_LOADING_FOLDER_PERMISSION
 export const SET_FOLDER_PERMISSIONS = "SET_FOLDER_PERMISSIONS";
 export const RESET_FOLDER_PERMISSIONS = "RESET_FOLDER_PERMISSIONS";
 export const START_CREATING_FOLDER_PERMISSION = "START_CREATING_FOLDER_PERMISSION";
+export const SET_FOLDER_HAS_PERMISSIONS = "SET_FOLDER_HAS_PERMISSIONS";
+export const START_DELETING_FOLDER_PERMISSION = "START_DELETING_FOLDER_PERMISSION";
 
 export class StartLoadingFolder implements Action {
     readonly type = START_LOADING_FOLDER;
@@ -93,6 +96,18 @@ export class StartCreatingFolderPermission implements Action {
     constructor(public payload: {group: RestrictedGroup, folder: TableEntry, permission: string}){}
 }
 
+export class SetFolderHasPermissions implements Action {
+    readonly type = SET_FOLDER_HAS_PERMISSIONS;
+
+    constructor(public payload: HasPermission[]) {}
+}
+
+export class StartDeletingFolderPermission implements Action {
+    readonly type = START_DELETING_FOLDER_PERMISSION;
+
+    constructor(public payload: FolderPermission) {}
+}
+
 export type FilesActions = StartLoadingFolder
     | SetCurrentFolder
     | SetFolders
@@ -102,4 +117,6 @@ export type FilesActions = StartLoadingFolder
     | StartLoadingFolderPermissions
     | SetFolderPermissions
     | ResetFolderPermissions
-    | StartCreatingFolderPermission;
+    | StartCreatingFolderPermission
+    | SetFolderHasPermissions
+    | StartDeletingFolderPermission;

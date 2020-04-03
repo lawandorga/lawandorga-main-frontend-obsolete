@@ -60,7 +60,6 @@ const DOWNLOAD_ALL_RECORD_DOCUMENTS_BASE_API_URL = base + "api/records/documents
 const DOWNLOAD_ENCRYPTED_RECORD_DOCUMENT_BASE_API_URL = base + "api/records/e_record/documents/";
 const FILES_FOLDER_PERMISSIONS_BASE_API_URL = base + 'api/files/folder_permissions/';
 
-
 export const GetSpecialProfileApiURL = (id: string | number) => {
     return `${PROFILES_API_URL}${id}/`;
 };
@@ -143,6 +142,10 @@ export const GetFolderInformationApiUrl = (path: string) => {
     return `${FOLDER_INFORMATION_BASE_API_URL}`;
 };
 
-export const GetFolderPermissionsApiUrl = (id: string) => {
+export const GetFolderPermissionsForFolderApiUrl = (id: string) => {
     return `${FILES_FOLDER_PERMISSIONS_BASE_API_URL}${id}/`;
+};
+
+export const GetFolderPermissionApiUrl = (id: string) => {
+    return `${FILES_PERMISSION_FOR_FOLDER_BASE_API_URL}${id}/`
 };

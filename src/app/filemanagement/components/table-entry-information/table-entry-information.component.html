@@ -20,15 +20,13 @@
     <div>
         <h1>{{ entry.name }}</h1>
     </div>
-    <mat-divider class="folder-view__divider"></mat-divider>
     <div>
         <h3>{{ entry.size | storageSize }}</h3>
         <h3>last edited: {{ entry.last_edited | date: 'short' }}</h3>
-        <h3 *ngIf="entry.type === folderEnum">129 files</h3>
+        <h3 *ngIf="entry.type === folderEnum">number of files: {{entry.numberOfFiles}}</h3>
         <h3>creator: {{ entry.creator.name }}</h3>
         <h3>created: {{ entry.created | date: 'short' }}</h3>
     </div>
-    <mat-divider class="folder-view__divider"></mat-divider>
     <div *ngIf="entry.type === 0 && showPermissions">
         <app-table-entry-information-folder-permission [folderEntry]="entry"></app-table-entry-information-folder-permission>
     </div>

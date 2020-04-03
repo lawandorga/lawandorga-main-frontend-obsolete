@@ -31,7 +31,8 @@ export class TableEntry {
         public creator: RestrictedUser,
         public size: number,
         public created: Date,
-        public last_edited: Date
+        public last_edited: Date,
+        public numberOfFiles: number
     ) {
         this.id = id;
         this.name = name;
@@ -40,6 +41,7 @@ export class TableEntry {
         this.created = created;
         this.last_edited = last_edited;
         this.type = type;
+        this.numberOfFiles = numberOfFiles;
     }
 
     static getTableEntryFromJson(json: any, type: FilesTypes) {
@@ -53,7 +55,8 @@ export class TableEntry {
             new RestrictedUser(json.creator.id, json.creator.name),
             json.size,
             new Date(json.created),
-            new Date(json.last_edited)
+            new Date(json.last_edited),
+            type === FilesTypes.Folder ? json.number_of_files : -1
         )
     }
 

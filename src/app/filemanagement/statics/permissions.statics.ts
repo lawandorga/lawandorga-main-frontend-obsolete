@@ -1,4 +1,4 @@
-/*!
+/*
  * law&orga - record and organization management software for refugee law clinics
  * Copyright (C) 2020  Dominik Walser
  *
@@ -17,14 +17,5 @@
  */
 
 
-@import "~src/styles/basic.scss";
-
-
-.table-entry-information-folder-permission__button {
-    background: $c-primary-l;
-    color: $c-primary-variant
-}
-
-.table-entry-information-folder-permission__container {
-    margin-top: 55px;
-}
+export const PERMISSION_FILES_READ_FOLDER = 'read_folder';
+export const PERMISSION_FILES_WRITE_FOLDER = 'write_folder';

@@ -24,7 +24,7 @@ import { FilesState } from '../store/files.reducers';
 import { select, Store } from '@ngrx/store';
 import {
     StartCreatingFolderPermission,
-    StartDeletingFilesAndFolders,
+    StartDeletingFilesAndFolders, StartDeletingFolderPermission,
     StartDownloadFilesAndFolders,
     StartLoadingFolder,
     StartLoadingFolderPermissions
@@ -35,6 +35,7 @@ import { StorageService } from '../../shared/services/storage.service';
 import { FolderPermission } from '../models/folder_permission.model';
 import { Table } from 'aws-sdk/clients/glue';
 import { RestrictedGroup } from '../../core/models/group.model';
+import { HasPermission } from '../../core/models/permission.model';
 
 @Injectable({
     providedIn: "root"
@@ -109,8 +110,21 @@ export class FilesSandboxService {
         );
     }
 
+    getFolderHasPermissions(asArray: boolean = true): Observable<HasPermission[]> {
+        return this.filesStore.pipe(
+            select((state: any) => {
+                const values = state.files.folder_has_permissions;
+                return asArray ? Object.values(values) : values;
+            })
+        )
+    }
+
     startCreatingFolderPermission(folder: TableEntry, group: RestrictedGroup, permission: string){
         this.filesStore.dispatch(new StartCreatingFolderPermission({group, folder, permission}));
+    }
+
+    startDeletingFolderPermission(folder: FolderPermission){
+        this.filesStore.dispatch(new StartDeletingFolderPermission(folder));
     }
 }
 

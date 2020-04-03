@@ -22,28 +22,39 @@ import { HttpClient } from '@angular/common/http';
 import { FilesSandboxService } from '../services/files-sandbox.service';
 import {
     SET_CURRENT_FOLDER,
-    SET_FILES, SET_FOLDER_PERMISSIONS,
-    SET_FOLDERS, START_CREATING_FOLDER_PERMISSION,
+    SET_FILES,
+    SET_FOLDER_HAS_PERMISSIONS,
+    SET_FOLDER_PERMISSIONS,
+    SET_FOLDERS,
+    START_CREATING_FOLDER_PERMISSION,
     START_DELETING_FILES_AND_FOLDERS,
+    START_DELETING_FOLDER_PERMISSION,
     START_DOWNLOAD_FILES_AND_FOLDERS,
-    START_LOADING_FOLDER, START_LOADING_FOLDER_PERMISSIONS, StartCreatingFolderPermission,
+    START_LOADING_FOLDER,
+    START_LOADING_FOLDER_PERMISSIONS,
+    StartCreatingFolderPermission,
     StartDeletingFilesAndFolders,
+    StartDeletingFolderPermission,
     StartDownloadFilesAndFolders,
-    StartLoadingFolder, StartLoadingFolderPermissions
+    StartLoadingFolder,
+    StartLoadingFolderPermissions
 } from './files.actions';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { from } from 'rxjs';
 import {
     FILES_DELETE_BASE_API_URL,
-    FILES_DOWNLOAD_BASE_API_URL, FILES_PERMISSION_FOR_FOLDER_BASE_API_URL,
-    GetFolderInformationApiUrl, GetFolderPermissionsApiUrl
+    FILES_DOWNLOAD_BASE_API_URL,
+    FILES_PERMISSION_FOR_FOLDER_BASE_API_URL,
+    GetFolderInformationApiUrl,
+    GetFolderPermissionApiUrl,
+    GetFolderPermissionsForFolderApiUrl
 } from '../../statics/api_urls.statics';
 import { TableEntry } from '../models/table-entry.model';
 import { CoreSandboxService } from '../../core/services/core-sandbox.service';
 import { StorageService } from '../../shared/services/storage.service';
-import { FolderPermission } from '../models/folder_permission.model';
+import { FolderPermission, FolderPermissionFrom } from '../models/folder_permission.model';
 import { RestrictedGroup } from '../../core/models/group.model';
-import { parseTwoDigitYear } from 'moment';
+import { HasPermission } from '../../core/models/permission.model';
 
 @Injectable()
 export class FilesEffects {
@@ -162,25 +173,37 @@ export class FilesEffects {
         }),
         mergeMap((payload: string) => {
             return from(
-                this.http
-                    .get(GetFolderPermissionsApiUrl(payload))
-                    .pipe(
-                        catchError(error => {
-                            console.log('error: ', error);
-                            return [];
-                        }),
-                        mergeMap((response: any) => {
-                            console.log('response from get folder permissions', response);
-                            let folderPermissions = FolderPermission.getFolderPermissionsFromJsonArray(response.SEE, 'see');
-                            folderPermissions = folderPermissions.concat(FolderPermission.getFolderPermissionsFromJsonArray(response.READ, 'read'));
-                            folderPermissions = folderPermissions.concat(FolderPermission.getFolderPermissionsFromJsonArray(response.WRITE, 'write'));
-                            console.log('folder permissions: ', folderPermissions);
-                            return [{
+                this.http.get(GetFolderPermissionsForFolderApiUrl(payload)).pipe(
+                    catchError(error => {
+                        console.log('error: ', error);
+                        return [];
+                    }),
+                    mergeMap((response: any) => {
+                        let folder_permissions = FolderPermission.getFolderPermissionsFromJsonArray(
+                            response.folder_permissions,
+                            FolderPermissionFrom.Parent
+                        );
+                        folder_permissions = folder_permissions.concat(
+                            FolderPermission.getFolderPermissionsFromJsonArray(
+                                response.folder_visible,
+                                FolderPermissionFrom.Children
+                            )
+                        );
+                        const has_permissions = HasPermission.getPermissionsFromJsonArray(
+                            response.general_permissions
+                        );
+                        return [
+                            {
                                 type: SET_FOLDER_PERMISSIONS,
-                                payload: folderPermissions
-                            }];
-                        })
-                    )
+                                payload: folder_permissions
+                            },
+                            {
+                                type: SET_FOLDER_HAS_PERMISSIONS,
+                                payload: has_permissions
+                            }
+                        ];
+                    })
+                )
             );
         })
     );
@@ -191,7 +214,7 @@ export class FilesEffects {
         map((action: StartCreatingFolderPermission) => {
             return action.payload;
         }),
-        mergeMap((payload: { folder: TableEntry, group: RestrictedGroup, permission: string }) => {
+        mergeMap((payload: { folder: TableEntry; group: RestrictedGroup; permission: string }) => {
             return from(
                 this.http
                     .post(FILES_PERMISSION_FOR_FOLDER_BASE_API_URL, {
@@ -206,9 +229,41 @@ export class FilesEffects {
                         }),
                         mergeMap((response: any) => {
                             console.log('response: ', response);
-                            return [];
+                            return [
+                                {
+                                    type: START_LOADING_FOLDER_PERMISSIONS,
+                                    payload: payload.folder.id
+                                }
+                            ];
                         })
                     )
+            );
+        })
+    );
+
+    @Effect()
+    startDeletingFolderPermission = this.actions.pipe(
+        ofType(START_DELETING_FOLDER_PERMISSION),
+        map((action: StartDeletingFolderPermission) => {
+            return action.payload;
+        }),
+        mergeMap((payload: FolderPermission) => {
+            return from(
+                this.http.delete(GetFolderPermissionApiUrl(payload.id)).pipe(
+                    catchError(error => {
+                        console.log('error: ', error);
+                        return [];
+                    }),
+                    mergeMap((response: any) => {
+                        console.log('response: ', response);
+                        return [
+                            {
+                                type: START_LOADING_FOLDER_PERMISSIONS,
+                                payload: payload.folderId
+                            }
+                        ];
+                    })
+                )
             );
         })
     );
