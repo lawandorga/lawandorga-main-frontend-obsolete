@@ -97,7 +97,6 @@ export class FilesSandboxService {
     }
 
     startLoadingFolderPermissions(folder_id: string){
-        console.log('folder permissions fired');
         this.filesStore.dispatch(new StartLoadingFolderPermissions(folder_id));
     }
 

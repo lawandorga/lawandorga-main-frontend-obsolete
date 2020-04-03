@@ -16,11 +16,11 @@
   ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
   -->
 
-<h1>add permission for folder</h1>
+<h3>add permission for folder</h3>
 <div mat-dialog-content>
-  <mat-radio-group>
-    <mat-radio-button value="read">read</mat-radio-button>
-    <mat-radio-button value="write">write</mat-radio-button>
+  <mat-radio-group  [(ngModel)]="selectedPermission">
+    <mat-radio-button value="read" class="add-permission-for-folder__radio-button">read</mat-radio-button>
+    <mat-radio-button value="write" class="add-permission-for-folder__radio-button">write</mat-radio-button>
   </mat-radio-group>
   <app-autocomplete [allValuesObservable]="groups" placeholder="permission for group"
                     (selectedValueChanged)="selectedGroupChanged($event)" [setSelectedValue]="selectedGroup">

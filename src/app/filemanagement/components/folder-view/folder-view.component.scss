@@ -27,6 +27,10 @@
     padding-right: 15px;
 }
 
+.folder-view__max-width {
+    max-width: 30px;
+}
+
 .folder-view__column-content {
     padding-right: 15px;
     width: 125px;
@@ -34,7 +38,7 @@
 
 .folder-view__small-column {
     //max-width: fit-content;
-    width: 15px;
+    max-width: 15px;
 }
 
 .folder-view__table {

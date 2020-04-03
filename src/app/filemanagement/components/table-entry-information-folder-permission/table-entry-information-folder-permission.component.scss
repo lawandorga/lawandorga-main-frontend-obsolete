@@ -22,9 +22,19 @@
 
 .table-entry-information-folder-permission__button {
     background: $c-primary-l;
-    color: $c-primary-variant
+    color: $c-primary-variant;
 }
 
 .table-entry-information-folder-permission__container {
     margin-top: 55px;
+}
+
+.table-entry-information-folder-permission__table__icon {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.table-entry-information-folder-permission__add-button-container {
+    margin-top: 20px;
+    text-align: center;
 }

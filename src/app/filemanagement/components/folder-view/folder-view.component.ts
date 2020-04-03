@@ -81,6 +81,7 @@ export class FolderViewComponent implements OnInit {
         });
         this.fileSB.getCurrentFolder().subscribe((currentFolder: TableEntry) => {
             this.currentFolder = currentFolder;
+            this.informationEntry = this.currentFolder;
         });
     }
 
@@ -133,8 +134,6 @@ export class FolderViewComponent implements OnInit {
     }
 
     filesSelected($event) {
-        console.log('i should upload shit');
-        console.log('my event', $event);
         event.preventDefault();
         const files = Array.from(this.fileInput.nativeElement.files);
         this.fileSB.upload(files, this.path);

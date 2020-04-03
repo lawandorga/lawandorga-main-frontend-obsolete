@@ -16,23 +16,23 @@
   ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
   -->
 <div class="table-entry-information-folder-permission__container">
-    <h2>direct folder permissions:</h2>
+    <h2>direct permissions:</h2>
     <div *ngIf="folderPermissions | async as catalog; else loading">
         <ng-container *ngIf="catalog.length; else noItems">
             <table mat-table [dataSource]="catalog">
-                <ng-container matColumnDef="permission">
-                    <th mat-header-cell *matHeaderCellDef></th>
-                    <td mat-cell *matCellDef="let folderPermission">
+                <ng-container matColumnDef="permission" class="table-entry-information-folder-permission__table__icon">
+                    <th mat-header-cell *matHeaderCellDef class="table-entry-information-folder-permission__table__icon"></th>
+                    <td mat-cell *matCellDef="let folderPermission" class="table-entry-information-folder-permission__table__icon">
                         <div *ngIf="folderPermission.permission === 'read_folder'; else write_folder">
-                            <mat-icon>library_books</mat-icon>
+                            <mat-icon matTooltip="can read folder">library_books</mat-icon>
                         </div>
                         <ng-template #write_folder>
-                            <div *ngIf="folderPermission === 'write_folder'; else visible">
-                                <mat-icon>library_add</mat-icon>
+                            <div *ngIf="folderPermission.permission === 'write_folder'; else visible">
+                                <mat-icon matTooltip="can write folder">library_add</mat-icon>
                             </div>
                         </ng-template>
                         <ng-template #visible>
-                            <mat-icon>visibility</mat-icon>
+                            <mat-icon matTooltip="can see folder, but not contents">visibility</mat-icon>
                         </ng-template>
                     </td>
                 </ng-container>
@@ -50,15 +50,21 @@
                     <td mat-cell *matCellDef="let folderPermission">
                         <div>
                             <div *ngIf="folderPermission.from === permissionFromChildren; else up">
-                                <mat-icon>arrow_downward</mat-icon>
+                                <mat-icon matTooltip="from folder {{folderPermission.folderName}}"
+                                          (click)="onFolderPermissionGoToFolderClick(folderPermission)" class="is_clickable">arrow_downward
+                                </mat-icon>
                             </div>
                             <ng-template #up>
                                 <div *ngIf="folderPermission.folderId !== folderEntry.id; else delete">
-                                    <mat-icon>arrow_upward</mat-icon>
+                                    <mat-icon matTooltip="from folder {{folderPermission.folderName}}"
+                                              (click)="onFolderPermissionGoToFolderClick(folderPermission)" class="is_clickable">arrow_upward
+                                    </mat-icon>
                                 </div>
                             </ng-template>
                             <ng-template #delete>
-                                <button mat-icon-button (click)="onRemoveFolderPermissionClick(folderPermission)"><mat-icon>delete</mat-icon></button>
+                                <button mat-icon-button (click)="onRemoveFolderPermissionClick(folderPermission)">
+                                    <mat-icon matTooltip="delete permission">delete</mat-icon>
+                                </button>
                             </ng-template>
                         </div>
                     </td>
@@ -73,7 +79,7 @@
     </div>
     <ng-template #loading>loading animation...</ng-template>
 
-    <h2>from general permissions: </h2>
+    <h2>general permissions: </h2>
     <div *ngIf="folderHasPermissions | async as catalogHas">
         <ng-container *ngIf="catalogHas.length; else noHasItems">
             <table mat-table [dataSource]="catalogHas">
@@ -81,22 +87,22 @@
                     <th mat-header-cell *matHeaderCellDef></th>
                     <td mat-cell *matCellDef="let hasPermission">
                         <div *ngIf="hasPermission.permission_id === PERMISSION_READ_ALL_ID; else write_folder">
-                            <mat-icon>library_books</mat-icon>
+                            <mat-icon matTooltip="can read all folders">library_books</mat-icon>
                         </div>
                         <ng-template #write_folder>
                             <div *ngIf="hasPermission.permission_ === PERMISSION_WRITE_ALL_ID; else visible">
-                                <mat-icon>library_add</mat-icon>
+                                <mat-icon matTooltip="can write in all folders">library_add</mat-icon>
                             </div>
                         </ng-template>
                         <ng-template #visible>
-                            <mat-icon>visibility</mat-icon>
+                            <mat-icon matTooltip="can see all folders, but not contents">visibility</mat-icon>
                         </ng-template>
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="group_name">
                     <th mat-header-cell *matHeaderCellDef>name</th>
                     <td mat-cell *matCellDef="let hasPermission">
-                        <div>{{ groups[hasPermission.groupHas].name }}</div>
+                        <div (click)="onGroupClick(hasPermission)" class="is_clickable">{{ groups ? groups[hasPermission.groupHas].name : ''}}</div>
                     </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="columnsHas; sticky: true"></tr>
@@ -107,11 +113,15 @@
             nothing from general permissions
         </ng-template>
     </div>
-    <button
-        mat-icon-button
-        class="table-entry-information-folder-permission__button"
-        (click)="onAddFolderPermissionClick()"
-    >
-        <mat-icon>add</mat-icon>
-    </button>
+    <div class="table-entry-information-folder-permission__add-button-container">
+        <button
+                mat-icon-button
+                class="table-entry-information-folder-permission__button"
+                (click)="onAddFolderPermissionClick()"
+        >
+            <mat-icon>add</mat-icon>
+        </button>
+
+    </div>
+
 </div>

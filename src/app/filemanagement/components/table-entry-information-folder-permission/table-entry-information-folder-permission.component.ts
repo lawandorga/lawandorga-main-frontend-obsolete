@@ -31,6 +31,11 @@ import {
     PERMISSION_WRITE_ALL_FOLDERS_RLC
 } from '../../../statics/permissions.statics';
 import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
+import {
+    GetFolderFrontUrlAbsolute,
+    GetFolderFrontUrlRelative, GetGroupFrontUrl,
+    GetPermissionFrontUrl
+} from '../../../statics/frontend_links.statics';
 
 
 @Component({
@@ -78,11 +83,22 @@ export class TableEntryInformationFolderPermissionComponent implements OnInit {
     }
 
     onAddFolderPermissionClick(){
-        console.log('addFolderPermissionClick');
         this.dialog.open(AddPermissionForFolderComponent, {data: this.folderEntry});
     }
 
     onRemoveFolderPermissionClick(folderPermission: FolderPermission){
         this.fileSB.startDeletingFolderPermission(folderPermission);
+    }
+
+    onFolderPermissionGoToFolderClick(folderPermission: FolderPermission){
+        this.router
+            .navigateByUrl(GetFolderFrontUrlAbsolute(folderPermission.folderPath))
+            .catch(error => {
+                console.log('error at redirecting: ', error);
+            });
+    }
+
+    onGroupClick(hasPermission: HasPermission){
+        this.router.navigateByUrl(GetGroupFrontUrl(hasPermission.groupHas));
     }
 }

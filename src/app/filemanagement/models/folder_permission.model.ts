@@ -29,34 +29,34 @@ export class FolderPermission {
         public group: RestrictedGroup,
         public permission: string,
         public folderId: string,
+        public folderPath: string,
+        public folderName: string,
         public from: FolderPermissionFrom
     ) {
         this.id = id;
         this.group = group;
         this.permission = permission;
         this.folderId = folderId;
+        this.folderPath = folderPath;
+        this.folderName = folderName;
         this.from = from;
     }
 
     static getFolderPermissionFromJson(json: any, from: FolderPermissionFrom): FolderPermission {
-        console.log('json: ', json);
-        // if (json.general){
-        //     return new FolderPermission('-1', null, permission, '-1');
-        // }
         return new FolderPermission(
             json.id,
             new RestrictedGroup(json.group_has_permission.id, json.group_has_permission.name),
             json.permission.name,
-            json.folder,
+            json.folder.id,
+            json.folder.path,
+            json.folder.name,
             from
         )
     }
 
     static getFolderPermissionsFromJsonArray(jsonArray: any, from: FolderPermissionFrom): FolderPermission[] {
         const folderPermissions: FolderPermission[] = [];
-        console.log('jsonArray: ', jsonArray);
         Object.values(jsonArray).map(folderPermissionJson => {
-            console.log('mapped json: ', folderPermissionJson);
             folderPermissions.push(FolderPermission.getFolderPermissionFromJson(folderPermissionJson, from));
         });
         return folderPermissions;
