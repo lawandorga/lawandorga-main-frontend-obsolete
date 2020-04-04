@@ -203,4 +203,19 @@ export class FolderViewComponent implements OnInit {
         this.informationEntry = entry;
         this.informationOpened = true;
     }
+
+    onCreateFolderClick(){
+        // TODO: create new folder here
+        this.sharedSB.openEditTextDialog({
+            short: true,
+            descriptionLabel: 'folder name:',
+            cancelLabel: 'back',
+            saveLabel: 'save',
+            saveColor: 'primary',
+            title: 'new folder'
+        }, (result) => {
+            console.log('result from create new folder: ', result);
+            this.fileSB.startCreatingNewFolder(result, this.currentFolder);
+        })
+    }
 }

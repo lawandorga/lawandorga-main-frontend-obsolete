@@ -20,7 +20,10 @@
     <app-path-information [path]="path"></app-path-information>
 
     <span class="spacer"></span>
-    <button mat-icon-button (click)="onCurrentFolderInformation()"><mat-icon>info</mat-icon></button>
+    <div>
+        <button mat-icon-button (click)="onCreateFolderClick()"><mat-icon>create_new_folder</mat-icon></button>
+        <button mat-icon-button (click)="onCurrentFolderInformation()"><mat-icon>info</mat-icon></button>
+    </div>
 
 </mat-toolbar>
 <mat-card class="folder-view__mat-card"  (drop)="dropped($event)" (dragover)="dragover($event)">
@@ -84,7 +87,9 @@
                     </table>
                 </div>
                 <ng-template #nothingToShow>
-                    <p>no files or folders to show, maybe you have insufficient permissions</p>
+                    <div class="folder-view__empty-container">
+                        <h2 matTooltip="or insufficient permissions">folder empty</h2>
+                    </div>
                 </ng-template>
                 <h2 class="folder-view__drop-zone">drop files and folders here</h2>
 

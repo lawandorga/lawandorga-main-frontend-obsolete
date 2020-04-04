@@ -18,6 +18,7 @@
 
 
 import {
+    ADD_FOLDER,
     FilesActions,
     RESET_FOLDER_PERMISSIONS,
     SET_CURRENT_FOLDER,
@@ -77,6 +78,14 @@ export function filesReducer(state = initialState, action: FilesActions) {
             return {
                 ...state,
                 folder_has_permissions: getIdObjects(action.payload)
+            };
+        case ADD_FOLDER:
+            return {
+                ...state,
+                folders: {
+                    ...state.folders,
+                    [action.payload.id]: action.payload
+                }
             };
         default:
             return state;

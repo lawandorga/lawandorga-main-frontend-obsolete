@@ -23,7 +23,7 @@ import {SnackbarService} from '../../shared/services/snackbar.service';
 import { FilesState } from '../store/files.reducers';
 import { select, Store } from '@ngrx/store';
 import {
-    StartCreatingFolderPermission,
+    StartCreatingFolderPermission, StartCreatingNewFolder,
     StartDeletingFilesAndFolders, StartDeletingFolderPermission,
     StartDownloadFilesAndFolders,
     StartLoadingFolder,
@@ -36,6 +36,7 @@ import { FolderPermission } from '../models/folder_permission.model';
 import { Table } from 'aws-sdk/clients/glue';
 import { RestrictedGroup } from '../../core/models/group.model';
 import { HasPermission } from '../../core/models/permission.model';
+import { GetFolderFrontUrlAbsolute } from '../../statics/frontend_links.statics';
 
 @Injectable({
     providedIn: "root"
@@ -122,8 +123,12 @@ export class FilesSandboxService {
         this.filesStore.dispatch(new StartCreatingFolderPermission({group, folder, permission}));
     }
 
-    startDeletingFolderPermission(folder: FolderPermission){
+    startDeletingFolderPermission(folder: FolderPermission): void {
         this.filesStore.dispatch(new StartDeletingFolderPermission(folder));
+    }
+
+    startCreatingNewFolder(name: string, parent: TableEntry): void {
+        this.filesStore.dispatch(new StartCreatingNewFolder({name, parent}));
     }
 }
 

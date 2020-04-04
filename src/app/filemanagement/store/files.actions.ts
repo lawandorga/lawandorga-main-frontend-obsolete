@@ -26,6 +26,7 @@ export const START_LOADING_FOLDER = 'START_LOADING_FOLDER';
 export const SET_CURRENT_FOLDER = 'SET_CURRENT_FOLDER';
 export const SET_FOLDERS = "SET_FOLDERS";
 export const SET_FILES = "SET_FILES";
+export const ADD_FOLDER = "ADD_FOLDER";
 export const START_DELETING_FILES_AND_FOLDERS = "START_DELETING_FILES_AND_FOLDERS";
 export const START_DOWNLOAD_FILES_AND_FOLDERS = "START_DOWNLOAD_FILES_AND_FOLDERS";
 export const START_LOADING_FOLDER_PERMISSIONS = "START_LOADING_FOLDER_PERMISSIONS";
@@ -34,6 +35,7 @@ export const RESET_FOLDER_PERMISSIONS = "RESET_FOLDER_PERMISSIONS";
 export const START_CREATING_FOLDER_PERMISSION = "START_CREATING_FOLDER_PERMISSION";
 export const SET_FOLDER_HAS_PERMISSIONS = "SET_FOLDER_HAS_PERMISSIONS";
 export const START_DELETING_FOLDER_PERMISSION = "START_DELETING_FOLDER_PERMISSION";
+export const START_CREATING_NEW_FOLDER = "START_CREATING_NEW_FOLDER";
 
 export class StartLoadingFolder implements Action {
     readonly type = START_LOADING_FOLDER;
@@ -108,6 +110,18 @@ export class StartDeletingFolderPermission implements Action {
     constructor(public payload: FolderPermission) {}
 }
 
+export class StartCreatingNewFolder implements Action {
+    readonly type = START_CREATING_NEW_FOLDER;
+
+    constructor(public payload: {name: string, parent: TableEntry}) {}
+}
+
+export class AddFolder implements Action {
+    readonly type = ADD_FOLDER;
+
+    constructor(public payload: TableEntry) {}
+}
+
 export type FilesActions = StartLoadingFolder
     | SetCurrentFolder
     | SetFolders
@@ -119,4 +133,6 @@ export type FilesActions = StartLoadingFolder
     | ResetFolderPermissions
     | StartCreatingFolderPermission
     | SetFolderHasPermissions
-    | StartDeletingFolderPermission;
+    | StartDeletingFolderPermission
+    | StartCreatingNewFolder
+    | AddFolder;

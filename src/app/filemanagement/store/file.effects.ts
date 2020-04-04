@@ -21,18 +21,19 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { HttpClient } from '@angular/common/http';
 import { FilesSandboxService } from '../services/files-sandbox.service';
 import {
+    ADD_FOLDER,
     SET_CURRENT_FOLDER,
     SET_FILES,
     SET_FOLDER_HAS_PERMISSIONS,
     SET_FOLDER_PERMISSIONS,
     SET_FOLDERS,
-    START_CREATING_FOLDER_PERMISSION,
+    START_CREATING_FOLDER_PERMISSION, START_CREATING_NEW_FOLDER,
     START_DELETING_FILES_AND_FOLDERS,
     START_DELETING_FOLDER_PERMISSION,
     START_DOWNLOAD_FILES_AND_FOLDERS,
     START_LOADING_FOLDER,
     START_LOADING_FOLDER_PERMISSIONS,
-    StartCreatingFolderPermission,
+    StartCreatingFolderPermission, StartCreatingNewFolder,
     StartDeletingFilesAndFolders,
     StartDeletingFolderPermission,
     StartDownloadFilesAndFolders,
@@ -44,7 +45,7 @@ import { from } from 'rxjs';
 import {
     FILES_DELETE_BASE_API_URL,
     FILES_DOWNLOAD_BASE_API_URL,
-    FILES_PERMISSION_FOR_FOLDER_BASE_API_URL,
+    FILES_PERMISSION_FOR_FOLDER_BASE_API_URL, FOLDER_BASE_API_URL,
     GetFolderInformationApiUrl,
     GetFolderPermissionApiUrl,
     GetFolderPermissionsForFolderApiUrl
@@ -262,6 +263,35 @@ export class FilesEffects {
                                 payload: payload.folderId
                             }
                         ];
+                    })
+                )
+            );
+        })
+    );
+
+    @Effect()
+    startCreatingNewFolder = this.actions.pipe(
+        ofType(START_CREATING_NEW_FOLDER),
+        map((action: StartCreatingNewFolder) => {
+            return action.payload;
+        }),
+        mergeMap((payload: {name: string, parent: TableEntry}) => {
+            return from(
+                this.http.post(FOLDER_BASE_API_URL, {
+                    name: payload.name,
+                    parent_folder_id: payload.parent.id
+                }).pipe(
+                    catchError(error => {
+                        console.log('error: ', error);
+                        return [];
+                    }),
+                    mergeMap((response: any) => {
+                        console.log('response from creating new folder: ', response);
+
+                        return [{
+                            type: ADD_FOLDER,
+                            payload: TableEntry.getFolderTableEntryFromJson(response)
+                        }];
                     })
                 )
             );

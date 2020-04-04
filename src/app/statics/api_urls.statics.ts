@@ -43,7 +43,7 @@ export const INACTIVE_USERS_API_URL = base + 'api/inactive_users/';
 export const USER_HAS_PERMISSIONS_API_URL = base + 'api/user_has_permissions/';
 export const RECORD_DELETIONS_API_URL = base + 'api/records/record_deletion_requests/';
 export const PROCESS_RECORD_DELETIONS_API_URL = base + 'api/records/process_record_deletion_request/';
-export const FOLDER_INFORMATION_BASE_API_URL = base + 'api/files/folder';
+export const FOLDER_BASE_API_URL = base + 'api/files/folder';
 export const FILES_UPLOAD_BASE_API_URL = base + 'api/files/upload';
 export const FILES_DELETE_BASE_API_URL = base + 'api/files/delete';
 export const FILES_DOWNLOAD_BASE_API_URL = base + 'api/files/download';
@@ -138,8 +138,8 @@ export const GetDownloadEncryptedRecordDocumentApiUrl = (document_id: string) =>
 
 export const GetFolderInformationApiUrl = (path: string) => {
     if (path)
-        return `${FOLDER_INFORMATION_BASE_API_URL}?path=${path}`;
-    return `${FOLDER_INFORMATION_BASE_API_URL}`;
+        return `${FOLDER_BASE_API_URL}?path=${path}`;
+    return `${FOLDER_BASE_API_URL}`;
 };
 
 export const GetFolderPermissionsForFolderApiUrl = (id: string) => {
