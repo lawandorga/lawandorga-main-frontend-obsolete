@@ -47,7 +47,7 @@ import {
     StartLoadingInactiveUsers,
     StartLoadingNewUserRequests,
     StartLoadingOtherUsers,
-    StartLoadingRlcs,
+    StartLoadingRlcs, StartLoadingRlcSettings,
     StartLoadingSpecialForeignUser,
     StartLoadingSpecialGroup,
     StartLoadingSpecialGroupHasPermissions,
@@ -56,7 +56,7 @@ import {
     StartRemovingGroupMember,
     StartRemovingHasPermission,
     StartSavingUser
-} from "../store/core.actions";
+} from '../store/core.actions';
 import { StorageService } from "../../shared/services/storage.service";
 import { SnackbarService } from "../../shared/services/snackbar.service";
 import { Observable } from "rxjs";
@@ -65,6 +65,7 @@ import { FullGroup, RestrictedGroup } from "../models/group.model";
 import { RestrictedRlc } from "../models/rlc.model";
 import { NewUserRequest } from "../models/new_user_request.model";
 import { State } from "../models/state.model";
+import { RlcSettings } from '../models/rlc_settings.model';
 
 @Injectable()
 export class CoreSandboxService {
@@ -479,5 +480,17 @@ export class CoreSandboxService {
 
     startCheckingUserHasPermissions(): void {
         this.coreStateStore.dispatch(new StartCheckingUserHasPermissions());
+    }
+
+    startLoadingRlcSettings(): void {
+        this.coreStateStore.dispatch(new StartLoadingRlcSettings());
+    }
+
+    getRlcSettings(): Observable<RlcSettings> {
+        return this.coreStateStore.pipe(
+            select((state: any) => {
+                return state.core.rlc_settings;
+            })
+        )
     }
 }

@@ -94,8 +94,11 @@ export class CreateRecordComponent implements OnInit {
     ngOnInit() {}
 
     onClientBirthdayChange(event: MatDatepickerInputEvent<Date>){
-        this.recordSB.loadClientPossibilities(new Date(this.createRecordForm.get("client_birthday").value));
-        this.openSelectClientDialog();
+        // const birthday = this.createRecordForm.get("client_birthday").value;
+        // if (birthday !== null){
+        //     this.recordSB.loadClientPossibilities(new Date(this.createRecordForm.get("client_birthday").value));
+        //     this.openSelectClientDialog();
+        // }
     }
 
     selectedConsultantsChanged(selectedConsultants) {
@@ -139,6 +142,11 @@ export class CreateRecordComponent implements OnInit {
                     this.givenOriginCountry = null;
                     this.resetClientFields();
                 }
+            } else {
+                this.client = null;
+                this.originCountry = null;
+                this.givenOriginCountry = null;
+                this.resetClientFields();
             }
             this.recordSB.resetPossibleClients();
         });

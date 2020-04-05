@@ -28,6 +28,10 @@ export const START_REQUESTING_RECORD_PERMISSION =
     "START_REQUESTING_RECORD_PERMISSION";
 export const START_REQUESTING_RECORD_DELETION = "START_REQUESTING_RECORD_DELETION";
 
+export const START_YIELDING_RECORD = "START_YIELDING_RECORD";
+
+export const START_ENLISTING_POOL_CONSULTANT = "START_ENLISTING_POOL_CONSULTANT";
+
 export const START_LOADING_RECORDS = "START_LOADING_RECORDS";
 export const START_LOADING_RECORD_STATICS = "START_LOADING_RECORD_STATICS";
 export const START_LOADING_CLIENT_POSSIBILITIES =
@@ -35,6 +39,7 @@ export const START_LOADING_CLIENT_POSSIBILITIES =
 export const START_LOADING_SPECIAL_RECORD = "START_LOADING_SPECIAL_RECORD";
 export const START_LOADING_RECORD_PERMISSION_REQUESTS = 'START_LOADING_RECORD_PERMISSION_REQUESTS';
 export const START_LOADING_RECORD_DELETION_REQUESTS = 'START_LOADING_RECORD_DELETION_REQUESTS';
+export const START_LOADING_RECORD_POOL = 'START_LOADING_RECORD_POOL';
 
 export const START_ADDING_NEW_RECORD = "START_ADDING_NEW_RECORD";
 export const START_ADDING_NEW_RECORD_MESSAGE =
@@ -48,6 +53,7 @@ export const START_SAVING_RECORD = "START_SAVING_RECORD";
 export const START_ADMITTING_RECORD_PERMISSION_REQUEST = "START_ADMITTING_RECORD_PERMISSION_REQUEST";
 export const START_DECLINING_RECORD_PERMISSION_REQUEST = "START_DECLINING_RECORD_PERMISSION_REQUEST";
 export const START_PROCESSING_RECORD_DELETION_REQUEST = "START_PROCESSING_RECORD_DELETION_REQUEST";
+
 
 export class StartRequestingReadPermission implements Action {
     readonly type = START_REQUESTING_RECORD_PERMISSION;
@@ -133,6 +139,21 @@ export class StartProcessingRecordDeletionRequest implements Action {
     constructor(public payload: {request: RecordDeletionRequest, action: string}) {}
 }
 
+export class StartYieldingRecord implements Action {
+    readonly type = START_YIELDING_RECORD;
+
+    constructor(public payload: FullRecord) {}
+}
+
+export class StartEnlistingPoolConsultant implements Action {
+    readonly type = START_ENLISTING_POOL_CONSULTANT;
+}
+
+export class StartLoadingRecordPool implements Action {
+    readonly type = START_LOADING_RECORD_POOL;
+}
+
+
 export type RecordStartActions =
     | StartRequestingReadPermission
     | StartRequestingRecordDeletion
@@ -148,4 +169,7 @@ export type RecordStartActions =
     | StartAdmittingRecordPermissionRequest
     | StartDecliningRecordPermissionRequest
     | StartLoadingRecordDeletionRequests
-    | StartProcessingRecordDeletionRequest;
+    | StartProcessingRecordDeletionRequest
+    | StartLoadingRecordPool
+    | StartYieldingRecord
+    | StartEnlistingPoolConsultant;

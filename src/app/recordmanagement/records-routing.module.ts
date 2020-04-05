@@ -24,6 +24,7 @@ import { CreateRecordComponent } from "./pages/create-record/create-record.compo
 import { RecordComponent } from "./pages/record/record.component";
 import { RecordsPermitRequestsComponent } from "./pages/records-permit-requests/records-permit-requests.component";
 import { RecordDeletionRequestsComponent } from './pages/record-deletion-requests/record-deletion-requests.component';
+import { RecordPoolComponent } from './pages/record-pool/record-pool.component';
 
 const recordsRoutes: Routes = [
     {
@@ -34,6 +35,10 @@ const recordsRoutes: Routes = [
     {
         path: "add",
         component: CreateRecordComponent
+    },
+    {
+        path: "record_pool",
+        component: RecordPoolComponent
     },
     {
         path: "permit_requests",
