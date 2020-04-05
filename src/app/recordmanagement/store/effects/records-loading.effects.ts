@@ -56,7 +56,7 @@ import {
     SET_SPECIAL_ORIGIN_COUNTRY,
     SET_SPECIAL_RECORD,
     SET_SPECIAL_RECORD_DOCUMENTS,
-    SET_SPECIAL_RECORD_MESSAGES, SET_SPECIAL_RECORD_REQUEST_STATE
+    SET_SPECIAL_RECORD_MESSAGES, SET_SPECIAL_RECORD_REQUEST_STATE, SET_USERS_POOL_ENLISTINGS
 } from '../actions/records-set.actions';
 import { RestrictedUser } from "../../../core/models/user.model";
 import { OriginCountry } from "../../models/country.model";
@@ -382,6 +382,10 @@ export class RecordsLoadingEffects {
                                 {
                                     type: SET_POOL_CONSULTANTS,
                                     payload: response['entries'].length
+                                },
+                                {
+                                    type: SET_USERS_POOL_ENLISTINGS,
+                                    payload: response.number_of_own_enlistings
                                 }
                             ]
                         }

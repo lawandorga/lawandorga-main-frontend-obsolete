@@ -25,7 +25,7 @@ import { from } from 'rxjs';
 import {
     START_ADMITTING_RECORD_PERMISSION_REQUEST,
     START_DECLINING_RECORD_PERMISSION_REQUEST,
-    START_ENLISTING_POOL_CONSULTANT,
+    START_ENLISTING_POOL_CONSULTANT, START_LOADING_RECORD_POOL,
     START_PROCESSING_RECORD_DELETION_REQUEST,
     START_REQUESTING_RECORD_DELETION,
     START_REQUESTING_RECORD_PERMISSION,
@@ -343,7 +343,7 @@ export class RecordsEffects {
                             } else if (response['action'] === 'matched') {
                                 this.coreSB.showSuccessSnackBar('record matched with consultant from pool, you are no longer responsible for this record');
                             }
-                            return [{ type: StartLoadingRecordPool }];
+                            return [{ type: START_LOADING_RECORD_POOL }];
                         })
                     )
             );
@@ -368,12 +368,12 @@ export class RecordsEffects {
 
                     console.log('response from enlisting to consultant pool', response);
                     if (response['action'] === 'created') {
-                        this.coreSB.showSuccessSnackBar('you enlisted successfully to consultant pool');
+                        this.coreSB.showSuccessSnackBar(`you enlisted successfully to consultant pool. You are enlisted ${response.number_of_enlistings} times`);
                     } else if (response['action'] === 'matched') {
                         this.coreSB.showSuccessSnackBar('you matched successfully, you are now responsible for another record');
 
                     }
-                    return [{ type: StartLoadingRecordPool }];
+                    return [{ type: START_LOADING_RECORD_POOL }];
                 })
             ));
         })

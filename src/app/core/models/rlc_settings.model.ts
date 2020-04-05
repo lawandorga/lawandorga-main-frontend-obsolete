@@ -1,4 +1,4 @@
-/*!
+/*
  * law&orga - record and organization management software for refugee law clinics
  * Copyright (C) 2020  Dominik Walser
  *
@@ -16,7 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
+export class RlcSettings {
+    constructor(public recordPoolEnabled: boolean) {
+        this.recordPoolEnabled = recordPoolEnabled;
+    }
 
-.record-pool__card {
-    max-width: 850px;
+    static getRlcSettingsFromJson(json: any): RlcSettings{
+        return new RlcSettings(json.user_record_pool);
+    }
 }

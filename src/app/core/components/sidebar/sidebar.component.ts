@@ -42,6 +42,8 @@ import {
     RECORDS_FRONT_URL,
     RECORDS_PERMIT_REQUEST_FRONT_URL
 } from '../../../statics/frontend_links.statics';
+import { RlcSettings } from '../../models/rlc_settings.model';
+import set = Reflect.set;
 
 @Component({
     selector: "app-sidebar",
@@ -262,10 +264,13 @@ export class SidebarComponent implements OnInit {
         this.coreSB.hasPermissionFromStringForOwnRlc(
             PERMISSION_CAN_CONSULT,
             hasPermission => {
-                if (this.show_tab_permissions.record_pool !== hasPermission) {
-                    this.show_tab_permissions.record_pool = hasPermission;
-                    this.recheckSidebarItems();
-                }
+                this.coreSB.getRlcSettings().subscribe((settings: RlcSettings) => {
+                    if (settings && settings.recordPoolEnabled && hasPermission){
+                        this.show_tab_permissions.record_pool = true;
+                        this.recheckSidebarItems();
+                        console.log('should show: ', settings.recordPoolEnabled);
+                    }
+                });
             }
         );
 

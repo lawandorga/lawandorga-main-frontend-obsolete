@@ -46,6 +46,7 @@ export const SET_SPECIAL_RECORD_REQUEST_STATE = "SET_SPECIAL_RECORD_REQUEST_STAT
 export const SET_RECORD_DELETION_REQUESTS = "SET_RECORD_DELETION_REQUESTS";
 export const SET_POOL_CONSULTANTS = "SET_POOL_CONSULTANTS";
 export const SET_POOL_RECORDS = "SET_POOL_RECORDS";
+export const SET_USERS_POOL_ENLISTINGS = "SET_USERS_POOL_ENLISTINGS";
 
 export class SetRecords implements Action {
     readonly type = SET_RECORDS;
@@ -155,6 +156,12 @@ export class SetPoolConsultants implements Action {
     constructor(public payload: number) {}
 }
 
+export class SetUsersPoolEnlistings implements Action {
+    readonly type = SET_USERS_POOL_ENLISTINGS;
+
+    constructor(public payload: number) {}
+}
+
 
 export type RecordsSetActions =
     | SetRecords
@@ -174,4 +181,5 @@ export type RecordsSetActions =
     | SetSpecialRecordRequestState
     | SetRecordDeletionRequests
     | SetPoolRecords
-    | SetPoolConsultants;
+    | SetPoolConsultants
+    | SetUsersPoolEnlistings;

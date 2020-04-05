@@ -33,6 +33,7 @@ import { dateInPastValidator } from '../../../../statics/validators.statics';
 import { alphabeticalSorterByField } from '../../../../shared/other/sorter-helper';
 import { tap } from 'rxjs/internal/operators/tap';
 import { SharedSandboxService } from '../../../../shared/services/shared-sandbox.service';
+import { RlcSettings } from '../../../../core/models/rlc_settings.model';
 
 @Component({
     selector: 'app-full-record-detail',
@@ -58,6 +59,9 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
 
     recordEditForm: FormGroup;
     user_working_on_record = false;
+    rlc_options = {
+        show_yielding: false,
+    };
 
     constructor(private recordSB: RecordsSandboxService, private coreSB: CoreSandboxService, private sharedSB: SharedSandboxService) {
         this.recordEditForm = new FormGroup({
@@ -122,6 +126,12 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
                     if (this.client && this.record) this.loadValues();
                 }
             );
+
+        this.coreSB.getRlcSettings().subscribe((settings: RlcSettings) => {
+            if (settings && settings.recordPoolEnabled){
+                this.rlc_options.show_yielding = true;
+            }
+        });
     }
 
     loadValues() {
@@ -320,4 +330,3 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
         });
     }
 }
- 

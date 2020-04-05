@@ -42,6 +42,7 @@ import {
     SET_SPECIAL_RECORD_DOCUMENTS,
     SET_SPECIAL_RECORD_MESSAGES,
     SET_SPECIAL_RECORD_REQUEST_STATE,
+    SET_USERS_POOL_ENLISTINGS,
     UPDATE_RECORD_DELETION_REQUEST,
     UPDATE_RECORD_PERMISSION_REQUEST
 } from './actions/records.actions';
@@ -79,6 +80,7 @@ export interface RecordsState {
     possible_clients: { [id: number]: FullClient };
     pool_records: number;
     pool_consultants: number;
+    users_pool_enlistings: number;
 }
 
 export const initialState: RecordsState = {
@@ -103,7 +105,8 @@ export const initialState: RecordsState = {
     country_states: [],
     possible_clients: {},
     pool_records: 0,
-    pool_consultants: 0
+    pool_consultants: 0,
+    users_pool_enlistings: 0
 };
 
 export function recordsReducer(state = initialState, action: RecordsActions) {
@@ -291,7 +294,13 @@ export function recordsReducer(state = initialState, action: RecordsActions) {
                 ...state,
                 pool_records: action.payload
             };
+        case SET_USERS_POOL_ENLISTINGS:
+            console.log('reducer here', action);
+            return {
+                ...state,
+                users_pool_enlistings: action.payload
+            };
         default:
             return state;
     }
-}
+};

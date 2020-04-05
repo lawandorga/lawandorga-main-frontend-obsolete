@@ -79,8 +79,8 @@ import {
     StartActivatingInactiveUser,
     REMOVE_INACTIVE_USER,
     START_CHECKING_USER_HAS_PERMISSIONS,
-    SET_USER_PERMISSIONS
-} from "./core.actions";
+    SET_USER_PERMISSIONS, START_LOADING_RLC_SETTINGS, SET_RLC_SETTINGS
+} from './core.actions';
 import {
     CREATE_PROFILE_API_URL,
     GetActivateUserApiUrl,
@@ -97,10 +97,10 @@ import {
     INACTIVE_USERS_API_URL,
     NEW_USER_REQUEST_ADMIT_API_URL,
     NEW_USER_REQUEST_API_URL,
-    PROFILES_API_URL,
+    PROFILES_API_URL, RLC_SETTINGS_API_URL,
     RLCS_API_URL,
     USER_HAS_PERMISSIONS_API_URL
-} from "../../statics/api_urls.statics";
+} from '../../statics/api_urls.statics';
 import { CoreSandboxService } from "../services/core-sandbox.service";
 import { ForeignUser, FullUser, RestrictedUser } from "../models/user.model";
 import { SnackbarService } from "../../shared/services/snackbar.service";
@@ -110,6 +110,7 @@ import { RestrictedRlc } from "../models/rlc.model";
 import { NewUserRequest } from "../models/new_user_request.model";
 import { AppSandboxService } from '../services/app-sandbox.service';
 import { placeholdersToParams } from '@angular/compiler/src/render3/view/i18n/util';
+import { RlcSettings } from '../models/rlc_settings.model';
 
 @Injectable()
 export class CoreEffects {
@@ -893,4 +894,34 @@ export class CoreEffects {
             );
         })
     );
+
+    @Effect()
+    startLoadingRlcSettings = this.actions.pipe(
+        ofType(START_LOADING_RLC_SETTINGS),
+        switchMap(() => {
+            return from(
+                this.http.get(RLC_SETTINGS_API_URL).pipe(
+                    catchError(error => {
+                        this.snackbar.showErrorSnackBar(
+                            "error:" +
+                            error.error.detail
+                        );
+                        return [];
+                    }),
+                    mergeMap((response: any) => {
+                        console.log('response from loading rlc settings', response);
+                        const rlc_settings = RlcSettings.getRlcSettingsFromJson(response);
+                        console.log('settings are: ', rlc_settings);
+                        return [
+                            {
+                                type: SET_RLC_SETTINGS,
+                                payload: rlc_settings
+                            }
+                        ];
+                    })
+                )
+            );
+        })
+    );
+
 }

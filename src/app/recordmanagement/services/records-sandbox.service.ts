@@ -121,6 +121,14 @@ export class RecordsSandboxService {
         );
     }
 
+    getUsersPoolEnlistings(): Observable<number | any> {
+        return this.recordStore.pipe(
+            select((state: any) => {
+                return state.records.users_pool_enlistings
+            })
+        );
+    }
+
     getPoolConsultants(): Observable<number | any> {
         return this.recordStore.pipe(
             select((state: any) => {
