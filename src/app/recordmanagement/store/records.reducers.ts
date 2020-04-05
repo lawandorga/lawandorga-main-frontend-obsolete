@@ -27,6 +27,8 @@ import {
     SET_CONSULTANTS,
     SET_COUNTRY_STATES,
     SET_ORIGIN_COUNTRIES,
+    SET_POOL_CONSULTANTS,
+    SET_POOL_RECORDS,
     SET_POSSIBLE_CLIENTS,
     SET_RECORD_DELETION_REQUESTS,
     SET_RECORD_DOCUMENT_TAGS,
@@ -40,6 +42,7 @@ import {
     SET_SPECIAL_RECORD_DOCUMENTS,
     SET_SPECIAL_RECORD_MESSAGES,
     SET_SPECIAL_RECORD_REQUEST_STATE,
+    SET_USERS_POOL_ENLISTINGS,
     UPDATE_RECORD_DELETION_REQUEST,
     UPDATE_RECORD_PERMISSION_REQUEST
 } from './actions/records.actions';
@@ -75,6 +78,9 @@ export interface RecordsState {
     record_states: State[];
     country_states: State[];
     possible_clients: { [id: number]: FullClient };
+    pool_records: number;
+    pool_consultants: number;
+    users_pool_enlistings: number;
 }
 
 export const initialState: RecordsState = {
@@ -97,7 +103,10 @@ export const initialState: RecordsState = {
     record_document_tags: {},
     record_states: [],
     country_states: [],
-    possible_clients: {}
+    possible_clients: {},
+    pool_records: 0,
+    pool_consultants: 0,
+    users_pool_enlistings: 0
 };
 
 export function recordsReducer(state = initialState, action: RecordsActions) {
@@ -274,8 +283,23 @@ export function recordsReducer(state = initialState, action: RecordsActions) {
                         [action.payload.id]: action.payload
                     }
                 }
-            }
+            };
+        case SET_POOL_CONSULTANTS:
+            return {
+                ...state,
+                pool_consultants: action.payload
+            };
+        case SET_POOL_RECORDS:
+            return {
+                ...state,
+                pool_records: action.payload
+            };
+        case SET_USERS_POOL_ENLISTINGS:
+            return {
+                ...state,
+                users_pool_enlistings: action.payload
+            };
         default:
             return state;
     }
-}
+};
