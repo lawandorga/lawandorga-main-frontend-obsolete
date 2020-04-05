@@ -295,7 +295,6 @@ export function recordsReducer(state = initialState, action: RecordsActions) {
                 pool_records: action.payload
             };
         case SET_USERS_POOL_ENLISTINGS:
-            console.log('reducer here', action);
             return {
                 ...state,
                 users_pool_enlistings: action.payload

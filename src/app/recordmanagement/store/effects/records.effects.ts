@@ -275,7 +275,7 @@ export class RecordsEffects {
         }),
         mergeMap((payload: { request: RecordDeletionRequest; action: string }) => {
             if (payload.action !== 'accept' && payload.action !== 'decline') {
-                console.log('Unsupported method at processing record deletion request!');
+                
                 return [];
             }
 
@@ -337,7 +337,6 @@ export class RecordsEffects {
                                 this.recordSB.showError('sending error');
                                 return [];
                             }
-                            console.log('response from yielding record', response);
                             if (response['action'] === 'created') {
                                 this.coreSB.showSuccessSnackBar('record added to record pool');
                             } else if (response['action'] === 'matched') {
@@ -365,8 +364,6 @@ export class RecordsEffects {
                         this.recordSB.showError('sending error');
                         return [];
                     }
-
-                    console.log('response from enlisting to consultant pool', response);
                     if (response['action'] === 'created') {
                         this.coreSB.showSuccessSnackBar(`you enlisted successfully to consultant pool. You are enlisted ${response.number_of_enlistings} times`);
                     } else if (response['action'] === 'matched') {

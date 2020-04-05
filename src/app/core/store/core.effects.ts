@@ -909,9 +909,7 @@ export class CoreEffects {
                         return [];
                     }),
                     mergeMap((response: any) => {
-                        console.log('response from loading rlc settings', response);
                         const rlc_settings = RlcSettings.getRlcSettingsFromJson(response);
-                        console.log('settings are: ', rlc_settings);
                         return [
                             {
                                 type: SET_RLC_SETTINGS,

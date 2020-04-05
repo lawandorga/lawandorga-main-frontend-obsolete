@@ -268,7 +268,6 @@ export class SidebarComponent implements OnInit {
                     if (settings && settings.recordPoolEnabled && hasPermission){
                         this.show_tab_permissions.record_pool = true;
                         this.recheckSidebarItems();
-                        console.log('should show: ', settings.recordPoolEnabled);
                     }
                 });
             }
