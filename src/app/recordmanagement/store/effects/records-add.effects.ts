@@ -44,7 +44,6 @@ export class RecordsAddEffects {
     constructor(
         private actions: Actions,
         private http: HttpClient,
-        private appSB: AppSandboxService,
         private recordSB: RecordsSandboxService,
         private recordStore: Store<RecordState>
     ) {
@@ -57,7 +56,7 @@ export class RecordsAddEffects {
             return action.payload;
         }),
         switchMap((newRecord: any) => {
-            const privateKeyPlaceholderHeader = this.appSB.getPrivateKeyPlaceholder();
+            const privateKeyPlaceholderHeader = AppSandboxService.getPrivateKeyPlaceholder();
             return from(
                 this.http.post(CREATE_RECORD_API_URL, newRecord, privateKeyPlaceholderHeader).pipe(
                     catchError(error => {
@@ -89,7 +88,7 @@ export class RecordsAddEffects {
                     record_id = record.id;
                 })
                 .unsubscribe();
-            const privateKeyPlaceholderHeader = this.appSB.getPrivateKeyPlaceholder();
+            const privateKeyPlaceholderHeader = AppSandboxService.getPrivateKeyPlaceholder();
             return from(
                 this.http
                     .post(GetAddRecordMessageApiUrl(record_id), {

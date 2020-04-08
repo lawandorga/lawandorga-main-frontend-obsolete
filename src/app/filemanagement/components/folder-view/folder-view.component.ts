@@ -99,34 +99,35 @@ export class FolderViewComponent implements OnInit {
 
     dropped($event) {
         $event.preventDefault();
+        this.fileSB.uploadNew($event.dataTransfer.items, this.path);
 
-        const items = $event.dataTransfer.items;
-        const all = [];
-        let count = 0;
-        const itemsLength = items.length;
-        for (let i = 0; i < items.length; i++) {
-            const item = items[i];
-            const entry = item.webkitGetAsEntry();
-            if (entry.isFile) {
-                this.parseFileEntry(entry).then(result => {
-                    count = count + 1;
-                    all.push(result);
-                    if (count === itemsLength) {
-                        this.fileSB.upload(all, this.path);
-                        this.fileSB.startLoadingFolderInformation(this.path);
-                    }
-                });
-            } else if (entry.isDirectory) {
-                this.parseDirectoryEntry(entry).then(result => {
-                    count = count + 1;
-                    all.push(result);
-                    if (count === itemsLength) {
-                        this.fileSB.upload(all, this.path);
-                        this.fileSB.startLoadingFolderInformation(this.path);
-                    }
-                });
-            }
-        }
+        // const items = $event.dataTransfer.items;
+        // const all = [];
+        // let count = 0;
+        // const itemsLength = items.length;
+        // for (let i = 0; i < items.length; i++) {
+        //     const item = items[i];
+        //     const entry = item.webkitGetAsEntry();
+        //     if (entry.isFile) {
+        //         this.parseFileEntry(entry).then(result => {
+        //             count = count + 1;
+        //             all.push(result);
+        //             if (count === itemsLength) {
+        //                 this.fileSB.upload(all, this.path);
+        //                 this.fileSB.startLoadingFolderInformation(this.path);
+        //             }
+        //         });
+        //     } else if (entry.isDirectory) {
+        //         this.parseDirectoryEntry(entry).then(result => {
+        //             count = count + 1;
+        //             all.push(result);
+        //             if (count === itemsLength) {
+        //                 this.fileSB.upload(all, this.path);
+        //                 this.fileSB.startLoadingFolderInformation(this.path);
+        //             }
+        //         });
+        //     }
+        // }
     }
 
     dragover($event) {
@@ -205,7 +206,6 @@ export class FolderViewComponent implements OnInit {
     }
 
     onCreateFolderClick(){
-        // TODO: create new folder here
         this.sharedSB.openEditTextDialog({
             short: true,
             descriptionLabel: 'folder name:',

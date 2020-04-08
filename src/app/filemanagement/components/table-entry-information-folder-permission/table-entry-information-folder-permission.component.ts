@@ -33,10 +33,9 @@ import {
 import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
 import {
     GetFolderFrontUrlAbsolute,
-    GetFolderFrontUrlRelative, GetGroupFrontUrl,
-    GetPermissionFrontUrl
+    GetGroupFrontUrl
 } from '../../../statics/frontend_links.statics';
-
+import { SharedSandboxService } from '../../../shared/services/shared-sandbox.service';
 
 @Component({
     selector: 'app-table-entry-information-folder-permission',
@@ -60,37 +59,54 @@ export class TableEntryInformationFolderPermissionComponent implements OnInit {
 
     groups: any;
 
-    constructor(private coreSB: CoreSandboxService, private fileSB: FilesSandboxService, private router: Router, public dialog: MatDialog) {}
+    constructor(
+        private coreSB: CoreSandboxService,
+        private fileSB: FilesSandboxService,
+        private router: Router,
+        public dialog: MatDialog,
+        private sharedSB: SharedSandboxService
+    ) {}
 
     ngOnInit() {
         this.coreSB.startLoadingGroups();
         this.folderPermissions = this.fileSB.getFolderPermissions();
         this.folderHasPermissions = this.fileSB.getFolderHasPermissions();
         this.coreSB.getAllPermissions().subscribe((permissions: Permission[]) => {
-            for (const permission of permissions){
-                if (permission.name === PERMISSION_WRITE_ALL_FOLDERS_RLC){
+            for (const permission of permissions) {
+                if (permission.name === PERMISSION_WRITE_ALL_FOLDERS_RLC) {
                     this.PERMISSION_WRITE_ALL_ID = permission.id;
-                } else if (permission.name === PERMISSION_READ_ALL_FOLDERS_RLC){
+                } else if (permission.name === PERMISSION_READ_ALL_FOLDERS_RLC) {
                     this.PERMISSION_READ_ALL_ID = permission.id;
-                } else if (permission.name === PERMISSION_MANAGE_FOLDER_PERMISSIONS_RLC){
+                } else if (permission.name === PERMISSION_MANAGE_FOLDER_PERMISSIONS_RLC) {
                     this.PERMISSION_MANAGE_ID = permission.id;
                 }
             }
         });
         this.coreSB.getGroups(false).subscribe((groups: any) => {
             this.groups = groups;
-        })
+        });
     }
 
-    onAddFolderPermissionClick(){
-        this.dialog.open(AddPermissionForFolderComponent, {data: this.folderEntry});
+    onAddFolderPermissionClick() {
+        this.dialog.open(AddPermissionForFolderComponent, { data: this.folderEntry });
     }
 
-    onRemoveFolderPermissionClick(folderPermission: FolderPermission){
-        this.fileSB.startDeletingFolderPermission(folderPermission);
+    onRemoveFolderPermissionClick(folderPermission: FolderPermission) {
+        console.log('folder permission: ', folderPermission);
+        this.sharedSB.openConfirmDialog({
+            confirmLabel: 'delete',
+            cancelLabel: 'cancel',
+            title: 'sure?',
+            description: `are you sure you want to remove permission ${folderPermission.permission} from group ${folderPermission.group.name}?`,
+            confirmColor: 'warn'
+        }, (confirm) => {
+            if (confirm){
+                this.fileSB.startDeletingFolderPermission(folderPermission);
+            }
+        });
     }
 
-    onFolderPermissionGoToFolderClick(folderPermission: FolderPermission){
+    onFolderPermissionGoToFolderClick(folderPermission: FolderPermission) {
         this.router
             .navigateByUrl(GetFolderFrontUrlAbsolute(folderPermission.folderPath))
             .catch(error => {
@@ -98,7 +114,7 @@ export class TableEntryInformationFolderPermissionComponent implements OnInit {
             });
     }
 
-    onGroupClick(hasPermission: HasPermission){
+    onGroupClick(hasPermission: HasPermission) {
         this.router.navigateByUrl(GetGroupFrontUrl(hasPermission.groupHas));
     }
 }

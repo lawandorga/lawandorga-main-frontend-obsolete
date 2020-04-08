@@ -61,7 +61,6 @@ export class RecordsEffects {
     constructor(
         private actions: Actions,
         private http: HttpClient,
-        private appSB: AppSandboxService,
         private recordSB: RecordsSandboxService
     ) {}
 
@@ -72,7 +71,7 @@ export class RecordsEffects {
             return action.payload;
         }),
         switchMap((payload: { record: FullRecord; client: FullClient }) => {
-            const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
+            const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
             return from(
                 this.http
                     .patch(GetSpecialRecordApiURL(payload.record.id), {
@@ -160,7 +159,7 @@ export class RecordsEffects {
             return action.payload;
         }),
         mergeMap((request: RecordPermissionRequest) => {
-            const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
+            const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
             return from(
                 this.http
                     .post(RECORD_PERMISSIONS_LIST_API_URL, {

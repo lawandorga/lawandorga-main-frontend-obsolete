@@ -231,7 +231,7 @@ export class RecordsLoadingEffects {
         }),
         switchMap((id: string) => {
             return from(
-                this.http.get(GetSpecialRecordApiURL(id), this.appSB.getPrivateKeyPlaceholder()).pipe(
+                this.http.get(GetSpecialRecordApiURL(id), AppSandboxService.getPrivateKeyPlaceholder()).pipe(
                     catchError(error => {
                         this.snackbarService.showErrorSnackBar(
                             `error at loading special record: ${

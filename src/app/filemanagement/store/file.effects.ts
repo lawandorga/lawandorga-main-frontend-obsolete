@@ -56,6 +56,7 @@ import { StorageService } from '../../shared/services/storage.service';
 import { FolderPermission, FolderPermissionFrom } from '../models/folder_permission.model';
 import { RestrictedGroup } from '../../core/models/group.model';
 import { HasPermission } from '../../core/models/permission.model';
+import { AppSandboxService } from '../../core/services/app-sandbox.service';
 
 @Injectable()
 export class FilesEffects {
@@ -145,7 +146,7 @@ export class FilesEffects {
                     .post(FILES_DOWNLOAD_BASE_API_URL, {
                         entries: payload.entries,
                         path: payload.path
-                    })
+                    }, AppSandboxService.getPrivateKeyPlaceholder())
                     .pipe(
                         catchError(error => {
                             console.log('error: ', error);
