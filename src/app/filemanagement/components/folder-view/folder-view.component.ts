@@ -86,9 +86,7 @@ export class FolderViewComponent implements OnInit {
     }
 
     onEntryClick(entry: TableEntry): void {
-        // console.log('click on: ', entry);
         if (entry.type === FilesTypes.Folder) {
-            // console.log('new path: ', GetFolderFrontUrlRelative(this.path, entry.name));
             this.router
                 .navigateByUrl(GetFolderFrontUrlRelative(this.path, entry.name))
                 .catch(error => {
@@ -99,35 +97,9 @@ export class FolderViewComponent implements OnInit {
 
     dropped($event) {
         $event.preventDefault();
+        console.log('datatransfer of dropped', $event.dataTransfer);
+        console.log('datatransfer items of dropped', $event.dataTransfer.items);
         this.fileSB.upload($event.dataTransfer.items, this.path);
-
-        // const items = $event.dataTransfer.items;
-        // const all = [];
-        // let count = 0;
-        // const itemsLength = items.length;
-        // for (let i = 0; i < items.length; i++) {
-        //     const item = items[i];
-        //     const entry = item.webkitGetAsEntry();
-        //     if (entry.isFile) {
-        //         this.parseFileEntry(entry).then(result => {
-        //             count = count + 1;
-        //             all.push(result);
-        //             if (count === itemsLength) {
-        //                 this.fileSB.upload(all, this.path);
-        //                 this.fileSB.startLoadingFolderInformation(this.path);
-        //             }
-        //         });
-        //     } else if (entry.isDirectory) {
-        //         this.parseDirectoryEntry(entry).then(result => {
-        //             count = count + 1;
-        //             all.push(result);
-        //             if (count === itemsLength) {
-        //                 this.fileSB.upload(all, this.path);
-        //                 this.fileSB.startLoadingFolderInformation(this.path);
-        //             }
-        //         });
-        //     }
-        // }
     }
 
     dragover($event) {
@@ -136,36 +108,28 @@ export class FolderViewComponent implements OnInit {
 
     filesSelected($event) {
         event.preventDefault();
-        const files = Array.from(this.fileInput.nativeElement.files);
-        this.fileSB.upload(files, this.path);
+        // const files = Array.from(this.fileInput.nativeElement.files);
+        // console.log('files', files);
+        // const dataTransfer = new DataTransfer();
+        // console.log('empty DataTransfer', dataTransfer);
+        //
+        // // const itemList = new DataTransferItemList();
+        //
+        //
+        // for (const file of files){
+        //     // dataTransfer.add(file);
+        //     dataTransfer.items.add(file);
+        //     console.log('i add ', file);
+        //
+        //     // itemList.add(file)
+        //
+        // }
+        // dataTransfer.effectAllowed = 'all';
+        // console.log('dataTransfer after adding', dataTransfer);
+
+        // this.fileSB.upload(dataTransfer.items, this.path);
+        this.fileSB.upload(Array.from(this.fileInput.nativeElement.files), this.path);
         this.fileSB.startLoadingFolderInformation(this.path);
-    }
-
-    parseFileEntry(fileEntry) {
-        return new Promise((resolve, reject) => {
-            fileEntry.file(
-                file => {
-                    resolve(file);
-                },
-                err => {
-                    reject(err);
-                }
-            );
-        });
-    }
-
-    parseDirectoryEntry(directoryEntry) {
-        const directoryReader = directoryEntry.createReader();
-        return new Promise((resolve, reject) => {
-            directoryReader.readEntries(
-                entries => {
-                    resolve(entries);
-                },
-                err => {
-                    reject(err);
-                }
-            );
-        });
     }
 
     onDeleteClick(entry: TableEntry) {
@@ -178,7 +142,6 @@ export class FolderViewComponent implements OnInit {
             desc += 'folder ';
         }
         desc += entry.name + '?';
-
 
         this.sharedSB.openConfirmDialog({
             description: desc,
@@ -214,7 +177,6 @@ export class FolderViewComponent implements OnInit {
             saveColor: 'primary',
             title: 'new folder'
         }, (result) => {
-            console.log('result from create new folder: ', result);
             this.fileSB.startCreatingNewFolder(result, this.currentFolder);
         })
     }

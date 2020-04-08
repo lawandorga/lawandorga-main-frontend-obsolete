@@ -287,8 +287,6 @@ export class FilesEffects {
                         return [];
                     }),
                     mergeMap((response: any) => {
-                        console.log('response from creating new folder: ', response);
-
                         return [{
                             type: ADD_FOLDER,
                             payload: TableEntry.getFolderTableEntryFromJson(response)

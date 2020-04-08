@@ -87,6 +87,10 @@ export class FilesSandboxService {
             this.startLoadingFolderInformation(path);
             this.snackbarService.showSuccessSnackBar("uploaded sucessfully")
         });
+        // this.storage.uploadFiles(stuff, path, () => {
+        //     this.startLoadingFolderInformation(path);
+        //     this.snackbarService.showSuccessSnackBar("uploaded sucessfully")
+        // });
     }
 
     startDeleting(stuff: TableEntry[], path: string){

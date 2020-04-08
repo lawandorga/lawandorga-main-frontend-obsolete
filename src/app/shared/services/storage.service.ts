@@ -102,24 +102,31 @@ export class StorageService {
             });
     }
 
-    upload(dataTransferItemList, path, callback){
+    upload(dataTransferItemList, path, callback) {
+        console.log('storage, upload, i got', dataTransferItemList, path);
+        console.log('type from upload: ', Array.isArray(dataTransferItemList));
+        if (Array.isArray(dataTransferItemList)){
+            console.log('i want to upload files');
+            this.uploadFiles(dataTransferItemList, path, callback);
+            return;
+        }
+
         this.getAllFileEntries(dataTransferItemList).then((fileEntries) => {
-            console.log('fileEntries: ', fileEntries);
+            console.log('i read file entries: ', fileEntries);
             const formData = new FormData();
             const paths = [];
             let count = 0;
-            for (const entry of fileEntries){
-                if (entry.name === '.DS_Store'){
+            for (const entry of fileEntries) {
+                if (entry.name === '.DS_Store') {
+                    // exclude macos specific files
                     count++;
                     continue;
                 }
-                console.log('entry of fileEntries', entry);
                 entry.file((fileResult) => {
-                    console.log('fileResult of entry, ', fileResult);
                     count++;
                     formData.append('files', fileResult);
                     paths.push(entry.fullPath + ';' + fileResult.size);
-                    if (count === fileEntries.length){
+                    if (count === fileEntries.length) {
                         formData.append('paths', JSON.stringify(paths));
                         formData.append('path', path);
 
@@ -134,12 +141,45 @@ export class StorageService {
                                 callback(response);
                             });
                     }
-                })
+                });
             }
         });
     }
 
-    async getAllFileEntries(dataTransferItemList) {
+    uploadFiles(files, path, callback) {
+        let count = 0;
+        const formData = new FormData();
+        const paths = [];
+        for (const entry of files) {
+            if (entry.name === '.DS_Store') {
+                // exclude macos specific files
+                count++;
+                continue;
+            }
+
+            count++;
+            console.log('uploadFiles, entry:', entry);
+            formData.append('files', entry);
+            paths.push(entry.name + ';' + entry.size);
+            if (count === files.length) {
+                formData.append('paths', JSON.stringify(paths));
+                formData.append('path', path);
+                this.http
+                    .post(
+                        FILES_UPLOAD_BASE_API_URL,
+                        formData,
+                        AppSandboxService.getPrivateKeyPlaceholder()
+                    )
+                    .subscribe(response => {
+                        // TODO?
+                        callback(response);
+                    });
+            }
+        }
+    }
+
+    async getAllFileEntries(dataTransferItemList: any[]) {
+        console.log('get all file entries here: ', dataTransferItemList);
         const fileEntries = [];
         const queue = [];
         for (let i = 0; i < dataTransferItemList.length; i++) {
