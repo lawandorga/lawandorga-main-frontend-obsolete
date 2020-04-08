@@ -83,16 +83,9 @@ export class FilesSandboxService {
     }
 
     upload(stuff: any, path: string){
-        this.storage.upload(path, stuff, (response) => {
+        this.storage.upload(stuff, path, () => {
             this.startLoadingFolderInformation(path);
             this.snackbarService.showSuccessSnackBar("uploaded sucessfully")
-        });
-    }
-
-    uploadNew(stuff, path){
-        this.storage.uploadNew(stuff, path, () => {
-            this.startLoadingFolderInformation(path);
-            this.snackbarService.showSuccessSnackBar("uploaded!!!!!!!!!!!!!!!!! sucessfully")
         });
     }
 

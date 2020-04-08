@@ -99,7 +99,7 @@ export class FolderViewComponent implements OnInit {
 
     dropped($event) {
         $event.preventDefault();
-        this.fileSB.uploadNew($event.dataTransfer.items, this.path);
+        this.fileSB.upload($event.dataTransfer.items, this.path);
 
         // const items = $event.dataTransfer.items;
         // const all = [];
