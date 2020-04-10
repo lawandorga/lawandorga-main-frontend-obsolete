@@ -23,6 +23,7 @@ import { FilesTypes, TableEntry } from '../../models/table-entry.model';
 import { GetFolderFrontUrlRelative } from '../../../statics/frontend_links.statics';
 import { createUrlResolverWithoutPackagePrefix } from '@angular/compiler';
 import { SharedSandboxService } from '../../../shared/services/shared-sandbox.service';
+import { compareLogSummaries } from '@angular/core/src/render3/styling/class_and_style_bindings';
 
 @Component({
     selector: 'app-folder-view',
@@ -40,7 +41,7 @@ export class FolderViewComponent implements OnInit {
     @ViewChild('fileInput')
     fileInput: ElementRef<HTMLInputElement>;
 
-    columns = ['type', 'name', 'size', 'last_edited', 'more'];
+    columns = ['type', 'name', 'last_edited', 'more'];
 
     constructor(
         private route: ActivatedRoute,
@@ -108,26 +109,6 @@ export class FolderViewComponent implements OnInit {
 
     filesSelected($event) {
         event.preventDefault();
-        // const files = Array.from(this.fileInput.nativeElement.files);
-        // console.log('files', files);
-        // const dataTransfer = new DataTransfer();
-        // console.log('empty DataTransfer', dataTransfer);
-        //
-        // // const itemList = new DataTransferItemList();
-        //
-        //
-        // for (const file of files){
-        //     // dataTransfer.add(file);
-        //     dataTransfer.items.add(file);
-        //     console.log('i add ', file);
-        //
-        //     // itemList.add(file)
-        //
-        // }
-        // dataTransfer.effectAllowed = 'all';
-        // console.log('dataTransfer after adding', dataTransfer);
-
-        // this.fileSB.upload(dataTransfer.items, this.path);
         this.fileSB.upload(Array.from(this.fileInput.nativeElement.files), this.path);
         this.fileSB.startLoadingFolderInformation(this.path);
     }
@@ -177,7 +158,9 @@ export class FolderViewComponent implements OnInit {
             saveColor: 'primary',
             title: 'new folder'
         }, (result) => {
-            this.fileSB.startCreatingNewFolder(result, this.currentFolder);
+            if (result && result !== ''){
+                this.fileSB.startCreatingNewFolder(result, this.currentFolder);
+            }
         })
     }
 }

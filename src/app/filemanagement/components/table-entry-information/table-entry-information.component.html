@@ -21,9 +21,9 @@
         <h1>{{ entry.name }}</h1>
     </div>
     <div>
-        <h4>{{ entry.size | storageSize }}</h4>
+<!--        <h4>{{ entry.size | storageSize }}</h4>-->
         <h4>last edited: {{ entry.last_edited | date: 'short' }}</h4>
-        <h4 *ngIf="entry.type === folderEnum">number of files: {{entry.numberOfFiles}}</h4>
+<!--        <h4 *ngIf="entry.type === folderEnum">number of files: {{entry.numberOfFiles}}</h4>-->
         <h4>creator: {{ entry.creator.name }}</h4>
         <h4>created: {{ entry.created | date: 'short' }}</h4>
     </div>

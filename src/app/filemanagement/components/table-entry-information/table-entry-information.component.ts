@@ -32,11 +32,7 @@ import { FolderPermission } from '../../models/folder_permission.model';
 export class TableEntryInformationComponent implements OnInit, OnChanges {
     @Input()
     entry: TableEntry;
-
-
-
     showPermissions = false;
-
     folderEnum: number;
 
     constructor(private coreSB: CoreSandboxService, private fileSB: FilesSandboxService) {}
