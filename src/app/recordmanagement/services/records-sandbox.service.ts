@@ -32,10 +32,10 @@ import {
     StartAddingNewRecord,
     StartAddingNewRecordMessage,
     StartAdmittingRecordPermissionRequest,
-    StartDecliningRecordPermissionRequest,
+    StartDecliningRecordPermissionRequest, StartEnlistingPoolConsultant,
     StartLoadingClientPossibilities,
     StartLoadingRecordDeletionRequests,
-    StartLoadingRecordPermissionRequests,
+    StartLoadingRecordPermissionRequests, StartLoadingRecordPool,
     StartLoadingRecords,
     StartLoadingRecordStatics,
     StartLoadingSpecialRecord,
@@ -43,7 +43,7 @@ import {
     StartRequestingReadPermission,
     StartRequestingRecordDeletion,
     StartSavingRecord,
-    StartSettingRecordDocumentTags
+    StartSettingRecordDocumentTags, StartYieldingRecord
 } from '../store/actions/records.actions';
 import { FullClient } from '../models/client.model';
 import { OriginCountry } from '../models/country.model';
@@ -105,6 +105,34 @@ export class RecordsSandboxService {
             select((state: any) => {
                 const values = state.records.consultants;
                 return asArray ? Object.values(values) : values;
+            })
+        );
+    };
+
+    startEnlistingPoolConsultant(){
+        this.recordStore.dispatch(new StartEnlistingPoolConsultant());
+    }
+
+    getPoolRecords(): Observable<number | any> {
+        return this.recordStore.pipe(
+            select((state: any) => {
+                return state.records.pool_records
+            })
+        );
+    }
+
+    getUsersPoolEnlistings(): Observable<number | any> {
+        return this.recordStore.pipe(
+            select((state: any) => {
+                return state.records.users_pool_enlistings
+            })
+        );
+    }
+
+    getPoolConsultants(): Observable<number | any> {
+        return this.recordStore.pipe(
+            select((state: any) => {
+                return state.records.pool_consultants
             })
         );
     }
@@ -193,6 +221,10 @@ export class RecordsSandboxService {
         this.recordStore.dispatch(new StartLoadingRecordStatics());
     }
 
+    startYieldingRecord(record: FullRecord){
+        this.recordStore.dispatch(new StartYieldingRecord(record));
+    }
+
     resetPossibleClients() {
         this.recordStore.dispatch(new ResetPossibleClients());
     }
@@ -213,21 +245,25 @@ export class RecordsSandboxService {
         consultants: RestrictedUser[],
         tags: Tag[]
     ) {
-        let newRecord = {};
-        if (client) {
-            newRecord = {
-                client_id: client.id
-            };
-        } else {
-            newRecord = {
-                client_birthday: CoreSandboxService.transformDateToString(
-                    new Date(createFormValues.client_birthday)
-                ),
-                client_name: createFormValues.client_name
-            };
-        }
-        newRecord = {
-            ...newRecord,
+        // let newRecord = {};
+        // if (client) {
+        //     newRecord = {
+        //         client_id: client.id
+        //     };
+        // } else {
+        //     newRecord = {
+        //         client_birthday: CoreSandboxService.transformDateToString(
+        //             new Date(createFormValues.client_birthday)
+        //         ),
+        //         client_name: createFormValues.client_name
+        //     };
+        // }
+        const newRecord = {
+            //...newRecord,
+            client_birthday: CoreSandboxService.transformDateToString(
+                new Date(createFormValues.client_birthday)
+            ),
+            client_name: createFormValues.client_name,
             client_phone_number: createFormValues.client_phone_number,
             client_note: createFormValues.client_note,
             first_contact_date: CoreSandboxService.transformDateToString(
@@ -262,7 +298,7 @@ export class RecordsSandboxService {
         this.location.back();
     }
 
-    uploadRecordDocuments(files: File[]) {
+     uploadRecordDocuments(files: File[]) {
         let record_id = null;
         this.recordStore
             .pipe(select((state: any) => state.records.special_record.record))
@@ -376,5 +412,9 @@ export class RecordsSandboxService {
         this.recordStore.dispatch(
             new StartProcessingRecordDeletionRequest({ request, action: 'accept' })
         );
+    }
+
+    startLoadingRecordPool(){
+        this.recordStore.dispatch(new StartLoadingRecordPool());
     }
 }

@@ -26,7 +26,7 @@ import { AppSandboxService } from './app-sandbox.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-    constructor(private store: Store<AuthState>, private appSB: AppSandboxService) {}
+  constructor(private store: Store<AuthState>, private appSB: AppSandboxService) {}
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return this.store.select('auth').pipe(

@@ -22,6 +22,7 @@ import { HasPermission, Permission } from "../models/permission.model";
 import { RestrictedRlc } from "../models/rlc.model";
 import { FullGroup, RestrictedGroup } from "../models/group.model";
 import { NewUserRequest } from "../models/new_user_request.model";
+import { RlcSettings } from '../models/rlc_settings.model';
 
 export const ADD_GROUP = "ADD_GROUP";
 export const ADD_SINGLE_HAS_PERMISSION = "ADD_SINGLE_HAS_PERMISSION";
@@ -84,6 +85,9 @@ export const START_REMOVING_HAS_PERMISSION = "START_REMOVING_HAS_PERMISSION";
 export const START_ACTIVATING_INACTIVE_USER = "START_ACTIVATING_INACTIVE_USER";
 export const START_SAVING_USER = "START_SAVING_USER";
 export const UPDATE_NEW_USER_REQUEST = "UPDATE_NEW_USER_REQUEST";
+export const START_LOADING_RLC_SETTINGS = "START_LOADING_RLC_SETTINGS";
+export const SET_RLC_SETTINGS = "SET_RLC_SETTINGS";
+
 
 export class AddGroup implements Action {
     readonly type = ADD_GROUP;
@@ -352,6 +356,16 @@ export class StartCheckingUserHasPermissions implements Action {
     readonly type = START_CHECKING_USER_HAS_PERMISSIONS;
 }
 
+export class StartLoadingRlcSettings implements Action {
+    readonly type = START_LOADING_RLC_SETTINGS;
+}
+
+export class SetRlcSettings implements Action {
+    readonly type = SET_RLC_SETTINGS;
+
+    constructor(public payload: RlcSettings) {}
+}
+
 export type CoreActions =
     | AddGroup
     | AddSingleHasPermission
@@ -401,4 +415,6 @@ export type CoreActions =
     | StartRemovingHasPermission
     | StartSavingUser
     | UpdateNewUserRequest
-    | StartCheckingUserHasPermissions;
+    | StartCheckingUserHasPermissions
+    | StartLoadingRlcSettings
+    | SetRlcSettings;

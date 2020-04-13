@@ -16,21 +16,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { ForeignUser, FullUser, RestrictedUser } from "../models/user.model";
+import { ForeignUser, FullUser, RestrictedUser } from '../models/user.model';
 import {
     ADD_GROUP,
     ADD_SINGLE_HAS_PERMISSION,
     CoreActions,
-    REMOVE_ACTUAL_HAS_PERMISSIONS, REMOVE_INACTIVE_USER,
-    REMOVE_SINGLE_HAS_PERMISSION, RESET_INACTIVE_USERS,
+    REMOVE_ACTUAL_HAS_PERMISSIONS,
+    REMOVE_INACTIVE_USER,
+    REMOVE_SINGLE_HAS_PERMISSION,
+    RESET_INACTIVE_USERS,
     RESET_SPECIAL_FOREIGN_USER,
     RESET_SPECIAL_GROUP,
     RESET_SPECIAL_PERMISSION,
     SET_ACTUAL_HAS_PERMISSIONS,
     SET_ALL_PERMISSIONS,
-    SET_GROUPS, SET_INACTIVE_USERS, SET_NEW_USER_REQUESTS,
+    SET_GROUPS,
+    SET_INACTIVE_USERS,
+    SET_NEW_USER_REQUESTS,
     SET_OTHER_USERS,
     SET_RLC,
+    SET_RLC_SETTINGS,
     SET_RLCS,
     SET_SPECIAL_FOREIGN_USER,
     SET_SPECIAL_GROUP,
@@ -38,13 +43,15 @@ import {
     SET_USER,
     SET_USER_PERMISSIONS,
     SET_USER_RECORD_STATES,
-    SET_USER_STATES, UPDATE_NEW_USER_REQUEST
+    SET_USER_STATES,
+    UPDATE_NEW_USER_REQUEST
 } from './core.actions';
-import { HasPermission, Permission } from "../models/permission.model";
-import { RestrictedRlc } from "../models/rlc.model";
-import {getIdObjects, getObjectsByField} from '../../shared/other/reducer-helper';
-import { FullGroup, RestrictedGroup } from "../models/group.model";
-import { NewUserRequest } from "../models/new_user_request.model";
+import { HasPermission, Permission } from '../models/permission.model';
+import { RestrictedRlc } from '../models/rlc.model';
+import { getIdObjects, getObjectsByField } from '../../shared/other/reducer-helper';
+import { FullGroup, RestrictedGroup } from '../models/group.model';
+import { NewUserRequest } from '../models/new_user_request.model';
+import { RlcSettings } from '../models/rlc_settings.model';
 
 export interface CoreState {
     user: FullUser;
@@ -56,6 +63,7 @@ export interface CoreState {
     actual_has_permissions: { [id: number]: HasPermission };
     foreign_user: ForeignUser;
     rlc: RestrictedRlc;
+    rlc_settings: RlcSettings;
     user_states: any;
     user_record_states: any;
     special_permission: Permission;
@@ -74,6 +82,7 @@ const initialState: CoreState = {
     actual_has_permissions: {},
     foreign_user: null,
     rlc: null,
+    rlc_settings: null,
     user_states: [],
     user_record_states: [],
     special_permission: null,
@@ -224,6 +233,11 @@ export function coreReducer(state = initialState, action: CoreActions) {
                     ...state.new_user_requests,
                     [action.payload.id]: action.payload
                 }
+            };
+        case SET_RLC_SETTINGS:
+            return {
+                ...state,
+                rlc_settings: action.payload
             };
         default:
             return state;

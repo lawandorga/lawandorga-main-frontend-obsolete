@@ -68,6 +68,7 @@ export class StorageService {
         FileSaver.saveAs(StorageService.b64toBlob(bytes, mime.getType(filename), 512), filename);
     }
 
+
     uploadEncryptedRecordDocuments(files: File[], record_id, callbackFinishedFn?: Function) {
         const formData = new FormData();
         for (const file of files) {

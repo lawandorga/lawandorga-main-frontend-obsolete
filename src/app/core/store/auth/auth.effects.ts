@@ -50,8 +50,8 @@ import {
     SET_USER,
     SET_USER_PERMISSIONS,
     SET_USER_RECORD_STATES,
-    SET_USER_STATES
-} from "../core.actions";
+    SET_USER_STATES, START_LOADING_RLC_SETTINGS
+} from '../core.actions';
 import { AuthGuardService } from "../../services/auth-guard.service";
 import { FullUser } from "../../models/user.model";
 import { RecordsSandboxService } from "../../../recordmanagement/services/records-sandbox.service";
@@ -284,6 +284,9 @@ export class AuthEffects {
                 payload: State.getStatesFromJsonArray(
                     response.user_record_states
                 )
+            },
+            {
+                type: START_LOADING_RLC_SETTINGS
             }
         ];
     }

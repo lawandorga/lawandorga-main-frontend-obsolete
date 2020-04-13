@@ -39,6 +39,7 @@ export const PRIVACY_STATEMENT_FRONT_URL = "privacy_statement";
 export const INACTIVE_USERS_FRONT_URL = "inactive_users";
 export const DELETION_REQUESTS_FRONT_URL = "records/deletion_requests";
 export const FILES_FRONT_URL = "files";
+export const RECORD_POOL_FRONT_URL = "records/record_pool";
 
 export const GetProfileFrontUrl = (profile: RestrictedUser | string): string => {
     if (profile instanceof RestrictedUser)
