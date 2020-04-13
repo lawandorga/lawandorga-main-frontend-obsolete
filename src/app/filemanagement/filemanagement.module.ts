@@ -22,14 +22,39 @@ import {FilesMainViewComponent} from './components/files-main-view/files-main-vi
 import {FilemanagementRoutingModule} from './filemanagement-routing.module';
 import {SharedModule} from '../shared/shared.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { ListFileItemComponent } from './components/list-file-item/list-file-item.component';
+import { ListFolderItemComponent } from './components/list-folder-item/list-folder-item.component';
+import { PathInformationComponent } from './components/path-information/path-information.component';
+import { FolderViewComponent } from './components/folder-view/folder-view.component';
+import { StoreModule } from '@ngrx/store';
+import { filesReducer } from './store/files.reducers';
+import { EffectsModule } from '@ngrx/effects';
+import { FilesEffects } from './store/file.effects';
+import { StorageSizePipe } from './pipes/storage-size.pipe';
+import { TableEntryInformationComponent } from './components/table-entry-information/table-entry-information.component';
+import { TableEntryInformationFolderPermissionComponent } from './components/table-entry-information-folder-permission/table-entry-information-folder-permission.component';
+import { AddPermissionForFolderComponent } from './components/add-permission-for-folder/add-permission-for-folder.component';
 
 @NgModule({
     imports: [
         FilemanagementRoutingModule,
-        SharedModule
+        SharedModule,
+        StoreModule.forFeature('files', filesReducer),
+        EffectsModule.forFeature([FilesEffects])
     ],
     declarations: [
         FilesMainViewComponent,
+        ListFileItemComponent,
+        ListFolderItemComponent,
+        PathInformationComponent,
+        FolderViewComponent,
+        StorageSizePipe,
+        TableEntryInformationComponent,
+        TableEntryInformationFolderPermissionComponent,
+        AddPermissionForFolderComponent,
+    ],
+    entryComponents: [
+        AddPermissionForFolderComponent
     ]
 })
 export class FilemanagementModule {

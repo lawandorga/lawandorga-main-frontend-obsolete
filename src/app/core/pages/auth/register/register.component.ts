@@ -37,7 +37,6 @@ export class RegisterComponent implements OnInit {
     errorStateMatcher = new CustomErrorStateMatcher();
 
     constructor(
-        private snackBar: MatSnackBar,
         private coreSB: CoreSandboxService
     ) {
 

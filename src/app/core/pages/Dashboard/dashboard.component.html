@@ -17,11 +17,17 @@
   -->
 
 <mat-card class="dashboard__dashboard-card">
-    <h1>Hello! Welcome to Law&Orga</h1>
+    <h1>Hello {{ name ? name: ''}}!</h1>
     <mat-card-content>
         <p>
-            This is a placeholder for the coming dashboard. Please be patient and use the navigation links to the left.
+            Nice to see you back!
+
         </p>
-<!--        <button mat-button (click)="onDialogClick()">dialog</button>-->
+        <p>
+            On the left side you will find all relevant navigation links.
+        </p>
+        <p>
+            Have fun and lots of success!
+        </p>
     </mat-card-content>
 </mat-card>

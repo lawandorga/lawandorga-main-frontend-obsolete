@@ -196,7 +196,7 @@ export class RecordsLoadingEffects {
             return action.payload;
         }),
         switchMap((birthday: Date) => {
-            const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
+            const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
             return from(
                 this.http
                     .post(CLIENTS_BY_BIRTHDAY_API_URL, {
@@ -232,7 +232,7 @@ export class RecordsLoadingEffects {
         }),
         switchMap((id: string) => {
             return from(
-                this.http.get(GetSpecialRecordApiURL(id), this.appSB.getPrivateKeyPlaceholder()).pipe(
+                this.http.get(GetSpecialRecordApiURL(id), AppSandboxService.getPrivateKeyPlaceholder()).pipe(
                     catchError(error => {
                         this.snackbarService.showErrorSnackBar(
                             `error at loading special record: ${

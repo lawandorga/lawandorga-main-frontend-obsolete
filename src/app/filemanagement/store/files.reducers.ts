@@ -17,21 +17,75 @@
  */
 
 
-import {FilesActions, LOAD_FILES} from './files.actions';
+import {
+    ADD_FOLDER,
+    FilesActions,
+    RESET_FOLDER_PERMISSIONS,
+    SET_CURRENT_FOLDER,
+    SET_FILES, SET_FOLDER_HAS_PERMISSIONS,
+    SET_FOLDER_PERMISSIONS,
+    SET_FOLDERS
+} from './files.actions';
+import { getIdObjects } from '../../shared/other/reducer-helper';
+import { TableEntry } from '../models/table-entry.model';
+import { FolderPermission } from '../models/folder_permission.model';
+import { HasPermission } from '../../core/models/permission.model';
 
 export interface FilesState {
-    files: any;
+    current_folder: TableEntry,
+    folders: { [id: number]: TableEntry },
+    files: { [id: number]: TableEntry },
+    folder_permissions: { [id: number]: FolderPermission},
+    folder_has_permissions: { [id: number]: HasPermission}
 }
 
 export const initialState: FilesState = {
-    files: {}
+    current_folder: null,
+    folders: {},
+    files: {},
+    folder_permissions: {},
+    folder_has_permissions: {}
 };
 
 export function filesReducer(state = initialState, action: FilesActions) {
     switch (action.type) {
-        case LOAD_FILES:
+        case SET_FOLDERS:
             return {
-                ...state
+                ...state,
+                folders: getIdObjects(action.payload)
+            };
+        case SET_FILES:
+            return {
+                ...state,
+                files: getIdObjects(action.payload)
+            };
+        case SET_CURRENT_FOLDER:
+            return {
+                ...state,
+                current_folder: action.payload
+            };
+        case SET_FOLDER_PERMISSIONS:
+            return {
+                ...state,
+                folder_permissions: getIdObjects(action.payload)
+            };
+        case RESET_FOLDER_PERMISSIONS:
+            return {
+                ...state,
+                folder_permissions: {}
+            };
+        case SET_FOLDER_HAS_PERMISSIONS:
+            return {
+                ...state,
+                folder_has_permissions: getIdObjects(action.payload)
+            };
+        case ADD_FOLDER:
+            return {
+                ...state,
+                folders: {
+                    ...state.folders,
+                    [action.payload.id]: action.payload
+                }
             };
         default:
             return state;

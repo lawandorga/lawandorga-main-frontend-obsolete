@@ -20,12 +20,13 @@ import {RouterModule, Routes} from '@angular/router';
 import {FilesMainViewComponent} from './components/files-main-view/files-main-view.component';
 import {NgModule} from '@angular/core';
 import {AuthGuardService} from '../core/services/auth-guard.service';
+import { FolderViewComponent } from './components/folder-view/folder-view.component';
 
 const fileRoutes: Routes = [
     {
         path: "",
-        pathMatch: "full",
-        component: FilesMainViewComponent
+        pathMatch: 'full',
+        component: FolderViewComponent
     }
 ];
 

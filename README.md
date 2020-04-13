@@ -1,4 +1,3 @@
-# Law&Orga Frontend 
 
 # General
 Frontend of Law&Orga Project for (Refugee) Law Clinics in Germany.
@@ -30,5 +29,4 @@ or for continuous building (with file-watcher)
 To start the frontend server just:
 
 `npm run start:dev`
-
 

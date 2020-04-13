@@ -25,7 +25,7 @@ export const passwordValidator = (control: AbstractControl): { [key: string]: bo
     const hasNumber = /\d/.test(password);
     const hasUpper = /[A-Z]/.test(password);
     const hasLower = /[a-z]/.test(password);
-    const hasSpecial = /[$@!%*?&+=#'"`\/<>,.^()[\]\\|{}]/.test(password);
+    const hasSpecial = /[$@!%*?&+=#'"`\/<>,.^\-()[\]\\|{}]/.test(password);
     const length = password.length >= 9;
     if (!hasNumber || !hasUpper || !hasLower || !hasSpecial)
         return { weak: true };

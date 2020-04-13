@@ -17,11 +17,122 @@
  */
 
 import { Action } from '@ngrx/store';
+import { TableEntry } from '../models/table-entry.model';
+import { FolderPermission } from '../models/folder_permission.model';
+import { RestrictedGroup } from '../../core/models/group.model';
+import { HasPermission } from '../../core/models/permission.model';
 
-export const LOAD_FILES = 'LOAD_FILES';
+export const START_LOADING_FOLDER = 'START_LOADING_FOLDER';
+export const SET_CURRENT_FOLDER = 'SET_CURRENT_FOLDER';
+export const SET_FOLDERS = "SET_FOLDERS";
+export const SET_FILES = "SET_FILES";
+export const ADD_FOLDER = "ADD_FOLDER";
+export const START_DELETING_FILES_AND_FOLDERS = "START_DELETING_FILES_AND_FOLDERS";
+export const START_DOWNLOAD_FILES_AND_FOLDERS = "START_DOWNLOAD_FILES_AND_FOLDERS";
+export const START_LOADING_FOLDER_PERMISSIONS = "START_LOADING_FOLDER_PERMISSIONS";
+export const SET_FOLDER_PERMISSIONS = "SET_FOLDER_PERMISSIONS";
+export const RESET_FOLDER_PERMISSIONS = "RESET_FOLDER_PERMISSIONS";
+export const START_CREATING_FOLDER_PERMISSION = "START_CREATING_FOLDER_PERMISSION";
+export const SET_FOLDER_HAS_PERMISSIONS = "SET_FOLDER_HAS_PERMISSIONS";
+export const START_DELETING_FOLDER_PERMISSION = "START_DELETING_FOLDER_PERMISSION";
+export const START_CREATING_NEW_FOLDER = "START_CREATING_NEW_FOLDER";
 
-export class LoadFiles implements Action {
-    readonly type = LOAD_FILES;
+export class StartLoadingFolder implements Action {
+    readonly type = START_LOADING_FOLDER;
+
+    constructor(public payload: string) {
+    }
 }
 
-export type FilesActions = LoadFiles;
+export class SetCurrentFolder implements Action {
+    readonly type = SET_CURRENT_FOLDER;
+
+    constructor(public payload: TableEntry) {}
+}
+
+export class SetFolders implements Action {
+    readonly type = SET_FOLDERS;
+
+    constructor(public payload: TableEntry[]) {
+    }
+}
+
+export class SetFiles implements Action {
+    readonly type = SET_FILES;
+
+    constructor(public payload: TableEntry[]) {
+    }
+}
+
+export class StartDeletingFilesAndFolders implements Action {
+    readonly type = START_DELETING_FILES_AND_FOLDERS;
+
+    constructor(public payload: { entries: TableEntry[]; path: string}) {}
+}
+
+export class StartDownloadFilesAndFolders implements Action {
+    readonly type = START_DOWNLOAD_FILES_AND_FOLDERS;
+
+    constructor(public payload: { entries: TableEntry[], path: string }) {}
+}
+
+export class StartLoadingFolderPermissions implements Action {
+    readonly type = START_LOADING_FOLDER_PERMISSIONS;
+
+    constructor(public payload: string) {}
+}
+
+export class SetFolderPermissions implements Action {
+    readonly type = SET_FOLDER_PERMISSIONS;
+
+    constructor(public payload: FolderPermission[]) {}
+}
+
+export class ResetFolderPermissions implements Action {
+    readonly type = RESET_FOLDER_PERMISSIONS;
+}
+
+export class StartCreatingFolderPermission implements Action {
+    readonly type = START_CREATING_FOLDER_PERMISSION;
+
+    constructor(public payload: {group: RestrictedGroup, folder: TableEntry, permission: string}){}
+}
+
+export class SetFolderHasPermissions implements Action {
+    readonly type = SET_FOLDER_HAS_PERMISSIONS;
+
+    constructor(public payload: HasPermission[]) {}
+}
+
+export class StartDeletingFolderPermission implements Action {
+    readonly type = START_DELETING_FOLDER_PERMISSION;
+
+    constructor(public payload: FolderPermission) {}
+}
+
+export class StartCreatingNewFolder implements Action {
+    readonly type = START_CREATING_NEW_FOLDER;
+
+    constructor(public payload: {name: string, parent: TableEntry}) {}
+}
+
+export class AddFolder implements Action {
+    readonly type = ADD_FOLDER;
+
+    constructor(public payload: TableEntry) {}
+}
+
+export type FilesActions = StartLoadingFolder
+    | SetCurrentFolder
+    | SetFolders
+    | SetFiles
+    | StartDeletingFilesAndFolders
+    | StartDownloadFilesAndFolders
+    | StartLoadingFolderPermissions
+    | SetFolderPermissions
+    | ResetFolderPermissions
+    | StartCreatingFolderPermission
+    | SetFolderHasPermissions
+    | StartDeletingFolderPermission
+    | StartCreatingNewFolder
+    | AddFolder;

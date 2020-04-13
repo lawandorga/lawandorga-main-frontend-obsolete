@@ -17,13 +17,16 @@
  */
 
 import { BrowserModule } from "@angular/platform-browser";
-import { NgModule } from "@angular/core";
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ActionReducer, StoreModule } from "@ngrx/store";
 import { EffectsModule } from "@ngrx/effects";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 import LogRocket from "logrocket";
+import { registerLocaleData } from '@angular/common';
+import localeDE from '@angular/common/locales/de';
+
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -42,6 +45,10 @@ import { SnackbarService } from "./shared/services/snackbar.service";
 import {FilesSandboxService} from './filemanagement/services/files-sandbox.service';
 import {SharedSandboxService} from "./shared/services/shared-sandbox.service";
 import {CookieService} from "ngx-cookie-service";
+
+
+registerLocaleData(localeDE);
+
 
 const reduxMiddleware = LogRocket.reduxMiddleware();
 
@@ -83,7 +90,8 @@ export function logrocketMiddleware(reducer): ActionReducer<any, any> {
         SnackbarService,
         SharedSandboxService,
         CookieService,
-        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+        {provide: LOCALE_ID, useValue: "de"}
     ],
     bootstrap: [AppComponent]
 })
