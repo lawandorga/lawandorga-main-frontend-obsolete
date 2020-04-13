@@ -41,6 +41,12 @@ import { RequestOptions } from '@angular/http';
 export class AppSandboxService {
     savedLocation = '';
 
+    static getPrivateKeyPlaceholder(): any {
+        let headers = new HttpHeaders();
+        headers = headers.append('private-key', 'placeholder');
+        return {headers};
+    }
+
     constructor(
         private store: Store<AppState>,
         private router: Router,
@@ -112,9 +118,5 @@ export class AppSandboxService {
         this.cookieService.delete('users_private_key');
     }
 
-    getPrivateKeyPlaceholder(): any {
-        let headers = new HttpHeaders();
-        headers = headers.append('private-key', 'placeholder');
-        return {headers};
-    }
+
 }

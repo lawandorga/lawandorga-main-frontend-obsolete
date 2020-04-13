@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import {Component, OnInit} from "@angular/core";
+import { Component, isDevMode, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {AppSandboxService} from "../../services/app-sandbox.service";
 import {FullUser} from "../../models/user.model";
@@ -30,7 +30,7 @@ import {
     PERMISSION_CAN_VIEW_RECORDS, PERMISSION_PROCESS_RECORD_DELETION_REQUESTS
 } from '../../../statics/permissions.statics';
 import {
-    ACCEPT_NEW_USER_REQUESTS_FRONT_URL, DELETION_REQUESTS_FRONT_URL,
+    ACCEPT_NEW_USER_REQUESTS_FRONT_URL, DELETION_REQUESTS_FRONT_URL, FILES_FRONT_URL,
     GROUPS_FRONT_URL,
     INACTIVE_USERS_FRONT_URL,
     LEGAL_NOTICE_FRONT_URL,
@@ -51,14 +51,12 @@ import set = Reflect.set;
     styleUrls: ["./sidebar.component.scss"]
 })
 export class SidebarComponent implements OnInit {
-    active = false;
     name = "";
     email = "";
     timer = null;
     checkPermissionInterval = 30000;
 
     legalNoticeUrl = LEGAL_NOTICE_FRONT_URL;
-    privacyStatementUrl = PRIVACY_STATEMENT_FRONT_URL;
 
     show_tab_permissions = {
         records: false,
@@ -68,6 +66,7 @@ export class SidebarComponent implements OnInit {
         accept_new_user: false,
         activate_inactive_users: false,
         process_record_deletion_requests: false,
+        show_files: false,
         record_pool: false
     };
 
@@ -96,6 +95,11 @@ export class SidebarComponent implements OnInit {
             label: "Groups",
             icon: "group",
             link: GROUPS_FRONT_URL
+        },
+        {
+            label: "Files",
+            icon: "folder_open",
+            link: FILES_FRONT_URL
         },
         {
             label: "Admin",
@@ -278,10 +282,12 @@ export class SidebarComponent implements OnInit {
             this.email = user ? user.email : "";
         });
 
-        this.timer = setInterval(() => {
-            this.coreSB.startCheckingUserHasPermissions();
-        }, this.checkPermissionInterval);
-        this.recheckSidebarItems();
+        if (!isDevMode()){
+            this.timer = setInterval(() => {
+                this.coreSB.startCheckingUserHasPermissions();
+            }, this.checkPermissionInterval);
+            this.recheckSidebarItems();
+        }
     }
 
     recheckSidebarItems() {
@@ -341,9 +347,5 @@ export class SidebarComponent implements OnInit {
     selectedItem(event) {
         if (event.label === "Logout") this.logout();
         else this.router.navigate([event.link]);
-    }
-
-    selectedLabel(event) {
-        // console.log("selected label", event);
     }
 }

@@ -21,20 +21,19 @@ import { HttpClient } from '@angular/common/http';
 import * as FileSaver from 'file-saver';
 import * as mime from 'mime';
 
-
 import {
+    FILES_UPLOAD_BASE_API_URL,
     GetDownloadAllRecordDocumentsApiUrl,
     GetDownloadEncryptedRecordDocumentApiUrl,
     GetSpecialRecordUploadDocumentsApiUrl
 } from '../../statics/api_urls.statics';
-import { SnackbarService } from './snackbar.service';
 import { AppSandboxService } from '../../core/services/app-sandbox.service';
 import { RecordDocument } from '../../recordmanagement/models/record_document.model';
 
 @Injectable()
 export class StorageService {
-
-    constructor(private http: HttpClient, private snackbarService: SnackbarService, private appSB: AppSandboxService) {}
+    constructor(private http: HttpClient) {
+    }
 
     private static b64toBlob(b64Data, contentType, sliceSize) {
         contentType = contentType || 'application/zip';
@@ -57,7 +56,7 @@ export class StorageService {
         }
 
         const blob = new Blob(byteArrays, {
-            type: contentType,
+            type: contentType
         });
         return blob;
     }
@@ -72,27 +71,141 @@ export class StorageService {
 
     uploadEncryptedRecordDocuments(files: File[], record_id, callbackFinishedFn?: Function) {
         const formData = new FormData();
-        for (const file of files){
-            formData.append('files', file)
+        for (const file of files) {
+            formData.append('files', file);
         }
-        const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
-        this.http.post(GetSpecialRecordUploadDocumentsApiUrl(record_id), formData, privateKeyPlaceholder)
+        const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
+        this.http
+            .post(GetSpecialRecordUploadDocumentsApiUrl(record_id), formData, privateKeyPlaceholder)
             .subscribe(res => {
                 callbackFinishedFn(res);
-            })
+            });
     }
 
-    downloadEncryptedRecordDocument(document: RecordDocument){
-        const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
-        this.http.get(GetDownloadEncryptedRecordDocumentApiUrl(document.id.toString()), privateKeyPlaceholder).subscribe((response) => {
-            StorageService.saveFile(response, document.name)
-        })
+    downloadEncryptedRecordDocument(document: RecordDocument) {
+        const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
+        this.http
+            .get(
+                GetDownloadEncryptedRecordDocumentApiUrl(document.id.toString()),
+                privateKeyPlaceholder
+            )
+            .subscribe(response => {
+                StorageService.saveFile(response, document.name);
+            });
     }
 
-    downloadAllEncryptedRecordDocuments(record_id: string, record_token: string){
-        const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
-        this.http.get(GetDownloadAllRecordDocumentsApiUrl(record_id), privateKeyPlaceholder).subscribe((response) => {
-            StorageService.saveFile(response, `${record_token}_documents.zip`);
-        })
+    downloadAllEncryptedRecordDocuments(record_id: string, record_token: string) {
+        const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
+        this.http
+            .get(GetDownloadAllRecordDocumentsApiUrl(record_id), privateKeyPlaceholder)
+            .subscribe(response => {
+                StorageService.saveFile(response, `${record_token}_documents.zip`);
+            });
+    }
+
+    upload(dataTransferItemList, path, callback) {
+        if (Array.isArray(dataTransferItemList)){
+            this.uploadFiles(dataTransferItemList, path, callback);
+            return;
+        }
+
+        this.getAllFileEntries(dataTransferItemList).then((fileEntries) => {
+            const formData = new FormData();
+            const paths = [];
+            let count = 0;
+            for (const entry of fileEntries) {
+                if (entry.name === '.DS_Store') {
+                    // exclude macos specific files
+                    count++;
+                    continue;
+                }
+                entry.file((fileResult) => {
+                    count++;
+                    formData.append('files', fileResult);
+                    paths.push(entry.fullPath + ';' + fileResult.size);
+                    if (count === fileEntries.length) {
+                        formData.append('paths', JSON.stringify(paths));
+                        formData.append('path', path);
+
+                        this.http
+                            .post(
+                                FILES_UPLOAD_BASE_API_URL,
+                                formData,
+                                AppSandboxService.getPrivateKeyPlaceholder()
+                            )
+                            .subscribe(response => {
+                                // TODO?
+                                callback(response);
+                            });
+                    }
+                });
+            }
+        });
+    }
+
+    uploadFiles(files, path, callback) {
+        let count = 0;
+        const formData = new FormData();
+        const paths = [];
+        for (const entry of files) {
+            if (entry.name === '.DS_Store') {
+                // exclude macos specific files
+                count++;
+                continue;
+            }
+            count++;
+            formData.append('files', entry);
+            paths.push(entry.name + ';' + entry.size);
+            if (count === files.length) {
+                formData.append('paths', JSON.stringify(paths));
+                formData.append('path', path);
+                this.http
+                    .post(
+                        FILES_UPLOAD_BASE_API_URL,
+                        formData,
+                        AppSandboxService.getPrivateKeyPlaceholder()
+                    )
+                    .subscribe(response => {
+                        callback(response);
+                    });
+            }
+        }
+    }
+
+    async getAllFileEntries(dataTransferItemList: any[]) {
+        const fileEntries = [];
+        const queue = [];
+        for (let i = 0; i < dataTransferItemList.length; i++) {
+            queue.push(dataTransferItemList[i].webkitGetAsEntry());
+        }
+        while (queue.length > 0) {
+            const entry = queue.shift();
+            if (entry.isFile) {
+                fileEntries.push(entry);
+            } else if (entry.isDirectory) {
+                queue.push(...await this.readAllDirectoryEntries(entry.createReader()));
+            }
+        }
+        return fileEntries;
+    }
+
+    async readAllDirectoryEntries(directoryReader) {
+        const entries = [];
+        let readEntries = await this.readEntriesPromise(directoryReader);
+        while (readEntries.length > 0) {
+            entries.push(...readEntries);
+            readEntries = await this.readEntriesPromise(directoryReader);
+        }
+        return entries;
+    }
+
+    async readEntriesPromise(directoryReader): Promise<any> {
+        try {
+            return await new Promise((resolve, reject) => {
+                directoryReader.readEntries(resolve, reject);
+            });
+        } catch (err) {
+            console.log(err);
+        }
     }
 }

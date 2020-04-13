@@ -43,6 +43,11 @@ export const INACTIVE_USERS_API_URL = base + 'api/inactive_users/';
 export const USER_HAS_PERMISSIONS_API_URL = base + 'api/user_has_permissions/';
 export const RECORD_DELETIONS_API_URL = base + 'api/records/record_deletion_requests/';
 export const PROCESS_RECORD_DELETIONS_API_URL = base + 'api/records/process_record_deletion_request/';
+export const FOLDER_BASE_API_URL = base + 'api/files/folder';
+export const FILES_UPLOAD_BASE_API_URL = base + 'api/files/upload';
+export const FILES_DELETE_BASE_API_URL = base + 'api/files/delete';
+export const FILES_DOWNLOAD_BASE_API_URL = base + 'api/files/download';
+export const FILES_PERMISSION_FOR_FOLDER_BASE_API_URL = base + 'api/files/permission_for_folder/';
 export const RECORD_POOL_API_URL = base + 'api/records/record_pool/';
 export const POOL_RECORD_API_URL = base + 'api/records/pool_records/';
 export const POOL_CONSULTANT_API_URL = base + 'api/records/pool_consultants/';
@@ -56,7 +61,8 @@ const DOWNLOAD_SIGNING_BASE_API_URL = base + "api/storage_down/";       // depre
 const RECORD_DOCUMENT_BASE_API_URL = base + "api/records/documents/";
 const PERMISSION_FOR_GROUP_BASE_API_URL = base + "api/permissions_for_group/";
 const DOWNLOAD_ALL_RECORD_DOCUMENTS_BASE_API_URL = base + "api/records/documents_download/";
-const DOWNLOAD_ENCRYPTED_RECORD_DOCUMENT_BASE_API_URL = base + "api/records/e_record/documents/"
+const DOWNLOAD_ENCRYPTED_RECORD_DOCUMENT_BASE_API_URL = base + "api/records/e_record/documents/";
+const FILES_FOLDER_PERMISSIONS_BASE_API_URL = base + 'api/files/folder_permissions/';
 
 export const GetSpecialProfileApiURL = (id: string | number) => {
     return `${PROFILES_API_URL}${id}/`;
@@ -132,4 +138,18 @@ export const GetSpecialRecordUploadDocumentsApiUrl = (record_id: string) => {
 
 export const GetDownloadEncryptedRecordDocumentApiUrl = (document_id: string) => {
     return `${DOWNLOAD_ENCRYPTED_RECORD_DOCUMENT_BASE_API_URL}${document_id}/`;
+};
+
+export const GetFolderInformationApiUrl = (path: string) => {
+    if (path)
+        return `${FOLDER_BASE_API_URL}?path=${path}`;
+    return `${FOLDER_BASE_API_URL}`;
+};
+
+export const GetFolderPermissionsForFolderApiUrl = (id: string) => {
+    return `${FILES_FOLDER_PERMISSIONS_BASE_API_URL}${id}/`;
+};
+
+export const GetFolderPermissionApiUrl = (id: string) => {
+    return `${FILES_PERMISSION_FOR_FOLDER_BASE_API_URL}${id}/`
 };

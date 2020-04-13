@@ -311,7 +311,7 @@ export class CoreEffects {
             return action.payload;
         }),
         switchMap((toAdd: { user_id: string; group_id: string }) => {
-            const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
+            const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
             return from(
                 this.http
                     .post(GROUP_MEMBER_API_URL, {
@@ -492,7 +492,7 @@ export class CoreEffects {
             return action.payload;
         }),
         switchMap((toAdd: any) => {
-            const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
+            const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
             return from(
                 this.http.post(HAS_PERMISSION_API_URL, toAdd, privateKeyPlaceholder).pipe(
                     catchError(error => {
@@ -656,7 +656,7 @@ export class CoreEffects {
             return action.payload;
         }),
         switchMap((newUserRequest: NewUserRequest) => {
-            const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
+            const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
             return from(
                 this.http
                     .post(NEW_USER_REQUEST_ADMIT_API_URL, {
@@ -837,7 +837,7 @@ export class CoreEffects {
             return action.payload;
         }),
         switchMap((id: string) => {
-            const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
+            const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
             return from(
                 this.http
                     .post(INACTIVE_USERS_API_URL, {

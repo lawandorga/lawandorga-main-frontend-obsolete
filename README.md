@@ -1,3 +1,10 @@
-# law-orga-frontend
+# Law&Orga Frontend 
 
-Frontend for Law & Orga Project of (Refugee) Law Clinics in Germany
+## General
+Frontend of Law&Orga Project for (Refugee) Law Clinics in Germany.
+
+This Project consists of this Frontend and the corresponding Backend at: XXX
+
+##  Quickstart
+
+To run the frontend just build 
