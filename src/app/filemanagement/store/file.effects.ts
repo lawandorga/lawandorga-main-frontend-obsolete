@@ -181,7 +181,6 @@ export class FilesEffects {
                         return [];
                     }),
                     mergeMap((response: any) => {
-                        console.log('response from loading folder permissions: ', response);
                         let folder_permissions = FolderPermission.getFolderPermissionsFromJsonArray(
                             response.folder_permissions,
                             FolderPermissionFrom.Parent

@@ -41,7 +41,7 @@ export class FolderViewComponent implements OnInit {
     @ViewChild('fileInput')
     fileInput: ElementRef<HTMLInputElement>;
 
-    columns = ['type', 'name', 'last_edited', 'more'];
+    columns = ['type', 'name', 'size', 'last_edited', 'more'];
 
     constructor(
         private route: ActivatedRoute,

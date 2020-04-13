@@ -85,8 +85,6 @@ export class TableEntryInformationFolderPermissionComponent implements OnInit {
         this.coreSB.getGroups(false).subscribe((groups: any) => {
             this.groups = groups;
         });
-        console.log('FolderPermissionsFrom.Children: ', FolderPermissionFrom.Children);
-        console.log('FolderPermissionsFrom.Parent: ', FolderPermissionFrom.Parent);
     }
 
     onAddFolderPermissionClick() {
