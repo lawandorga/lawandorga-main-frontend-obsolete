@@ -23,11 +23,11 @@
                 <ng-container matColumnDef="permission" class="table-entry-information-folder-permission__table__icon">
                     <th mat-header-cell *matHeaderCellDef class="table-entry-information-folder-permission__table__icon"></th>
                     <td mat-cell *matCellDef="let folderPermission" class="table-entry-information-folder-permission__table__icon">
-                        <div *ngIf="folderPermission.permission === 'read_folder && folderPermission.from !== permissionFromChildren'; else write_folder">
+                        <div *ngIf="folderPermission.permission === 'read_folder' && folderPermission.from !== permissionFromChildren; else write_folder">
                             <mat-icon matTooltip="can read folder">library_books</mat-icon>
                         </div>
                         <ng-template #write_folder>
-                            <div *ngIf="folderPermission.permission === 'write_folder && folderPermission.from !== permissionFromChildren'; else visible">
+                            <div *ngIf="folderPermission.permission === 'write_folder' && folderPermission.from !== permissionFromChildren; else visible">
                                 <mat-icon matTooltip="can write folder">library_add</mat-icon>
                             </div>
                         </ng-template>

@@ -63,7 +63,8 @@ export class SidebarComponent implements OnInit {
         permissions: false,
         accept_new_user: false,
         activate_inactive_users: false,
-        process_record_deletion_requests: false
+        process_record_deletion_requests: false,
+        show_files: false,
     };
 
     sidebarItemsOrg = [

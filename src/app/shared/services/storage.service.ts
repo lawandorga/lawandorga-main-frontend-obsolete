@@ -103,16 +103,12 @@ export class StorageService {
     }
 
     upload(dataTransferItemList, path, callback) {
-        console.log('storage, upload, i got', dataTransferItemList, path);
-        console.log('type from upload: ', Array.isArray(dataTransferItemList));
         if (Array.isArray(dataTransferItemList)){
-            console.log('i want to upload files');
             this.uploadFiles(dataTransferItemList, path, callback);
             return;
         }
 
         this.getAllFileEntries(dataTransferItemList).then((fileEntries) => {
-            console.log('i read file entries: ', fileEntries);
             const formData = new FormData();
             const paths = [];
             let count = 0;
@@ -156,9 +152,7 @@ export class StorageService {
                 count++;
                 continue;
             }
-
             count++;
-            console.log('uploadFiles, entry:', entry);
             formData.append('files', entry);
             paths.push(entry.name + ';' + entry.size);
             if (count === files.length) {
@@ -171,7 +165,6 @@ export class StorageService {
                         AppSandboxService.getPrivateKeyPlaceholder()
                     )
                     .subscribe(response => {
-                        // TODO?
                         callback(response);
                     });
             }
@@ -179,7 +172,6 @@ export class StorageService {
     }
 
     async getAllFileEntries(dataTransferItemList: any[]) {
-        console.log('get all file entries here: ', dataTransferItemList);
         const fileEntries = [];
         const queue = [];
         for (let i = 0; i < dataTransferItemList.length; i++) {

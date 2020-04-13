@@ -54,9 +54,7 @@ export class FolderViewComponent implements OnInit {
         this.route.queryParamMap.subscribe(map => {
             if (map.get('path')) {
                 this.path = map.get('path');
-                // console.log('path set: ', this.path);
             } else {
-                // console.log('root');
                 this.path = '';
             }
             this.fileSB.startLoadingFolderInformation(this.path);
@@ -98,8 +96,6 @@ export class FolderViewComponent implements OnInit {
 
     dropped($event) {
         $event.preventDefault();
-        console.log('datatransfer of dropped', $event.dataTransfer);
-        console.log('datatransfer items of dropped', $event.dataTransfer.items);
         this.fileSB.upload($event.dataTransfer.items, this.path);
     }
 

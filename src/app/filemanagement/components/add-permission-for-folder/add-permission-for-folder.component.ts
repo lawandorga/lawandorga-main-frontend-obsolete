@@ -42,9 +42,7 @@ export class AddPermissionForFolderComponent implements OnInit {
         private coreSB: CoreSandboxService,
         public dialogRef: MatDialogRef<AddPermissionForFolderComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any
-    ) {
-        console.log('received data: ', data);
-    }
+    ) {}
 
     ngOnInit() {
         this.coreSB.startLoadingGroups();
@@ -56,7 +54,6 @@ export class AddPermissionForFolderComponent implements OnInit {
 
     selectedGroupChanged(selectedGroup: RestrictedGroup): void {
         this.selectedGroup = selectedGroup;
-        console.log('now selected; ', selectedGroup);
     }
 
     onCloseClick() {
@@ -64,11 +61,6 @@ export class AddPermissionForFolderComponent implements OnInit {
     }
 
     onAddClick() {
-        console.log('i want to add a permission for group ', this.selectedGroup);
-        console.log('my folder is: ', this.data);
-        console.log('selected permission: ', this.selectedPermission);
-
-        // const entry = TableEntry(this.data);
         if (this.selectedPermission){
             this.fileSB.startCreatingFolderPermission(this.data, this.selectedGroup, this.selectedPermission);
             this.dialogRef.close();
