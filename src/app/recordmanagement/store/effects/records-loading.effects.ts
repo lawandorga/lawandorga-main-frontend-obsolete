@@ -196,7 +196,7 @@ export class RecordsLoadingEffects {
             return action.payload;
         }),
         switchMap((birthday: Date) => {
-            const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
+            const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
             return from(
                 this.http
                     .post(CLIENTS_BY_BIRTHDAY_API_URL, {

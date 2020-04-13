@@ -68,9 +68,8 @@ export class RecordsEffects {
     constructor(
         private actions: Actions,
         private http: HttpClient,
-        private recordSB: RecordsSandboxService
-        private appSB: AppSandboxService,
         private recordSB: RecordsSandboxService,
+        private appSB: AppSandboxService,
         private coreSB: CoreSandboxService
     ) {
     }
@@ -320,7 +319,7 @@ export class RecordsEffects {
             return action.payload;
         }),
         mergeMap((payload: FullRecord) => {
-            const privateKeyPlaceholder = this.appSB.getPrivateKeyPlaceholder();
+            const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
             return from(
                 this.http
                     .post(POOL_RECORD_API_URL, {
