@@ -114,7 +114,7 @@
 
             <h1>Already processed</h1>
           <div *ngIf="(recordDeletionRequests | async | recordDeletionProcessed).length === 0; else alreadyProcessedTable">
-            <p>Ops, there are not deletion requests processed until now.</p>
+            <p>There are no deletion requests processed until now.</p>
           </div>
           <ng-template #alreadyProcessedTable>
             <table mat-table [dataSource]="(recordDeletionRequests | async | recordDeletionProcessed)">
