@@ -22,7 +22,7 @@ import {AppSandboxService} from "../../services/app-sandbox.service";
 import {FullUser} from "../../models/user.model";
 import {CoreSandboxService} from "../../services/core-sandbox.service";
 import {
-    PERMISSION_ACCEPT_NEW_USERS_RLC,
+    PERMISSION_ACCEPT_NEW_USERS_RLC, PERMISSION_ACCESS_TO_FILES_RLC,
     PERMISSION_ACTIVATE_INACTIVE_USERS,
     PERMISSION_CAN_ADD_RECORD_RLC, PERMISSION_CAN_CONSULT,
     PERMISSION_CAN_PERMIT_RECORD_PERMISSION_REQUESTS,
@@ -266,6 +266,16 @@ export class SidebarComponent implements OnInit {
         );
 
         this.coreSB.hasPermissionFromStringForOwnRlc(
+            PERMISSION_ACCESS_TO_FILES_RLC,
+            hasPermission => {
+                if (this.show_tab_permissions.show_files !== hasPermission) {
+                    this.show_tab_permissions.show_files = hasPermission;
+                    this.recheckSidebarItems();
+                }
+            }
+        );
+
+        this.coreSB.hasPermissionFromStringForOwnRlc(
             PERMISSION_CAN_CONSULT,
             hasPermission => {
                 this.coreSB.getRlcSettings().subscribe((settings: RlcSettings) => {
@@ -325,6 +335,11 @@ export class SidebarComponent implements OnInit {
         if (!this.show_tab_permissions.process_record_deletion_requests)
             newSidebarItems = SidebarComponent.removeLink(
                 DELETION_REQUESTS_FRONT_URL,
+                newSidebarItems
+            ).newItems;
+        if (!this.show_tab_permissions.show_files)
+            newSidebarItems = SidebarComponent.removeLink(
+                FILES_FRONT_URL,
                 newSidebarItems
             ).newItems;
         if (!this.show_tab_permissions.record_pool)
