@@ -47,6 +47,8 @@ export class AppComponent implements OnDestroy, OnInit{
     privacyStatementUrl = PRIVACY_STATEMENT_FRONT_URL;
     legalNoticeUrl = LEGAL_NOTICE_FRONT_URL;
 
+    
+
     constructor(
         private route: ActivatedRoute,
         private router: Router,
