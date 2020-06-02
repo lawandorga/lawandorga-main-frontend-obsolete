@@ -16,17 +16,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit } from "@angular/core";
-import { MatDialogRef } from "@angular/material";
-import { CoreSandboxService } from "../../services/core-sandbox.service";
-import { FullGroup } from "../../models/group.model";
-import { RestrictedUser } from "../../models/user.model";
-import {alphabeticalSorterByField} from '../../../shared/other/sorter-helper';
+import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material';
+import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { FullGroup } from '../../models/group.model';
+import { RestrictedUser } from '../../models/user.model';
+import { alphabeticalSorterByField } from '../../../shared/other/sorter-helper';
 
 @Component({
-    selector: "app-add-group-member",
-    templateUrl: "./add-group-member.component.html",
-    styleUrls: ["./add-group-member.component.scss"]
+    selector: 'app-add-group-member',
+    templateUrl: './add-group-member.component.html',
+    styleUrls: ['./add-group-member.component.scss']
 })
 export class AddGroupMemberComponent implements OnInit {
     group_members: RestrictedUser[];
@@ -37,7 +37,8 @@ export class AddGroupMemberComponent implements OnInit {
     constructor(
         public dialogRef: MatDialogRef<AddGroupMemberComponent>,
         private coreSB: CoreSandboxService
-    ) {}
+    ) {
+    }
 
     ngOnInit() {
         this.coreSB.startLoadingOtherUsers();
@@ -67,18 +68,11 @@ export class AddGroupMemberComponent implements OnInit {
     }
 
     checkUsersToShow() {
-        if (this.group_members && this.other_users){
+        if (this.group_members && this.other_users) {
             this.users_to_show = [];
             this.other_users.forEach((other_user: RestrictedUser) => {
-                if (
-                    this.group_members &&
-                    this.group_members.filter(
-                        (group_member: RestrictedUser) =>
-                            group_member.id === other_user.id
-                    ).length === 0
-                ) {
+                if (!this.group_members.find(e => e.id === other_user.id))
                     this.users_to_show.push(other_user);
-                }
             });
         }
     }
