@@ -84,9 +84,17 @@ export class AuthEffects {
             return from(
                 this.http.post(LOGIN_API_URL, authData).pipe(
                     catchError(error => {
-                        this.coreSB.showErrorSnackBar(
-                            `Login not successfull: ${error.error.detail}`
-                        );
+                        console.log('error: ', error);
+                        if(error.name === 'HttpErrorResponse'){
+                            this.coreSB.showErrorSnackBar(
+                                `Login not successful: error from server. Try again later.`
+                            );
+                        } else {
+                            this.coreSB.showErrorSnackBar(
+                                `Login not successful: ${error.error.detail}`
+                            );
+                        }
+
                         return [];
                     }),
                     mergeMap(
