@@ -66,7 +66,10 @@ export class GroupDetailsComponent implements OnInit {
     }
 
     onAddGroupMemberClick() {
-        this.dialog.open(AddGroupMemberComponent);
+        this.dialog.open(AddGroupMemberComponent, {
+            maxHeight: '50vh',
+            maxWidth: '50vh'
+        });
     }
 
     onUserClick(user: RestrictedUser) {

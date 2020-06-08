@@ -22,6 +22,7 @@ import { CoreSandboxService } from '../../services/core-sandbox.service';
 import { FullGroup } from '../../models/group.model';
 import { RestrictedUser } from '../../models/user.model';
 import { alphabeticalSorterByField } from '../../../shared/other/sorter-helper';
+import { Observable, of } from 'rxjs';
 
 @Component({
     selector: 'app-add-group-member',
@@ -32,6 +33,10 @@ export class AddGroupMemberComponent implements OnInit {
     group_members: RestrictedUser[];
     other_users: RestrictedUser[];
     users_to_show: RestrictedUser[];
+
+    observable_users_to_show: Observable<RestrictedUser[]>;
+    selectedUsers: RestrictedUser[];
+
     group_id: string;
 
     constructor(
@@ -63,10 +68,6 @@ export class AddGroupMemberComponent implements OnInit {
         this.dialogRef.close();
     }
 
-    onAddGroupMemberClick(user: RestrictedUser) {
-        this.coreSB.addGroupMember(user.id, this.group_id);
-    }
-
     checkUsersToShow() {
         if (this.group_members && this.other_users) {
             this.users_to_show = [];
@@ -74,6 +75,17 @@ export class AddGroupMemberComponent implements OnInit {
                 if (!this.group_members.find(e => e.id === other_user.id))
                     this.users_to_show.push(other_user);
             });
+            this.observable_users_to_show = of(this.users_to_show);
         }
+    }
+
+    onAddUsersClick(){
+        this.coreSB.addGroupMembers(this.selectedUsers.map((restrictedUser: RestrictedUser) =>   restrictedUser.id  ), this.group_id);
+        this.dialogRef.close();
+
+    }
+
+    selectedUsersChanged(selectedUsers: RestrictedUser[]){
+        this.selectedUsers = selectedUsers;
     }
 }
