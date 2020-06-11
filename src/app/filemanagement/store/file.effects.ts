@@ -74,6 +74,10 @@ export class FilesEffects {
             return action.payload;
         }),
         mergeMap((path: string) => {
+            if (path.endsWith(" ")){
+                path = path + '//'
+            }
+
             return from(
                 this.http.get(GetFolderInformationApiUrl(path)).pipe(
                     catchError(error => {
