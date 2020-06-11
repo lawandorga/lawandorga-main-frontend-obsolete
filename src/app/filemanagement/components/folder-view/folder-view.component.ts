@@ -24,6 +24,7 @@ import { GetFolderFrontUrlRelative } from '../../../statics/frontend_links.stati
 import { createUrlResolverWithoutPackagePrefix } from '@angular/compiler';
 import { SharedSandboxService } from '../../../shared/services/shared-sandbox.service';
 import { compareLogSummaries } from '@angular/core/src/render3/styling/class_and_style_bindings';
+import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
 
 @Component({
     selector: 'app-folder-view',
@@ -47,7 +48,8 @@ export class FolderViewComponent implements OnInit {
         private route: ActivatedRoute,
         private fileSB: FilesSandboxService,
         private router: Router,
-        private sharedSB: SharedSandboxService
+        private sharedSB: SharedSandboxService,
+        private coreSB: CoreSandboxService
     ) {}
 
     ngOnInit() {
@@ -153,9 +155,13 @@ export class FolderViewComponent implements OnInit {
             saveLabel: 'save',
             saveColor: 'primary',
             title: 'new folder'
-        }, (result) => {
+        }, (result: string) => {
             if (result && result !== ''){
-                this.fileSB.startCreatingNewFolder(result, this.currentFolder);
+                if (result.includes('/')){
+                   this.coreSB.showErrorSnackBar("You can't use \/ in folder names.")
+                } else {
+                    this.fileSB.startCreatingNewFolder(result, this.currentFolder);
+                }
             }
         })
     }

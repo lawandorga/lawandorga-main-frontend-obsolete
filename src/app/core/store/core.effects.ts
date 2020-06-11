@@ -38,8 +38,6 @@ import {
     START_LOADING_SPECIAL_GROUP,
     StartLoadingSpecialGroup,
     SET_SPECIAL_GROUP,
-    START_ADDING_GROUP_MEMBER,
-    StartAddingGroupMember,
     START_REMOVING_GROUP_MEMBER,
     StartRemovingGroupMember,
     START_LOADING_SPECIAL_PERMISSION,
@@ -79,7 +77,11 @@ import {
     StartActivatingInactiveUser,
     REMOVE_INACTIVE_USER,
     START_CHECKING_USER_HAS_PERMISSIONS,
-    SET_USER_PERMISSIONS, START_LOADING_RLC_SETTINGS, SET_RLC_SETTINGS
+    SET_USER_PERMISSIONS,
+    START_LOADING_RLC_SETTINGS,
+    SET_RLC_SETTINGS,
+    START_ADDING_GROUP_MEMBERS,
+    StartAddingGroupMembers
 } from './core.actions';
 import {
     CREATE_PROFILE_API_URL,
@@ -109,8 +111,8 @@ import { HasPermission, Permission } from "../models/permission.model";
 import { RestrictedRlc } from "../models/rlc.model";
 import { NewUserRequest } from "../models/new_user_request.model";
 import { AppSandboxService } from '../services/app-sandbox.service';
-import { placeholdersToParams } from '@angular/compiler/src/render3/view/i18n/util';
 import { RlcSettings } from '../models/rlc_settings.model';
+import { alphabeticalSorterByField } from '../../shared/other/sorter-helper';
 
 @Injectable()
 export class CoreEffects {
@@ -292,6 +294,7 @@ export class CoreEffects {
                     }),
                     mergeMap((response: any) => {
                         const group = FullGroup.getFullGroupFromJson(response);
+                        alphabeticalSorterByField(group.members, 'name');
                         return [
                             {
                                 type: SET_SPECIAL_GROUP,
@@ -305,25 +308,25 @@ export class CoreEffects {
     );
 
     @Effect()
-    startAddingGroupMember = this.actions.pipe(
-        ofType(START_ADDING_GROUP_MEMBER),
-        map((action: StartAddingGroupMember) => {
+    startAddingGroupMembers = this.actions.pipe(
+        ofType(START_ADDING_GROUP_MEMBERS),
+        map((action: StartAddingGroupMembers) => {
             return action.payload;
         }),
-        switchMap((toAdd: { user_id: string; group_id: string }) => {
+        switchMap((toAdd: { user_ids: string[]; group_id: string }) => {
             const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
             return from(
                 this.http
                     .post(GROUP_MEMBER_API_URL, {
                         action: "add",
-                        user_id: toAdd.user_id,
+                        user_ids: toAdd.user_ids,
                         group_id: toAdd.group_id
                     }, privateKeyPlaceholder)
                     .pipe(
                         catchError(error => {
                             this.snackbar.showErrorSnackBar(
                                 "error at adding group member: " +
-                                    error.error.detail
+                                error.error.detail
                             );
                             return [];
                         }),
@@ -349,13 +352,13 @@ export class CoreEffects {
         map((action: StartRemovingGroupMember) => {
             return action.payload;
         }),
-        switchMap((toAdd: { user_id: string; group_id: string }) => {
+        switchMap((toRemove: { user_id: string; group_id: string }) => {
             return from(
                 this.http
                     .post(GROUP_MEMBER_API_URL, {
                         action: "remove",
-                        user_id: toAdd.user_id,
-                        group_id: toAdd.group_id
+                        user_ids: [toRemove.user_id],
+                        group_id: toRemove.group_id
                     })
                     .pipe(
                         catchError(error => {
