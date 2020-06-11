@@ -54,7 +54,7 @@ export const SET_USER_RECORD_STATES = "SET_USER_RECORD_STATES";
 export const SET_USER_STATES = "SET_USER_STATES";
 export const START_ACCEPTING_USER = "START_ACCEPTING_USER";
 export const START_ADDING_GROUP = "START_ADDING_GROUP";
-export const START_ADDING_GROUP_MEMBER = "START_ADDING_GROUP_MEMBER";
+export const START_ADDING_GROUP_MEMBERS = "START_ADDING_GROUP_MEMBERS";
 export const START_ADDING_HAS_PERMISSION = "START_ADDING_HAS_PERMISSION";
 export const START_ADMITTING_NEW_USER_REQUEST =
     "START_ADMITTING_NEW_USER_REQUEST";
@@ -226,10 +226,10 @@ export class StartAddingGroup implements Action {
     constructor(public payload: any) {}
 }
 
-export class StartAddingGroupMember implements Action {
-    readonly type = START_ADDING_GROUP_MEMBER;
+export class StartAddingGroupMembers implements Action {
+    readonly type = START_ADDING_GROUP_MEMBERS;
 
-    constructor(public payload: { user_id: string; group_id: string }) {}
+    constructor(public payload: { user_ids: string[]; group_id: string }) {}
 }
 
 export class StartAddingHasPermission implements Action {
@@ -393,7 +393,7 @@ export type CoreActions =
     | SetUserStates
     | StartAcceptingUser
     | StartAddingGroup
-    | StartAddingGroupMember
+    | StartAddingGroupMembers
     | StartAddingHasPermission
     | StartAdmittingNewUserRequest
     | StartActivatingInactiveUser
