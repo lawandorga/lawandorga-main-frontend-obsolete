@@ -16,8 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
+.groups-list__card-holder {
+    display: flex;
+    justify-content: center;
+    //width: 750px;
+}
+
 .groups-list__card {
-    max-width: 750px;
+    //max-width: 750px;
+    width: 750px;
+
 }
 
 
