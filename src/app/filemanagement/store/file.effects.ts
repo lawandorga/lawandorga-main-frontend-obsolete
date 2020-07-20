@@ -26,7 +26,7 @@ import {
     SET_FILES,
     SET_FOLDER_HAS_PERMISSIONS,
     SET_FOLDER_PERMISSIONS,
-    SET_FOLDERS,
+    SET_FOLDERS, SET_WRITE_PERMISSION,
     START_CREATING_FOLDER_PERMISSION, START_CREATING_NEW_FOLDER,
     START_DELETING_FILES_AND_FOLDERS,
     START_DELETING_FOLDER_PERMISSION,
@@ -92,9 +92,12 @@ export class FilesEffects {
                         const current_folder = TableEntry.getFolderTableEntryFromJson(
                             response.current_folder
                         );
+                        const write_permission = response.write_permission;
+
                         return [
                             { type: SET_FOLDERS, payload: folders },
                             { type: SET_FILES, payload: files },
+                            { type: SET_WRITE_PERMISSION, payload: write_permission },
                             { type: SET_CURRENT_FOLDER, payload: current_folder }
                         ];
                     })
@@ -125,7 +128,7 @@ export class FilesEffects {
                             this.coreSB.showSuccessSnackBar(
                                 'successfully deleted files and folders'
                             );
-                            // console.log('response from deletion', response);
+
                             return [
                                 {
                                     type: START_LOADING_FOLDER,
@@ -157,7 +160,7 @@ export class FilesEffects {
                             return [];
                         }),
                         mergeMap((response: any) => {
-                            // console.log('response from deletion', response);
+
                             if (payload.entries.length === 1) {
                                 payload.path = payload.entries[0].name;
                             } else if (payload.path === '') {

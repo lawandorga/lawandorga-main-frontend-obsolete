@@ -21,10 +21,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FilesSandboxService } from '../../services/files-sandbox.service';
 import { FilesTypes, TableEntry } from '../../models/table-entry.model';
 import { GetFolderFrontUrlRelative } from '../../../statics/frontend_links.statics';
-import { createUrlResolverWithoutPackagePrefix } from '@angular/compiler';
 import { SharedSandboxService } from '../../../shared/services/shared-sandbox.service';
-import { compareLogSummaries } from '@angular/core/src/render3/styling/class_and_style_bindings';
 import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
+import { PERMISSION_WRITE_ALL_FOLDERS_RLC } from '../../../statics/permissions.statics';
 
 @Component({
     selector: 'app-folder-view',
@@ -36,6 +35,8 @@ export class FolderViewComponent implements OnInit {
     path: string;
     informationOpened = false;
     informationEntry: TableEntry;
+
+    write_permission = false;
 
     currentFolder: TableEntry;
 
@@ -84,6 +85,19 @@ export class FolderViewComponent implements OnInit {
             this.currentFolder = currentFolder;
             this.informationEntry = this.currentFolder;
         });
+
+        this.fileSB.getCurrentFolderWritePermission().subscribe((write_permission: boolean) => {
+            console.log('write permission: ', write_permission);
+            this.write_permission = this.write_permission || write_permission;
+        });
+
+        this.coreSB.hasPermissionFromStringForOwnRlc(
+            PERMISSION_WRITE_ALL_FOLDERS_RLC,
+            hasPermission => {
+                console.log('overall write permission for folders: ', hasPermission);
+                this.write_permission = this.write_permission || hasPermission;
+            }
+        );
     }
 
     onEntryClick(entry: TableEntry): void {
