@@ -17,8 +17,14 @@
  */
 
 
+import { NotificationEvent, NotificationEventSubject } from '../models/notification.enum';
+
 export class NotificationTextBuilderHelper{
-    static generateNotificationText(event_subject: string, event: string, ref_text: string): string {
-        return "";
+    static generateNotificationText(event_subject: string, event: string, ref_text: string, source_user_name: string): string {
+        if (event_subject === NotificationEventSubject.RECORD && event === NotificationEvent.CREATED){
+            return `You were assigned as Consultant for Record ${ref_text}`;
+        }
+        const text = `${source_user_name} ${event.toLowerCase()} ${event_subject.toLowerCase().replace("_", " ")} ${ref_text}`;
+        return text;
     }
 }

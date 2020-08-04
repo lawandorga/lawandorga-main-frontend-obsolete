@@ -90,7 +90,8 @@ export const START_SAVING_USER = "START_SAVING_USER";
 export const UPDATE_NEW_USER_REQUEST = "UPDATE_NEW_USER_REQUEST";
 export const START_LOADING_RLC_SETTINGS = "START_LOADING_RLC_SETTINGS";
 export const SET_RLC_SETTINGS = "SET_RLC_SETTINGS";
-
+export const DECREMENT_NOTIFICATION_COUNTER = "DECREMENT_NOTIFICATION_COUNTER";
+export const INCREMENT_NOTIFICATION_COUNTER = "INCREMENT_NOTIFICATION_COUNTER";
 
 export class AddGroup implements Action {
     readonly type = ADD_GROUP;
@@ -375,6 +376,14 @@ export class SetNotifications implements Action {
     constructor(public payload: number) {}
 }
 
+export class IncrementNotificationCounter implements Action {
+    readonly type = INCREMENT_NOTIFICATION_COUNTER;
+}
+
+export class DecrementNotificationCounter implements Action {
+    readonly type = DECREMENT_NOTIFICATION_COUNTER;
+}
+
 export type CoreActions =
     | AddGroup
     | AddSingleHasPermission
@@ -427,4 +436,6 @@ export type CoreActions =
     | StartCheckingUserHasPermissions
     | StartLoadingRlcSettings
     | SetRlcSettings
-    | SetNotifications;
+    | SetNotifications
+    | IncrementNotificationCounter
+    | DecrementNotificationCounter;

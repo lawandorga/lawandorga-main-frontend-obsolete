@@ -18,9 +18,11 @@
 
 import { ForeignUser, FullUser, RestrictedUser } from '../models/user.model';
 import {
-    CoreActions,
     ADD_GROUP,
     ADD_SINGLE_HAS_PERMISSION,
+    CoreActions,
+    DECREMENT_NOTIFICATION_COUNTER,
+    INCREMENT_NOTIFICATION_COUNTER,
     REMOVE_ACTUAL_HAS_PERMISSIONS,
     REMOVE_INACTIVE_USER,
     REMOVE_SINGLE_HAS_PERMISSION,
@@ -246,6 +248,16 @@ export function coreReducer(state = initialState, action: CoreActions) {
             return {
                 ...state,
                 notifications: action.payload
+            };
+        case INCREMENT_NOTIFICATION_COUNTER:
+            return {
+                ...state,
+                notifications: state.notifications + 1
+            };
+        case DECREMENT_NOTIFICATION_COUNTER:
+            return {
+                ...state,
+                notifications: state.notifications - 1
             };
         default:
             return state;

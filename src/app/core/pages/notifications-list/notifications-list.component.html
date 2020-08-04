@@ -22,8 +22,7 @@
 
     </mat-card-header>
     <mat-card-content>
-        <table mat-table [dataSource]="dataSource" matSort>
-<!--            glocke, red if not read, 'absender-->
+        <table mat-table [dataSource]="data" matSort matSortActive="created" matSortDisableClear matSortDirection="desc">
             <ng-container matColumnDef="id">
                 <th mat-header-cell *matHeaderCellDef>id</th>
                 <td mat-cell *matCellDef="let notification">
@@ -32,14 +31,13 @@
             </ng-container>
 
             <ng-container matColumnDef="read">
-                <th mat-header-cell *matHeaderCellDef>status</th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>status</th>
                 <td mat-cell *matCellDef="let notification">
-                    {{notification.id}}
                     <div *ngIf="notification.read; else noNotification">
-                        <mat-icon>notifications_none</mat-icon>
+                        <mat-icon (click)="onReadClick(notification)">notifications_none</mat-icon>
                     </div>
                     <ng-template #noNotification>
-                        <mat-icon class="notifications-list__unread">notifications_active</mat-icon>
+                        <mat-icon class="notifications-list__unread" (click)="onReadClick(notification)">notifications_active</mat-icon>
                     </ng-template>
                 </td>
             </ng-container>
@@ -52,16 +50,16 @@
             </ng-container>
 
             <ng-container matColumnDef="source_user">
-                <th mat-header-cell *matHeaderCellDef>source</th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>source</th>
                 <td mat-cell *matCellDef="let notification">
                     {{notification.source_user.name}}
                 </td>
             </ng-container>
 
             <ng-container matColumnDef="text">
-                <th mat-header-cell *matHeaderCellDef></th>
+                <th mat-header-cell *matHeaderCellDef>description</th>
                 <td mat-cell *matCellDef="let notification">
-                    text
+                    {{notification.text}}
                 </td>
             </ng-container>
 
@@ -70,7 +68,7 @@
             <tr mat-row *matRowDef="let row; columns: columns;"></tr>
 
         </table>
-        <mat-paginator [pageSizeOptions]="[25, 50, 100]"></mat-paginator>
+        <mat-paginator [length]="results_length" [pageSizeOptions]="[25, 50, 100]"></mat-paginator>
 
 
     </mat-card-content>

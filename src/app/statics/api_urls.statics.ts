@@ -52,6 +52,7 @@ export const RECORD_POOL_API_URL = base + 'api/records/record_pool/';
 export const POOL_RECORD_API_URL = base + 'api/records/pool_records/';
 export const POOL_CONSULTANT_API_URL = base + 'api/records/pool_consultants/';
 export const RLC_SETTINGS_API_URL = base + 'api/my_rlc_settings/';
+export const NOTIFICATIONS_API_URL = base + 'api/notifications/';
 
 const CHECK_USER_ACTIVATION_API_URL = base + "api/check_user_activation_link/";
 const ACTIVATE_USER_ACTIVATION_API_URL = "base + api/activate_user_activation_link/";

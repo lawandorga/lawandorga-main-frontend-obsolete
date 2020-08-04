@@ -17,25 +17,11 @@
  */
 
 import { RestrictedUser } from './user.model';
-
-export enum NotificationEventSubject {
-    RECORD = 'RECORD',
-    RECORD_MESSAGE = 'RECORD_MESSAGE',
-    RECORD_DOCUMENT = 'RECORD_DOCUMENT',
-    RECORD_PERMISSION_REQUEST = 'RECORD_PERMISSION_REQUEST',
-    GROUP = 'GROUP',
-    FILE = 'FILE'
-}
-
-export enum NotificationEvent {
-    CREATED = 'CREATED',
-    DELETED = 'DELETED',
-    MOVED = 'MOVED',
-    UPDATED = 'UPDATED',
-    ADDED = 'ADDED'
-}
+import { NotificationTextBuilderHelper } from '../services/notification-text-builder.helper';
 
 export class Notification {
+    public text: string;
+
     constructor(
         public id: string,
         public source_user: RestrictedUser,
@@ -44,8 +30,7 @@ export class Notification {
         public ref_id: string,
         public ref_text: string,
         public read: boolean,
-        public created: Date,
-        public text: string
+        public created: Date
     ) {
         this.id = id;
         this.source_user = source_user;
@@ -54,7 +39,12 @@ export class Notification {
         this.ref_id = ref_id;
         this.ref_text = ref_text;
         this.read = read;
-        this.text = text;
+        this.text = NotificationTextBuilderHelper.generateNotificationText(
+            event_subject,
+            event,
+            ref_text,
+            this.source_user.name
+        );
     }
 
     static getNotificationFromJson(json: {
@@ -75,8 +65,7 @@ export class Notification {
             json.ref_id,
             json.ref_text,
             json.read,
-            new Date(json.created),
-            ''
+            new Date(json.created)
         );
     }
 

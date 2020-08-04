@@ -25,6 +25,7 @@ import { AppState } from "../../store/app.reducers";
 import { CoreState } from "../store/core.reducers";
 import { ForeignUser, FullUser, RestrictedUser } from "../models/user.model";
 import {
+    DecrementNotificationCounter, IncrementNotificationCounter,
     RemoveActualHasPermissions,
     ResetSpecialForeignUser,
     ResetSpecialGroup,
@@ -496,4 +497,13 @@ export class CoreSandboxService {
             })
         )
     }
+
+    decrementNotificationCounter(): void {
+        this.coreStateStore.dispatch(new DecrementNotificationCounter())
+    }
+
+    incrementNotificationCounter(): void {
+        this.coreStateStore.dispatch(new IncrementNotificationCounter())
+    }
+
 }

@@ -17,58 +17,59 @@
  */
 
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { RecordsSandboxService } from "../../services/records-sandbox.service";
+import { RecordsSandboxService } from '../../services/records-sandbox.service';
 import { Observable, Subscription } from 'rxjs';
-import {
-    isRestrictedRecord,
-    RestrictedRecord
-} from "../../models/record.model";
-import { ActivatedRoute, Router } from "@angular/router";
-import { Tag } from "../../models/tag.model";
+import { isRestrictedRecord, RestrictedRecord } from '../../models/record.model';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Tag } from '../../models/tag.model';
 import {
     GetRecordFrontUrl,
     GetRecordSearchFrontUrl
-} from "../../../statics/frontend_links.statics";
-import { tap } from "rxjs/internal/operators/tap";
-import {MatSort, MatTableDataSource} from '@angular/material';
+} from '../../../statics/frontend_links.statics';
+import { tap } from 'rxjs/internal/operators/tap';
+import { MatSort, MatTableDataSource } from '@angular/material';
 
 @Component({
-    selector: "app-records",
-    templateUrl: "./records-list.component.html",
-    styleUrls: ["./records-list.component.scss"]
+    selector: 'app-records',
+    templateUrl: './records-list.component.html',
+    styleUrls: ['./records-list.component.scss']
 })
 export class RecordsListComponent implements OnInit, OnDestroy {
     timeout = 400;
 
-    columns = ["access", "token", "state", "consultants", "tags"];
-    value = "";
+    columns = ['access', 'token', 'state', 'consultants', 'tags'];
+    value = '';
     timer = null;
+
+    subscriptions: Subscription[] = [];
 
     dataSource;
     @ViewChild(MatSort) sort: MatSort;
-
-    recordListSubscription: Subscription;
 
     constructor(
         private recordsSandbox: RecordsSandboxService,
         private route: ActivatedRoute,
         private router: Router
     ) {
-        this.route.queryParamMap.subscribe(map => {
-            if (map.get("search")) {
-                this.recordsSandbox.loadRecords(map.get("search"));
-                this.value = map.get("search");
-            } else {
-                this.recordsSandbox.loadRecords();
-            }
-        });
+        this.subscriptions.push(
+            this.route.queryParamMap.subscribe(map => {
+                if (map.get('search')) {
+                    this.recordsSandbox.loadRecords(map.get('search'));
+                    this.value = map.get('search');
+                } else {
+                    this.recordsSandbox.loadRecords();
+                }
+            })
+        );
     }
 
     ngOnInit() {
-        this.recordListSubscription = this.recordsSandbox.getRecords().subscribe(records => {
-            this.dataSource = new MatTableDataSource(records);
-            this.dataSource.sort = this.sort;
-        });
+        this.subscriptions.push(
+            this.recordsSandbox.getRecords().subscribe(records => {
+                this.dataSource = new MatTableDataSource(records);
+                this.dataSource.sort = this.sort;
+            })
+        );
 
         // this.records = this.recordsSandbox.getRecords().pipe(
         //     tap(results => {
@@ -94,7 +95,7 @@ export class RecordsListComponent implements OnInit, OnDestroy {
     }
 
     onSearchClick() {
-        if (this.value && this.value !== "") {
+        if (this.value && this.value !== '') {
             this.router.navigateByUrl(GetRecordSearchFrontUrl(this.value));
         } else this.router.navigateByUrl(`records`);
     }
@@ -117,6 +118,8 @@ export class RecordsListComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.recordListSubscription.unsubscribe();
+        for (const sub of this.subscriptions) {
+            sub.unsubscribe();
+        }
     }
 }

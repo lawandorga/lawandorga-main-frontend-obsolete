@@ -1,6 +1,6 @@
-/*!
+/*
  * law&orga - record and organization management software for refugee law clinics
- * Copyright (C) 2019  Dominik Walser
+ * Copyright (C) 2020  Dominik Walser
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -16,8 +16,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-@import "~src/styles/basic";
+export enum NotificationEventSubject {
+    RECORD = 'RECORD',
+    RECORD_MESSAGE = 'RECORD_MESSAGE',
+    RECORD_DOCUMENT = 'RECORD_DOCUMENT',
+    RECORD_PERMISSION_REQUEST = 'RECORD_PERMISSION_REQUEST',
+    GROUP = 'GROUP',
+    FILE = 'FILE'
+}
 
-.notifications-list__unread {
-    color: $c-warn;
+export enum NotificationEvent {
+    CREATED = 'CREATED',
+    DELETED = 'DELETED',
+    MOVED = 'MOVED',
+    UPDATED = 'UPDATED',
+    ADDED = 'ADDED'
 }
