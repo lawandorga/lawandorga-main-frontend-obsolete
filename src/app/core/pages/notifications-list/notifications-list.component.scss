@@ -18,6 +18,23 @@
 
 @import "~src/styles/basic";
 
+.notifications-list__card {
+    max-width: 800px;
+}
+
 .notifications-list__unread {
     color: $c-warn;
+}
+
+.notifications-list__column {
+    margin-right: 10px;
+    min-width: 110px;
+}
+
+.notifications-list__created-column {
+    margin-left: 20px;
+}
+
+.notifications-list__table {
+    width: 100%;
 }

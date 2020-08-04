@@ -16,15 +16,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-
 import { NotificationEvent, NotificationEventSubject } from '../models/notification.enum';
 
-export class NotificationTextBuilderHelper{
-    static generateNotificationText(event_subject: string, event: string, ref_text: string, source_user_name: string): string {
-        if (event_subject === NotificationEventSubject.RECORD && event === NotificationEvent.CREATED){
+export class NotificationTextBuilderHelper {
+    static generateNotificationText(
+        event_subject: string,
+        event: string,
+        ref_text: string,
+        source_user_name: string
+    ): string {
+        if (
+            event_subject === NotificationEventSubject.RECORD &&
+            event === NotificationEvent.CREATED
+        ) {
             return `You were assigned as Consultant for Record ${ref_text}`;
         }
-        const text = `${source_user_name} ${event.toLowerCase()} ${event_subject.toLowerCase().replace("_", " ")} ${ref_text}`;
-        return text;
+        return `${source_user_name} ${event.toLowerCase().split('.')[1]} ${
+            event_subject
+                .toLowerCase()
+                .replace('_', ' ')
+                .split('.')[1]
+        } ${ref_text}.`;
     }
 }

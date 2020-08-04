@@ -33,7 +33,7 @@ import { NOTIFICATIONS_API_URL } from '../../../statics/api_urls.statics';
     styleUrls: ['./notifications-list.component.scss']
 })
 export class NotificationsListComponent implements AfterViewInit {
-    columns = ['id', 'read', 'created', 'source_user', 'text'];
+    columns = ['id', 'read', 'created', 'text'];
 
     data: Notification[] = [];
     results_length = 0;
