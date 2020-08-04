@@ -285,6 +285,7 @@ export class SidebarComponent implements OnInit,  OnDestroy {
                 });
             }
         );
+        this.recheckSidebarItems();
 
         this.subscriptions.push(this.coreSB.getUser().subscribe((user: FullUser) => {
             this.name = user ? user.name : "";

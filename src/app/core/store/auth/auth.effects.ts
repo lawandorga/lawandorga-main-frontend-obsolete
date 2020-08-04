@@ -86,15 +86,15 @@ export class AuthEffects {
                 this.http.post(LOGIN_API_URL, authData).pipe(
                     catchError(error => {
                         console.log('error: ', error);
-                        if(error.name === 'HttpErrorResponse'){
-                            this.coreSB.showErrorSnackBar(
-                                `Login not successful: error from server. Try again later.`
-                            );
-                        } else {
+                        // if (error.name === 'HttpErrorResponse'){
+                        //     this.coreSB.showErrorSnackBar(
+                        //         `Login not successful: error from server. Try again later.`
+                        //     );
+                        // } else {
                             this.coreSB.showErrorSnackBar(
                                 `Login not successful: ${error.error.detail}`
                             );
-                        }
+                        // }
 
                         return [];
                     }),

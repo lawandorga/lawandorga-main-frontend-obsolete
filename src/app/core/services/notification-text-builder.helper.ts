@@ -31,11 +31,10 @@ export class NotificationTextBuilderHelper {
         ) {
             return `You were assigned as Consultant for Record ${ref_text}`;
         }
-        return `${source_user_name} ${event.toLowerCase().split('.')[1]} ${
+        return `${source_user_name} ${event.toLowerCase()} ${
             event_subject
                 .toLowerCase()
                 .replace('_', ' ')
-                .split('.')[1]
         } ${ref_text}.`;
     }
 }

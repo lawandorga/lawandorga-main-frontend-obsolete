@@ -26,6 +26,9 @@ import { MatSort } from '@angular/material/sort';
 import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { NOTIFICATIONS_API_URL } from '../../../statics/api_urls.statics';
+import { NotificationEventSubject } from '../../models/notification.enum';
+import { GetRecordFrontUrl } from '../../../statics/frontend_links.statics';
+import { not } from 'rxjs/internal-compatibility';
 
 @Component({
     selector: 'app-notifications-list',
@@ -33,7 +36,7 @@ import { NOTIFICATIONS_API_URL } from '../../../statics/api_urls.statics';
     styleUrls: ['./notifications-list.component.scss']
 })
 export class NotificationsListComponent implements AfterViewInit {
-    columns = ['id', 'read', 'created', 'text'];
+    columns = ['read', 'created', 'text'];
 
     data: Notification[] = [];
     results_length = 0;
@@ -73,6 +76,7 @@ export class NotificationsListComponent implements AfterViewInit {
             )
             .subscribe((data: NotificationResponse) => {
                 this.data = Notification.getNotificationsFromJsonArray(data.results);
+                console.log('data: ', this.data);
             });
     }
 
@@ -100,6 +104,16 @@ export class NotificationsListComponent implements AfterViewInit {
                 }
                 this.change.emit();
             });
+    }
+
+    onNotificationClick(notification: Notification): void {
+        if (
+            notification.event_subject === NotificationEventSubject.RECORD ||
+            notification.event_subject === NotificationEventSubject.RECORD_DOCUMENT ||
+            notification.event_subject === NotificationEventSubject.RECORD_MESSAGE
+        ) {
+            this.router.navigateByUrl(GetRecordFrontUrl(notification.ref_id));
+        }
     }
 }
 

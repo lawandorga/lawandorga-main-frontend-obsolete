@@ -34,15 +34,24 @@ export class Notification {
     ) {
         this.id = id;
         this.source_user = source_user;
-        this.event_subject = event_subject;
-        this.event = event;
+
+        if (event_subject.includes("."))
+            this.event_subject = event_subject.split(".")[1];
+        else
+            this.event_subject = event_subject;
+
+        if (event.includes("."))
+            this.event = event.split(".")[1]
+        else
+            this.event = event;
+
         this.ref_id = ref_id;
         this.ref_text = ref_text;
         this.read = read;
         this.text = NotificationTextBuilderHelper.generateNotificationText(
-            event_subject,
-            event,
-            ref_text,
+            this.event_subject,
+            this.event,
+            this.ref_text,
             this.source_user.name
         );
     }
