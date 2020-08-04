@@ -17,8 +17,9 @@
  */
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
+const hash = require('object-hash');
 import { FullRecord } from '../../../models/record.model';
 import { RecordsSandboxService } from '../../../services/records-sandbox.service';
 import { FullClient } from '../../../models/client.model';
@@ -63,6 +64,9 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
         show_yielding: false,
     };
 
+    settingsSubscription: Subscription;
+    specialRecordSubscription: Subscription;
+
     constructor(private recordSB: RecordsSandboxService, private coreSB: CoreSandboxService, private sharedSB: SharedSandboxService) {
         this.recordEditForm = new FormGroup({
             client_name: new FormControl(''),
@@ -89,6 +93,8 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.recordSB.resetFullClientInformation();
+        this.settingsSubscription.unsubscribe();
+        this.specialRecordSubscription.unsubscribe();
     }
 
     ngOnInit() {
@@ -102,7 +108,7 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
 
         // there but not changeable
         // first_contact_date, last_edited, token
-        this.recordSB
+        this.specialRecordSubscription = this.recordSB
             .getSpecialRecord()
             .subscribe(
                 (special_record: {
@@ -112,6 +118,7 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
                     record_documents: RecordDocument[];
                     record_messages: RecordMessage[];
                 }) => {
+                    console.log('special record subscription happening');
                     this.record = special_record.record;
                     this.client = special_record.client;
 
@@ -127,7 +134,7 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
                 }
             );
 
-        this.coreSB.getRlcSettings().subscribe((settings: RlcSettings) => {
+        this.settingsSubscription = this.coreSB.getRlcSettings().subscribe((settings: RlcSettings) => {
             if (settings && settings.recordPoolEnabled){
                 this.rlc_options.show_yielding = true;
             }
@@ -195,6 +202,7 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
                     this.user_working_on_record = true;
             })
         });
+        console.log('hash before: ', hash(this.recordEditForm.getRawValue()));
     }
 
     onSaveClick() {
@@ -240,7 +248,12 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
     }
 
     onBackClick() {
-        this.recordSB.goBack();
+        // this.recordSB.goBack();
+        const time = new Date();
+        console.log('start: ', time.getTime());
+        console.log('new hash: ', hash(this.recordEditForm.getRawValue()));
+        const diff = new Date().getTime() - time.getTime();
+        console.log('diff: ', diff);
     }
 
     onSelectedOriginCountryChanged(newOriginCountry: OriginCountry): void {

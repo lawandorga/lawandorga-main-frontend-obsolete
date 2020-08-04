@@ -45,7 +45,7 @@ import {
     LOGOUT_API_URL
 } from "../../../statics/api_urls.statics";
 import {
-    SET_ALL_PERMISSIONS,
+    SET_ALL_PERMISSIONS, SET_NOTIFICATIONS,
     SET_RLC,
     SET_USER,
     SET_USER_PERMISSIONS,
@@ -61,6 +61,7 @@ import { RestrictedRlc } from "../../models/rlc.model";
 import { AppSandboxService } from "../../services/app-sandbox.service";
 import { LOGIN_FRONT_URL } from "../../../statics/frontend_links.statics";
 import { State } from "../../models/state.model";
+import { Notification } from '../../models/notification.model';
 
 @Injectable()
 export class AuthEffects {
@@ -108,7 +109,8 @@ export class AuthEffects {
                             error: string;
                             error_message: string;
                             user_states: any;
-                            user_record_states;
+                            user_record_states: any;
+                            notifications: any;
                         }) => {
                             this.appSB.saveTokenAndUsersPrivateKey(response.token, response.users_private_key);
                             if (this.guard.lastVisitedUrl)
@@ -254,6 +256,7 @@ export class AuthEffects {
         rlc: any;
         user_states: any;
         user_record_states: any;
+        notifications: any;
     }) {
         // not on prod
         if (!isDevMode()) {
@@ -295,6 +298,10 @@ export class AuthEffects {
             },
             {
                 type: START_LOADING_RLC_SETTINGS
+            },
+            {
+                type: SET_NOTIFICATIONS,
+                payload: response.notifications
             }
         ];
     }

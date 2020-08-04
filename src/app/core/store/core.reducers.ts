@@ -18,9 +18,9 @@
 
 import { ForeignUser, FullUser, RestrictedUser } from '../models/user.model';
 import {
+    CoreActions,
     ADD_GROUP,
     ADD_SINGLE_HAS_PERMISSION,
-    CoreActions,
     REMOVE_ACTUAL_HAS_PERMISSIONS,
     REMOVE_INACTIVE_USER,
     REMOVE_SINGLE_HAS_PERMISSION,
@@ -33,6 +33,7 @@ import {
     SET_GROUPS,
     SET_INACTIVE_USERS,
     SET_NEW_USER_REQUESTS,
+    SET_NOTIFICATIONS,
     SET_OTHER_USERS,
     SET_RLC,
     SET_RLC_SETTINGS,
@@ -70,6 +71,7 @@ export interface CoreState {
     rlcs: { [id: number]: RestrictedRlc };
     new_user_requests: { [id: number]: NewUserRequest };
     inactive_users: { [id: number]: FullUser };
+    notifications: number;
 }
 
 const initialState: CoreState = {
@@ -88,7 +90,8 @@ const initialState: CoreState = {
     special_permission: null,
     rlcs: {},
     new_user_requests: {},
-    inactive_users: {}
+    inactive_users: {},
+    notifications: 0,
 };
 
 export function coreReducer(state = initialState, action: CoreActions) {
@@ -238,6 +241,11 @@ export function coreReducer(state = initialState, action: CoreActions) {
             return {
                 ...state,
                 rlc_settings: action.payload
+            };
+        case SET_NOTIFICATIONS:
+            return {
+                ...state,
+                notifications: action.payload
             };
         default:
             return state;

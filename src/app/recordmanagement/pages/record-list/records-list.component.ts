@@ -16,9 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import {Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { RecordsSandboxService } from "../../services/records-sandbox.service";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from 'rxjs';
 import {
     isRestrictedRecord,
     RestrictedRecord
@@ -37,7 +37,7 @@ import {MatSort, MatTableDataSource} from '@angular/material';
     templateUrl: "./records-list.component.html",
     styleUrls: ["./records-list.component.scss"]
 })
-export class RecordsListComponent implements OnInit {
+export class RecordsListComponent implements OnInit, OnDestroy {
     timeout = 400;
 
     columns = ["access", "token", "state", "consultants", "tags"];
@@ -46,6 +46,8 @@ export class RecordsListComponent implements OnInit {
 
     dataSource;
     @ViewChild(MatSort) sort: MatSort;
+
+    recordListSubscription: Subscription;
 
     constructor(
         private recordsSandbox: RecordsSandboxService,
@@ -63,7 +65,7 @@ export class RecordsListComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.recordsSandbox.getRecords().subscribe(records => {
+        this.recordListSubscription = this.recordsSandbox.getRecords().subscribe(records => {
             this.dataSource = new MatTableDataSource(records);
             this.dataSource.sort = this.sort;
         });
@@ -112,5 +114,9 @@ export class RecordsListComponent implements OnInit {
 
     onTagClick(tag: Tag) {
         this.router.navigateByUrl(GetRecordSearchFrontUrl(tag.name));
+    }
+
+    ngOnDestroy() {
+        this.recordListSubscription.unsubscribe();
     }
 }

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, isDevMode, OnInit } from '@angular/core';
+import { Component, isDevMode, OnDestroy, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {AppSandboxService} from "../../services/app-sandbox.service";
 import {FullUser} from "../../models/user.model";
@@ -44,17 +44,20 @@ import {
 } from '../../../statics/frontend_links.statics';
 import { RlcSettings } from '../../models/rlc_settings.model';
 import set = Reflect.set;
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: "app-sidebar",
     templateUrl: "./sidebar.component.html",
     styleUrls: ["./sidebar.component.scss"]
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit,  OnDestroy {
+    subscriptions: Subscription[] = [];
     name = "";
     email = "";
     timer = null;
     checkPermissionInterval = 30000;
+    number_of_notifications = '0';
 
     legalNoticeUrl = LEGAL_NOTICE_FRONT_URL;
 
@@ -131,10 +134,6 @@ export class SidebarComponent implements OnInit {
                     link: DELETION_REQUESTS_FRONT_URL
                 }
             ]
-        },
-        {
-            label: "Logout",
-            icon: "power_settings_new"
         }
     ];
     actualSidebarItems = [];
@@ -287,10 +286,14 @@ export class SidebarComponent implements OnInit {
             }
         );
 
-        this.coreSB.getUser().subscribe((user: FullUser) => {
+        this.subscriptions.push(this.coreSB.getUser().subscribe((user: FullUser) => {
             this.name = user ? user.name : "";
             this.email = user ? user.email : "";
-        });
+        }));
+
+        this.subscriptions.push(this.coreSB.getNotifications().subscribe((number_of_notifications: number) => {
+            this.number_of_notifications = number_of_notifications.toString();
+        }));
 
         if (!isDevMode()){
             this.timer = setInterval(() => {
@@ -360,7 +363,12 @@ export class SidebarComponent implements OnInit {
     }
 
     selectedItem(event) {
-        if (event.label === "Logout") this.logout();
-        else this.router.navigate([event.link]);
+        this.router.navigate([event.link]);
+    }
+
+    ngOnDestroy() {
+        for (const sub of this.subscriptions){
+            sub.unsubscribe();
+        }
     }
 }

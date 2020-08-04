@@ -58,6 +58,7 @@ import { LegalNoticeComponent } from "./pages/legal-notice/legal-notice.componen
 import { GroupDetailsComponent } from "./components/group-details/group-details.component";
 import { InactiveUsersComponent } from "./pages/inactive-users/inactive-users.component";
 import { PrivacyStatementComponent } from './pages/privacy-statement/privacy-statement.component';
+import { NotificationsListComponent } from './pages/notifications-list/notifications-list.component';
 
 @NgModule({
     imports: [
@@ -100,7 +101,8 @@ import { PrivacyStatementComponent } from './pages/privacy-statement/privacy-sta
         LegalNoticeComponent,
         GroupDetailsComponent,
         InactiveUsersComponent,
-        PrivacyStatementComponent
+        PrivacyStatementComponent,
+        NotificationsListComponent
     ],
     entryComponents: [
         AddGroupMemberComponent,
