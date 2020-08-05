@@ -24,24 +24,24 @@ import { HasPermission } from '../../core/models/permission.model';
 
 export const START_LOADING_FOLDER = 'START_LOADING_FOLDER';
 export const SET_CURRENT_FOLDER = 'SET_CURRENT_FOLDER';
-export const SET_FOLDERS = "SET_FOLDERS";
-export const SET_FILES = "SET_FILES";
-export const ADD_FOLDER = "ADD_FOLDER";
-export const START_DELETING_FILES_AND_FOLDERS = "START_DELETING_FILES_AND_FOLDERS";
-export const START_DOWNLOAD_FILES_AND_FOLDERS = "START_DOWNLOAD_FILES_AND_FOLDERS";
-export const START_LOADING_FOLDER_PERMISSIONS = "START_LOADING_FOLDER_PERMISSIONS";
-export const SET_FOLDER_PERMISSIONS = "SET_FOLDER_PERMISSIONS";
-export const RESET_FOLDER_PERMISSIONS = "RESET_FOLDER_PERMISSIONS";
-export const START_CREATING_FOLDER_PERMISSION = "START_CREATING_FOLDER_PERMISSION";
-export const SET_FOLDER_HAS_PERMISSIONS = "SET_FOLDER_HAS_PERMISSIONS";
-export const START_DELETING_FOLDER_PERMISSION = "START_DELETING_FOLDER_PERMISSION";
-export const START_CREATING_NEW_FOLDER = "START_CREATING_NEW_FOLDER";
+export const SET_FOLDERS = 'SET_FOLDERS';
+export const SET_FILES = 'SET_FILES';
+export const SET_WRITE_PERMISSION = 'SET_WRITE_PERMISSION';
+export const ADD_FOLDER = 'ADD_FOLDER';
+export const START_DELETING_FILES_AND_FOLDERS = 'START_DELETING_FILES_AND_FOLDERS';
+export const START_DOWNLOAD_FILES_AND_FOLDERS = 'START_DOWNLOAD_FILES_AND_FOLDERS';
+export const START_LOADING_FOLDER_PERMISSIONS = 'START_LOADING_FOLDER_PERMISSIONS';
+export const SET_FOLDER_PERMISSIONS = 'SET_FOLDER_PERMISSIONS';
+export const RESET_FOLDER_PERMISSIONS = 'RESET_FOLDER_PERMISSIONS';
+export const START_CREATING_FOLDER_PERMISSION = 'START_CREATING_FOLDER_PERMISSION';
+export const SET_FOLDER_HAS_PERMISSIONS = 'SET_FOLDER_HAS_PERMISSIONS';
+export const START_DELETING_FOLDER_PERMISSION = 'START_DELETING_FOLDER_PERMISSION';
+export const START_CREATING_NEW_FOLDER = 'START_CREATING_NEW_FOLDER';
 
 export class StartLoadingFolder implements Action {
     readonly type = START_LOADING_FOLDER;
 
-    constructor(public payload: string) {
-    }
+    constructor(public payload: string) {}
 }
 
 export class SetCurrentFolder implements Action {
@@ -53,27 +53,25 @@ export class SetCurrentFolder implements Action {
 export class SetFolders implements Action {
     readonly type = SET_FOLDERS;
 
-    constructor(public payload: TableEntry[]) {
-    }
+    constructor(public payload: TableEntry[]) {}
 }
 
 export class SetFiles implements Action {
     readonly type = SET_FILES;
 
-    constructor(public payload: TableEntry[]) {
-    }
+    constructor(public payload: TableEntry[]) {}
 }
 
 export class StartDeletingFilesAndFolders implements Action {
     readonly type = START_DELETING_FILES_AND_FOLDERS;
 
-    constructor(public payload: { entries: TableEntry[]; path: string}) {}
+    constructor(public payload: { entries: TableEntry[]; path: string }) {}
 }
 
 export class StartDownloadFilesAndFolders implements Action {
     readonly type = START_DOWNLOAD_FILES_AND_FOLDERS;
 
-    constructor(public payload: { entries: TableEntry[], path: string }) {}
+    constructor(public payload: { entries: TableEntry[]; path: string }) {}
 }
 
 export class StartLoadingFolderPermissions implements Action {
@@ -95,7 +93,9 @@ export class ResetFolderPermissions implements Action {
 export class StartCreatingFolderPermission implements Action {
     readonly type = START_CREATING_FOLDER_PERMISSION;
 
-    constructor(public payload: {group: RestrictedGroup, folder: TableEntry, permission: string}){}
+    constructor(
+        public payload: { group: RestrictedGroup; folder: TableEntry; permission: string }
+    ) {}
 }
 
 export class SetFolderHasPermissions implements Action {
@@ -113,7 +113,7 @@ export class StartDeletingFolderPermission implements Action {
 export class StartCreatingNewFolder implements Action {
     readonly type = START_CREATING_NEW_FOLDER;
 
-    constructor(public payload: {name: string, parent: TableEntry}) {}
+    constructor(public payload: { name: string; parent: TableEntry }) {}
 }
 
 export class AddFolder implements Action {
@@ -122,7 +122,14 @@ export class AddFolder implements Action {
     constructor(public payload: TableEntry) {}
 }
 
-export type FilesActions = StartLoadingFolder
+export class SetWritePermission implements Action {
+    readonly type = SET_WRITE_PERMISSION;
+
+    constructor(public payload: boolean) {}
+}
+
+export type FilesActions =
+    | StartLoadingFolder
     | SetCurrentFolder
     | SetFolders
     | SetFiles
@@ -135,4 +142,5 @@ export type FilesActions = StartLoadingFolder
     | SetFolderHasPermissions
     | StartDeletingFolderPermission
     | StartCreatingNewFolder
-    | AddFolder;
+    | AddFolder
+    | SetWritePermission;

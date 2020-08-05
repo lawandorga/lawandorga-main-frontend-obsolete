@@ -22,9 +22,11 @@ import {
     FilesActions,
     RESET_FOLDER_PERMISSIONS,
     SET_CURRENT_FOLDER,
-    SET_FILES, SET_FOLDER_HAS_PERMISSIONS,
+    SET_FILES,
+    SET_FOLDER_HAS_PERMISSIONS,
     SET_FOLDER_PERMISSIONS,
-    SET_FOLDERS
+    SET_FOLDERS,
+    SET_WRITE_PERMISSION
 } from './files.actions';
 import { getIdObjects } from '../../shared/other/reducer-helper';
 import { TableEntry } from '../models/table-entry.model';
@@ -33,6 +35,7 @@ import { HasPermission } from '../../core/models/permission.model';
 
 export interface FilesState {
     current_folder: TableEntry,
+    write_permission: boolean,
     folders: { [id: number]: TableEntry },
     files: { [id: number]: TableEntry },
     folder_permissions: { [id: number]: FolderPermission},
@@ -41,6 +44,7 @@ export interface FilesState {
 
 export const initialState: FilesState = {
     current_folder: null,
+    write_permission: false,
     folders: {},
     files: {},
     folder_permissions: {},
@@ -87,6 +91,11 @@ export function filesReducer(state = initialState, action: FilesActions) {
                     [action.payload.id]: action.payload
                 }
             };
+        case SET_WRITE_PERMISSION:
+            return {
+                ...state,
+                write_permission: action.payload
+            }
         default:
             return state;
     }

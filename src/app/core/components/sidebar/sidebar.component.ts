@@ -1,3 +1,4 @@
+
 /*
  * law&orga - record and organization management software for refugee law clinics
  * Copyright (C) 2019  Dominik Walser
