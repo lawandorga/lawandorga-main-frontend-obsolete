@@ -16,19 +16,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, Input, OnInit } from "@angular/core";
-import { CoreSandboxService } from "../../services/core-sandbox.service";
-import { FullGroup } from "../../models/group.model";
-import { AddGroupMemberComponent } from "../add-group-member/add-group-member.component";
-import { MatDialog } from "@angular/material";
-import {Router} from '@angular/router';
-import {GetProfileFrontUrl} from '../../../statics/frontend_links.statics';
-import {RestrictedUser} from '../../models/user.model';
+import { Component, Input, OnInit } from '@angular/core';
+import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { FullGroup } from '../../models/group.model';
+import { AddGroupMemberComponent } from '../add-group-member/add-group-member.component';
+import { MatDialog } from '@angular/material';
+import { Router } from '@angular/router';
+import { GetProfileFrontUrl } from '../../../statics/frontend_links.statics';
+import { RestrictedUser } from '../../models/user.model';
+import { SharedSandboxService } from '../../../shared/services/shared-sandbox.service';
 
 @Component({
-    selector: "app-group-details",
-    templateUrl: "./group-details.component.html",
-    styleUrls: ["./group-details.component.scss"]
+    selector: 'app-group-details',
+    templateUrl: './group-details.component.html',
+    styleUrls: ['./group-details.component.scss']
 })
 export class GroupDetailsComponent implements OnInit {
     memberColumns = [];
@@ -39,27 +40,39 @@ export class GroupDetailsComponent implements OnInit {
     @Input()
     group: FullGroup;
 
-    constructor(private coreSB: CoreSandboxService, public dialog: MatDialog, private router: Router) {}
+    constructor(private coreSB: CoreSandboxService, public dialog: MatDialog, private router: Router, private sharedSB: SharedSandboxService) {
+    }
 
     ngOnInit() {
         this.editGroupMembers = (this.editGroupMembers !== undefined);
 
         if (this.editGroupMembers) {
-            this.memberColumns = ["member", "remove"];
+            this.memberColumns = ['member', 'remove'];
         } else {
-            this.memberColumns = ["member"];
+            this.memberColumns = ['member'];
         }
     }
 
     onRemoveGroupMemberClick(user_id: string) {
-        this.coreSB.removeGroupMember(user_id, this.group.id);
+        this.sharedSB.openConfirmDialog({
+            description: 'are you sure you want to remove this user?',
+            confirmLabel: 'remove',
+            confirmColor: 'warn'
+        }, (remove: boolean) => {
+            if (remove) {
+                this.coreSB.removeGroupMember(user_id, this.group.id);
+            }
+        });
     }
 
     onAddGroupMemberClick() {
-        this.dialog.open(AddGroupMemberComponent);
+        this.dialog.open(AddGroupMemberComponent, {
+            maxHeight: '50vh',
+            maxWidth: '50vh'
+        });
     }
 
-    onUserClick(user: RestrictedUser){
+    onUserClick(user: RestrictedUser) {
         this.router.navigateByUrl(GetProfileFrontUrl(user));
     }
 }
