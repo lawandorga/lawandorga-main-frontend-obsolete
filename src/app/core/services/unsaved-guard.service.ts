@@ -19,19 +19,29 @@
 import { Injectable } from '@angular/core';
 import { CanDeactivate } from '@angular/router';
 import { HasUnsaved } from './can-have-unsaved.interface';
-
+import { SharedSandboxService } from '../../shared/services/shared-sandbox.service';
+import { bindCallback, Observable } from 'rxjs';
 
 @Injectable()
 export class UnsavedGuardService implements CanDeactivate<HasUnsaved> {
-    canDeactivate(component: HasUnsaved): boolean {
+    constructor(private sharedSB: SharedSandboxService) {}
 
-        if (component.hasUnsaved()){
-            if (confirm("You have unsaved changes! If you leave, your changes will be lost.")) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        return true;
+    canDeactivate(component: HasUnsaved): Observable<any> | boolean {
+        if (!component.hasUnsaved()) return true;
+
+        return new Observable<boolean>((observer) => {
+            this.sharedSB.openConfirmDialog(
+                {
+                    description: 'You have unsaved changes! If you leave, your changes will be lost.',
+                    confirmLabel: 'leave',
+                    confirmColor: 'warn',
+                    cancelLabel: 'stay',
+                },
+                (leave: boolean) => {
+                    observer.next(leave);
+                    observer.complete();
+                }
+            );
+        });
     }
 }
