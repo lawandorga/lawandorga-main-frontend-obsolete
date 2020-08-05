@@ -35,13 +35,14 @@ import { alphabeticalSorterByField } from '../../../../shared/other/sorter-helpe
 import { tap } from 'rxjs/internal/operators/tap';
 import { SharedSandboxService } from '../../../../shared/services/shared-sandbox.service';
 import { RlcSettings } from '../../../../core/models/rlc_settings.model';
+import { HasUnsaved } from '../../../../core/services/can-have-unsaved.interface';
 
 @Component({
     selector: 'app-full-record-detail',
     templateUrl: './full-record-detail.component.html',
     styleUrls: ['./full-record-detail.component.scss']
 })
-export class FullRecordDetailComponent implements OnInit, OnDestroy {
+export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved {
     allCountries: Observable<OriginCountry[]>;
     originCountryError: any;
     givenOriginCountry: OriginCountry;
@@ -63,6 +64,8 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
     rlc_options = {
         show_yielding: false,
     };
+
+    startHash: string;
 
     settingsSubscription: Subscription;
     specialRecordSubscription: Subscription;
@@ -118,7 +121,6 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
                     record_documents: RecordDocument[];
                     record_messages: RecordMessage[];
                 }) => {
-                    console.log('special record subscription happening');
                     this.record = special_record.record;
                     this.client = special_record.client;
 
@@ -202,7 +204,20 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
                     this.user_working_on_record = true;
             })
         });
-        console.log('hash before: ', hash(this.recordEditForm.getRawValue()));
+        this.startHash = this.getHash();
+    }
+
+    hasUnsaved(): boolean {
+        return this.startHash !== this.getHash();
+    }
+
+    getHash(): string {
+        const objects = {
+            edit: this.recordEditForm.getRawValue(),
+            record: this.record,
+            client: this.client
+        }
+        return hash(objects);
     }
 
     onSaveClick() {
@@ -245,13 +260,14 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy {
         this.client.phone_number = this.recordEditForm.value['client_phone'];
 
         this.recordSB.startSavingRecord(this.record, this.client);
+        this.startHash = this.getHash();
     }
 
     onBackClick() {
         // this.recordSB.goBack();
         const time = new Date();
         console.log('start: ', time.getTime());
-        console.log('new hash: ', hash(this.recordEditForm.getRawValue()));
+        console.log('new hash: ', this.getHash());
         const diff = new Date().getTime() - time.getTime();
         console.log('diff: ', diff);
     }

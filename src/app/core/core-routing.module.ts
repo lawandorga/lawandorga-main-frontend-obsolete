@@ -37,6 +37,7 @@ import {LegalNoticeComponent} from './pages/legal-notice/legal-notice.component'
 import {InactiveUsersComponent} from './pages/inactive-users/inactive-users.component';
 import {PrivacyStatementComponent} from './pages/privacy-statement/privacy-statement.component';
 import { NotificationsListComponent } from './pages/notifications-list/notifications-list.component';
+import { UnsavedGuardService } from './services/unsaved-guard.service';
 
 const apiRoutes: Routes = [
     {
@@ -111,6 +112,6 @@ const apiRoutes: Routes = [
 @NgModule({
     imports: [RouterModule.forChild(apiRoutes)],
     exports: [RouterModule],
-    providers: [AuthGuardService]
+    providers: [AuthGuardService, UnsavedGuardService]
 })
 export class CoreRoutingModule {}

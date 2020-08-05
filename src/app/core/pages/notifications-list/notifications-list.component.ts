@@ -76,7 +76,6 @@ export class NotificationsListComponent implements AfterViewInit {
             )
             .subscribe((data: NotificationResponse) => {
                 this.data = Notification.getNotificationsFromJsonArray(data.results);
-                console.log('data: ', this.data);
             });
     }
 

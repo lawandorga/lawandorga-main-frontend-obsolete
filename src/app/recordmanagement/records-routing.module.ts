@@ -25,6 +25,7 @@ import { RecordComponent } from "./pages/record/record.component";
 import { RecordsPermitRequestsComponent } from "./pages/records-permit-requests/records-permit-requests.component";
 import { RecordDeletionRequestsComponent } from './pages/record-deletion-requests/record-deletion-requests.component';
 import { RecordPoolComponent } from './pages/record-pool/record-pool.component';
+import { UnsavedGuardService } from '../core/services/unsaved-guard.service';
 
 const recordsRoutes: Routes = [
     {
@@ -50,13 +51,14 @@ const recordsRoutes: Routes = [
     },
     {
         path: ":id",
-        component: RecordComponent
+        component: RecordComponent,
+        canDeactivate: [UnsavedGuardService]
     }
 ];
 
 @NgModule({
     imports: [RouterModule.forChild(recordsRoutes)],
     exports: [RouterModule],
-    providers: [AuthGuardService]
+    providers: [AuthGuardService, UnsavedGuardService]
 })
 export class RecordsRoutingModule {}

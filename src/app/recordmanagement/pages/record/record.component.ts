@@ -16,19 +16,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { RecordsSandboxService } from "../../services/records-sandbox.service";
 import {FullRecord, RestrictedRecord} from '../../models/record.model';
 import { ActivatedRoute, Params } from "@angular/router";
+import { HasUnsaved } from '../../../core/services/can-have-unsaved.interface';
+import { FullRecordDetailComponent } from '../../components/records/full-record-detail/full-record-detail.component';
 
 @Component({
     selector: "app-record",
     templateUrl: "./record.component.html",
     styleUrls: ["./record.component.scss"]
 })
-export class RecordComponent implements OnInit {
+export class RecordComponent implements OnInit, HasUnsaved {
     id: string;
     type: string;
+
+    @ViewChild(FullRecordDetailComponent) child: FullRecordDetailComponent;
 
     constructor(
         private recordSB: RecordsSandboxService,
@@ -48,5 +52,11 @@ export class RecordComponent implements OnInit {
         });
     }
 
-
+    hasUnsaved(): boolean {
+        if (this.type === 'FullRecord'){
+            return this.child.hasUnsaved()
+        } else {
+            return false;
+        }
+    }
 }
