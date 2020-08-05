@@ -31,6 +31,13 @@ export class NotificationTextBuilderHelper {
         ) {
             return `You were assigned as Consultant for Record ${ref_text}`;
         }
+        if (event_subject === NotificationEventSubject.GROUP){
+            if (event === NotificationEvent.ADDED)
+                return `${source_user_name} added you to Group ${ref_text}`
+            if (event === NotificationEvent.REMOVED)
+                return `${source_user_name} removed you from Group ${ref_text}`
+        }
+
         return `${source_user_name} ${event.toLowerCase()} ${
             event_subject
                 .toLowerCase()

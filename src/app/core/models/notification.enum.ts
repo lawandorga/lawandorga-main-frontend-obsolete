@@ -30,5 +30,6 @@ export enum NotificationEvent {
     DELETED = 'DELETED',
     MOVED = 'MOVED',
     UPDATED = 'UPDATED',
-    ADDED = 'ADDED'
+    ADDED = 'ADDED',
+    REMOVED = 'REMOVED'
 }
