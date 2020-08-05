@@ -23,8 +23,10 @@ import { RestrictedRlc } from "../models/rlc.model";
 import { FullGroup, RestrictedGroup } from "../models/group.model";
 import { NewUserRequest } from "../models/new_user_request.model";
 import { RlcSettings } from '../models/rlc_settings.model';
+import { Notification } from '../models/notification.model';
 
 export const ADD_GROUP = "ADD_GROUP";
+export const ADD_NOTIFICATIONS = "ADD_NOTIFICATIONS";
 export const ADD_SINGLE_HAS_PERMISSION = "ADD_SINGLE_HAS_PERMISSION";
 export const REMOVE_ACTUAL_HAS_PERMISSIONS = "REMOVE_ACTUAL_HAS_PERMISSIONS";
 export const REMOVE_SINGLE_HAS_PERMISSION = "REMOVE_SINGLE_HAS_PERMISSION";
@@ -40,6 +42,7 @@ export const SET_ALL_PERMISSIONS = "SET_ALL_PERMISSIONS";
 export const SET_GROUPS = "SET_GROUPS";
 export const SET_INACTIVE_USERS = "SET_INACTIVE_USERS";
 export const SET_NEW_USER_REQUESTS = "SET_NEW_USER_REQUESTS";
+export const SET_NOTIFICATIONS = "SET_NOTIFICATIONS";
 export const SET_OTHER_USERS = "SET_OTHER_USERS";
 export const SET_RLC = "SET_RLC";
 export const SET_RLCS = "SET_RLCS";
@@ -87,7 +90,8 @@ export const START_SAVING_USER = "START_SAVING_USER";
 export const UPDATE_NEW_USER_REQUEST = "UPDATE_NEW_USER_REQUEST";
 export const START_LOADING_RLC_SETTINGS = "START_LOADING_RLC_SETTINGS";
 export const SET_RLC_SETTINGS = "SET_RLC_SETTINGS";
-
+export const DECREMENT_NOTIFICATION_COUNTER = "DECREMENT_NOTIFICATION_COUNTER";
+export const INCREMENT_NOTIFICATION_COUNTER = "INCREMENT_NOTIFICATION_COUNTER";
 
 export class AddGroup implements Action {
     readonly type = ADD_GROUP;
@@ -366,6 +370,20 @@ export class SetRlcSettings implements Action {
     constructor(public payload: RlcSettings) {}
 }
 
+export class SetNotifications implements Action {
+    readonly type = SET_NOTIFICATIONS;
+
+    constructor(public payload: number) {}
+}
+
+export class IncrementNotificationCounter implements Action {
+    readonly type = INCREMENT_NOTIFICATION_COUNTER;
+}
+
+export class DecrementNotificationCounter implements Action {
+    readonly type = DECREMENT_NOTIFICATION_COUNTER;
+}
+
 export type CoreActions =
     | AddGroup
     | AddSingleHasPermission
@@ -417,4 +435,7 @@ export type CoreActions =
     | UpdateNewUserRequest
     | StartCheckingUserHasPermissions
     | StartLoadingRlcSettings
-    | SetRlcSettings;
+    | SetRlcSettings
+    | SetNotifications
+    | IncrementNotificationCounter
+    | DecrementNotificationCounter;

@@ -36,6 +36,7 @@ import { ActivateUserComponent } from "./pages/auth/activate-user/activate-user.
 import {LegalNoticeComponent} from './pages/legal-notice/legal-notice.component';
 import {InactiveUsersComponent} from './pages/inactive-users/inactive-users.component';
 import {PrivacyStatementComponent} from './pages/privacy-statement/privacy-statement.component';
+import { NotificationsListComponent } from './pages/notifications-list/notifications-list.component';
 
 const apiRoutes: Routes = [
     {
@@ -90,6 +91,11 @@ const apiRoutes: Routes = [
     {
         path: "inactive_users",
         component: InactiveUsersComponent,
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: "notifications",
+        component: NotificationsListComponent,
         canActivate: [AuthGuardService]
     },
     // without access control

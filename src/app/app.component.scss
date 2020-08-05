@@ -31,14 +31,35 @@ mat-sidenav{
 .root-toolbar{
     background-color: $c-primary !important;
     color: $c-on-primary;
-    border-bottom: 0px solid $c-secondary;
+    //border-bottom: 0px solid $c-secondary;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
-.root-toolbar img{
+.root-toolbar_left {
+    background-color: $c-primary !important;
+    color: $c-on-primary;
+    //border-bottom: 0px solid $c-secondary;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.root-toolbar_left img{
    width: 35px;
-   height: auto; 
+   height: 35px;
    margin-right: 5px;
 }
+
+.root-toolbar_notification {
+    margin-top: 5px;
+}
+
+.root-toolbar_text {
+    margin-top: 5px;
+}
+
 .root-container {
     display: flex;
     flex-direction: column;

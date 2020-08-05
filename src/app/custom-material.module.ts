@@ -48,6 +48,8 @@ import { MatIconModule } from "@angular/material/icon";
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {MatMenuModule} from "@angular/material/menu";
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
     imports: [
@@ -75,7 +77,9 @@ import {MatMenuModule} from "@angular/material/menu";
         MatSortModule,
         MatToolbarModule,
         MatTooltipModule,
-        MatMenuModule
+        MatMenuModule,
+        MatBadgeModule,
+        MatPaginatorModule,
     ],
     exports: [
         MatButtonModule,
@@ -101,7 +105,9 @@ import {MatMenuModule} from "@angular/material/menu";
         MatSortModule,
         MatToolbarModule,
         MatTooltipModule,
-        MatMenuModule
+        MatMenuModule,
+        MatBadgeModule,
+        MatPaginatorModule
     ],
     declarations: [],
     providers: [

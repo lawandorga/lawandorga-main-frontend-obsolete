@@ -16,17 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
+import moment from "moment";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { take } from "rxjs/operators";
-import moment from "moment";
-import { HttpClient } from "@angular/common/http";
 import { select, Store } from "@ngrx/store";
-
 import { AppState } from "../../store/app.reducers";
 import { CoreState } from "../store/core.reducers";
 import { ForeignUser, FullUser, RestrictedUser } from "../models/user.model";
 import {
+    DecrementNotificationCounter, IncrementNotificationCounter,
     RemoveActualHasPermissions,
     ResetSpecialForeignUser,
     ResetSpecialGroup,
@@ -56,9 +55,8 @@ import {
     StartRemovingHasPermission,
     StartSavingUser
 } from '../store/core.actions';
-import { StorageService } from "../../shared/services/storage.service";
 import { SnackbarService } from "../../shared/services/snackbar.service";
-import { Observable } from "rxjs";
+import { Observable } from 'rxjs';
 import { HasPermission, Permission } from "../models/permission.model";
 import { FullGroup, RestrictedGroup } from "../models/group.model";
 import { RestrictedRlc } from "../models/rlc.model";
@@ -72,8 +70,7 @@ export class CoreSandboxService {
         public router: Router,
         private snackbarService: SnackbarService,
         private appStateStore: Store<AppState>,
-        private coreStateStore: Store<CoreState>,
-        private storageService: StorageService
+        private coreStateStore: Store<CoreState>
     ) {}
 
     static transformDateToString(date: Date | string): string {
@@ -160,7 +157,7 @@ export class CoreSandboxService {
                     subscriberCallback(false);
                 }
             }
-        });
+        }).unsubscribe();
     }
 
     hasPermissionFromId(
@@ -490,4 +487,21 @@ export class CoreSandboxService {
             })
         )
     }
+
+    getNotifications(): Observable<number> {
+        return this.coreStateStore.pipe(
+            select((state: any) => {
+                return state.core.notifications;
+            })
+        )
+    }
+
+    decrementNotificationCounter(): void {
+        this.coreStateStore.dispatch(new DecrementNotificationCounter())
+    }
+
+    incrementNotificationCounter(): void {
+        this.coreStateStore.dispatch(new IncrementNotificationCounter())
+    }
+
 }

@@ -27,12 +27,27 @@
 </div>
 <mat-divider></mat-divider>
 <div class="sidebar__nav-holder">
-    <ng-material-multilevel-menu
-        [items]="actualSidebarItems"
-        (selectedItem)="selectedItem($event)"
-        [configuration]="config"
-    >
-    </ng-material-multilevel-menu>
+    <div>
+        <ng-material-multilevel-menu
+                [items]="actualSidebarItems"
+                (selectedItem)="selectedItem($event)"
+                [configuration]="config"
+        >
+        </ng-material-multilevel-menu>
+        <mat-list disableRipple="True" class="sidebar__list">
+            <mat-list-item class="sidebar__list_item" routerLink="notifications">
+                <mat-icon mat-list-icon [matBadge]="number_of_notifications" [matBadgeColor]="number_of_notifications === '0' ? 'primary':'warn'">notifications</mat-icon>
+                <div>Notifications</div>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item class="sidebar__list_item" (click)="logout()">
+                <mat-icon mat-list-icon>power_settings_new</mat-icon>
+                <div>Logout</div>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+        </mat-list>
+    </div>
+
     <div class="sidebar__other-links">
         <ul>
             <li class="is_clickable sidebar__other-links__items" [routerLink]="legalNoticeUrl">

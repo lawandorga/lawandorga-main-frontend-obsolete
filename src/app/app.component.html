@@ -19,9 +19,23 @@
 <div class="root-container" [class.example-is-mobile]="mobileQuery.matches">
     <div class="app__main-container">
         <mat-toolbar class="root-toolbar">
-            <button mat-icon-button (click)="toggleNav()"><mat-icon>menu</mat-icon></button>
-            <img src="/assets/img/rlc_intranet_logo.png" alt="RLC App" class="is_clickable" (click)="redirectToMainPage()">
-            <h1 (click)="redirectToMainPage()" class="is_clickable">Law&Orga</h1>
+            <div class="root-toolbar_left">
+                <button mat-icon-button (click)="toggleNav()"><mat-icon>menu</mat-icon></button>
+                <img src="/assets/img/rlc_intranet_logo.png" alt="RLC App" class="is_clickable" (click)="redirectToMainPage()">
+                <h1 (click)="redirectToMainPage()" class="is_clickable root-toolbar_text">Law & Orga</h1>
+            </div>
+<!--            <div class="root-toolbar_notification">-->
+<!--                <mat-menu #appMenu="matMenu">-->
+<!--                    <h3>Notifications</h3>-->
+<!--                    <button mat-menu-item class="button-normal">test</button>-->
+
+<!--                    <div>hello there</div>-->
+<!--                </mat-menu>-->
+
+<!--                <button mat-icon-button [matMenuTriggerFor]="appMenu">-->
+<!--                    <mat-icon matBadge="1544" matBadgeColor="warn">notifications</mat-icon>-->
+<!--                </button>-->
+<!--            </div>-->
         </mat-toolbar>
 
         <mat-sidenav-container class="sidenav-container"
@@ -44,7 +58,7 @@
         <nav class="app__nav-links-container">
 
             <a routerLink="{{legalNoticeUrl}}">Impressum</a>
-            <a href="https://rlc-deutschland.de/datenschutz/">Datenschutzerklärung</a>
+            <a href="{{privacyStatementUrl}}">Datenschutzerklärung</a>
         </nav>
     </div>
 </div>
