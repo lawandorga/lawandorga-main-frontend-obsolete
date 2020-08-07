@@ -89,6 +89,7 @@ export const START_ACTIVATING_INACTIVE_USER = "START_ACTIVATING_INACTIVE_USER";
 export const START_SAVING_USER = "START_SAVING_USER";
 export const UPDATE_NEW_USER_REQUEST = "UPDATE_NEW_USER_REQUEST";
 export const START_LOADING_RLC_SETTINGS = "START_LOADING_RLC_SETTINGS";
+export const START_LOADING_UNREAD_NOTIFICATIONS = "START_LOADING_UNREAD_NOTIFICATIONS";
 export const SET_RLC_SETTINGS = "SET_RLC_SETTINGS";
 export const DECREMENT_NOTIFICATION_COUNTER = "DECREMENT_NOTIFICATION_COUNTER";
 export const INCREMENT_NOTIFICATION_COUNTER = "INCREMENT_NOTIFICATION_COUNTER";
@@ -384,6 +385,10 @@ export class DecrementNotificationCounter implements Action {
     readonly type = DECREMENT_NOTIFICATION_COUNTER;
 }
 
+export class StartLoadingUnreadNotifications implements Action {
+    readonly type = START_LOADING_UNREAD_NOTIFICATIONS;
+}
+
 export type CoreActions =
     | AddGroup
     | AddSingleHasPermission
@@ -438,4 +443,5 @@ export type CoreActions =
     | SetRlcSettings
     | SetNotifications
     | IncrementNotificationCounter
-    | DecrementNotificationCounter;
+    | DecrementNotificationCounter
+    | StartLoadingUnreadNotifications;

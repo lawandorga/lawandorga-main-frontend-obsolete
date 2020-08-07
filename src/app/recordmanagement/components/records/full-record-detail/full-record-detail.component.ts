@@ -264,12 +264,7 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
     }
 
     onBackClick() {
-        // this.recordSB.goBack();
-        const time = new Date();
-        console.log('start: ', time.getTime());
-        console.log('new hash: ', this.getHash());
-        const diff = new Date().getTime() - time.getTime();
-        console.log('diff: ', diff);
+        this.recordSB.goBack();
     }
 
     onSelectedOriginCountryChanged(newOriginCountry: OriginCountry): void {

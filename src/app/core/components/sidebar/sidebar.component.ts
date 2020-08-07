@@ -56,8 +56,12 @@ export class SidebarComponent implements OnInit,  OnDestroy {
     subscriptions: Subscription[] = [];
     name = "";
     email = "";
-    timer = null;
+
+    timerCheckPermissions = null;
+    timerLoadUnreadNotifications = null;
     checkPermissionInterval = 30000;
+    checkNotificationsInterval = 5000;
+
     number_of_notifications = '0';
 
     legalNoticeUrl = LEGAL_NOTICE_FRONT_URL;
@@ -298,11 +302,15 @@ export class SidebarComponent implements OnInit,  OnDestroy {
         }));
 
         if (!isDevMode()){
-            this.timer = setInterval(() => {
+            this.timerCheckPermissions = setInterval(() => {
                 this.coreSB.startCheckingUserHasPermissions();
             }, this.checkPermissionInterval);
             this.recheckSidebarItems();
         }
+
+        this.timerLoadUnreadNotifications = setInterval(() => {
+            this.coreSB.startLoadingUnreadNotifications();
+        }, this.checkNotificationsInterval);
     }
 
     recheckSidebarItems() {
@@ -356,7 +364,8 @@ export class SidebarComponent implements OnInit,  OnDestroy {
     }
 
     logout() {
-        clearInterval(this.timer);
+        clearInterval(this.timerCheckPermissions);
+        clearInterval(this.timerLoadUnreadNotifications);
         this.appSB.logout();
     }
 
@@ -372,5 +381,7 @@ export class SidebarComponent implements OnInit,  OnDestroy {
         for (const sub of this.subscriptions){
             sub.unsubscribe();
         }
+        clearInterval(this.timerCheckPermissions);
+        clearInterval(this.timerLoadUnreadNotifications);
     }
 }

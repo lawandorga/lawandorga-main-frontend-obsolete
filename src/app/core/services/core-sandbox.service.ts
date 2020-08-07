@@ -50,7 +50,7 @@ import {
     StartLoadingSpecialForeignUser,
     StartLoadingSpecialGroup,
     StartLoadingSpecialGroupHasPermissions,
-    StartLoadingSpecialPermission,
+    StartLoadingSpecialPermission, StartLoadingUnreadNotifications,
     StartRemovingGroupMember,
     StartRemovingHasPermission,
     StartSavingUser
@@ -478,6 +478,10 @@ export class CoreSandboxService {
 
     startLoadingRlcSettings(): void {
         this.coreStateStore.dispatch(new StartLoadingRlcSettings());
+    }
+
+    startLoadingUnreadNotifications(): void {
+        this.coreStateStore.dispatch(new StartLoadingUnreadNotifications());
     }
 
     getRlcSettings(): Observable<RlcSettings> {

@@ -81,7 +81,7 @@ import {
     START_LOADING_RLC_SETTINGS,
     SET_RLC_SETTINGS,
     START_ADDING_GROUP_MEMBERS,
-    StartAddingGroupMembers
+    StartAddingGroupMembers, START_LOADING_UNREAD_NOTIFICATIONS, SET_NOTIFICATIONS
 } from './core.actions';
 import {
     CREATE_PROFILE_API_URL,
@@ -100,7 +100,7 @@ import {
     NEW_USER_REQUEST_ADMIT_API_URL,
     NEW_USER_REQUEST_API_URL,
     PROFILES_API_URL, RLC_SETTINGS_API_URL,
-    RLCS_API_URL,
+    RLCS_API_URL, UNREAD_NOTIFICATIONS_API_URL,
     USER_HAS_PERMISSIONS_API_URL
 } from '../../statics/api_urls.statics';
 import { CoreSandboxService } from "../services/core-sandbox.service";
@@ -925,4 +925,29 @@ export class CoreEffects {
         })
     );
 
+    @Effect()
+    startLoadingUnreadNotifications = this.actions.pipe(
+        ofType(START_LOADING_UNREAD_NOTIFICATIONS),
+        switchMap(() => {
+            return from(
+                this.http.get(UNREAD_NOTIFICATIONS_API_URL).pipe(
+                    catchError(error => {
+                        this.snackbar.showErrorSnackBar(
+                            "error at getting unread notifications: " +
+                            error.error.detail
+                        );
+                        return [];
+                    }),
+                    mergeMap((response: { unread_notifications; }) => {
+                        return [
+                            {
+                                type: SET_NOTIFICATIONS,
+                                payload: response.unread_notifications
+                            }
+                        ];
+                    })
+                )
+            );
+        })
+    );
 }
