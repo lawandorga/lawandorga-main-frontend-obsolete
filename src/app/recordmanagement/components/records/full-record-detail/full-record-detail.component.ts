@@ -16,10 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-
-const hash = require('object-hash');
 import { FullRecord } from '../../../models/record.model';
 import { RecordsSandboxService } from '../../../services/records-sandbox.service';
 import { FullClient } from '../../../models/client.model';
@@ -36,6 +34,8 @@ import { tap } from 'rxjs/internal/operators/tap';
 import { SharedSandboxService } from '../../../../shared/services/shared-sandbox.service';
 import { RlcSettings } from '../../../../core/models/rlc_settings.model';
 import { HasUnsaved } from '../../../../core/services/can-have-unsaved.interface';
+
+const hash = require('object-hash');
 
 @Component({
     selector: 'app-full-record-detail',
@@ -62,7 +62,7 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
     recordEditForm: FormGroup;
     user_working_on_record = false;
     rlc_options = {
-        show_yielding: false,
+        show_yielding: false
     };
 
     startHash: string;
@@ -70,7 +70,11 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
     settingsSubscription: Subscription;
     specialRecordSubscription: Subscription;
 
-    constructor(private recordSB: RecordsSandboxService, private coreSB: CoreSandboxService, private sharedSB: SharedSandboxService) {
+    constructor(
+        private recordSB: RecordsSandboxService,
+        private coreSB: CoreSandboxService,
+        private sharedSB: SharedSandboxService
+    ) {
         this.recordEditForm = new FormGroup({
             client_name: new FormControl(''),
             client_birthday: new FormControl('', [dateInPastValidator]),
@@ -92,6 +96,15 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
             status_described: new FormControl(''),
             additional_facts: new FormControl('')
         });
+    }
+
+    @HostListener('window:beforeunload', ['$event'])
+    onWindowClose(event: any): void {
+        // Do something
+        alert('dont');
+
+        event.preventDefault();
+        event.returnValue = false;
     }
 
     ngOnDestroy() {
@@ -125,84 +138,53 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
                     this.client = special_record.client;
 
                     this.origin_country = special_record.origin_country;
-                    this.record_documents = Object.values(
-                        special_record.record_documents
-                    );
-                    this.record_messages = Object.values(
-                        special_record.record_messages
-                    );
+                    this.record_documents = Object.values(special_record.record_documents);
+                    this.record_messages = Object.values(special_record.record_messages);
 
                     if (this.client && this.record) this.loadValues();
                 }
             );
 
-        this.settingsSubscription = this.coreSB.getRlcSettings().subscribe((settings: RlcSettings) => {
-            if (settings && settings.recordPoolEnabled){
-                this.rlc_options.show_yielding = true;
-            }
-        });
+        this.settingsSubscription = this.coreSB
+            .getRlcSettings()
+            .subscribe((settings: RlcSettings) => {
+                if (settings && settings.recordPoolEnabled) {
+                    this.rlc_options.show_yielding = true;
+                }
+            });
     }
 
     loadValues() {
         this.recordEditForm.controls['client_name'].setValue(this.client.name);
-        this.recordEditForm.controls['client_birthday'].setValue(
-            this.client.birthday
-        );
-        this.recordEditForm.controls['client_phone'].setValue(
-            this.client.phone_number
-        );
+        this.recordEditForm.controls['client_birthday'].setValue(this.client.birthday);
+        this.recordEditForm.controls['client_phone'].setValue(this.client.phone_number);
         this.recordEditForm.controls['client_note'].setValue(this.client.note);
 
-        this.recordEditForm.controls['official_note'].setValue(
-            this.record.official_note
-        );
+        this.recordEditForm.controls['official_note'].setValue(this.record.official_note);
         this.recordEditForm.controls['state'].setValue(this.record.state);
         this.recordEditForm.controls['note'].setValue(this.record.note);
         this.recordEditForm.controls['contact'].setValue(this.record.contact);
-        this.recordEditForm.controls['bamf_token'].setValue(
-            this.record.bamf_token
-        );
-        this.recordEditForm.controls['foreign_token'].setValue(
-            this.record.foreign_token
-        );
+        this.recordEditForm.controls['bamf_token'].setValue(this.record.bamf_token);
+        this.recordEditForm.controls['foreign_token'].setValue(this.record.foreign_token);
         this.recordEditForm.controls['first_correspondence'].setValue(
             this.record.first_correspondence
         );
-        this.recordEditForm.controls['circumstances'].setValue(
-            this.record.circumstances
-        );
+        this.recordEditForm.controls['circumstances'].setValue(this.record.circumstances);
         this.recordEditForm.controls['lawyer'].setValue(this.record.lawyer);
-        this.recordEditForm.controls['related_persons'].setValue(
-            this.record.related_persons
-        );
-        this.recordEditForm.controls['consultant_team'].setValue(
-            this.record.consultant_team
-        );
-        this.recordEditForm.controls['last_contact_date'].setValue(
-            this.record.last_contact_date
-        );
-        this.recordEditForm.controls['additional_facts'].setValue(
-            this.record.additional_facts
-        );
-        this.recordEditForm.controls['next_steps'].setValue(
-            this.record.next_steps
-        );
-        this.recordEditForm.controls['status_described'].setValue(
-            this.record.status_described
-        );
+        this.recordEditForm.controls['related_persons'].setValue(this.record.related_persons);
+        this.recordEditForm.controls['consultant_team'].setValue(this.record.consultant_team);
+        this.recordEditForm.controls['last_contact_date'].setValue(this.record.last_contact_date);
+        this.recordEditForm.controls['additional_facts'].setValue(this.record.additional_facts);
+        this.recordEditForm.controls['next_steps'].setValue(this.record.next_steps);
+        this.recordEditForm.controls['status_described'].setValue(this.record.status_described);
 
-        this.givenOriginCountry = this.recordSB.getOriginCountryById(
-            this.client.origin_country
-        );
-        this.givenRecordState = this.recordSB.getRecordStateByAbbreviation(
-            this.record.state
-        );
+        this.givenOriginCountry = this.recordSB.getOriginCountryById(this.client.origin_country);
+        this.givenRecordState = this.recordSB.getRecordStateByAbbreviation(this.record.state);
 
-        this.coreSB.getUser().subscribe((user) => {
-            this.record.working_on_record.forEach((currentUser) => {
-                if (currentUser['id'] === user.id)
-                    this.user_working_on_record = true;
-            })
+        this.coreSB.getUser().subscribe(user => {
+            this.record.working_on_record.forEach(currentUser => {
+                if (currentUser['id'] === user.id) this.user_working_on_record = true;
+            });
         });
         this.startHash = this.getHash();
     }
@@ -216,15 +198,13 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
             edit: this.recordEditForm.getRawValue(),
             record: this.record,
             client: this.client
-        }
+        };
         return hash(objects);
     }
 
     onSaveClick() {
         this.record.note = this.recordEditForm.value['note'];
-        this.record.related_persons = this.recordEditForm.value[
-            'related_persons'
-            ];
+        this.record.related_persons = this.recordEditForm.value['related_persons'];
         this.record.contact = this.recordEditForm.value['contact'];
         this.record.last_contact_date = CoreSandboxService.transformDate(
             this.recordEditForm.value['last_contact_date']
@@ -232,24 +212,14 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
         this.record.official_note = this.recordEditForm.value['official_note'];
         this.record.bamf_token = this.recordEditForm.value['bamf_token'];
         this.record.foreign_token = this.recordEditForm.value['foreign_token'];
-        this.record.additional_facts = this.recordEditForm.value[
-            'additional_facts'
-            ];
-        this.record.first_correspondence = this.recordEditForm.value[
-            'first_correspondence'
-            ];
+        this.record.additional_facts = this.recordEditForm.value['additional_facts'];
+        this.record.first_correspondence = this.recordEditForm.value['first_correspondence'];
         this.record.circumstances = this.recordEditForm.value['circumstances'];
         this.record.lawyer = this.recordEditForm.value['lawyer'];
-        this.record.related_persons = this.recordEditForm.value[
-            'related_persons'
-            ];
-        this.record.consultant_team = this.recordEditForm.value[
-            'consultant_team'
-            ];
+        this.record.related_persons = this.recordEditForm.value['related_persons'];
+        this.record.consultant_team = this.recordEditForm.value['consultant_team'];
         this.record.next_steps = this.recordEditForm.value['next_steps'];
-        this.record.status_described = this.recordEditForm.value[
-            'status_described'
-            ];
+        this.record.status_described = this.recordEditForm.value['status_described'];
 
         this.client.note = this.recordEditForm.value['client_note'];
         this.client.name = this.recordEditForm.value['client_name'];
@@ -296,61 +266,75 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
     }
 
     onChangeRecordTokenClick() {
-        this.sharedSB.openEditTextDialog({
-            short: true,
-            descriptionLabel: 'record token',
-            text: this.record.token,
-            descriptionText: 'please enter new record token'
-        }, (newToken: string) => {
-            if (newToken) {
-                this.record.token = newToken;
-                this.record.last_contact_date = CoreSandboxService.transformDate(
-                    this.recordEditForm.value['last_contact_date']
-                );
-                this.client.birthday = CoreSandboxService.transformDate(
-                    this.recordEditForm.value['client_birthday']
-                );
-                this.recordSB.startSavingRecord(this.record, this.client);
+        this.sharedSB.openEditTextDialog(
+            {
+                short: true,
+                descriptionLabel: 'record token',
+                text: this.record.token,
+                descriptionText: 'please enter new record token'
+            },
+            (newToken: string) => {
+                if (newToken) {
+                    this.record.token = newToken;
+                    this.record.last_contact_date = CoreSandboxService.transformDate(
+                        this.recordEditForm.value['last_contact_date']
+                    );
+                    this.client.birthday = CoreSandboxService.transformDate(
+                        this.recordEditForm.value['client_birthday']
+                    );
+                    this.recordSB.startSavingRecord(this.record, this.client);
+                }
             }
-        });
+        );
     }
 
     onRequestRecordDeletionClick() {
-        this.sharedSB.openEditTextDialog({
-            short: false,
-            descriptionLabel: 'record deletion',
-            text: '',
-            descriptionText: 'please explain why you want to delete this record',
-            saveLabel: 'delete',
-            saveColor: 'warn'
-        }, (deletion_description: string) => {
-            if (deletion_description) {
-                this.sharedSB.openConfirmDialog({
-                    description: 'are you sure you want to delete the record?',
-                    confirmLabel: 'delete',
-                    confirmColor: 'warn'
-                }, (delete_record: boolean) => {
-                    if (delete_record) {
-                        this.recordSB.startRequestingRecordDeletion(this.record, deletion_description);
-                    }
-                });
+        this.sharedSB.openEditTextDialog(
+            {
+                short: false,
+                descriptionLabel: 'record deletion',
+                text: '',
+                descriptionText: 'please explain why you want to delete this record',
+                saveLabel: 'delete',
+                saveColor: 'warn'
+            },
+            (deletion_description: string) => {
+                if (deletion_description) {
+                    this.sharedSB.openConfirmDialog(
+                        {
+                            description: 'are you sure you want to delete the record?',
+                            confirmLabel: 'delete',
+                            confirmColor: 'warn'
+                        },
+                        (delete_record: boolean) => {
+                            if (delete_record) {
+                                this.recordSB.startRequestingRecordDeletion(
+                                    this.record,
+                                    deletion_description
+                                );
+                            }
+                        }
+                    );
+                }
             }
-
-        });
+        );
     }
 
     onYieldingRecordClick() {
-        this.sharedSB.openConfirmDialog({
-            confirmLabel: 'sure',
-            cancelLabel: 'cancel',
-            description: 'are you sure you want to yield from record?',
-            title: 'Yield Record',
-            confirmColor: 'warn'
-        }, (result) => {
-            if (result){
-                // yield record
-                this.recordSB.startYieldingRecord(this.record);
+        this.sharedSB.openConfirmDialog(
+            {
+                confirmLabel: 'sure',
+                cancelLabel: 'cancel',
+                description: 'are you sure you want to yield from record?',
+                title: 'Yield Record',
+                confirmColor: 'warn'
+            },
+            result => {
+                if (result) {
+                    // yield record
+                    this.recordSB.startYieldingRecord(this.record);
+                }
             }
-        });
+        );
     }
 }

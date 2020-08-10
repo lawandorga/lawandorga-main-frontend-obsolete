@@ -40,7 +40,7 @@
     </mat-toolbar>
     <div class="full-record-detail__sub-header">
         <div class="full-record-detail__last-edited">
-            last edited: {{(record.last_edited | date)}}
+            last edited: {{(record.last_edited | date: 'HH:ss dd.MM.y')}}
         </div>
         <app-autocomplete [allValuesObservable]="allRecordStates" placeholder="record state"
                           (selectedValueChanged)="onSelectedRecordStateChanged($event)"

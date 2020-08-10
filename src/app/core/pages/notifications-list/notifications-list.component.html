@@ -38,7 +38,7 @@
             <ng-container matColumnDef="created" class="notifications-list__column">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>created</th>
                 <td mat-cell *matCellDef="let notification">
-                    {{notification.created | date: 'HH:ss d.MM.y'}}
+                    {{notification.created | date: 'HH:ss dd.MM.y'}}
                 </td>
             </ng-container>
 
