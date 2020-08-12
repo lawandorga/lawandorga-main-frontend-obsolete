@@ -15,19 +15,22 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
+@import "~src/styles/basic";
 
-//Standard Theme colors
-$c-primary: #003c4d;
-$c-primary-l: #386679;
-$c-primary-d: #001725;
-$c-primary-variant: #e4eaee;
-$c-secondary: #f8f8f9;
-$c-secondary-variant: #b5b5b5;
-$c-background: #e4eaee;
-$c-background-variant: #d6d6d6;
-$c-on-primary: #f8f8f9;
-$c-on-secondary: #3d3c3b;
-$c-link-color: #5456FF;
-$c-warn: #ff426b;
-$c-real-background: #fafafa;
-$c-hover: #f5f5f5;
+
+.notification-list__container {
+
+}
+
+.notification-list__table {
+    width: 100%;
+    background-color: $c-hover;
+    color: $c-hover;
+    padding-left: 80px;
+    border-radius: 15px;
+}
+
+.notification-list__unread {
+    color: $c-warn;
+}
+

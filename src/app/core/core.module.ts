@@ -59,6 +59,7 @@ import { GroupDetailsComponent } from './components/group-details/group-details.
 import { InactiveUsersComponent } from './pages/inactive-users/inactive-users.component';
 import { PrivacyStatementComponent } from './pages/privacy-statement/privacy-statement.component';
 import { NotificationGroupsListComponent } from './pages/notification-groups-list/notification-groups-list.component';
+import { NotificationListComponent } from './components/notification-list/notification-list.component';
 
 @NgModule({
     imports: [
@@ -102,7 +103,8 @@ import { NotificationGroupsListComponent } from './pages/notification-groups-lis
         GroupDetailsComponent,
         InactiveUsersComponent,
         PrivacyStatementComponent,
-        NotificationGroupsListComponent
+        NotificationGroupsListComponent,
+        NotificationListComponent
     ],
     entryComponents: [
         AddGroupMemberComponent,

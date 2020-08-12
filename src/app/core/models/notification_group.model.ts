@@ -64,7 +64,6 @@ export class NotificationGroup {
     }
 
     static getNotificationGroupsFromJsonArray(jsonArray): NotificationGroup[] {
-        console.log('notificationGroup to convert: ', jsonArray);
         const notificationGroups: NotificationGroup[] = [];
         Object.values(jsonArray).map(
             (jsonNotification: {
@@ -77,7 +76,6 @@ export class NotificationGroup {
                 ref_text;
                 notifications;
             }) => {
-                console.log('notificationGroup single item to convert in list: ', jsonNotification);
                 notificationGroups.push(
                     NotificationGroup.getNotificationGroupFromJson(jsonNotification)
                 );

@@ -28,9 +28,12 @@ import { HttpClient } from '@angular/common/http';
 import { NOTIFICATION_GROUPS_API_URL } from '../../../statics/api_urls.statics';
 import { NotificationGroup } from '../../models/notification_group.model';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { not } from 'rxjs/internal-compatibility';
+import { NotificationGroupType } from '../../models/notification.enum';
+import { GetRecordFrontUrl } from '../../../statics/frontend_links.statics';
 
 @Component({
-    selector: 'app-notifications-list',
+    selector: 'app-notification-groups-list',
     templateUrl: './notification-groups-list.component.html',
     styleUrls: ['./notification-groups-list.component.scss'],
     animations: [
@@ -44,7 +47,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
     ]
 })
 export class NotificationGroupsListComponent implements AfterViewInit {
-    columns = ['read', 'created', 'text'];
+    columns = ['read', 'last_activity', 'text'];
 
     data: NotificationGroup[] = [];
     expandedElement: NotificationGroup | null;
@@ -53,7 +56,7 @@ export class NotificationGroupsListComponent implements AfterViewInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
 
-    change = new EventEmitter();
+    change = new EventEmitter(); // TODO: maybe reload with timer? every x seconds, last updated
 
     constructor(
         private coreSB: CoreSandboxService,
@@ -75,7 +78,6 @@ export class NotificationGroupsListComponent implements AfterViewInit {
                     );
                 }),
                 map((data: NotificationResponse) => {
-                    console.log('response: ', data);
                     this.results_length = data.count;
                     return data;
                 }),
@@ -99,30 +101,31 @@ export class NotificationGroupsListComponent implements AfterViewInit {
         return this.httpClient.get<NotificationResponse>(requestUrl);
     }
 
-    onReadClick(notification: Notification): void {
-        // const toPost = {
-        //     read: !notification.read
-        // };
-        // this.httpClient
-        //     .patch(`${NOTIFICATIONS_API_URL}${notification.id}/`, toPost)
-        //     .subscribe(response => {
-        //         if (notification.read) {
-        //             this.coreSB.incrementNotificationCounter();
-        //         } else {
-        //             this.coreSB.decrementNotificationCounter();
-        //         }
-        //         this.change.emit();
-        //     });
+    onReadClick(event, notificationGroup: NotificationGroup): void {
+        event.stopPropagation();
+        const toPost = {
+            read: !notificationGroup.read
+        };
+        this.httpClient
+            .patch(`${NOTIFICATION_GROUPS_API_URL}${notificationGroup.id}/`, toPost)
+            .subscribe(response => {
+                if (notificationGroup.read) {
+                    this.coreSB.incrementNotificationCounter();
+                } else {
+                    this.coreSB.decrementNotificationCounter();
+                    for (const notification of notificationGroup.notifications) {
+                        notification.read = true;
+                    }
+                }
+                notificationGroup.read = !notificationGroup.read;
+            });
     }
 
-    onNotificationClick(notification: Notification): void {
-        //     if (
-        //         notification.event_subject === NotificationEventSubject.RECORD ||
-        //         notification.event_subject === NotificationEventSubject.RECORD_DOCUMENT ||
-        //         notification.event_subject === NotificationEventSubject.RECORD_MESSAGE
-        //     ) {
-        //         this.router.navigateByUrl(GetRecordFrontUrl(notification.ref_id));
-        //     }
+    onNotificationGroupClick(event, notificationGroup: NotificationGroup): void {
+        event.stopPropagation();
+        if (notificationGroup.type === NotificationGroupType.RECORD) {
+            this.router.navigateByUrl(GetRecordFrontUrl(notificationGroup.ref_id));
+        }
     }
 }
 

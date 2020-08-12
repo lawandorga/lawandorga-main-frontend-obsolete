@@ -18,6 +18,7 @@
 
 import { RestrictedUser } from './user.model';
 import { NotificationTextBuilderHelper } from '../services/notification-text-builder.helper';
+import { NotificationType } from './notification.enum';
 
 export class Notification {
     public description_text: string;
@@ -25,30 +26,28 @@ export class Notification {
     constructor(
         public id: string,
         public source_user: RestrictedUser,
-        public event_type: string,
+        public type: string,
         public read: boolean,
         public created: Date,
         public text: string
     ) {
         this.id = id;
         this.source_user = source_user;
-        this.event_type = event_type;
+        this.type = type;
         this.created = created;
         this.text = '';
         this.read = read;
-        this.description_text = '';
-        // this.description_text = NotificationTextBuilderHelper.generateNotificationText(
-        //     this.event_subject,
-        //     this.event,
-        //     this.ref_text,
-        //     this.source_user.name
-        // );
+        this.description_text = NotificationTextBuilderHelper.generateNotificationText(
+            source_user.name,
+            NotificationType[type],
+            text
+        );
     }
 
     static getNotificationFromJson(json: {
         id;
         source_user;
-        event_type;
+        type;
         read;
         created;
         text;
@@ -56,7 +55,7 @@ export class Notification {
         return new Notification(
             json.id,
             RestrictedUser.getRestrictedUserFromJson(json.source_user),
-            json.event_type,
+            json.type,
             json.read,
             new Date(json.created),
             json.text
@@ -66,7 +65,7 @@ export class Notification {
     static getNotificationsFromJsonArray(jsonArray): Notification[] {
         const notifications: Notification[] = [];
         Object.values(jsonArray).map(
-            (jsonNotification: { id; source_user; event_type; read; created; text }) => {
+            (jsonNotification: { id; source_user; type; read; created; text }) => {
                 notifications.push(Notification.getNotificationFromJson(jsonNotification));
             }
         );

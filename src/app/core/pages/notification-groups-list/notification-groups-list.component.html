@@ -25,7 +25,7 @@
             mat-table
             [dataSource]="data"
             matSort
-            matSortActive="created"
+            matSortActive="last_activity"
             matSortDisableClear
             matSortDirection="desc"
             class="notification-groups-list__table"
@@ -35,22 +35,24 @@
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>status</th>
                 <td mat-cell *matCellDef="let element">
                     <div *ngIf="element.read; else noNotification">
-                        <mat-icon (click)="onReadClick(element)">notifications_none</mat-icon>
+                        <mat-icon (click)="onReadClick($event, element)"
+                            >notifications_none</mat-icon
+                        >
                     </div>
                     <ng-template #noNotification>
                         <mat-icon
                             class="notification-groups-list__unread"
-                            (click)="onReadClick(element)"
+                            (click)="onReadClick($event, element)"
                             >notifications_active</mat-icon
                         >
                     </ng-template>
                 </td>
             </ng-container>
 
-            <ng-container matColumnDef="created" class="notification-groups-list__column">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>created</th>
-                <td mat-cell *matCellDef="let notification">
-                    {{ notification.created | date: 'HH:ss dd.MM.y' }}
+            <ng-container matColumnDef="last_activity" class="notification-groups-list__column">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>last activity</th>
+                <td mat-cell *matCellDef="let notificationGroup">
+                    {{ notificationGroup.last_activity | date: 'HH:ss dd.MM.yy' }}
                 </td>
             </ng-container>
 
@@ -62,7 +64,7 @@
                     mat-cell
                     *matCellDef="let notificationGroup"
                     class="notification-groups-list__created-column is_clickable"
-                    (click)="onNotificationClick(notificationGroup)"
+                    (click)="onNotificationGroupClick($event, notificationGroup)"
                 >
                     {{ notificationGroup.type.toLowerCase() + ' ' + notificationGroup.ref_text }}
                 </td>
@@ -74,8 +76,14 @@
                         class="notification-groups-list__group-detail"
                         [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'"
                     >
-                        <div>
-                            <h3>interesting</h3>
+                        <div
+                            *ngIf="element === expandedElement"
+                            class="notification-groups-list__temp"
+                        >
+                            <app-notification-list
+                                class="notification-groups-list__temp"
+                                [notificationGroup]="element"
+                            ></app-notification-list>
                         </div>
                     </div>
                 </td>
