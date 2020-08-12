@@ -16,8 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import {
     MAT_DATE_LOCALE,
@@ -33,21 +33,23 @@ import {
     MatGridListModule,
     MatTableModule,
     MatSortModule,
-    MatTooltipModule, DateAdapter, MAT_DATE_FORMATS
+    MatTooltipModule,
+    DateAdapter,
+    MAT_DATE_FORMATS
 } from '@angular/material';
-import { MatSidenavModule } from "@angular/material/sidenav";
-import { MatCardModule } from "@angular/material/card";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatSelectModule } from "@angular/material/select";
-import { MatInputModule } from "@angular/material/input";
-import { MatDatepickerModule } from "@angular/material/datepicker";
-import { MatNativeDateModule } from "@angular/material";
-import { MatExpansionModule } from "@angular/material/expansion";
-import { MatListModule } from "@angular/material/list";
-import { MatIconModule } from "@angular/material/icon";
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
-import {MatMenuModule} from "@angular/material/menu";
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
@@ -79,7 +81,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         MatTooltipModule,
         MatMenuModule,
         MatBadgeModule,
-        MatPaginatorModule,
+        MatPaginatorModule
     ],
     exports: [
         MatButtonModule,
@@ -111,13 +113,13 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     ],
     declarations: [],
     providers: [
-        { provide: MAT_DATE_LOCALE, useValue: "de-DE" },
+        { provide: MAT_DATE_LOCALE, useValue: 'de-DE' },
         {
             provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
-            useValue: { duration: 2500, verticalPosition: "top" }
+            useValue: { duration: 2500, verticalPosition: 'top' }
         },
-        {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-        {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS}
+        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+        { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS }
     ]
 })
 export class CustomMaterialModule {}

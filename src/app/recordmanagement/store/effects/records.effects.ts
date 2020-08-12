@@ -25,7 +25,8 @@ import { from } from 'rxjs';
 import {
     START_ADMITTING_RECORD_PERMISSION_REQUEST,
     START_DECLINING_RECORD_PERMISSION_REQUEST,
-    START_ENLISTING_POOL_CONSULTANT, START_LOADING_RECORD_POOL,
+    START_ENLISTING_POOL_CONSULTANT,
+    START_LOADING_RECORD_POOL,
     START_PROCESSING_RECORD_DELETION_REQUEST,
     START_REQUESTING_RECORD_DELETION,
     START_REQUESTING_RECORD_PERMISSION,
@@ -34,7 +35,6 @@ import {
     START_YIELDING_RECORD,
     StartAdmittingRecordPermissionRequest,
     StartDecliningRecordPermissionRequest,
-    StartLoadingRecordPool,
     StartProcessingRecordDeletionRequest,
     StartRequestingReadPermission,
     StartRequestingRecordDeletion,
@@ -71,8 +71,7 @@ export class RecordsEffects {
         private recordSB: RecordsSandboxService,
         private appSB: AppSandboxService,
         private coreSB: CoreSandboxService
-    ) {
-    }
+    ) {}
 
     @Effect()
     startSavingRecord = this.actions.pipe(
@@ -83,33 +82,36 @@ export class RecordsEffects {
         switchMap((payload: { record: FullRecord; client: FullClient }) => {
             const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
 
-            const record_object = { ...payload.record};
+            const record_object = { ...payload.record };
             console.log('record object: ', record_object);
 
             const tagIds = [];
             console.log('tags from payload: ', payload.record.tags);
-            for (const tag of payload.record.tags){
+            for (const tag of payload.record.tags) {
                 console.log('i push: ', tag.id);
                 tagIds.push(tag.id);
             }
             console.log('tag ids: ', tagIds);
-            delete (record_object['tags'])
+            delete record_object['tags'];
             record_object['tagged'] = tagIds;
             console.log('record: ', record_object);
-            delete(record_object['is_restricted'])
+            delete record_object['is_restricted'];
 
             record_object['record_token'] = record_object['token'];
             delete record_object['token'];
-
 
             // console.log('record after: ', payload.record);
 
             return from(
                 this.http
-                    .patch(GetSpecialRecordApiURL(payload.record.id), {
-                        record: record_object,
-                        client: payload.client
-                    }, privateKeyPlaceholder)
+                    .patch(
+                        GetSpecialRecordApiURL(payload.record.id),
+                        {
+                            record: record_object,
+                            client: payload.client
+                        },
+                        privateKeyPlaceholder
+                    )
                     .pipe(
                         catchError(error => {
                             this.recordSB.showError(
@@ -194,10 +196,14 @@ export class RecordsEffects {
             const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
             return from(
                 this.http
-                    .post(RECORD_PERMISSIONS_LIST_API_URL, {
-                        id: request.id,
-                        action: 'accept'
-                    }, privateKeyPlaceholder)
+                    .post(
+                        RECORD_PERMISSIONS_LIST_API_URL,
+                        {
+                            id: request.id,
+                            action: 'accept'
+                        },
+                        privateKeyPlaceholder
+                    )
                     .pipe(
                         catchError(error => {
                             this.recordSB.showError(
@@ -297,7 +303,6 @@ export class RecordsEffects {
         }),
         mergeMap((payload: { request: RecordDeletionRequest; action: string }) => {
             if (payload.action !== 'accept' && payload.action !== 'decline') {
-                
                 return [];
             }
 
@@ -344,9 +349,13 @@ export class RecordsEffects {
             const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
             return from(
                 this.http
-                    .post(POOL_RECORD_API_URL, {
-                        record: payload.id
-                    }, privateKeyPlaceholder)
+                    .post(
+                        POOL_RECORD_API_URL,
+                        {
+                            record: payload.id
+                        },
+                        privateKeyPlaceholder
+                    )
                     .pipe(
                         catchError(error => {
                             this.recordSB.showError(
@@ -362,7 +371,9 @@ export class RecordsEffects {
                             if (response['action'] === 'created') {
                                 this.coreSB.showSuccessSnackBar('record added to record pool');
                             } else if (response['action'] === 'matched') {
-                                this.coreSB.showSuccessSnackBar('record matched with consultant from pool, you are no longer responsible for this record');
+                                this.coreSB.showSuccessSnackBar(
+                                    'record matched with consultant from pool, you are no longer responsible for this record'
+                                );
                             }
                             return [{ type: START_LOADING_RECORD_POOL }];
                         })
@@ -375,26 +386,32 @@ export class RecordsEffects {
     startEnlistingPoolConsultant = this.actions.pipe(
         ofType(START_ENLISTING_POOL_CONSULTANT),
         switchMap(() => {
-            return from(this.http.post(POOL_CONSULTANT_API_URL, {}).pipe(catchError(error => {
-                    this.recordSB.showError(
-                        `error at enlisting to consultant pool: ${error.error.detail}`
-                    );
-                    return [];
-                }),
-                mergeMap(response => {
-                    if (response.error) {
-                        this.recordSB.showError('sending error');
+            return from(
+                this.http.post(POOL_CONSULTANT_API_URL, {}).pipe(
+                    catchError(error => {
+                        this.recordSB.showError(
+                            `error at enlisting to consultant pool: ${error.error.detail}`
+                        );
                         return [];
-                    }
-                    if (response['action'] === 'created') {
-                        this.coreSB.showSuccessSnackBar(`you enlisted successfully to consultant pool. You are enlisted ${response.number_of_enlistings} times`);
-                    } else if (response['action'] === 'matched') {
-                        this.coreSB.showSuccessSnackBar('you matched successfully, you are now responsible for another record');
-
-                    }
-                    return [{ type: START_LOADING_RECORD_POOL }];
-                })
-            ));
+                    }),
+                    mergeMap(response => {
+                        if (response.error) {
+                            this.recordSB.showError('sending error');
+                            return [];
+                        }
+                        if (response['action'] === 'created') {
+                            this.coreSB.showSuccessSnackBar(
+                                `you enlisted successfully to consultant pool. You are enlisted ${response.number_of_enlistings} times`
+                            );
+                        } else if (response['action'] === 'matched') {
+                            this.coreSB.showSuccessSnackBar(
+                                'you matched successfully, you are now responsible for another record'
+                            );
+                        }
+                        return [{ type: START_LOADING_RECORD_POOL }];
+                    })
+                )
+            );
         })
     );
 }

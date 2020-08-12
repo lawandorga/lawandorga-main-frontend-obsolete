@@ -25,20 +25,29 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { NOTIFICATIONS_API_URL } from '../../../statics/api_urls.statics';
-import { NotificationEventSubject } from '../../models/notification.enum';
-import { GetRecordFrontUrl } from '../../../statics/frontend_links.statics';
-import { not } from 'rxjs/internal-compatibility';
+import { NOTIFICATION_GROUPS_API_URL } from '../../../statics/api_urls.statics';
+import { NotificationGroup } from '../../models/notification_group.model';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
     selector: 'app-notifications-list',
-    templateUrl: './notifications-list.component.html',
-    styleUrls: ['./notifications-list.component.scss']
+    templateUrl: './notification-groups-list.component.html',
+    styleUrls: ['./notification-groups-list.component.scss'],
+    animations: [
+        trigger('detailExpand', [
+            state('collapsed', style({ height: '0px', minHeight: '0', display: 'none' })),
+            state('expanded', style({ height: '*' })),
+            // transition('expanded <=> collapsed', animate('290ms cubic-bezier(0.4, 0.0, 0.2, 1)'))
+            transition('collapsed <=> expanded', animate('300ms ease-in'))
+            // transition('expanded <=> collapsed', animate('1000ms ease-in'))
+        ])
+    ]
 })
-export class NotificationsListComponent implements AfterViewInit {
+export class NotificationGroupsListComponent implements AfterViewInit {
     columns = ['read', 'created', 'text'];
 
-    data: Notification[] = [];
+    data: NotificationGroup[] = [];
+    expandedElement: NotificationGroup | null;
     results_length = 0;
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -66,6 +75,7 @@ export class NotificationsListComponent implements AfterViewInit {
                     );
                 }),
                 map((data: NotificationResponse) => {
+                    console.log('response: ', data);
                     this.results_length = data.count;
                     return data;
                 }),
@@ -75,7 +85,7 @@ export class NotificationsListComponent implements AfterViewInit {
                 })
             )
             .subscribe((data: NotificationResponse) => {
-                this.data = Notification.getNotificationsFromJsonArray(data.results);
+                this.data = NotificationGroup.getNotificationGroupsFromJsonArray(data);
             });
     }
 
@@ -85,39 +95,39 @@ export class NotificationsListComponent implements AfterViewInit {
         sort_active: string,
         sort_direction: string
     ): Observable<NotificationResponse> {
-        const requestUrl = `${NOTIFICATIONS_API_URL}?limit=${limit}&offset=${offset}&sort=${sort_active}&sortdirection=${sort_direction}`;
+        const requestUrl = `${NOTIFICATION_GROUPS_API_URL}?limit=${limit}&offset=${offset}&sort=${sort_active}&sortdirection=${sort_direction}`;
         return this.httpClient.get<NotificationResponse>(requestUrl);
     }
 
     onReadClick(notification: Notification): void {
-        const toPost = {
-            read: !notification.read
-        };
-        this.httpClient
-            .patch(`${NOTIFICATIONS_API_URL}${notification.id}/`, toPost)
-            .subscribe(response => {
-                if (notification.read) {
-                    this.coreSB.incrementNotificationCounter();
-                } else {
-                    this.coreSB.decrementNotificationCounter();
-                }
-                this.change.emit();
-            });
+        // const toPost = {
+        //     read: !notification.read
+        // };
+        // this.httpClient
+        //     .patch(`${NOTIFICATIONS_API_URL}${notification.id}/`, toPost)
+        //     .subscribe(response => {
+        //         if (notification.read) {
+        //             this.coreSB.incrementNotificationCounter();
+        //         } else {
+        //             this.coreSB.decrementNotificationCounter();
+        //         }
+        //         this.change.emit();
+        //     });
     }
 
     onNotificationClick(notification: Notification): void {
-        if (
-            notification.event_subject === NotificationEventSubject.RECORD ||
-            notification.event_subject === NotificationEventSubject.RECORD_DOCUMENT ||
-            notification.event_subject === NotificationEventSubject.RECORD_MESSAGE
-        ) {
-            this.router.navigateByUrl(GetRecordFrontUrl(notification.ref_id));
-        }
+        //     if (
+        //         notification.event_subject === NotificationEventSubject.RECORD ||
+        //         notification.event_subject === NotificationEventSubject.RECORD_DOCUMENT ||
+        //         notification.event_subject === NotificationEventSubject.RECORD_MESSAGE
+        //     ) {
+        //         this.router.navigateByUrl(GetRecordFrontUrl(notification.ref_id));
+        //     }
     }
 }
 
 export interface NotificationResponse {
-    results: Notification[];
+    results: NotificationGroup[];
     count: number;
     next: string;
     previous: string;

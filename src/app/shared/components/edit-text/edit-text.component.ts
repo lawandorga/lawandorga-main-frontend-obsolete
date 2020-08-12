@@ -43,7 +43,7 @@ export class EditTextComponent implements OnInit {
             this.shortText = true;
         }
         this.descriptionLabel = data.descriptionLabel;
-        this.title = data.title ? data.title : 'Edit text';
+        this.title = data.title ? data.title : 'Edit description_text';
         this.descriptionText = data.descriptionText ? data.descriptionText : undefined;
         this.saveLabel = data.saveLabel ? data.saveLabel : 'save';
         this.cancelLabel = data.cancelLabel ? data.cancelLabel : 'back';
