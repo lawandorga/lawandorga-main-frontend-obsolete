@@ -21,6 +21,11 @@
         <h2>Notifications</h2>
     </mat-card-header>
     <mat-card-content>
+        <app-chip-autocomplete
+            [allValuesObservable]="filterValuesObservable"
+            placeholder="filter types"
+            (selectedValuesChanged)="selectedFilterChanged($event)"
+        ></app-chip-autocomplete>
         <table
             mat-table
             [dataSource]="data"

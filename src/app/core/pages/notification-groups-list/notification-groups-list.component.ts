@@ -17,20 +17,19 @@
  */
 
 import { AfterViewInit, Component, EventEmitter, ViewChild } from '@angular/core';
-import { Notification } from '../../models/notification.model';
-import { merge, Observable } from 'rxjs';
+import { merge, Observable, of } from 'rxjs';
 import { CoreSandboxService } from '../../services/core-sandbox.service';
 import { Router } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { catchError, map, startWith, switchMap } from 'rxjs/operators';
+import { catchError, filter, map, startWith, switchMap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { NOTIFICATION_GROUPS_API_URL } from '../../../statics/api_urls.statics';
 import { NotificationGroup } from '../../models/notification_group.model';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { not } from 'rxjs/internal-compatibility';
 import { NotificationGroupType } from '../../models/notification.enum';
 import { GetRecordFrontUrl } from '../../../statics/frontend_links.statics';
+import { Filterable } from '../../../shared/models/filterable.model';
 
 @Component({
     selector: 'app-notification-groups-list',
@@ -52,6 +51,9 @@ export class NotificationGroupsListComponent implements AfterViewInit {
     data: NotificationGroup[] = [];
     expandedElement: NotificationGroup | null;
     results_length = 0;
+
+    filterValuesObservable: Observable<FilterableTypes[]> = this.generateFilterableTypes();
+    currentFilterValues: FilterableTypes[] = [];
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
@@ -87,7 +89,7 @@ export class NotificationGroupsListComponent implements AfterViewInit {
                 })
             )
             .subscribe((data: NotificationResponse) => {
-                this.data = NotificationGroup.getNotificationGroupsFromJsonArray(data);
+                this.data = NotificationGroup.getNotificationGroupsFromJsonArray(data.results);
             });
     }
 
@@ -97,8 +99,19 @@ export class NotificationGroupsListComponent implements AfterViewInit {
         sort_active: string,
         sort_direction: string
     ): Observable<NotificationResponse> {
-        const requestUrl = `${NOTIFICATION_GROUPS_API_URL}?limit=${limit}&offset=${offset}&sort=${sort_active}&sortdirection=${sort_direction}`;
+        const filtersAsStrings: string[] = [];
+        for (const currentFilter of this.currentFilterValues) {
+            filtersAsStrings.push(currentFilter.name);
+        }
+        const filterString = filtersAsStrings.join('___');
+
+        const requestUrl = `${NOTIFICATION_GROUPS_API_URL}?limit=${limit}&offset=${offset}&sort=${sort_active}&sortdirection=${sort_direction}&filter=${filterString}`;
         return this.httpClient.get<NotificationResponse>(requestUrl);
+    }
+
+    selectedFilterChanged(event: FilterableTypes[]): void {
+        this.currentFilterValues = event;
+        this.change.emit();
     }
 
     onReadClick(event, notificationGroup: NotificationGroup): void {
@@ -127,11 +140,35 @@ export class NotificationGroupsListComponent implements AfterViewInit {
             this.router.navigateByUrl(GetRecordFrontUrl(notificationGroup.ref_id));
         }
     }
+
+    generateFilterableTypes(): Observable<FilterableTypes[]> {
+        const list = [];
+        for (const name of Object.keys(NotificationGroupType)) {
+            list.push(new FilterableTypes(name));
+        }
+        return of(list);
+    }
 }
 
-export interface NotificationResponse {
+interface NotificationResponse {
     results: NotificationGroup[];
     count: number;
     next: string;
     previous: string;
+}
+
+class FilterableTypes implements Filterable {
+    public readonly toShow: string;
+
+    getFilterableProperty() {
+        return this.toShow;
+    }
+
+    constructor(public readonly name: string) {
+        this.name = name;
+        this.toShow = name
+            .toLowerCase()
+            .split('_')
+            .join(' ');
+    }
 }
