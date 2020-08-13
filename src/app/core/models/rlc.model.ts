@@ -16,9 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import {Filterable} from '../../shared/models/filterable.model';
+import { Filterable } from '../../shared/models/filterable.model';
 
-export class RestrictedRlc implements Filterable{
+export class RestrictedRlc implements Filterable {
     constructor(public id: string, public name: string) {
         this.id = id;
         this.name = name;
@@ -32,11 +32,11 @@ export class RestrictedRlc implements Filterable{
         return restrictedRlcs;
     }
 
-    static getRestrictedRlcFromJson(json){
+    static getRestrictedRlcFromJson(json) {
         return new RestrictedRlc(json.id, json.name);
     }
 
-    getFilterableProperty(){
+    getFilterableProperty() {
         return this.name;
     }
 }

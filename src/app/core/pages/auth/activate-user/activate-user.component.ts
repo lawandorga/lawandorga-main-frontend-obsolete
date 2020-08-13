@@ -16,26 +16,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, Params } from "@angular/router";
-import { CoreSandboxService } from "../../../services/core-sandbox.service";
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+import { CoreSandboxService } from '../../../services/core-sandbox.service';
 
 @Component({
-    selector: "app-activate-user",
-    templateUrl: "./activate-user.component.html",
-    styleUrls: ["./activate-user.component.scss"]
+    selector: 'app-activate-user',
+    templateUrl: './activate-user.component.html',
+    styleUrls: ['./activate-user.component.scss']
 })
 export class ActivateUserComponent implements OnInit {
     activationLink: string;
 
-    constructor(
-        private coreSB: CoreSandboxService,
-        public route: ActivatedRoute
-    ) {}
+    constructor(private coreSB: CoreSandboxService, public route: ActivatedRoute) {}
 
     ngOnInit() {
         this.route.params.subscribe((params: Params) => {
-            this.activationLink = params["link"];
+            this.activationLink = params['link'];
 
             this.coreSB.startCheckingUserActivationLink(this.activationLink);
         });

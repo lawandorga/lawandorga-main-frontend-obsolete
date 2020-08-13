@@ -25,8 +25,8 @@ export class FullFolder {
         public creator: RestrictedUser,
         public size: number,
         public created: Date,
-        public last_edited: Date)
-    {
+        public last_edited: Date
+    ) {
         this.id = id;
         this.name = name;
         this.creator = creator;
@@ -36,8 +36,8 @@ export class FullFolder {
     }
 
     static getFullFolderFromJson(json: any): FullFolder {
-        if (!json.creator){
-            json.creator = {id: -1, name: ''}
+        if (!json.creator) {
+            json.creator = { id: -1, name: '' };
         }
         return new FullFolder(
             json.id,
@@ -46,10 +46,10 @@ export class FullFolder {
             json.size,
             new Date(json.created),
             new Date(json.last_edited)
-        )
+        );
     }
 
-    static getFullFoldersFromJsonArray(jsonArray: any): FullFolder[]{
+    static getFullFoldersFromJsonArray(jsonArray: any): FullFolder[] {
         const fullFolders: FullFolder[] = [];
         Object.values(jsonArray).map(fullFolderJson => {
             fullFolders.push(FullFolder.getFullFolderFromJson(fullFolderJson));

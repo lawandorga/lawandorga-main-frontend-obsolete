@@ -21,7 +21,7 @@ export class RlcSettings {
         this.recordPoolEnabled = recordPoolEnabled;
     }
 
-    static getRlcSettingsFromJson(json: any): RlcSettings{
+    static getRlcSettingsFromJson(json: any): RlcSettings {
         return new RlcSettings(json.user_record_pool);
     }
 }

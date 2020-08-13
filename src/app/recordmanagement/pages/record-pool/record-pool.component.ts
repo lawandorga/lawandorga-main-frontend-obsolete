@@ -30,9 +30,7 @@ export class RecordPoolComponent implements OnInit {
     records: number;
     users_enlistings: number;
 
-
-    constructor(private recordSB: RecordsSandboxService) {
-    }
+    constructor(private recordSB: RecordsSandboxService) {}
 
     ngOnInit() {
         this.recordSB.startLoadingRecordPool();
@@ -47,7 +45,7 @@ export class RecordPoolComponent implements OnInit {
         });
     }
 
-    onEnlistClick(){
+    onEnlistClick() {
         this.recordSB.startEnlistingPoolConsultant();
     }
 }

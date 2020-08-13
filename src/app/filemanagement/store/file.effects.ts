@@ -26,14 +26,17 @@ import {
     SET_FILES,
     SET_FOLDER_HAS_PERMISSIONS,
     SET_FOLDER_PERMISSIONS,
-    SET_FOLDERS, SET_WRITE_PERMISSION,
-    START_CREATING_FOLDER_PERMISSION, START_CREATING_NEW_FOLDER,
+    SET_FOLDERS,
+    SET_WRITE_PERMISSION,
+    START_CREATING_FOLDER_PERMISSION,
+    START_CREATING_NEW_FOLDER,
     START_DELETING_FILES_AND_FOLDERS,
     START_DELETING_FOLDER_PERMISSION,
     START_DOWNLOAD_FILES_AND_FOLDERS,
     START_LOADING_FOLDER,
     START_LOADING_FOLDER_PERMISSIONS,
-    StartCreatingFolderPermission, StartCreatingNewFolder,
+    StartCreatingFolderPermission,
+    StartCreatingNewFolder,
     StartDeletingFilesAndFolders,
     StartDeletingFolderPermission,
     StartDownloadFilesAndFolders,
@@ -45,7 +48,8 @@ import { from } from 'rxjs';
 import {
     FILES_DELETE_BASE_API_URL,
     FILES_DOWNLOAD_BASE_API_URL,
-    FILES_PERMISSION_FOR_FOLDER_BASE_API_URL, FOLDER_BASE_API_URL,
+    FILES_PERMISSION_FOR_FOLDER_BASE_API_URL,
+    FOLDER_BASE_API_URL,
     GetFolderInformationApiUrl,
     GetFolderPermissionApiUrl,
     GetFolderPermissionsForFolderApiUrl
@@ -74,8 +78,8 @@ export class FilesEffects {
             return action.payload;
         }),
         mergeMap((path: string) => {
-            if (path.endsWith(" ")){
-                path = path + '//'
+            if (path.endsWith(' ')) {
+                path = path + '//';
             }
 
             return from(
@@ -150,17 +154,20 @@ export class FilesEffects {
         mergeMap((payload: { entries: TableEntry[]; path: string }) => {
             return from(
                 this.http
-                    .post(FILES_DOWNLOAD_BASE_API_URL, {
-                        entries: payload.entries,
-                        path: payload.path
-                    }, AppSandboxService.getPrivateKeyPlaceholder())
+                    .post(
+                        FILES_DOWNLOAD_BASE_API_URL,
+                        {
+                            entries: payload.entries,
+                            path: payload.path
+                        },
+                        AppSandboxService.getPrivateKeyPlaceholder()
+                    )
                     .pipe(
                         catchError(error => {
                             console.log('error: ', error);
                             return [];
                         }),
                         mergeMap((response: any) => {
-
                             if (payload.entries.length === 1) {
                                 payload.path = payload.entries[0].name;
                             } else if (payload.path === '') {
@@ -281,23 +288,27 @@ export class FilesEffects {
         map((action: StartCreatingNewFolder) => {
             return action.payload;
         }),
-        mergeMap((payload: {name: string, parent: TableEntry}) => {
+        mergeMap((payload: { name: string; parent: TableEntry }) => {
             return from(
-                this.http.post(FOLDER_BASE_API_URL, {
-                    name: payload.name,
-                    parent_folder_id: payload.parent.id
-                }).pipe(
-                    catchError(error => {
-                        console.log('error: ', error);
-                        return [];
-                    }),
-                    mergeMap((response: any) => {
-                        return [{
-                            type: ADD_FOLDER,
-                            payload: TableEntry.getFolderTableEntryFromJson(response)
-                        }];
+                this.http
+                    .post(FOLDER_BASE_API_URL, {
+                        name: payload.name,
+                        parent_folder_id: payload.parent.id
                     })
-                )
+                    .pipe(
+                        catchError(error => {
+                            console.log('error: ', error);
+                            return [];
+                        }),
+                        mergeMap((response: any) => {
+                            return [
+                                {
+                                    type: ADD_FOLDER,
+                                    payload: TableEntry.getFolderTableEntryFromJson(response)
+                                }
+                            ];
+                        })
+                    )
             );
         })
     );

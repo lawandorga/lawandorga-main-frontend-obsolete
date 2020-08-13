@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Filterable } from "../../shared/models/filterable.model";
+import { Filterable } from '../../shared/models/filterable.model';
 
 export class State implements Filterable {
     constructor(public abbreviation: string, public full_name: string) {
@@ -24,7 +24,7 @@ export class State implements Filterable {
         this.full_name = full_name;
     }
 
-    static getStatesFromJsonArray(array){
+    static getStatesFromJsonArray(array) {
         const states: Array<State> = [];
         array.map(stateArray => {
             states.push(new State(stateArray[0], stateArray[1]));

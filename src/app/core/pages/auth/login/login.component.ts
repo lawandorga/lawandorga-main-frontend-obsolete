@@ -16,21 +16,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit } from "@angular/core";
-import { Router, ActivatedRoute } from "@angular/router";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { isDevMode } from "@angular/core";
-import { AppSandboxService } from "../../../services/app-sandbox.service";
+import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { isDevMode } from '@angular/core';
+import { AppSandboxService } from '../../../services/app-sandbox.service';
 import {
     FORGOT_PASSWORD_FRONT_URL,
     MAIN_PAGE_FRONT_URL,
     REGISTER_FRONT_URL
-} from "../../../../statics/frontend_links.statics";
+} from '../../../../statics/frontend_links.statics';
 
 @Component({
-    selector: "app-login",
-    templateUrl: "./login.component.html",
-    styleUrls: ["./login.component.scss"]
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
     loginForm: FormGroup;
@@ -45,12 +45,12 @@ export class LoginComponent implements OnInit {
         }
 
         this.loginForm = new FormGroup({
-            email: new FormControl("", [Validators.required, Validators.email]),
-            password: new FormControl("", [Validators.required])
+            email: new FormControl('', [Validators.required, Validators.email]),
+            password: new FormControl('', [Validators.required])
         });
         if (isDevMode()) {
-            this.loginForm.controls["email"].setValue("dummy@rlcm.de");
-            this.loginForm.controls["password"].setValue("qwe123");
+            this.loginForm.controls['email'].setValue('dummy@rlcm.de');
+            this.loginForm.controls['password'].setValue('qwe123');
         }
     }
 
@@ -58,10 +58,7 @@ export class LoginComponent implements OnInit {
 
     onLogInClick() {
         if (this.loginForm.valid)
-            this.appSB.login(
-                this.loginForm.value.email,
-                this.loginForm.value.password
-            );
+            this.appSB.login(this.loginForm.value.email, this.loginForm.value.password);
     }
 
     onRegisterClick() {

@@ -32,8 +32,7 @@ import { RecordDocument } from '../../recordmanagement/models/record_document.mo
 
 @Injectable()
 export class StorageService {
-    constructor(private http: HttpClient) {
-    }
+    constructor(private http: HttpClient) {}
 
     private static b64toBlob(b64Data, contentType, sliceSize) {
         contentType = contentType || 'application/zip';
@@ -67,7 +66,6 @@ export class StorageService {
          */
         FileSaver.saveAs(StorageService.b64toBlob(bytes, mime.getType(filename), 512), filename);
     }
-
 
     uploadEncryptedRecordDocuments(files: File[], record_id, callbackFinishedFn?: Function) {
         const formData = new FormData();
@@ -104,12 +102,12 @@ export class StorageService {
     }
 
     upload(dataTransferItemList, path, callback) {
-        if (Array.isArray(dataTransferItemList)){
+        if (Array.isArray(dataTransferItemList)) {
             this.uploadFiles(dataTransferItemList, path, callback);
             return;
         }
 
-        this.getAllFileEntries(dataTransferItemList).then((fileEntries) => {
+        this.getAllFileEntries(dataTransferItemList).then(fileEntries => {
             const formData = new FormData();
             const paths = [];
             let count = 0;
@@ -119,7 +117,7 @@ export class StorageService {
                     count++;
                     continue;
                 }
-                entry.file((fileResult) => {
+                entry.file(fileResult => {
                     count++;
                     formData.append('files', fileResult);
                     paths.push(entry.fullPath + ';' + fileResult.size);
@@ -183,7 +181,7 @@ export class StorageService {
             if (entry.isFile) {
                 fileEntries.push(entry);
             } else if (entry.isDirectory) {
-                queue.push(...await this.readAllDirectoryEntries(entry.createReader()));
+                queue.push(...(await this.readAllDirectoryEntries(entry.createReader())));
             }
         }
         return fileEntries;

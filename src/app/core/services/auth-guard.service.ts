@@ -16,30 +16,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Injectable } from "@angular/core";
-import { Store } from "@ngrx/store";
-import { map, take } from "rxjs/operators";
-import {
-    ActivatedRouteSnapshot,
-    CanActivate,
-    Router,
-    RouterStateSnapshot
-} from "@angular/router";
-import { AppState } from "../../store/app.reducers";
-import { AuthState } from "../store/auth/auth.reducers";
-import {LOGIN_FRONT_URL} from '../../statics/frontend_links.statics';
+import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { map, take } from 'rxjs/operators';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { AppState } from '../../store/app.reducers';
+import { AuthState } from '../store/auth/auth.reducers';
+import { LOGIN_FRONT_URL } from '../../statics/frontend_links.statics';
 
 @Injectable()
 export class AuthGuardService implements CanActivate {
     lastVisitedUrl: string = undefined;
 
-    constructor(
-        private router: Router,
-        private store: Store<AppState>
-    ) {}
+    constructor(private router: Router, private store: Store<AppState>) {}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        return this.store.select("auth").pipe(
+        return this.store.select('auth').pipe(
             take(1),
             map((authState: AuthState) => {
                 if (!authState.authenticated) {
@@ -51,10 +43,9 @@ export class AuthGuardService implements CanActivate {
         );
     }
 
-    getLastVisitedUrl(){
+    getLastVisitedUrl() {
         let returnVal;
-        if (this.lastVisitedUrl)
-            returnVal = this.lastVisitedUrl;
+        if (this.lastVisitedUrl) returnVal = this.lastVisitedUrl;
         this.lastVisitedUrl = undefined;
         return returnVal;
     }

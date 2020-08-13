@@ -16,11 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RecordDocumentItemDetailComponent } from "./record-document-item-detail.component";
+import { RecordDocumentItemDetailComponent } from './record-document-item-detail.component';
 
-describe("RecordDocumentItemDetailComponent", () => {
+describe('RecordDocumentItemDetailComponent', () => {
     let component: RecordDocumentItemDetailComponent;
     let fixture: ComponentFixture<RecordDocumentItemDetailComponent>;
 
@@ -36,7 +36,7 @@ describe("RecordDocumentItemDetailComponent", () => {
         fixture.detectChanges();
     });
 
-    it("should create", () => {
+    it('should create', () => {
         expect(component).toBeTruthy();
     });
 });

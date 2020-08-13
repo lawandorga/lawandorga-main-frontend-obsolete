@@ -26,7 +26,7 @@ import { AppSandboxService } from './app-sandbox.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private store: Store<AuthState>, private appSB: AppSandboxService) {}
+    constructor(private store: Store<AuthState>, private appSB: AppSandboxService) {}
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return this.store.select('auth').pipe(
@@ -49,8 +49,8 @@ export class AuthInterceptor implements HttpInterceptor {
                 return next.handle(clonedRequest).pipe(
                     catchError((error, caught) => {
                         if (error.status === 401) {
-                            if (error.url && error.url.includes('logout')){
-                               return [];
+                            if (error.url && error.url.includes('logout')) {
+                                return [];
                             }
                             this.appSB.saveLocation();
                             this.appSB.logout();

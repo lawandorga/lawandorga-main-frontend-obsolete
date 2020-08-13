@@ -16,12 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit } from '@angular/core';
 
 @Component({
-    selector: "app-legal-notice",
-    templateUrl: "./legal-notice.component.html",
-    styleUrls: ["./legal-notice.component.scss"]
+    selector: 'app-legal-notice',
+    templateUrl: './legal-notice.component.html',
+    styleUrls: ['./legal-notice.component.scss']
 })
 export class LegalNoticeComponent implements OnInit {
     constructor() {}

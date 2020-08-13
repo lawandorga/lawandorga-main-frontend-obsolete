@@ -16,33 +16,30 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit } from "@angular/core";
-import { CoreSandboxService } from "../../services/core-sandbox.service";
-import { ActivatedRoute, Params } from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { ActivatedRoute, Params } from '@angular/router';
 import {
     PERMISSION_CAN_MANAGE_GROUP,
     PERMISSION_CAN_MANAGE_GROUPS_RLC
-} from "../../../statics/permissions.statics";
-import { RestrictedRlc } from "../../models/rlc.model";
-import {FullGroup} from '../../models/group.model';
+} from '../../../statics/permissions.statics';
+import { RestrictedRlc } from '../../models/rlc.model';
+import { FullGroup } from '../../models/group.model';
 
 @Component({
-    selector: "app-group",
-    templateUrl: "./group.component.html",
-    styleUrls: ["./group.component.scss"]
+    selector: 'app-group',
+    templateUrl: './group.component.html',
+    styleUrls: ['./group.component.scss']
 })
 export class GroupComponent implements OnInit {
     id: string;
     can_edit = false;
 
-    constructor(
-        private coreSB: CoreSandboxService,
-        private route: ActivatedRoute
-    ) {}
+    constructor(private coreSB: CoreSandboxService, private route: ActivatedRoute) {}
 
     ngOnInit() {
         this.route.params.subscribe((params: Params) => {
-            this.id = params["id"];
+            this.id = params['id'];
             this.coreSB.startLoadingSpecialGroup(this.id);
         });
 

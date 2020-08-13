@@ -16,26 +16,29 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {ChipAutocompleteComponent} from './components/chip-autocomplete/chip-autocomplete.component';
-import {CustomMaterialModule} from '../custom-material.module';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {AutocompleteComponent} from './components/autocomplete/autocomplete.component';
-import {GetColorOnHoverDirective} from './directives/get-color-on-hover.directive';
-import {AutoExpandDirective} from './directives/auto-expand.directive';
-import {ExpandableButtonComponent} from './components/expandable-button/expandable-button.component';
-import {EditTextComponent} from './components/edit-text/edit-text.component';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ChipAutocompleteComponent } from './components/chip-autocomplete/chip-autocomplete.component';
+import { CustomMaterialModule } from '../custom-material.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AutocompleteComponent } from './components/autocomplete/autocomplete.component';
+import { GetColorOnHoverDirective } from './directives/get-color-on-hover.directive';
+import { AutoExpandDirective } from './directives/auto-expand.directive';
+import { ExpandableButtonComponent } from './components/expandable-button/expandable-button.component';
+import { EditTextComponent } from './components/edit-text/edit-text.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
-    imports: [
-        CommonModule,
-        CustomMaterialModule,
-        FormsModule,
-        ReactiveFormsModule,
+    imports: [CommonModule, CustomMaterialModule, FormsModule, ReactiveFormsModule],
+    declarations: [
+        ChipAutocompleteComponent,
+        AutocompleteComponent,
+        GetColorOnHoverDirective,
+        AutoExpandDirective,
+        ExpandableButtonComponent,
+        EditTextComponent,
+        ConfirmationDialogComponent
     ],
-    declarations: [ChipAutocompleteComponent, AutocompleteComponent, GetColorOnHoverDirective, AutoExpandDirective, ExpandableButtonComponent, EditTextComponent, ConfirmationDialogComponent],
     exports: [
         CommonModule,
         CustomMaterialModule,
@@ -50,10 +53,6 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
         EditTextComponent,
         ConfirmationDialogComponent
     ],
-    entryComponents: [
-        EditTextComponent,
-        ConfirmationDialogComponent
-    ]
+    entryComponents: [EditTextComponent, ConfirmationDialogComponent]
 })
-export class SharedModule {
-}
+export class SharedModule {}

@@ -1,4 +1,3 @@
-
 /*
  * law&orga - record and organization management software for refugee law clinics
  * Copyright (C) 2019  Dominik Walser
@@ -17,9 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-export const getIdObjects = (array) => {
+export const getIdObjects = array => {
     const obj = {};
-    array.forEach((item) => {
+    array.forEach(item => {
         obj[item.id] = item;
     });
     return obj;
@@ -27,7 +26,7 @@ export const getIdObjects = (array) => {
 
 export const getObjectsByField = (array, field) => {
     const obj = {};
-    array.forEach((item) => {
+    array.forEach(item => {
         obj[item[field]] = item;
     });
     return obj;

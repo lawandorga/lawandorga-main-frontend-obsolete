@@ -16,8 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { authReducer, AuthState } from "../core/store/auth/auth.reducers";
-import { ActionReducerMap } from "@ngrx/store";
+import { authReducer, AuthState } from '../core/store/auth/auth.reducers';
+import { ActionReducerMap } from '@ngrx/store';
 
 export interface AppState {
     auth: AuthState;

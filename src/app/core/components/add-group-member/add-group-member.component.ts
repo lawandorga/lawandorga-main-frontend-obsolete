@@ -42,18 +42,15 @@ export class AddGroupMemberComponent implements OnInit {
     constructor(
         public dialogRef: MatDialogRef<AddGroupMemberComponent>,
         private coreSB: CoreSandboxService
-    ) {
-    }
+    ) {}
 
     ngOnInit() {
         this.coreSB.startLoadingOtherUsers();
-        this.coreSB
-            .getOtherUsers()
-            .subscribe((other_users: RestrictedUser[]) => {
-                alphabeticalSorterByField(other_users, 'name');
-                this.other_users = other_users;
-                this.checkUsersToShow();
-            });
+        this.coreSB.getOtherUsers().subscribe((other_users: RestrictedUser[]) => {
+            alphabeticalSorterByField(other_users, 'name');
+            this.other_users = other_users;
+            this.checkUsersToShow();
+        });
         this.coreSB.getGroup().subscribe((group: FullGroup) => {
             if (group) {
                 this.group_members = group.members;
@@ -79,13 +76,15 @@ export class AddGroupMemberComponent implements OnInit {
         }
     }
 
-    onAddUsersClick(){
-        this.coreSB.addGroupMembers(this.selectedUsers.map((restrictedUser: RestrictedUser) =>   restrictedUser.id  ), this.group_id);
+    onAddUsersClick() {
+        this.coreSB.addGroupMembers(
+            this.selectedUsers.map((restrictedUser: RestrictedUser) => restrictedUser.id),
+            this.group_id
+        );
         this.dialogRef.close();
-
     }
 
-    selectedUsersChanged(selectedUsers: RestrictedUser[]){
+    selectedUsersChanged(selectedUsers: RestrictedUser[]) {
         this.selectedUsers = selectedUsers;
     }
 }

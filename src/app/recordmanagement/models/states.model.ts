@@ -16,15 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import {RecordsState} from '../store/records.reducers';
+import { RecordsState } from '../store/records.reducers';
 
-export class RecordState{
-    constructor(public value: string, public name: string){
+export class RecordState {
+    constructor(public value: string, public name: string) {
         this.value = value;
         this.name = name;
     }
 
-    static getRecordStatesFromJsonArray(jsonArray){
+    static getRecordStatesFromJsonArray(jsonArray) {
         const tags: RecordState[] = [];
         Object.values(jsonArray).map(jsonRecordState => {
             tags.push(RecordState.getRecordStateFromJson(jsonRecordState));
@@ -32,7 +32,7 @@ export class RecordState{
         return tags;
     }
 
-    static getRecordStateFromJson(json){
+    static getRecordStateFromJson(json) {
         return new RecordState(json.id, json.name);
     }
 }

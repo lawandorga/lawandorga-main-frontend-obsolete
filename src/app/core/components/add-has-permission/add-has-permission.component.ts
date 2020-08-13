@@ -16,20 +16,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import {Component, Inject, Input, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import { CoreSandboxService } from "../../services/core-sandbox.service";
-import { RestrictedUser } from "../../models/user.model";
-import { RestrictedGroup } from "../../models/group.model";
-import { RestrictedRlc } from "../../models/rlc.model";
-import { Observable } from "rxjs";
-import {tap} from 'rxjs/internal/operators/tap';
-import {alphabeticalSorterByField} from '../../../shared/other/sorter-helper';
+import { Component, Inject, Input, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { RestrictedUser } from '../../models/user.model';
+import { RestrictedGroup } from '../../models/group.model';
+import { RestrictedRlc } from '../../models/rlc.model';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/internal/operators/tap';
+import { alphabeticalSorterByField } from '../../../shared/other/sorter-helper';
 
 @Component({
-    selector: "app-add-has-permission",
-    templateUrl: "./add-has-permission.component.html",
-    styleUrls: ["./add-has-permission.component.scss"]
+    selector: 'app-add-has-permission',
+    templateUrl: './add-has-permission.component.html',
+    styleUrls: ['./add-has-permission.component.scss']
 })
 export class AddHasPermissionComponent implements OnInit {
     permissionId: string;
@@ -53,21 +53,25 @@ export class AddHasPermissionComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.allUsers = this.coreSB.getOtherUsers().pipe(tap(results => {
-            alphabeticalSorterByField(results, 'name')
-        }));
-        this.allGroups = this.coreSB.getGroups().pipe(tap(results => {
-            alphabeticalSorterByField(results, 'name')
-        }));
+        this.allUsers = this.coreSB.getOtherUsers().pipe(
+            tap(results => {
+                alphabeticalSorterByField(results, 'name');
+            })
+        );
+        this.allGroups = this.coreSB.getGroups().pipe(
+            tap(results => {
+                alphabeticalSorterByField(results, 'name');
+            })
+        );
 
         this.coreSB.getRlc().subscribe((rlc: RestrictedRlc) => {
             this.ownRlc = rlc;
         });
 
-        if (this.data && this.data.permissionId){
+        if (this.data && this.data.permissionId) {
             this.permissionId = this.data.permissionId;
         } else {
-            this.coreSB.showErrorSnackBar('error: no permission id')
+            this.coreSB.showErrorSnackBar('error: no permission id');
         }
     }
 

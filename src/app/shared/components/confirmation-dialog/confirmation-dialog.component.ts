@@ -16,13 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import {Component, Inject, OnInit} from "@angular/core";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-    selector: "app-confirmation-dialog",
-    templateUrl: "./confirmation-dialog.component.html",
-    styleUrls: ["./confirmation-dialog.component.scss"]
+    selector: 'app-confirmation-dialog',
+    templateUrl: './confirmation-dialog.component.html',
+    styleUrls: ['./confirmation-dialog.component.scss']
 })
 export class ConfirmationDialogComponent implements OnInit {
     title: string;
@@ -35,17 +35,16 @@ export class ConfirmationDialogComponent implements OnInit {
         public dialogRef: MatDialogRef<ConfirmationDialogComponent>,
         @Inject(MAT_DIALOG_DATA) data: ConfirmTextParamsInterface
     ) {
-        this.title = data.title ? data.title : "Are you sure?";
+        this.title = data.title ? data.title : 'Are you sure?';
         if (data.description) {
             this.description = data.description;
         }
-        this.confirmLabel = data.confirmLabel ? data.confirmLabel : "yes";
+        this.confirmLabel = data.confirmLabel ? data.confirmLabel : 'yes';
         this.cancelLabel = data.cancelLabel ? data.cancelLabel : 'no';
         this.confirmColor = data.confirmColor ? data.confirmColor : 'primary';
     }
 
-    ngOnInit() {
-    }
+    ngOnInit() {}
 
     onCancelClick() {
         this.dialogRef.close(false);

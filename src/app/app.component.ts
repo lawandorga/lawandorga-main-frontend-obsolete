@@ -16,28 +16,32 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import {Component, OnInit, ViewChild} from "@angular/core";
-import { Router, ActivatedRoute } from "@angular/router";
-import { AuthState } from "./core/store/auth/auth.reducers";
-import { Observable } from "rxjs";
-import LogRocket from "logrocket";
-import { AppSandboxService } from "./core/services/app-sandbox.service";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { AuthState } from './core/store/auth/auth.reducers';
+import { Observable } from 'rxjs';
+import LogRocket from 'logrocket';
+import { AppSandboxService } from './core/services/app-sandbox.service';
 
-import {MediaMatcher} from '@angular/cdk/layout';
-import {ChangeDetectorRef, OnDestroy} from '@angular/core';
-import {LEGAL_NOTICE_FRONT_URL, MAIN_PAGE_FRONT_URL, PRIVACY_STATEMENT_FRONT_URL} from './statics/frontend_links.statics';
-import {environment} from "../environments/environment";
+import { MediaMatcher } from '@angular/cdk/layout';
+import { ChangeDetectorRef, OnDestroy } from '@angular/core';
+import {
+    LEGAL_NOTICE_FRONT_URL,
+    MAIN_PAGE_FRONT_URL,
+    PRIVACY_STATEMENT_FRONT_URL
+} from './statics/frontend_links.statics';
+import { environment } from '../environments/environment';
 
 @Component({
-    selector: "app-root",
-    templateUrl: "./app.component.html",
-    styleUrls: ["./app.component.scss"]
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnDestroy, OnInit{
+export class AppComponent implements OnDestroy, OnInit {
     @ViewChild('snav')
     snav;
 
-    title = "rlcapp";
+    title = 'rlcapp';
     authState: Observable<AuthState>;
 
     mobileQuery: MediaQueryList;
@@ -47,8 +51,6 @@ export class AppComponent implements OnDestroy, OnInit{
     privacyStatementUrl = PRIVACY_STATEMENT_FRONT_URL;
     legalNoticeUrl = LEGAL_NOTICE_FRONT_URL;
 
-    
-
     constructor(
         private route: ActivatedRoute,
         private router: Router,
@@ -57,7 +59,7 @@ export class AppComponent implements OnDestroy, OnInit{
         media: MediaMatcher
     ) {
         this.authState = this.appSB.startApp();
-        LogRocket.init("mndnnu/rlc_app");
+        LogRocket.init('mndnnu/rlc_app');
         this.mobileQuery = media.matchMedia('(max-width: 600px)');
         this._mobileQueryListener = () => changeDetectorRef.detectChanges();
         this.mobileQuery.addListener(this._mobileQueryListener);
@@ -76,11 +78,10 @@ export class AppComponent implements OnDestroy, OnInit{
     }
 
     toggleNav() {
-        if (this.snav)
-            this.snav.toggle();
+        if (this.snav) this.snav.toggle();
     }
 
-    redirectToMainPage(){
+    redirectToMainPage() {
         this.router.navigate([MAIN_PAGE_FRONT_URL]);
     }
 }

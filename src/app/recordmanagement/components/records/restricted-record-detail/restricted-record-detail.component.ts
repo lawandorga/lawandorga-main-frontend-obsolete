@@ -16,26 +16,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit } from "@angular/core";
-import { RestrictedRecord } from "../../../models/record.model";
-import { RecordsSandboxService } from "../../../services/records-sandbox.service";
-import { Router } from "@angular/router";
-import { GetRecordSearchFrontUrl } from "../../../../statics/frontend_links.statics";
-import { Tag } from "../../../models/tag.model";
+import { Component, OnInit } from '@angular/core';
+import { RestrictedRecord } from '../../../models/record.model';
+import { RecordsSandboxService } from '../../../services/records-sandbox.service';
+import { Router } from '@angular/router';
+import { GetRecordSearchFrontUrl } from '../../../../statics/frontend_links.statics';
+import { Tag } from '../../../models/tag.model';
 
 @Component({
-    selector: "app-restricted-record-detail",
-    templateUrl: "./restricted-record-detail.component.html",
-    styleUrls: ["./restricted-record-detail.component.scss"]
+    selector: 'app-restricted-record-detail',
+    templateUrl: './restricted-record-detail.component.html',
+    styleUrls: ['./restricted-record-detail.component.scss']
 })
 export class RestrictedRecordDetailComponent implements OnInit {
     record: RestrictedRecord;
     request_state = 'nr';
 
-    constructor(
-        private recordSB: RecordsSandboxService,
-        private router: Router
-    ) {}
+    constructor(private recordSB: RecordsSandboxService, private router: Router) {}
 
     ngOnInit() {
         this.recordSB
@@ -44,9 +41,8 @@ export class RestrictedRecordDetailComponent implements OnInit {
                 if (special_record.record) this.record = special_record.record;
             });
         this.recordSB.getSpecialRecordRequestState().subscribe((state: string) => {
-            if (state)
-                this.request_state = state;
-        })
+            if (state) this.request_state = state;
+        });
     }
 
     onTagClick(tag: Tag) {

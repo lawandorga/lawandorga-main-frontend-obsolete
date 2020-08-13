@@ -32,12 +32,11 @@
 
 import * as RecordsReducer from './records.reducers';
 
-
 describe('RecordsReducers', () => {
     describe('undefined action', () => {
         it('should return the default state', () => {
             const { initialState } = RecordsReducer;
-            const action = {type: "aa"};
+            const action = { type: 'aa' };
             // const state = RecordsReducer.recordsReducer(undefined, action);
 
             // expect(state).toBe(initialState);

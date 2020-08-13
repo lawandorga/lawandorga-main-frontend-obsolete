@@ -16,15 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit } from "@angular/core";
-import { MatDialogRef } from "@angular/material";
-import { CoreSandboxService } from "../../services/core-sandbox.service";
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material';
+import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-    selector: "app-add-group",
-    templateUrl: "./add-group.component.html",
-    styleUrls: ["./add-group.component.scss"]
+    selector: 'app-add-group',
+    templateUrl: './add-group.component.html',
+    styleUrls: ['./add-group.component.scss']
 })
 export class AddGroupComponent implements OnInit {
     addGroupForm: FormGroup;
@@ -36,7 +36,7 @@ export class AddGroupComponent implements OnInit {
 
     ngOnInit() {
         this.addGroupForm = new FormGroup({
-            name: new FormControl("", [Validators.required]),
+            name: new FormControl('', [Validators.required]),
             visible: new FormControl(true)
         });
     }

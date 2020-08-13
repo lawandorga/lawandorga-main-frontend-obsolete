@@ -16,15 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, Input, OnInit } from "@angular/core";
-import { RecordMessage } from "../../../../models/record_message.model";
-import {CoreSandboxService} from '../../../../../core/services/core-sandbox.service';
-import {FullUser} from '../../../../../core/models/user.model';
+import { Component, Input, OnInit } from '@angular/core';
+import { RecordMessage } from '../../../../models/record_message.model';
+import { CoreSandboxService } from '../../../../../core/services/core-sandbox.service';
+import { FullUser } from '../../../../../core/models/user.model';
 
 @Component({
-    selector: "app-record-message-item",
-    templateUrl: "./record-message-item.component.html",
-    styleUrls: ["./record-message-item.component.scss"]
+    selector: 'app-record-message-item',
+    templateUrl: './record-message-item.component.html',
+    styleUrls: ['./record-message-item.component.scss']
 })
 export class RecordMessageItemComponent implements OnInit {
     @Input()
@@ -36,11 +36,14 @@ export class RecordMessageItemComponent implements OnInit {
 
     ngOnInit() {
         let own = null;
-        this.coreSB.getUser().subscribe((user: FullUser) => {
-            own = user.id;
-        }).unsubscribe();
+        this.coreSB
+            .getUser()
+            .subscribe((user: FullUser) => {
+                own = user.id;
+            })
+            .unsubscribe();
 
-        if (own === this.message.sender.id){
+        if (own === this.message.sender.id) {
             this.ownMessage = true;
         } else {
             this.ownMessage = false;
