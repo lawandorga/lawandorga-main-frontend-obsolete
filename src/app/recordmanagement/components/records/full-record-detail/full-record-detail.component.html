@@ -19,18 +19,45 @@
     <mat-toolbar class="full-record-detail__header">
         <h1>{{ record.token }}</h1>
         <div>
-            <button mat-stroked-button aria-label="Back" (click)="onBackClick()" type="button"
-                    class="full-record-detail__button">
+            <button
+                mat-stroked-button
+                aria-label="Back"
+                (click)="onBackClick()"
+                type="button"
+                class="full-record-detail__button"
+            >
                 Back
             </button>
-            <button mat-flat-button matSuffix color="primary" aria-label="Search" type="submit"
-                    class="full-record-detail__button" (click)="onSaveClick()">
+            <button
+                mat-flat-button
+                matSuffix
+                color="primary"
+                aria-label="Search"
+                type="submit"
+                class="full-record-detail__button"
+                (click)="onSaveClick()"
+            >
                 Save
             </button>
             <mat-menu #appMenu="matMenu">
-                <button mat-menu-item class="button-normal" (click)="onChangeRecordTokenClick()">change record token</button>
-                <button mat-menu-item class="button-normal" (click)="onRequestRecordDeletionClick()">request deletion</button>
-                <button *ngIf="user_working_on_record && rlc_options.show_yielding" mat-menu-item class="button-normal" (click)="onYieldingRecordClick()">yield from record</button>
+                <button mat-menu-item class="button-normal" (click)="onChangeRecordTokenClick()">
+                    change record token
+                </button>
+                <button
+                    mat-menu-item
+                    class="button-normal"
+                    (click)="onRequestRecordDeletionClick()"
+                >
+                    request deletion
+                </button>
+                <button
+                    *ngIf="user_working_on_record && rlc_options.show_yielding"
+                    mat-menu-item
+                    class="button-normal"
+                    (click)="onYieldingRecordClick()"
+                >
+                    yield from record
+                </button>
             </mat-menu>
 
             <button mat-icon-button [matMenuTriggerFor]="appMenu">
@@ -40,12 +67,16 @@
     </mat-toolbar>
     <div class="full-record-detail__sub-header">
         <div class="full-record-detail__last-edited">
-            last edited: {{(record.last_edited | date: 'HH:ss dd.MM.y')}}
+            last edited: {{ record.last_edited | date: 'HH:ss dd.MM.y' }}
         </div>
-        <app-autocomplete [allValuesObservable]="allRecordStates" placeholder="record state"
-                          (selectedValueChanged)="onSelectedRecordStateChanged($event)"
-                          [setSelectedValue]="givenRecordState" valueToShow="full_name"
-                          class="full-record-detail__select-state full_width">
+        <app-autocomplete
+            [allValuesObservable]="allRecordStates"
+            placeholder="record state"
+            (selectedValueChanged)="onSelectedRecordStateChanged($event)"
+            [setSelectedValue]="givenRecordState"
+            valueToShow="full_name"
+            class="full-record-detail__select-state full_width"
+        >
         </app-autocomplete>
     </div>
 
@@ -56,48 +87,71 @@
             </mat-panel-title>
         </mat-expansion-panel-header>
 
-
         <div class="full-record-detail__form">
-
             <mat-form-field>
-                <input matInput placeholder="client name" formControlName="client_name">
+                <input matInput placeholder="client name" formControlName="client_name" />
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput placeholder="client birthday" formControlName="client_birthday"
-                       [matDatepicker]="picker_client_birthday">
-                <mat-datepicker-toggle matSuffix [for]="picker_client_birthday"></mat-datepicker-toggle>
+                <input
+                    matInput
+                    placeholder="client birthday"
+                    formControlName="client_birthday"
+                    [matDatepicker]="picker_client_birthday"
+                />
+                <mat-datepicker-toggle
+                    matSuffix
+                    [for]="picker_client_birthday"
+                ></mat-datepicker-toggle>
                 <mat-datepicker #picker_client_birthday></mat-datepicker>
             </mat-form-field>
 
-            <app-autocomplete [allValuesObservable]="allCountries" placeholder="origin country"
-                              (selectedValueChanged)="onSelectedOriginCountryChanged($event)"
-                              [errors]="originCountryError"
-                              [setSelectedValue]="givenOriginCountry" class="full_width">
+            <app-autocomplete
+                [allValuesObservable]="allCountries"
+                placeholder="origin country"
+                (selectedValueChanged)="onSelectedOriginCountryChanged($event)"
+                [errors]="originCountryError"
+                [setSelectedValue]="recordEditForm.originCountry"
+                class="full_width"
+            >
                 <mat-error *ngIf="originCountryError && originCountryError.null">
                     please select a country
                 </mat-error>
             </app-autocomplete>
-            <div class="full-record-detail__autocomplete-container">
-
-            </div>
+            <div class="full-record-detail__autocomplete-container"></div>
 
             <mat-form-field>
-                <input matInput placeholder="client phone number" formControlName="client_phone">
+                <input matInput placeholder="client phone number" formControlName="client_phone" />
             </mat-form-field>
             <mat-form-field>
-                <textarea matInput type="text" placeholder="client note"
-                          formControlName="client_note"> appAutoExpand</textarea>
+                <textarea
+                    matInput
+                    type="text"
+                    placeholder="client note"
+                    formControlName="client_note"
+                >
+ appAutoExpand</textarea
+                >
             </mat-form-field>
 
             <mat-form-field>
-                <textarea matInput type="text" placeholder="related persons"
-                          formControlName="related_persons" appAutoExpand></textarea>
+                <textarea
+                    matInput
+                    type="text"
+                    placeholder="related persons"
+                    formControlName="related_persons"
+                    appAutoExpand
+                ></textarea>
             </mat-form-field>
 
             <mat-form-field>
-                <textarea matInput type="text" placeholder="further contact information"
-                          formControlName="contact" appAutoExpand></textarea>
+                <textarea
+                    matInput
+                    type="text"
+                    placeholder="further contact information"
+                    formControlName="contact"
+                    appAutoExpand
+                ></textarea>
             </mat-form-field>
         </div>
     </mat-expansion-panel>
@@ -112,19 +166,36 @@
         <div class="full-record-detail__form">
             <mat-form-field appearance="outline" color="warn">
                 <mat-label>Official Note</mat-label>
-                <textarea matInput type="text" placeholder="official note" formControlName="official_note"
-                          appAutoExpand></textarea>
+                <textarea
+                    matInput
+                    type="text"
+                    placeholder="official note"
+                    formControlName="official_note"
+                    appAutoExpand
+                ></textarea>
             </mat-form-field>
 
-
             <mat-form-field>
-                <textarea matInput type="text" placeholder="note" formControlName="note" appAutoExpand></textarea>
+                <textarea
+                    matInput
+                    type="text"
+                    placeholder="note"
+                    formControlName="note"
+                    appAutoExpand
+                ></textarea>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput placeholder="last contact date" formControlName="last_contact_date"
-                       [matDatepicker]="picker_last_contact_date">
-                <mat-datepicker-toggle matSuffix [for]="picker_last_contact_date"></mat-datepicker-toggle>
+                <input
+                    matInput
+                    placeholder="last contact date"
+                    formControlName="last_contact_date"
+                    [matDatepicker]="picker_last_contact_date"
+                />
+                <mat-datepicker-toggle
+                    matSuffix
+                    [for]="picker_last_contact_date"
+                ></mat-datepicker-toggle>
                 <mat-datepicker #picker_last_contact_date></mat-datepicker>
             </mat-form-field>
 
@@ -134,27 +205,30 @@
             </div>
 
             <div>
-                <app-chip-autocomplete [allValuesObservable]="allRecordTags" class="full_width"
-                                       placeholder="tags"
-                                       (selectedValuesChanged)="onSelectedRecordTagsChanged($event)"
-                                       [errors]="recordTagErrors"
-                                       [firstSelected]="record.tags">
+                <app-chip-autocomplete
+                    [allValuesObservable]="allRecordTags"
+                    class="full_width"
+                    placeholder="tags"
+                    (selectedValuesChanged)="onSelectedRecordTagsChanged($event)"
+                    [errors]="recordTagErrors"
+                    [firstSelected]="record.tags"
+                >
                     <mat-error *ngIf="recordTagErrors && recordTagErrors.null">
                         at least one tag for case is required
                     </mat-error>
                 </app-chip-autocomplete>
             </div>
             <mat-form-field>
-                <input matInput placeholder="consultant team" formControlName="consultant_team">
+                <input matInput placeholder="consultant team" formControlName="consultant_team" />
             </mat-form-field>
             <mat-form-field>
-                <input matInput placeholder="lawyer" formControlName="lawyer">
+                <input matInput placeholder="lawyer" formControlName="lawyer" />
             </mat-form-field>
             <mat-form-field>
-                <input matInput placeholder="BAMF token" formControlName="bamf_token">
+                <input matInput placeholder="BAMF token" formControlName="bamf_token" />
             </mat-form-field>
             <mat-form-field>
-                <input matInput placeholder="foreign token" formControlName="foreign_token">
+                <input matInput placeholder="foreign token" formControlName="foreign_token" />
             </mat-form-field>
         </div>
     </mat-expansion-panel>
@@ -167,24 +241,49 @@
         </mat-expansion-panel-header>
         <div class="full-record-detail__form">
             <mat-form-field>
-                <textarea matInput type="text" placeholder="first correspondence"
-                          formControlName="first_correspondence" appAutoExpand></textarea>
+                <textarea
+                    matInput
+                    type="text"
+                    placeholder="first correspondence"
+                    formControlName="first_correspondence"
+                    appAutoExpand
+                ></textarea>
             </mat-form-field>
             <mat-form-field>
-                <textarea matInput type="text" placeholder="circumstances"
-                          formControlName="circumstances" appAutoExpand></textarea>
+                <textarea
+                    matInput
+                    type="text"
+                    placeholder="circumstances"
+                    formControlName="circumstances"
+                    appAutoExpand
+                ></textarea>
             </mat-form-field>
             <mat-form-field>
-                <textarea matInput type="text" placeholder="next steps" formControlName="next_steps"
-                          appAutoExpand></textarea>
+                <textarea
+                    matInput
+                    type="text"
+                    placeholder="next steps"
+                    formControlName="next_steps"
+                    appAutoExpand
+                ></textarea>
             </mat-form-field>
             <mat-form-field>
-                    <textarea matInput type="text" placeholder="status described"
-                              formControlName="status_described" appAutoExpand></textarea>
+                <textarea
+                    matInput
+                    type="text"
+                    placeholder="status described"
+                    formControlName="status_described"
+                    appAutoExpand
+                ></textarea>
             </mat-form-field>
             <mat-form-field>
-                    <textarea matInput type="text" placeholder="additional facts"
-                              formControlName="additional_facts" appAutoExpand></textarea>
+                <textarea
+                    matInput
+                    type="text"
+                    placeholder="additional facts"
+                    formControlName="additional_facts"
+                    appAutoExpand
+                ></textarea>
             </mat-form-field>
         </div>
     </mat-expansion-panel>
@@ -195,8 +294,13 @@
                 Files
             </mat-panel-title>
             <div class="full-record-detail__download-all-holder">
-                <app-expandable-button color="primary" icon="cloud_download" [styleParams]="{ fontSize: '14px' }"
-                                       content="download all" (click)="downloadAllRecordDocuments($event)"></app-expandable-button>
+                <app-expandable-button
+                    color="primary"
+                    icon="cloud_download"
+                    [styleParams]="{ fontSize: '14px' }"
+                    content="download all"
+                    (click)="downloadAllRecordDocuments($event)"
+                ></app-expandable-button>
             </div>
         </mat-expansion-panel-header>
 
