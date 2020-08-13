@@ -204,6 +204,7 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
 
     onSaveClick() {
         this.record.note = this.recordEditForm.value['note'];
+
         this.record.related_persons = this.recordEditForm.value['related_persons'];
         this.record.contact = this.recordEditForm.value['contact'];
         this.record.last_contact_date = CoreSandboxService.transformDate(

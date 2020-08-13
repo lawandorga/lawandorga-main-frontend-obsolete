@@ -54,7 +54,9 @@ export class NotificationTextBuilderHelper {
             return `${source_user_name} created record`;
         }
         if (event_type === NotificationType.RECORD__UPDATED) {
-            return `${source_user_name} updated fields`;
+            return `${source_user_name} updated ${
+                text.split(',').length > 1 ? 'fields' : 'field'
+            } ${text.length < 30 ? text : ''}`;
         }
         if (event_type === NotificationType.RECORD__RECORD_MESSAGE_ADDED) {
             return `${source_user_name} wrote a new message`;
