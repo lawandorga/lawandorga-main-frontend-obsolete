@@ -87,14 +87,12 @@ export class FolderViewComponent implements OnInit {
         });
 
         this.fileSB.getCurrentFolderWritePermission().subscribe((write_permission: boolean) => {
-            console.log('write permission: ', write_permission);
             this.write_permission = this.write_permission || write_permission;
         });
 
         this.coreSB.hasPermissionFromStringForOwnRlc(
             PERMISSION_WRITE_ALL_FOLDERS_RLC,
             hasPermission => {
-                console.log('overall write permission for folders: ', hasPermission);
                 this.write_permission = this.write_permission || hasPermission;
             }
         );

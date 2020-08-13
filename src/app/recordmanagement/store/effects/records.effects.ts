@@ -27,6 +27,7 @@ import {
     START_DECLINING_RECORD_PERMISSION_REQUEST,
     START_ENLISTING_POOL_CONSULTANT,
     START_LOADING_RECORD_POOL,
+    START_LOADING_SPECIAL_RECORD,
     START_PROCESSING_RECORD_DELETION_REQUEST,
     START_REQUESTING_RECORD_DELETION,
     START_REQUESTING_RECORD_PERMISSION,
@@ -82,8 +83,6 @@ export class RecordsEffects {
         switchMap((payload: { data: any; id: string }) => {
             const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
 
-            // console.log('record after: ', payload.record);
-
             return from(
                 this.http
                     .patch(GetSpecialRecordApiURL(payload.id), payload.data, privateKeyPlaceholder)
@@ -96,7 +95,7 @@ export class RecordsEffects {
                         }),
                         mergeMap((response: any) => {
                             this.recordSB.successfullySavedRecord(response);
-                            return [];
+                            return [{ type: START_LOADING_SPECIAL_RECORD, payload: payload.id }];
                         })
                     )
             );

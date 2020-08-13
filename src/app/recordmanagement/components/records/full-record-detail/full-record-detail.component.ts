@@ -76,27 +76,6 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
         private coreSB: CoreSandboxService,
         private sharedSB: SharedSandboxService
     ) {
-        // this.recordEditForm = new FormGroup({
-        //     client_name: new FormControl(''),
-        //     client_birthday: new FormControl('', [dateInPastValidator]),
-        //     client_phone: new FormControl(''),
-        //     client_note: new FormControl(''),
-        //     note: new FormControl(''),
-        //     official_note: new FormControl(''),
-        //     last_contact_date: new FormControl('', [dateInPastValidator]),
-        //     state: new FormControl(''),
-        //     consultant_team: new FormControl(''),
-        //     lawyer: new FormControl(''),
-        //     related_persons: new FormControl(''),
-        //     contact: new FormControl(''),
-        //     bamf_token: new FormControl(''),
-        //     foreign_token: new FormControl(''),
-        //     first_correspondence: new FormControl(''),
-        //     circumstances: new FormControl(''),
-        //     next_steps: new FormControl(''),
-        //     status_described: new FormControl(''),
-        //     additional_facts: new FormControl('')
-        // });
         this.recordEditForm = new RecordFormGroup(recordSB, coreSB);
     }
 
@@ -104,10 +83,10 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
     onWindowClose(event: any): void {
         // Do something
         if (this.startHash !== this.recordEditForm.getHash()) {
-            alert('dont');
+            alert('unsaved content');
 
-            // event.preventDefault();
-            // event.returnValue = false;
+            event.preventDefault();
+            event.returnValue = false;
         }
     }
 
@@ -159,37 +138,6 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
     }
 
     loadValues() {
-        // this.recordEditForm.controls['client_name'].setValue(this.client.name);
-        // this.recordEditForm.controls['client_birthday'].setValue(this.client.birthday);
-        // this.recordEditForm.controls['client_phone'].setValue(this.client.phone_number);
-        // this.recordEditForm.controls['client_note'].setValue(this.client.note);
-        //
-        // this.recordEditForm.controls['official_note'].setValue(this.record.official_note);
-        // this.recordEditForm.controls['state'].setValue(this.record.state);
-        // this.recordEditForm.controls['note'].setValue(this.record.note);
-        // this.recordEditForm.controls['contact'].setValue(this.record.contact);
-        // this.recordEditForm.controls['bamf_token'].setValue(this.record.bamf_token);
-        // this.recordEditForm.controls['foreign_token'].setValue(this.record.foreign_token);
-        // this.recordEditForm.controls['first_correspondence'].setValue(
-        //     this.record.first_correspondence
-        // );
-        // this.recordEditForm.controls['circumstances'].setValue(this.record.circumstances);
-        // this.recordEditForm.controls['lawyer'].setValue(this.record.lawyer);
-        // this.recordEditForm.controls['related_persons'].setValue(this.record.related_persons);
-        // this.recordEditForm.controls['consultant_team'].setValue(this.record.consultant_team);
-        // this.recordEditForm.controls['last_contact_date'].setValue(this.record.last_contact_date);
-        // this.recordEditForm.controls['additional_facts'].setValue(this.record.additional_facts);
-        // this.recordEditForm.controls['next_steps'].setValue(this.record.next_steps);
-        // this.recordEditForm.controls['status_described'].setValue(this.record.status_described);
-        //
-        // this.givenOriginCountry = this.recordSB.getOriginCountryById(this.client.origin_country);
-        // this.givenRecordState = this.recordSB.getRecordStateByAbbreviation(this.record.state);
-        //
-        // this.coreSB.getUser().subscribe(user => {
-        //     this.record.working_on_record.forEach(currentUser => {
-        //         if (currentUser['id'] === user.id) this.user_working_on_record = true;
-        //     });
-        // });
         this.recordEditForm.loadValuesFromRecordAndClient(this.record, this.client);
         this.startHash = this.recordEditForm.getHash();
     }
@@ -198,45 +146,9 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
         return this.startHash !== this.recordEditForm.getHash();
     }
 
-    // getHash(): string {
-    //     const objects = {
-    //         edit: this.recordEditForm.getRawValue(),
-    //         record: this.record,
-    //         client: this.client
-    //     };
-    //     return hash(objects);
-    // }
-
     onSaveClick() {
-        // this.record.note = this.recordEditForm.value['note'];
-        //
-        // this.record.related_persons = this.recordEditForm.value['related_persons'];
-        // this.record.contact = this.recordEditForm.value['contact'];
-        // this.record.last_contact_date = CoreSandboxService.transformDate(
-        //     this.recordEditForm.value['last_contact_date']
-        // );
-        // this.record.official_note = this.recordEditForm.value['official_note'];
-        // this.record.bamf_token = this.recordEditForm.value['bamf_token'];
-        // this.record.foreign_token = this.recordEditForm.value['foreign_token'];
-        // this.record.additional_facts = this.recordEditForm.value['additional_facts'];
-        // this.record.first_correspondence = this.recordEditForm.value['first_correspondence'];
-        // this.record.circumstances = this.recordEditForm.value['circumstances'];
-        // this.record.lawyer = this.recordEditForm.value['lawyer'];
-        // this.record.related_persons = this.recordEditForm.value['related_persons'];
-        // this.record.consultant_team = this.recordEditForm.value['consultant_team'];
-        // this.record.next_steps = this.recordEditForm.value['next_steps'];
-        // this.record.status_described = this.recordEditForm.value['status_described'];
-        //
-        // this.client.note = this.recordEditForm.value['client_note'];
-        // this.client.name = this.recordEditForm.value['client_name'];
-        // this.client.birthday = CoreSandboxService.transformDate(
-        //     this.recordEditForm.value['client_birthday']
-        // );
-        // this.client.origin_country = this.origin_country.id;
-        // this.client.phone_number = this.recordEditForm.value['client_phone'];
         const changes = this.recordEditForm.getChanges();
         if (Object.keys(changes).length === 0) {
-            console.log('nothing to change');
         } else {
             this.recordSB.startSavingRecord(changes, this.record.id);
             this.startHash = this.recordEditForm.getHash();
@@ -291,7 +203,6 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
                     this.client.birthday = CoreSandboxService.transformDate(
                         this.recordEditForm.value['client_birthday']
                     );
-                    // this.recordSB.startSavingRecord(this.record, this.client);
                 }
             }
         );
@@ -405,8 +316,6 @@ class RecordFormGroup extends FormGroup {
     loadValuesFromRecordAndClient(record: FullRecord, client: FullClient): void {
         const clientObject = { ...client };
         const recordObject = { ...record };
-        console.log('clientObject', clientObject);
-        console.log('recordObject', recordObject);
 
         const field_hashes = {};
         for (const label of this.fields) {
@@ -432,12 +341,8 @@ class RecordFormGroup extends FormGroup {
     }
 
     getChanges(): any {
-        console.log('getChanges');
         const changes = { record: {}, client: {} };
         for (const label of this.fields) {
-            // if (hash(this.value[label]) !== this.org_hashes['field_hashes'][label]) {
-            //     changes[label] = this.value[label];
-            // }
             if (label.startsWith('client_')) {
                 if (hash(this.value[label]) !== this.org_hashes['field_hashes'][label]) {
                     changes['client'][label.substring(7)] = this.value[label];
@@ -447,8 +352,6 @@ class RecordFormGroup extends FormGroup {
                     changes['record'][label] = this.value[label];
                 }
             }
-            // field_hashes[label] = hash(this.value[label]);
-            // this.org_hashes['field_hashes'][label] = hash(this.value[label]);
         }
         if (hash(this.recordState) !== this.org_hashes['record_state']) {
             changes['record']['state'] = this.recordState;
@@ -456,8 +359,6 @@ class RecordFormGroup extends FormGroup {
         if (hash(this.originCountry) !== this.org_hashes['origin_country']) {
             changes['client']['origin_country'] = this.originCountry.id;
         }
-
-        console.log('changes:', changes);
 
         return changes;
     }
@@ -470,13 +371,4 @@ class RecordFormGroup extends FormGroup {
         };
         return hash(objects);
     }
-
-    //   getHash(): string {
-    //         const objects = {
-    //             edit: this.recordEditForm.getRawValue(),
-    //             record: this.record,
-    //             client: this.client
-    //         };
-    //         return hash(objects);
-    //     }
 }

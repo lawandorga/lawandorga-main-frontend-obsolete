@@ -294,27 +294,6 @@ export class RecordsSandboxService {
     }
 
     startSavingRecord(toSave: any, record_id: number) {
-        // TODO: stuff here
-        console.log('startSavingRecord here');
-        console.log('toSave: ', toSave);
-        // const record_object = { ...payload.record };
-        // console.log('record object: ', record_object);
-        //
-        // const tagIds = [];
-        // console.log('tags from payload: ', payload.record.tags);
-        // for (const tag of payload.record.tags) {
-        //     console.log('i push: ', tag.id);
-        //     tagIds.push(tag.id);
-        // }
-        // console.log('tag ids: ', tagIds);
-        // delete record_object['tags'];
-        // record_object['tagged'] = tagIds;
-        // console.log('record: ', record_object);
-        // delete record_object['is_restricted'];
-        //
-        // record_object['record_token'] = record_object['token'];
-        // delete record_object['token'];
-
         this.recordStore.dispatch(
             new StartSavingRecord({ data: toSave, id: record_id.toString() })
         );
