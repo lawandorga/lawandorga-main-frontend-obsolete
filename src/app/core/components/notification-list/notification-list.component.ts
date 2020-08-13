@@ -51,15 +51,17 @@ export class NotificationListComponent implements OnInit {
             .patch(`${NOTIFICATIONS_API_URL}${notification.id}/`, toPost)
             .subscribe(response => {
                 notification.read = !notification.read;
-                if (!notification.read) {
+                if (!notification.read && this.notificationGroup.read) {
                     this.notificationGroup.read = false;
-                    this.coreSB.decrementNotificationCounter();
+                    this.coreSB.incrementNotificationCounter();
                 } else {
                     for (const current_notification of this.notificationGroup.notifications) {
-                        if (!current_notification.read) return;
+                        if (!current_notification.read) {
+                            return;
+                        }
                     }
                     this.notificationGroup.read = true;
-                    this.coreSB.incrementNotificationCounter();
+                    this.coreSB.decrementNotificationCounter();
                 }
             });
     }

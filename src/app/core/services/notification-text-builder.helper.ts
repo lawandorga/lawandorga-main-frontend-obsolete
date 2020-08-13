@@ -19,32 +19,6 @@
 import { NotificationType } from '../models/notification.enum';
 
 export class NotificationTextBuilderHelper {
-    // static generateNotificationText(
-    //     event_subject: string,
-    //     event: string,
-    //     ref_text: string,
-    //     source_user_name: string
-    // ): string {
-    //     if (
-    //         event_subject === NotificationEventSubject.RECORD &&
-    //         event === NotificationEvent.CREATED
-    //     ) {
-    //         return `You were assigned as Consultant for Record ${ref_text}`;
-    //     }
-    //     if (event_subject === NotificationEventSubject.GROUP){
-    //         if (event === NotificationEvent.ADDED)
-    //             return `${source_user_name} added you to Group ${ref_text}`
-    //         if (event === NotificationEvent.REMOVED)
-    //             return `${source_user_name} removed you from Group ${ref_text}`
-    //     }
-    //
-    //     return `${source_user_name} ${event.toLowerCase()} ${
-    //         event_subject
-    //             .toLowerCase()
-    //             .replace('_', ' ')
-    //     } ${ref_text}.`;
-    // }
-
     static generateNotificationText(
         source_user_name: string,
         event_type: NotificationType,
@@ -56,7 +30,7 @@ export class NotificationTextBuilderHelper {
         if (event_type === NotificationType.RECORD__UPDATED) {
             return `${source_user_name} updated ${
                 text.split(',').length > 1 ? 'fields' : 'field'
-            } ${text.length < 30 ? text : ''}`;
+            } ${text.length < 30 ? text.replace(',', ', ') : ''}`;
         }
         if (event_type === NotificationType.RECORD__RECORD_MESSAGE_ADDED) {
             return `${source_user_name} wrote a new message`;

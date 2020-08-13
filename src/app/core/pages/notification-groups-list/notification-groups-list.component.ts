@@ -90,7 +90,6 @@ export class NotificationGroupsListComponent implements AfterViewInit {
             )
             .subscribe((data: NotificationResponse) => {
                 this.data = NotificationGroup.getNotificationGroupsFromJsonArray(data.results);
-                console.log('data', this.data);
             });
     }
 
