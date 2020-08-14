@@ -53,6 +53,11 @@ tr.example-detail-row {
 
 .example-element-row td {
     border-bottom-width: 0;
+    height: 60px;
+}
+
+.example-expanded-row {
+    font-size: 30px !important;
 }
 
 tr.example-element-row:not(.example-expanded-row):hover {
@@ -66,4 +71,3 @@ tr.example-element-row:not(.example-expanded-row):active {
 .notification-groups-list__temp {
     width: 100%;
 }
-

@@ -60,6 +60,7 @@ import { InactiveUsersComponent } from './pages/inactive-users/inactive-users.co
 import { PrivacyStatementComponent } from './pages/privacy-statement/privacy-statement.component';
 import { NotificationGroupsListComponent } from './pages/notification-groups-list/notification-groups-list.component';
 import { NotificationListComponent } from './components/notification-list/notification-list.component';
+import { CdkTableModule } from '@angular/cdk/table';
 
 @NgModule({
     imports: [
@@ -71,7 +72,8 @@ import { NotificationListComponent } from './components/notification-list/notifi
         EffectsModule.forFeature([CoreEffects]),
         MatTabsModule,
         MatProgressSpinnerModule,
-        NgMaterialMultilevelMenuModule
+        NgMaterialMultilevelMenuModule,
+        CdkTableModule
     ],
     declarations: [
         ProfileComponent,

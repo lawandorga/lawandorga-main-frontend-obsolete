@@ -35,7 +35,19 @@ export class NotificationTextBuilderHelper {
         if (event_type === NotificationType.RECORD__RECORD_MESSAGE_ADDED) {
             return `${source_user_name} wrote a new message`;
         }
+        if (event_type === NotificationType.GROUP__ADDED_ME) {
+            return `${source_user_name} added you to the group`;
+        }
+        if (event_type === NotificationType.GROUP__REMOVED_ME) {
+            return `${source_user_name} removed you from the group`;
+        }
+        if (event_type === NotificationType.RECORD__RECORD_DOCUMENT_ADDED) {
+            return `${source_user_name} added record document ${text}`;
+        }
+        if (event_type === NotificationType.RECORD__RECORD_DOCUMENT_MODIFIED) {
+            return `${source_user_name} modified record document ${text}`;
+        }
 
-        return 'notification';
+        return 'notification text needs to be added';
     }
 }

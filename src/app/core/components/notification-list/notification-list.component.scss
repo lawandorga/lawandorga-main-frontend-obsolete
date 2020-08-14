@@ -26,7 +26,7 @@
     width: 100%;
     background-color: $c-hover;
     color: $c-hover;
-    padding-left: 80px;
+    padding-left: 40px;
     border-radius: 15px;
 }
 
@@ -34,3 +34,20 @@
     color: $c-warn;
 }
 
+.notification-lost__read-status {
+    //padding-right: 30px;
+    //width: 100px;
+
+}
+
+.notification-list__column__read {
+    max-width: 30px;
+}
+
+.notification-list__column__created {
+    max-width: 100px;
+}
+
+.notification-list__column__desc {
+    width: auto;
+}
