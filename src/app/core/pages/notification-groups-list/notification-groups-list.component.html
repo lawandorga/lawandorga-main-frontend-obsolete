@@ -68,10 +68,20 @@
                 <td
                     mat-cell
                     *matCellDef="let notificationGroup"
-                    class="notification-groups-list__created-column is_clickable"
-                    (click)="onNotificationGroupClick($event, notificationGroup)"
+                    class="notification-groups-list__created-column"
                 >
-                    {{ notificationGroup.type.toLowerCase() + ' ' + notificationGroup.ref_text }}
+                    {{
+                        notificationGroup.type
+                            .toLowerCase()
+                            .split('_')
+                            .join(' ')
+                    }}
+                    <span
+                        (click)="onNotificationGroupClick($event, notificationGroup)"
+                        class="is_clickable"
+                    >
+                        {{ notificationGroup.ref_text }}</span
+                    >
                 </td>
             </ng-container>
 

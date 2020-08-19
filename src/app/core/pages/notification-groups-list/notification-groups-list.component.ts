@@ -136,7 +136,11 @@ export class NotificationGroupsListComponent implements AfterViewInit {
 
     onNotificationGroupClick(event, notificationGroup: NotificationGroup): void {
         event.stopPropagation();
-        if (notificationGroup.type === NotificationGroupType.RECORD) {
+        if (
+            notificationGroup.type === NotificationGroupType.RECORD ||
+            notificationGroup.type === NotificationGroupType.RECORD_DELETION_REQUEST ||
+            notificationGroup.type === NotificationGroupType.RECORD_PERMISSION_REQUEST
+        ) {
             this.router.navigateByUrl(GetRecordFrontUrl(notificationGroup.ref_id));
         }
     }

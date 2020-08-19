@@ -32,6 +32,9 @@ export class NotificationTextBuilderHelper {
                 text.split(',').length > 1 ? 'fields' : 'field'
             } ${text.length < 30 ? text.replace(',', ', ') : ''}`;
         }
+        if (event_type === NotificationType.RECORD__DELETED) {
+            return `${source_user_name} deleted record`;
+        }
         if (event_type === NotificationType.RECORD__RECORD_MESSAGE_ADDED) {
             return `${source_user_name} wrote a new message`;
         }
@@ -46,6 +49,42 @@ export class NotificationTextBuilderHelper {
         }
         if (event_type === NotificationType.RECORD__RECORD_DOCUMENT_MODIFIED) {
             return `${source_user_name} modified record document ${text}`;
+        }
+        if (event_type === NotificationType.RECORD_DELETION_REQUEST__REQUESTED) {
+            return `${source_user_name} requested record deletion`;
+        }
+        if (event_type === NotificationType.RECORD_DELETION_REQUEST__ACCEPTED) {
+            return `${source_user_name} accepted record deletion request`;
+        }
+        if (event_type === NotificationType.RECORD_DELETION_REQUEST__DECLINED) {
+            return `${source_user_name} declined record deletion request`;
+        }
+        if (event_type === NotificationType.USER_REQUEST__REQUESTED) {
+            return `${source_user_name} requested to join your rlc`;
+        }
+        if (event_type === NotificationType.USER_REQUEST__ACCEPTED) {
+            return `${source_user_name} accepted the request`;
+        }
+        if (event_type === NotificationType.USER_REQUEST__DECLINED) {
+            return `${source_user_name} declined the request`;
+        }
+        if (event_type === NotificationType.RECORD_PERMISSION_REQUEST__REQUESTED) {
+            return `${source_user_name} asked to get access to record`;
+        }
+        if (event_type === NotificationType.RECORD_PERMISSION_REQUEST__ACCEPTED) {
+            return `${source_user_name} accepted the request`;
+        }
+        if (event_type === NotificationType.RECORD_PERMISSION_REQUEST__DECLINED) {
+            return `${source_user_name} declined the request`;
+        }
+        if (event_type === NotificationType.RECORD__ACCESS_DENIED) {
+            return `${source_user_name} denied access to record`;
+        }
+        if (event_type === NotificationType.RECORD__DELETION_REQUEST_DENIED) {
+            return `${source_user_name} denied record deletion request`;
+        }
+        if (event_type === NotificationType.RECORD__NEW_RECORD_PERMISSION) {
+            return `${source_user_name} granted access to record`;
         }
 
         return 'notification text needs to be added';
