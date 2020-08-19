@@ -16,8 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import {Filterable} from '../../shared/models/filterable.model';
-import {RestrictedUser} from './user.model';
+import { Filterable } from '../../shared/models/filterable.model';
+import { RestrictedUser } from './user.model';
 
 export class RestrictedGroup implements Filterable {
     constructor(public id: string, public name: string) {
@@ -28,9 +28,7 @@ export class RestrictedGroup implements Filterable {
     static getRestrictedGroupsFromJsonArray(jsonArray) {
         const restrictedGroups: Array<RestrictedGroup> = [];
         Object.values(jsonArray).map(restrictedJsonUser => {
-            restrictedGroups.push(
-                RestrictedGroup.getRestrictedUserFromJson(restrictedJsonUser)
-            );
+            restrictedGroups.push(RestrictedGroup.getRestrictedUserFromJson(restrictedJsonUser));
         });
         return restrictedGroups;
     }
@@ -53,7 +51,7 @@ export class FullGroup extends RestrictedGroup {
         public members: RestrictedUser[],
         public visible: boolean,
         public description: string,
-        public note: string,
+        public note: string
     ) {
         super(id, name);
         this.creator_id = creator_id;

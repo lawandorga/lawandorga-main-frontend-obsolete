@@ -16,14 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { ErrorStateMatcher } from "@angular/material";
-import { FormControl, FormGroupDirective, NgForm } from "@angular/forms";
+import { ErrorStateMatcher } from '@angular/material';
+import { FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 
 export class CustomErrorStateMatcher implements ErrorStateMatcher {
-    isErrorState(
-        control: FormControl | null,
-        form: FormGroupDirective | NgForm | null
-    ): boolean {
+    isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
         return !!(control && control.dirty && form && form.invalid);
     }
 }

@@ -16,11 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NewUserRequestsComponent } from "./new-user-requests.component";
+import { NewUserRequestsComponent } from './new-user-requests.component';
 
-describe("NewUserRequestsComponent", () => {
+describe('NewUserRequestsComponent', () => {
     let component: NewUserRequestsComponent;
     let fixture: ComponentFixture<NewUserRequestsComponent>;
 
@@ -36,7 +36,7 @@ describe("NewUserRequestsComponent", () => {
         fixture.detectChanges();
     });
 
-    it("should create", () => {
+    it('should create', () => {
         expect(component).toBeTruthy();
     });
 });

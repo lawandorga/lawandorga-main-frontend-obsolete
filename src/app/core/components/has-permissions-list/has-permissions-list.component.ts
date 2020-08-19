@@ -16,14 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import {
-    Component,
-    Input,
-    OnChanges,
-    OnInit,
-    SimpleChanges
-} from "@angular/core";
-import { SelectionModel } from "@angular/cdk/collections";
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { SelectionModel } from '@angular/cdk/collections';
 import {
     animate,
     animateChild,
@@ -33,21 +27,21 @@ import {
     style,
     transition,
     trigger
-} from "@angular/animations";
-import { Router } from "@angular/router";
+} from '@angular/animations';
+import { Router } from '@angular/router';
 
-import { HasPermission } from "../../models/permission.model";
-import { RestrictedUser } from "../../models/user.model";
-import { RestrictedGroup } from "../../models/group.model";
-import { RestrictedRlc } from "../../models/rlc.model";
-import { CoreSandboxService } from "../../services/core-sandbox.service";
-import { PERMISSION_CAN_MANAGE_PERMISSIONS_RLC } from "../../../statics/permissions.statics";
-import { GetPermissionFrontUrl } from "../../../statics/frontend_links.statics";
+import { HasPermission } from '../../models/permission.model';
+import { RestrictedUser } from '../../models/user.model';
+import { RestrictedGroup } from '../../models/group.model';
+import { RestrictedRlc } from '../../models/rlc.model';
+import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { PERMISSION_CAN_MANAGE_PERMISSIONS_RLC } from '../../../statics/permissions.statics';
+import { GetPermissionFrontUrl } from '../../../statics/frontend_links.statics';
 
 @Component({
-    selector: "app-has-permissions-list",
-    templateUrl: "./has-permissions-list.component.html",
-    styleUrls: ["./has-permissions-list.component.scss"]
+    selector: 'app-has-permissions-list',
+    templateUrl: './has-permissions-list.component.html',
+    styleUrls: ['./has-permissions-list.component.scss']
 })
 export class HasPermissionsListComponent implements OnInit, OnChanges {
     @Input()
@@ -58,20 +52,20 @@ export class HasPermissionsListComponent implements OnInit, OnChanges {
     @Input()
     permissionHolder: RestrictedUser | RestrictedGroup | RestrictedRlc;
 
-    columns = ["permission_name", "permission_for", "remove"];
+    columns = ['permission_name', 'permission_for', 'remove'];
 
     canEditPermissions = false;
     selection = new SelectionModel<HasPermission>(true, []);
 
     foldStates = {};
-    removeText = "remove";
+    removeText = 'remove';
 
     constructor(private coreSB: CoreSandboxService, private router: Router) {}
 
     ngOnInit() {
         if (!this.hasPermissions || this.hasPermissions.length === 0)
             throw new Error(
-                "HasPermissionsList-Error: hasPermissions has to be set and .length != 0"
+                'HasPermissionsList-Error: hasPermissions has to be set and .length != 0'
             );
 
         this.coreSB.hasPermissionFromStringForOwnRlc(
@@ -91,12 +85,11 @@ export class HasPermissionsListComponent implements OnInit, OnChanges {
             resetStates = true;
         }
         this.hasPermissions.forEach((hasPermission: HasPermission) => {
-            this.permissionNames[
-                hasPermission.id
-            ] = this.coreSB.getPermissionById(hasPermission.permission_id).name;
+            this.permissionNames[hasPermission.id] = this.coreSB.getPermissionById(
+                hasPermission.permission_id
+            ).name;
 
-            if (resetStates)
-                this.foldStates[hasPermission.id] = "folded";
+            if (resetStates) this.foldStates[hasPermission.id] = 'folded';
         });
     }
 
@@ -105,9 +98,7 @@ export class HasPermissionsListComponent implements OnInit, OnChanges {
     }
 
     onHasPermissionNameClick(hasPermission: HasPermission): void {
-        this.router.navigateByUrl(
-            GetPermissionFrontUrl(hasPermission.permission_id)
-        );
+        this.router.navigateByUrl(GetPermissionFrontUrl(hasPermission.permission_id));
     }
 
     isAllSelected() {
@@ -127,10 +118,10 @@ export class HasPermissionsListComponent implements OnInit, OnChanges {
     }
 
     onMouseEnter(id: number): void {
-        this.foldStates[id] = "unfolded";
+        this.foldStates[id] = 'unfolded';
     }
 
     onMouseLeave(id: number): void {
-        this.foldStates[id] = "folded";
+        this.foldStates[id] = 'folded';
     }
 }

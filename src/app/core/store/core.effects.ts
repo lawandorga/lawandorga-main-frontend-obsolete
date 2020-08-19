@@ -16,11 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Actions, Effect, ofType } from "@ngrx/effects";
-import { catchError, map, mergeMap, switchMap } from "rxjs/operators";
-import { from, of } from "rxjs";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Actions, Effect, ofType } from '@ngrx/effects';
+import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
+import { from, of } from 'rxjs';
 
 import {
     START_CREATE_USER,
@@ -81,7 +81,9 @@ import {
     START_LOADING_RLC_SETTINGS,
     SET_RLC_SETTINGS,
     START_ADDING_GROUP_MEMBERS,
-    StartAddingGroupMembers, START_LOADING_UNREAD_NOTIFICATIONS, SET_NOTIFICATIONS
+    StartAddingGroupMembers,
+    START_LOADING_UNREAD_NOTIFICATIONS,
+    SET_NOTIFICATIONS
 } from './core.actions';
 import {
     CREATE_PROFILE_API_URL,
@@ -99,17 +101,19 @@ import {
     INACTIVE_USERS_API_URL,
     NEW_USER_REQUEST_ADMIT_API_URL,
     NEW_USER_REQUEST_API_URL,
-    PROFILES_API_URL, RLC_SETTINGS_API_URL,
-    RLCS_API_URL, UNREAD_NOTIFICATIONS_API_URL,
+    PROFILES_API_URL,
+    RLC_SETTINGS_API_URL,
+    RLCS_API_URL,
+    UNREAD_NOTIFICATIONS_API_URL,
     USER_HAS_PERMISSIONS_API_URL
 } from '../../statics/api_urls.statics';
-import { CoreSandboxService } from "../services/core-sandbox.service";
-import { ForeignUser, FullUser, RestrictedUser } from "../models/user.model";
-import { SnackbarService } from "../../shared/services/snackbar.service";
-import { FullGroup, RestrictedGroup } from "../models/group.model";
-import { HasPermission, Permission } from "../models/permission.model";
-import { RestrictedRlc } from "../models/rlc.model";
-import { NewUserRequest } from "../models/new_user_request.model";
+import { CoreSandboxService } from '../services/core-sandbox.service';
+import { ForeignUser, FullUser, RestrictedUser } from '../models/user.model';
+import { SnackbarService } from '../../shared/services/snackbar.service';
+import { FullGroup, RestrictedGroup } from '../models/group.model';
+import { HasPermission, Permission } from '../models/permission.model';
+import { RestrictedRlc } from '../models/rlc.model';
+import { NewUserRequest } from '../models/new_user_request.model';
 import { AppSandboxService } from '../services/app-sandbox.service';
 import { RlcSettings } from '../models/rlc_settings.model';
 import { alphabeticalSorterByField } from '../../shared/other/sorter-helper';
@@ -132,32 +136,22 @@ export class CoreEffects {
         }),
         switchMap((updates: { id: string; userUpdates: any }) => {
             return from(
-                this.http
-                    .patch(
-                        GetSpecialProfileApiURL(updates.id),
-                        updates.userUpdates
-                    )
-                    .pipe(
-                        catchError(error => {
-                            if (error.status === 400) return of({ error: "1" });
-                            else if (error.status === 500)
-                                return of({ error: "2" });
-                            return of({ error: "unknown" });
-                        }),
-                        mergeMap((response: any) => {
-                            this.coreSB.showSuccessSnackBar(
-                                "successfully saved"
-                            );
-                            return [
-                                {
-                                    type: SET_USER,
-                                    payload: FullUser.getFullUserFromJson(
-                                        response
-                                    )
-                                }
-                            ];
-                        })
-                    )
+                this.http.patch(GetSpecialProfileApiURL(updates.id), updates.userUpdates).pipe(
+                    catchError(error => {
+                        if (error.status === 400) return of({ error: '1' });
+                        else if (error.status === 500) return of({ error: '2' });
+                        return of({ error: 'unknown' });
+                    }),
+                    mergeMap((response: any) => {
+                        this.coreSB.showSuccessSnackBar('successfully saved');
+                        return [
+                            {
+                                type: SET_USER,
+                                payload: FullUser.getFullUserFromJson(response)
+                            }
+                        ];
+                    })
+                )
             );
         })
     );
@@ -172,17 +166,13 @@ export class CoreEffects {
             return from(
                 this.http.post(CREATE_PROFILE_API_URL, user).pipe(
                     catchError(error => {
-                        this.snackbar.showErrorSnackBar(
-                            "error at register: " + error.error.detail
-                        );
+                        this.snackbar.showErrorSnackBar('error at register: ' + error.error.detail);
                         return [];
                     }),
                     mergeMap((response: any) => {
                         if (!response.error) {
-                            this.coreSB.showSuccessSnackBar(
-                                "successfully created account"
-                            );
-                            this.coreSB.router.navigate(["login"]);
+                            this.coreSB.showSuccessSnackBar('successfully created account');
+                            this.coreSB.router.navigate(['login']);
                         }
                         return [];
                     })
@@ -199,14 +189,12 @@ export class CoreEffects {
                 this.http.get(GROUPS_API_URL).pipe(
                     catchError(error => {
                         this.snackbar.showErrorSnackBar(
-                            "error at loading groups: " + error.error.detail
+                            'error at loading groups: ' + error.error.detail
                         );
                         return [];
                     }),
                     mergeMap((response: any) => {
-                        const groups = RestrictedGroup.getRestrictedGroupsFromJsonArray(
-                            response
-                        );
+                        const groups = RestrictedGroup.getRestrictedGroupsFromJsonArray(response);
                         return [
                             {
                                 type: SET_GROUPS,
@@ -227,14 +215,12 @@ export class CoreEffects {
                 this.http.get(PROFILES_API_URL).pipe(
                     catchError(error => {
                         this.snackbar.showErrorSnackBar(
-                            "error at loading profiles: " + error.error.detail
+                            'error at loading profiles: ' + error.error.detail
                         );
                         return [];
                     }),
                     mergeMap((response: any) => {
-                        const users = RestrictedUser.getRestrictedUsersFromJsonArray(
-                            response
-                        );
+                        const users = RestrictedUser.getRestrictedUsersFromJsonArray(response);
                         return [{ type: SET_OTHER_USERS, payload: users }];
                     })
                 )
@@ -259,9 +245,7 @@ export class CoreEffects {
                     }),
                     mergeMap((response: any) => {
                         if (!response.error) {
-                            const user = ForeignUser.getForeignUserFromJson(
-                                response
-                            );
+                            const user = ForeignUser.getForeignUserFromJson(response);
                             return [
                                 {
                                     type: SET_SPECIAL_FOREIGN_USER,
@@ -287,8 +271,7 @@ export class CoreEffects {
                 this.http.get(GetSpecialGroupApiURL(id)).pipe(
                     catchError(error => {
                         this.snackbar.showErrorSnackBar(
-                            "error at loading special group: " +
-                                error.error.detail
+                            'error at loading special group: ' + error.error.detail
                         );
                         return [];
                     }),
@@ -317,23 +300,24 @@ export class CoreEffects {
             const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
             return from(
                 this.http
-                    .post(GROUP_MEMBER_API_URL, {
-                        action: "add",
-                        user_ids: toAdd.user_ids,
-                        group_id: toAdd.group_id
-                    }, privateKeyPlaceholder)
+                    .post(
+                        GROUP_MEMBER_API_URL,
+                        {
+                            action: 'add',
+                            user_ids: toAdd.user_ids,
+                            group_id: toAdd.group_id
+                        },
+                        privateKeyPlaceholder
+                    )
                     .pipe(
                         catchError(error => {
                             this.snackbar.showErrorSnackBar(
-                                "error at adding group member: " +
-                                error.error.detail
+                                'error at adding group member: ' + error.error.detail
                             );
                             return [];
                         }),
                         mergeMap((response: any) => {
-                            const group = FullGroup.getFullGroupFromJson(
-                                response
-                            );
+                            const group = FullGroup.getFullGroupFromJson(response);
                             return [
                                 {
                                     type: SET_SPECIAL_GROUP,
@@ -356,22 +340,19 @@ export class CoreEffects {
             return from(
                 this.http
                     .post(GROUP_MEMBER_API_URL, {
-                        action: "remove",
+                        action: 'remove',
                         user_ids: [toRemove.user_id],
                         group_id: toRemove.group_id
                     })
                     .pipe(
                         catchError(error => {
                             this.snackbar.showErrorSnackBar(
-                                "error at removing group member: " +
-                                    error.error.detail
+                                'error at removing group member: ' + error.error.detail
                             );
                             return [];
                         }),
                         mergeMap((response: any) => {
-                            const group = FullGroup.getFullGroupFromJson(
-                                response
-                            );
+                            const group = FullGroup.getFullGroupFromJson(response);
                             return [
                                 {
                                     type: SET_SPECIAL_GROUP,
@@ -395,15 +376,12 @@ export class CoreEffects {
                 this.http.get(GetSpecialPermissionApiURL(id)).pipe(
                     catchError(error => {
                         this.snackbar.showErrorSnackBar(
-                            "error at loading special permission: " +
-                                error.error.detail
+                            'error at loading special permission: ' + error.error.detail
                         );
                         return [];
                     }),
                     mergeMap((response: any) => {
-                        const permission = Permission.getPermissionFromJson(
-                            response
-                        );
+                        const permission = Permission.getPermissionFromJson(response);
                         const hasPermissions = HasPermission.getPermissionsFromJsonArray(
                             response.has_permissions
                         );
@@ -431,17 +409,15 @@ export class CoreEffects {
                 this.http.get(RLCS_API_URL).pipe(
                     catchError(error => {
                         this.snackbar.showErrorSnackBar(
-                            "error at loading rlcs: " + error.error.detail
+                            'error at loading rlcs: ' + error.error.detail
                         );
                         return [];
                     }),
                     mergeMap((response: any) => {
-                        const rlcs = RestrictedRlc.getRestrictedRlcsFromJsonArray(
-                            response
-                        );
+                        const rlcs = RestrictedRlc.getRestrictedRlcsFromJsonArray(response);
                         if (rlcs.length === 0) {
                             this.snackbar.showErrorSnackBar(
-                                "unfortunately there are no rlcs until now"
+                                'unfortunately there are no rlcs until now'
                             );
                         }
                         return [
@@ -467,8 +443,7 @@ export class CoreEffects {
                 this.http.delete(GetSpecialHasPermissionApiURL(id)).pipe(
                     catchError(error => {
                         this.snackbar.showErrorSnackBar(
-                            "error at deleting hasPermission: " +
-                                error.error.detail
+                            'error at deleting hasPermission: ' + error.error.detail
                         );
                         return [];
                     }),
@@ -500,15 +475,12 @@ export class CoreEffects {
                 this.http.post(HAS_PERMISSION_API_URL, toAdd, privateKeyPlaceholder).pipe(
                     catchError(error => {
                         this.snackbar.showErrorSnackBar(
-                            "error at creating hasPermission: " +
-                                error.error.detail
+                            'error at creating hasPermission: ' + error.error.detail
                         );
                         return [];
                     }),
                     mergeMap((response: any) => {
-                        const hasPermission = HasPermission.getHasPermissionFromJson(
-                            response
-                        );
+                        const hasPermission = HasPermission.getHasPermissionFromJson(response);
                         return [
                             {
                                 type: ADD_SINGLE_HAS_PERMISSION,
@@ -535,8 +507,7 @@ export class CoreEffects {
                 this.http.get(GetPermissionsForGroupApiURL(id)).pipe(
                     catchError(error => {
                         this.snackbar.showErrorSnackBar(
-                            "error at loading special group has permissions: " +
-                                error.error.detail
+                            'error at loading special group has permissions: ' + error.error.detail
                         );
                         return [];
                     }),
@@ -564,8 +535,7 @@ export class CoreEffects {
                 this.http.get(HAS_PERMISSIONS_STATICS_API_URL).pipe(
                     catchError(error => {
                         this.snackbar.showErrorSnackBar(
-                            "error at loading hasPermission statics: " +
-                                error.error.detail
+                            'error at loading hasPermission statics: ' + error.error.detail
                         );
                         return [];
                     }),
@@ -603,14 +573,12 @@ export class CoreEffects {
                 this.http.post(GROUPS_API_URL, newGroup).pipe(
                     catchError(error => {
                         this.snackbar.showErrorSnackBar(
-                            "error at adding new group: " + error.error.detail
+                            'error at adding new group: ' + error.error.detail
                         );
                         return [];
                     }),
                     mergeMap((response: any) => {
-                        const group = RestrictedGroup.getRestrictedUserFromJson(
-                            response
-                        );
+                        const group = RestrictedGroup.getRestrictedUserFromJson(response);
                         return [
                             {
                                 type: ADD_GROUP,
@@ -631,15 +599,12 @@ export class CoreEffects {
                 this.http.get(NEW_USER_REQUEST_API_URL).pipe(
                     catchError(error => {
                         this.snackbar.showErrorSnackBar(
-                            "error at loading new user requests: " +
-                                error.error.detail
+                            'error at loading new user requests: ' + error.error.detail
                         );
                         return [];
                     }),
                     mergeMap((response: any) => {
-                        const requests = NewUserRequest.getNewUserRequestFromJsonArray(
-                            response
-                        );
+                        const requests = NewUserRequest.getNewUserRequestFromJsonArray(response);
                         return [
                             {
                                 type: SET_NEW_USER_REQUESTS,
@@ -662,22 +627,23 @@ export class CoreEffects {
             const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
             return from(
                 this.http
-                    .post(NEW_USER_REQUEST_ADMIT_API_URL, {
-                        id: newUserRequest.id,
-                        action: "accept"
-                    }, privateKeyPlaceholder)
+                    .post(
+                        NEW_USER_REQUEST_ADMIT_API_URL,
+                        {
+                            id: newUserRequest.id,
+                            action: 'accept'
+                        },
+                        privateKeyPlaceholder
+                    )
                     .pipe(
                         catchError(error => {
                             this.snackbar.showErrorSnackBar(
-                                "error at accepting new user request: " +
-                                    error.error.detail
+                                'error at accepting new user request: ' + error.error.detail
                             );
                             return [];
                         }),
                         mergeMap((response: any) => {
-                            const request = NewUserRequest.getNewUserRequestFromJson(
-                                response
-                            );
+                            const request = NewUserRequest.getNewUserRequestFromJson(response);
                             return [
                                 {
                                     type: UPDATE_NEW_USER_REQUEST,
@@ -701,20 +667,17 @@ export class CoreEffects {
                 this.http
                     .post(NEW_USER_REQUEST_ADMIT_API_URL, {
                         id: newUserRequest.id,
-                        action: "decline"
+                        action: 'decline'
                     })
                     .pipe(
                         catchError(error => {
                             this.snackbar.showErrorSnackBar(
-                                "error at accepting new user request: " +
-                                    error.error.detail
+                                'error at accepting new user request: ' + error.error.detail
                             );
                             return [];
                         }),
                         mergeMap((response: any) => {
-                            const request = NewUserRequest.getNewUserRequestFromJson(
-                                response
-                            );
+                            const request = NewUserRequest.getNewUserRequestFromJson(response);
                             return [
                                 {
                                     type: UPDATE_NEW_USER_REQUEST,
@@ -738,8 +701,7 @@ export class CoreEffects {
                 this.http.get(GetCheckUserActivationApiUrl(link)).pipe(
                     catchError(error => {
                         this.snackbar.showErrorSnackBar(
-                            "error at checking user activation link: " +
-                                error.error.detail
+                            'error at checking user activation link: ' + error.error.detail
                         );
                         return [];
                     }),
@@ -762,15 +724,12 @@ export class CoreEffects {
                 this.http.post(GetActivateUserApiUrl(link), {}).pipe(
                     catchError(error => {
                         this.snackbar.showErrorSnackBar(
-                            "error at checking user activation link: " +
-                                error.error.detail
+                            'error at checking user activation link: ' + error.error.detail
                         );
                         return [];
                     }),
                     mergeMap((response: any) => {
-                        this.snackbar.showSuccessSnackBar(
-                            "account successfully activated"
-                        );
+                        this.snackbar.showSuccessSnackBar('account successfully activated');
                         return [];
                     })
                 )
@@ -789,14 +748,12 @@ export class CoreEffects {
                 this.http.patch(GetSpecialProfileApiURL(user.id), user).pipe(
                     catchError(error => {
                         this.snackbar.showErrorSnackBar(
-                            "error at saving user: " + error.error.detail
+                            'error at saving user: ' + error.error.detail
                         );
                         return [];
                     }),
                     mergeMap((response: any) => {
-                        this.snackbar.showSuccessSnackBar(
-                            "successfully saved profile"
-                        );
+                        this.snackbar.showSuccessSnackBar('successfully saved profile');
                         return [];
                     })
                 )
@@ -812,15 +769,12 @@ export class CoreEffects {
                 this.http.get(INACTIVE_USERS_API_URL).pipe(
                     catchError(error => {
                         this.snackbar.showErrorSnackBar(
-                            "error at loading inactive users: " +
-                                error.error.detail
+                            'error at loading inactive users: ' + error.error.detail
                         );
                         return [];
                     }),
                     mergeMap((response: any) => {
-                        const inactive_users = FullUser.getFullUsersFromJsonArray(
-                            response
-                        );
+                        const inactive_users = FullUser.getFullUsersFromJsonArray(response);
                         return [
                             {
                                 type: SET_INACTIVE_USERS,
@@ -843,20 +797,22 @@ export class CoreEffects {
             const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
             return from(
                 this.http
-                    .post(INACTIVE_USERS_API_URL, {
-                        method: "activate",
-                        user_id: id
-                    }, privateKeyPlaceholder)
+                    .post(
+                        INACTIVE_USERS_API_URL,
+                        {
+                            method: 'activate',
+                            user_id: id
+                        },
+                        privateKeyPlaceholder
+                    )
                     .pipe(
                         catchError(error => {
                             this.snackbar.showErrorSnackBar(
-                                "error at activating inactive user: " +
-                                    error.error.detail
+                                'error at activating inactive user: ' + error.error.detail
                             );
                             return [];
                         }),
                         mergeMap((response: any) => {
-
                             return [
                                 {
                                     type: REMOVE_INACTIVE_USER,
@@ -877,8 +833,7 @@ export class CoreEffects {
                 this.http.get(USER_HAS_PERMISSIONS_API_URL).pipe(
                     catchError(error => {
                         this.snackbar.showErrorSnackBar(
-                            "error at checking user permissions: " +
-                                error.error.detail
+                            'error at checking user permissions: ' + error.error.detail
                         );
                         return [];
                     }),
@@ -905,10 +860,7 @@ export class CoreEffects {
             return from(
                 this.http.get(RLC_SETTINGS_API_URL).pipe(
                     catchError(error => {
-                        this.snackbar.showErrorSnackBar(
-                            "error:" +
-                            error.error.detail
-                        );
+                        this.snackbar.showErrorSnackBar('error:' + error.error.detail);
                         return [];
                     }),
                     mergeMap((response: any) => {
@@ -933,12 +885,11 @@ export class CoreEffects {
                 this.http.get(UNREAD_NOTIFICATIONS_API_URL).pipe(
                     catchError(error => {
                         this.snackbar.showErrorSnackBar(
-                            "error at getting unread notifications: " +
-                            error.error.detail
+                            'error at getting unread notifications: ' + error.error.detail
                         );
                         return [];
                     }),
-                    mergeMap((response: { unread_notifications; }) => {
+                    mergeMap((response: { unread_notifications }) => {
                         return [
                             {
                                 type: SET_NOTIFICATIONS,

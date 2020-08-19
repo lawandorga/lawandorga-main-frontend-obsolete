@@ -21,19 +21,18 @@ import { CoreSandboxService } from '../../services/core-sandbox.service';
 import { FullUser } from '../../models/user.model';
 
 @Component({
-    selector: "app-dashboard",
-    templateUrl: "./dashboard.component.html",
-    styleUrls: ["./dashboard.component.scss"]
+    selector: 'app-dashboard',
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-    name = "";
+    name = '';
 
     constructor(private coreSB: CoreSandboxService) {}
 
     ngOnInit(): void {
         this.coreSB.getUser().subscribe((user: FullUser) => {
-            if (user)
-                this.name = user.name;
+            if (user) this.name = user.name;
         });
     }
 }

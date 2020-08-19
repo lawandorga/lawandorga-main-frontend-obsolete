@@ -16,9 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import {AbstractControl, FormGroup} from '@angular/forms';
-import {CoreSandboxService} from '../core/services/core-sandbox.service';
-import moment from "moment";
+import { AbstractControl, FormGroup } from '@angular/forms';
+import { CoreSandboxService } from '../core/services/core-sandbox.service';
+import moment from 'moment';
 
 export const passwordValidator = (control: AbstractControl): { [key: string]: boolean } | null => {
     const password: string = control.value;
@@ -27,23 +27,21 @@ export const passwordValidator = (control: AbstractControl): { [key: string]: bo
     const hasLower = /[a-z]/.test(password);
     const hasSpecial = /[$@!%*?&+=#'"`\/<>,.^\-()[\]\\|{}]/.test(password);
     const length = password.length >= 9;
-    if (!hasNumber || !hasUpper || !hasLower || !hasSpecial)
-        return { weak: true };
+    if (!hasNumber || !hasUpper || !hasLower || !hasSpecial) return { weak: true };
     else if (!length) return { short: true };
     return null;
 };
 
 export const matchValidator = (field1: string, field2: string) => {
     return (g: FormGroup) => {
-        return g.get(field1).value === g.get(field2).value
-            ? null
-            : { mismatch: true };
+        return g.get(field1).value === g.get(field2).value ? null : { mismatch: true };
     };
 };
 
-export const dateInPastValidator = (control: AbstractControl): { [key: string]: boolean } | null => {
+export const dateInPastValidator = (
+    control: AbstractControl
+): { [key: string]: boolean } | null => {
     const value: Date = CoreSandboxService.transformDate(control.value);
-    if (moment().diff(moment(value)) < 0)
-        return { inFuture: true };
+    if (moment().diff(moment(value)) < 0) return { inFuture: true };
     return null;
 };

@@ -16,6 +16,5 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-
 export const PERMISSION_FILES_READ_FOLDER = 'read_folder';
 export const PERMISSION_FILES_WRITE_FOLDER = 'write_folder';

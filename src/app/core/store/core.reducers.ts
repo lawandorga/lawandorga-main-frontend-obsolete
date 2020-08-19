@@ -93,7 +93,7 @@ const initialState: CoreState = {
     rlcs: {},
     new_user_requests: {},
     inactive_users: {},
-    notifications: 0,
+    notifications: 0
 };
 
 export function coreReducer(state = initialState, action: CoreActions) {

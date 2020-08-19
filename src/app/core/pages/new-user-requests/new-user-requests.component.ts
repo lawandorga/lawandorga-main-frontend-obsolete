@@ -16,18 +16,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit } from "@angular/core";
-import {CoreSandboxService} from '../../services/core-sandbox.service';
-import {NewUserRequest} from '../../models/new_user_request.model';
-import {Observable} from 'rxjs';
-import {RestrictedUser} from '../../models/user.model';
-import {Router} from '@angular/router';
-import {GetProfileFrontUrl} from '../../../statics/frontend_links.statics';
+import { Component, OnInit } from '@angular/core';
+import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { NewUserRequest } from '../../models/new_user_request.model';
+import { Observable } from 'rxjs';
+import { RestrictedUser } from '../../models/user.model';
+import { Router } from '@angular/router';
+import { GetProfileFrontUrl } from '../../../statics/frontend_links.statics';
 
 @Component({
-    selector: "app-new-user-requests",
-    templateUrl: "./new-user-requests.component.html",
-    styleUrls: ["./new-user-requests.component.scss"]
+    selector: 'app-new-user-requests',
+    templateUrl: './new-user-requests.component.html',
+    styleUrls: ['./new-user-requests.component.scss']
 })
 export class NewUserRequestsComponent implements OnInit {
     newUserRequests: Observable<NewUserRequest[]>;

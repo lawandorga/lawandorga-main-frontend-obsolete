@@ -16,37 +16,37 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Action } from "@ngrx/store";
-import { RestrictedRecord } from "../../models/record.model";
-import { RecordDocument } from "../../models/record_document.model";
-import { RestrictedUser } from "../../../core/models/user.model";
-import { OriginCountry } from "../../models/country.model";
-import { FullClient } from "../../models/client.model";
-import { Tag } from "../../models/tag.model";
-import { RecordMessage } from "../../models/record_message.model";
-import { RecordPermissionRequest } from "../../models/record_permission.model";
-import {State} from '../../../core/models/state.model';
+import { Action } from '@ngrx/store';
+import { RestrictedRecord } from '../../models/record.model';
+import { RecordDocument } from '../../models/record_document.model';
+import { RestrictedUser } from '../../../core/models/user.model';
+import { OriginCountry } from '../../models/country.model';
+import { FullClient } from '../../models/client.model';
+import { Tag } from '../../models/tag.model';
+import { RecordMessage } from '../../models/record_message.model';
+import { RecordPermissionRequest } from '../../models/record_permission.model';
+import { State } from '../../../core/models/state.model';
 import { RecordDeletionRequest } from '../../models/record_deletion_request.model';
 
-export const SET_SPECIAL_RECORD = "SET_SPECIAL_RECORD";
-export const SET_SPECIAL_CLIENT = "SET_SPECIAL_CLIENT";
-export const SET_SPECIAL_ORIGIN_COUNTRY = "SET_SPECIAL_ORIGIN_COUNTRY";
-export const SET_SPECIAL_RECORD_DOCUMENTS = "SET_SPECIAL_RECORD_DOCUMENTS";
-export const SET_SPECIAL_RECORD_MESSAGES = "SET_SPECIAL_RECORD_MESSAGES";
-export const SET_RECORDS = "SET_RECORDS";
-export const SET_CONSULTANTS = "SET_CONSULTANTS";
-export const SET_RECORD_STATES = "SET_RECORD_STATES";
-export const SET_COUNTRY_STATES = "SET_COUNTRY_STATES";
-export const SET_ORIGIN_COUNTRIES = "SET_ORIGIN_COUNTRIES";
-export const SET_RECORD_TAGS = "SET_RECORD_TAGS";
-export const SET_POSSIBLE_CLIENTS = "SET_POSSIBLE_CLIENTS";
-export const SET_RECORD_DOCUMENT_TAGS = "SET_RECORD_DOCUMENT_TAGS";
-export const SET_RECORD_PERMISSION_REQUESTS = "SET_RECORD_PERMISSION_REQUESTS";
-export const SET_SPECIAL_RECORD_REQUEST_STATE = "SET_SPECIAL_RECORD_REQUEST_STATE";
-export const SET_RECORD_DELETION_REQUESTS = "SET_RECORD_DELETION_REQUESTS";
-export const SET_POOL_CONSULTANTS = "SET_POOL_CONSULTANTS";
-export const SET_POOL_RECORDS = "SET_POOL_RECORDS";
-export const SET_USERS_POOL_ENLISTINGS = "SET_USERS_POOL_ENLISTINGS";
+export const SET_SPECIAL_RECORD = 'SET_SPECIAL_RECORD';
+export const SET_SPECIAL_CLIENT = 'SET_SPECIAL_CLIENT';
+export const SET_SPECIAL_ORIGIN_COUNTRY = 'SET_SPECIAL_ORIGIN_COUNTRY';
+export const SET_SPECIAL_RECORD_DOCUMENTS = 'SET_SPECIAL_RECORD_DOCUMENTS';
+export const SET_SPECIAL_RECORD_MESSAGES = 'SET_SPECIAL_RECORD_MESSAGES';
+export const SET_RECORDS = 'SET_RECORDS';
+export const SET_CONSULTANTS = 'SET_CONSULTANTS';
+export const SET_RECORD_STATES = 'SET_RECORD_STATES';
+export const SET_COUNTRY_STATES = 'SET_COUNTRY_STATES';
+export const SET_ORIGIN_COUNTRIES = 'SET_ORIGIN_COUNTRIES';
+export const SET_RECORD_TAGS = 'SET_RECORD_TAGS';
+export const SET_POSSIBLE_CLIENTS = 'SET_POSSIBLE_CLIENTS';
+export const SET_RECORD_DOCUMENT_TAGS = 'SET_RECORD_DOCUMENT_TAGS';
+export const SET_RECORD_PERMISSION_REQUESTS = 'SET_RECORD_PERMISSION_REQUESTS';
+export const SET_SPECIAL_RECORD_REQUEST_STATE = 'SET_SPECIAL_RECORD_REQUEST_STATE';
+export const SET_RECORD_DELETION_REQUESTS = 'SET_RECORD_DELETION_REQUESTS';
+export const SET_POOL_CONSULTANTS = 'SET_POOL_CONSULTANTS';
+export const SET_POOL_RECORDS = 'SET_POOL_RECORDS';
+export const SET_USERS_POOL_ENLISTINGS = 'SET_USERS_POOL_ENLISTINGS';
 
 export class SetRecords implements Action {
     readonly type = SET_RECORDS;
@@ -161,7 +161,6 @@ export class SetUsersPoolEnlistings implements Action {
 
     constructor(public payload: number) {}
 }
-
 
 export type RecordsSetActions =
     | SetRecords

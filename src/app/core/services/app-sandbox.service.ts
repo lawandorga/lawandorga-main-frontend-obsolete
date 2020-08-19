@@ -44,7 +44,7 @@ export class AppSandboxService {
     static getPrivateKeyPlaceholder(): any {
         let headers = new HttpHeaders();
         headers = headers.append('private-key', 'placeholder');
-        return {headers};
+        return { headers };
     }
 
     constructor(
@@ -117,6 +117,4 @@ export class AppSandboxService {
         this.cookieService.delete('token');
         this.cookieService.delete('users_private_key');
     }
-
-
 }

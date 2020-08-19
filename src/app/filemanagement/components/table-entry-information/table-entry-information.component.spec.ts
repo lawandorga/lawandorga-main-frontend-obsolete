@@ -21,23 +21,22 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { TableEntryInformationComponent } from './table-entry-information.component';
 
 describe('TableEntryInformationComponent', () => {
-  let component: TableEntryInformationComponent;
-  let fixture: ComponentFixture<TableEntryInformationComponent>;
+    let component: TableEntryInformationComponent;
+    let fixture: ComponentFixture<TableEntryInformationComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ TableEntryInformationComponent ]
-    })
-    .compileComponents();
-  }));
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [TableEntryInformationComponent]
+        }).compileComponents();
+    }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(TableEntryInformationComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(TableEntryInformationComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

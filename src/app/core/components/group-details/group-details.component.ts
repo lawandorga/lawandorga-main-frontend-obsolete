@@ -40,11 +40,15 @@ export class GroupDetailsComponent implements OnInit {
     @Input()
     group: FullGroup;
 
-    constructor(private coreSB: CoreSandboxService, public dialog: MatDialog, private router: Router, private sharedSB: SharedSandboxService) {
-    }
+    constructor(
+        private coreSB: CoreSandboxService,
+        public dialog: MatDialog,
+        private router: Router,
+        private sharedSB: SharedSandboxService
+    ) {}
 
     ngOnInit() {
-        this.editGroupMembers = (this.editGroupMembers !== undefined);
+        this.editGroupMembers = this.editGroupMembers !== undefined;
 
         if (this.editGroupMembers) {
             this.memberColumns = ['member', 'remove'];
@@ -54,15 +58,18 @@ export class GroupDetailsComponent implements OnInit {
     }
 
     onRemoveGroupMemberClick(user_id: string) {
-        this.sharedSB.openConfirmDialog({
-            description: 'are you sure you want to remove this user?',
-            confirmLabel: 'remove',
-            confirmColor: 'warn'
-        }, (remove: boolean) => {
-            if (remove) {
-                this.coreSB.removeGroupMember(user_id, this.group.id);
+        this.sharedSB.openConfirmDialog(
+            {
+                description: 'are you sure you want to remove this user?',
+                confirmLabel: 'remove',
+                confirmColor: 'warn'
+            },
+            (remove: boolean) => {
+                if (remove) {
+                    this.coreSB.removeGroupMember(user_id, this.group.id);
+                }
             }
-        });
+        );
     }
 
     onAddGroupMemberClick() {

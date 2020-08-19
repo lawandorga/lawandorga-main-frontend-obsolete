@@ -16,10 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { AutoExpandDirective } from "./auto-expand.directive";
+import { AutoExpandDirective } from './auto-expand.directive';
 
-describe("AutoExpandDirective", () => {
-    it("should create an instance", () => {
+describe('AutoExpandDirective', () => {
+    it('should create an instance', () => {
         const directive = new AutoExpandDirective(null);
         expect(directive).toBeTruthy();
     });

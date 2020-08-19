@@ -16,16 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import {Injectable} from "@angular/core";
-import {MatDialog} from "@angular/material/dialog";
-import {EditTextComponent} from "../components/edit-text/edit-text.component";
-import {ConfirmationDialogComponent} from "../components/confirmation-dialog/confirmation-dialog.component";
+import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { EditTextComponent } from '../components/edit-text/edit-text.component';
+import { ConfirmationDialogComponent } from '../components/confirmation-dialog/confirmation-dialog.component';
 
 @Injectable()
 export class SharedSandboxService {
-    constructor(public dialog: MatDialog) {
-
-    }
+    constructor(public dialog: MatDialog) {}
 
     openEditTextDialog(data: EditTextParamsInterface, callback) {
         const dialogRef = this.dialog.open(EditTextComponent, {
@@ -37,7 +35,7 @@ export class SharedSandboxService {
         });
     }
 
-    openConfirmDialog(data: ConfirmTextParamsInterface, callback){
+    openConfirmDialog(data: ConfirmTextParamsInterface, callback) {
         const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
             data
         });

@@ -35,9 +35,9 @@ export class FullFile {
         this.size = size;
     }
 
-    static getFullFileFromJson(json: any): FullFile{
-        if (!json.creator){
-            json.creator = {id: -1, name: ''}
+    static getFullFileFromJson(json: any): FullFile {
+        if (!json.creator) {
+            json.creator = { id: -1, name: '' };
         }
         return new FullFile(
             json.id,
@@ -49,7 +49,7 @@ export class FullFile {
         );
     }
 
-    static getFullFilesFromJsonArray(jsonArray: any): FullFile[]{
+    static getFullFilesFromJsonArray(jsonArray: any): FullFile[] {
         const fullFiles: FullFile[] = [];
         Object.values(jsonArray).map(fullFileJson => {
             fullFiles.push(FullFile.getFullFileFromJson(fullFileJson));

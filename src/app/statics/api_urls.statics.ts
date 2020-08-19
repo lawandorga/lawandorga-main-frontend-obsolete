@@ -16,33 +16,33 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-
-import {environment} from "../../environments/environment";
+import { environment } from '../../environments/environment';
 
 export const base = environment.apiUrl;
-export const LOGIN_API_URL = base + "api/login/";
-export const RECORDS_API_URL = base + "api/records/e_records/";
-export const CLIENTS_BY_BIRTHDAY_API_URL = base + "api/records/e_clients_by_birthday/";
-export const RECORDS_STATICS_API_URL = base + "api/records/statics/";
-export const PROFILES_API_URL = base + "api/profiles/";
-export const CREATE_PROFILE_API_URL = base + "api/create_profile/";
-export const CREATE_RECORD_API_URL = base + "api/records/create_record/";
-export const RLCS_API_URL = base + "api/get_rlcs/";
-export const UPLOAD_SIGNING_BASE_API_URL = base + "api/storage_up/";
-export const RECORD_PERMISSIONS_LIST_API_URL = base + "api/records/e_record_permission_requests/";
-export const FORGOT_PASSWORD_API_URL = base + "api/forgot_password/";
-export const GROUPS_API_URL = base + "api/groups/";
-export const GROUP_MEMBER_API_URL = base + "api/group_members/";
-export const PERMISSION_API_URL = base + "api/permissions/";
-export const HAS_PERMISSION_API_URL = base + "api/has_permission/";
-export const HAS_PERMISSIONS_STATICS_API_URL = base + "api/has_permission_statics/";
-export const NEW_USER_REQUEST_API_URL = base + "api/new_user_request/";
-export const NEW_USER_REQUEST_ADMIT_API_URL = base + "api/new_user_request_admit/";
+export const LOGIN_API_URL = base + 'api/login/';
+export const RECORDS_API_URL = base + 'api/records/e_records/';
+export const CLIENTS_BY_BIRTHDAY_API_URL = base + 'api/records/e_clients_by_birthday/';
+export const RECORDS_STATICS_API_URL = base + 'api/records/statics/';
+export const PROFILES_API_URL = base + 'api/profiles/';
+export const CREATE_PROFILE_API_URL = base + 'api/create_profile/';
+export const CREATE_RECORD_API_URL = base + 'api/records/create_record/';
+export const RLCS_API_URL = base + 'api/get_rlcs/';
+export const UPLOAD_SIGNING_BASE_API_URL = base + 'api/storage_up/';
+export const RECORD_PERMISSIONS_LIST_API_URL = base + 'api/records/e_record_permission_requests/';
+export const FORGOT_PASSWORD_API_URL = base + 'api/forgot_password/';
+export const GROUPS_API_URL = base + 'api/groups/';
+export const GROUP_MEMBER_API_URL = base + 'api/group_members/';
+export const PERMISSION_API_URL = base + 'api/permissions/';
+export const HAS_PERMISSION_API_URL = base + 'api/has_permission/';
+export const HAS_PERMISSIONS_STATICS_API_URL = base + 'api/has_permission_statics/';
+export const NEW_USER_REQUEST_API_URL = base + 'api/new_user_request/';
+export const NEW_USER_REQUEST_ADMIT_API_URL = base + 'api/new_user_request_admit/';
 export const LOGOUT_API_URL = base + 'api/logout/';
 export const INACTIVE_USERS_API_URL = base + 'api/inactive_users/';
 export const USER_HAS_PERMISSIONS_API_URL = base + 'api/user_has_permissions/';
 export const RECORD_DELETIONS_API_URL = base + 'api/records/record_deletion_requests/';
-export const PROCESS_RECORD_DELETIONS_API_URL = base + 'api/records/process_record_deletion_request/';
+export const PROCESS_RECORD_DELETIONS_API_URL =
+    base + 'api/records/process_record_deletion_request/';
 export const FOLDER_BASE_API_URL = base + 'api/files/folder';
 export const FILES_UPLOAD_BASE_API_URL = base + 'api/files/upload';
 export const FILES_DELETE_BASE_API_URL = base + 'api/files/delete';
@@ -53,17 +53,18 @@ export const POOL_RECORD_API_URL = base + 'api/records/pool_records/';
 export const POOL_CONSULTANT_API_URL = base + 'api/records/pool_consultants/';
 export const RLC_SETTINGS_API_URL = base + 'api/my_rlc_settings/';
 export const NOTIFICATIONS_API_URL = base + 'api/notifications/';
+export const NOTIFICATION_GROUPS_API_URL = base + 'api/notification_groups/';
 export const UNREAD_NOTIFICATIONS_API_URL = base + 'api/unread_notifications/';
 
-const CHECK_USER_ACTIVATION_API_URL = base + "api/check_user_activation_link/";
-const ACTIVATE_USER_ACTIVATION_API_URL = "base + api/activate_user_activation_link/";
-const RESET_PASSWORD_API_URL = base + "api/reset_password/";
-const SPECIAL_RECORD_BASE_API_URL = base + "api/records/e_record/";     // deprecated??? is it?
-const DOWNLOAD_SIGNING_BASE_API_URL = base + "api/storage_down/";       // deprecated
-const RECORD_DOCUMENT_BASE_API_URL = base + "api/records/documents/";
-const PERMISSION_FOR_GROUP_BASE_API_URL = base + "api/permissions_for_group/";
-const DOWNLOAD_ALL_RECORD_DOCUMENTS_BASE_API_URL = base + "api/records/documents_download/";
-const DOWNLOAD_ENCRYPTED_RECORD_DOCUMENT_BASE_API_URL = base + "api/records/e_record/documents/";
+const CHECK_USER_ACTIVATION_API_URL = base + 'api/check_user_activation_link/';
+const ACTIVATE_USER_ACTIVATION_API_URL = 'base + api/activate_user_activation_link/';
+const RESET_PASSWORD_API_URL = base + 'api/reset_password/';
+const SPECIAL_RECORD_BASE_API_URL = base + 'api/records/e_record/'; // deprecated??? is it?
+const DOWNLOAD_SIGNING_BASE_API_URL = base + 'api/storage_down/'; // deprecated
+const RECORD_DOCUMENT_BASE_API_URL = base + 'api/records/documents/';
+const PERMISSION_FOR_GROUP_BASE_API_URL = base + 'api/permissions_for_group/';
+const DOWNLOAD_ALL_RECORD_DOCUMENTS_BASE_API_URL = base + 'api/records/documents_download/';
+const DOWNLOAD_ENCRYPTED_RECORD_DOCUMENT_BASE_API_URL = base + 'api/records/e_record/documents/';
 const FILES_FOLDER_PERMISSIONS_BASE_API_URL = base + 'api/files/folder_permissions/';
 
 export const GetSpecialProfileApiURL = (id: string | number) => {
@@ -143,8 +144,7 @@ export const GetDownloadEncryptedRecordDocumentApiUrl = (document_id: string) =>
 };
 
 export const GetFolderInformationApiUrl = (path: string) => {
-    if (path)
-        return `${FOLDER_BASE_API_URL}?path=${path}`;
+    if (path) return `${FOLDER_BASE_API_URL}?path=${path}`;
     return `${FOLDER_BASE_API_URL}`;
 };
 
@@ -153,5 +153,5 @@ export const GetFolderPermissionsForFolderApiUrl = (id: string) => {
 };
 
 export const GetFolderPermissionApiUrl = (id: string) => {
-    return `${FILES_PERMISSION_FOR_FOLDER_BASE_API_URL}${id}/`
+    return `${FILES_PERMISSION_FOR_FOLDER_BASE_API_URL}${id}/`;
 };

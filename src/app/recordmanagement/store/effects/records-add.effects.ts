@@ -34,7 +34,7 @@ import {
 } from '../actions/records-start.actions';
 import {
     CREATE_RECORD_API_URL,
-    GetAddRecordMessageApiUrl,
+    GetAddRecordMessageApiUrl
 } from '../../../statics/api_urls.statics';
 import { ADD_RECORD_MESSAGE } from '../actions/records.actions';
 import { RecordMessage } from '../../models/record_message.model';
@@ -46,8 +46,7 @@ export class RecordsAddEffects {
         private http: HttpClient,
         private recordSB: RecordsSandboxService,
         private recordStore: Store<RecordState>
-    ) {
-    }
+    ) {}
 
     @Effect()
     startAddingNewRecord = this.actions.pipe(
@@ -91,9 +90,13 @@ export class RecordsAddEffects {
             const privateKeyPlaceholderHeader = AppSandboxService.getPrivateKeyPlaceholder();
             return from(
                 this.http
-                    .post(GetAddRecordMessageApiUrl(record_id), {
-                        message: newMessage
-                    }, privateKeyPlaceholderHeader)
+                    .post(
+                        GetAddRecordMessageApiUrl(record_id),
+                        {
+                            message: newMessage
+                        },
+                        privateKeyPlaceholderHeader
+                    )
                     .pipe(
                         catchError(error => {
                             this.recordSB.showError(

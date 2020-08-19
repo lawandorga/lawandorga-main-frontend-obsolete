@@ -16,12 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit } from '@angular/core';
 
 @Component({
-    selector: "app-privacy-statement",
-    templateUrl: "./privacy-statement.component.html",
-    styleUrls: ["./privacy-statement.component.scss"]
+    selector: 'app-privacy-statement',
+    templateUrl: './privacy-statement.component.html',
+    styleUrls: ['./privacy-statement.component.scss']
 })
 export class PrivacyStatementComponent implements OnInit {
     constructor() {}

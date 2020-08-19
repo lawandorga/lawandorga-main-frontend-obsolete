@@ -29,13 +29,14 @@ export class UnsavedGuardService implements CanDeactivate<HasUnsaved> {
     canDeactivate(component: HasUnsaved): Observable<any> | boolean {
         if (!component.hasUnsaved()) return true;
 
-        return new Observable<boolean>((observer) => {
+        return new Observable<boolean>(observer => {
             this.sharedSB.openConfirmDialog(
                 {
-                    description: 'You have unsaved changes! If you leave, your changes will be lost.',
+                    description:
+                        'You have unsaved changes! If you leave, your changes will be lost.',
                     confirmLabel: 'leave',
                     confirmColor: 'warn',
-                    cancelLabel: 'stay',
+                    cancelLabel: 'stay'
                 },
                 (leave: boolean) => {
                     observer.next(leave);

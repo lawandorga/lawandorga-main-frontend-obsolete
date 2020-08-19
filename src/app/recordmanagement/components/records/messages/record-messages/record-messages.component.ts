@@ -16,15 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import {Component, Input, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {RecordsSandboxService} from '../../../../services/records-sandbox.service';
-import {RecordMessage} from '../../../../models/record_message.model';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { RecordsSandboxService } from '../../../../services/records-sandbox.service';
+import { RecordMessage } from '../../../../models/record_message.model';
 
 @Component({
-    selector: "app-record-messages",
-    templateUrl: "./record-messages.component.html",
-    styleUrls: ["./record-messages.component.scss"]
+    selector: 'app-record-messages',
+    templateUrl: './record-messages.component.html',
+    styleUrls: ['./record-messages.component.scss']
 })
 export class RecordMessagesComponent implements OnInit {
     messageForm: FormGroup;
@@ -34,7 +34,7 @@ export class RecordMessagesComponent implements OnInit {
 
     constructor(private recordSB: RecordsSandboxService) {
         this.messageForm = new FormGroup({
-            message: new FormControl("")
+            message: new FormControl('')
         });
     }
 

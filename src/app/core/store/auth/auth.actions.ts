@@ -16,16 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Action } from "@ngrx/store";
+import { Action } from '@ngrx/store';
 
-export const TRY_LOGIN = "TRY_LOGIN";
-export const TRY_RELOAD_STATIC_INFORMATION = "TRY_RELOAD_STATIC_INFORMATION";
-export const SET_TOKEN = "SET_TOKEN";
-export const SET_USERS_PRIVATE_KEY = "SET_USERS_PRIVATE_KEY";
-export const LOGOUT = "LOGOUT";
-export const FORGOT_PASSWORD = "FORGOT_PASSWORD";
-export const RESET_PASSWORD = "RESET_PASSWORD";
-export const START_LOGGING_OUT = "START_LOGGING_OUT";
+export const TRY_LOGIN = 'TRY_LOGIN';
+export const TRY_RELOAD_STATIC_INFORMATION = 'TRY_RELOAD_STATIC_INFORMATION';
+export const SET_TOKEN = 'SET_TOKEN';
+export const SET_USERS_PRIVATE_KEY = 'SET_USERS_PRIVATE_KEY';
+export const LOGOUT = 'LOGOUT';
+export const FORGOT_PASSWORD = 'FORGOT_PASSWORD';
+export const RESET_PASSWORD = 'RESET_PASSWORD';
+export const START_LOGGING_OUT = 'START_LOGGING_OUT';
 
 export class TryLogin implements Action {
     readonly type = TRY_LOGIN;
@@ -62,7 +62,7 @@ export class ForgotPassword implements Action {
 export class ResetPassword implements Action {
     readonly type = RESET_PASSWORD;
 
-    constructor(public payload: { new_password: string, link_id: string }) {}
+    constructor(public payload: { new_password: string; link_id: string }) {}
 }
 
 export class StartLoggingOut implements Action {

@@ -16,20 +16,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit } from "@angular/core";
-import { Observable } from "rxjs";
-import { Router } from "@angular/router";
-import { tap } from "rxjs/internal/operators/tap";
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { tap } from 'rxjs/internal/operators/tap';
 
-import { RestrictedUser } from "../../models/user.model";
-import { CoreSandboxService } from "../../services/core-sandbox.service";
-import { GetProfileFrontUrl } from "../../../statics/frontend_links.statics";
-import {alphabeticalSorterByField} from '../../../shared/other/sorter-helper';
+import { RestrictedUser } from '../../models/user.model';
+import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { GetProfileFrontUrl } from '../../../statics/frontend_links.statics';
+import { alphabeticalSorterByField } from '../../../shared/other/sorter-helper';
 
 @Component({
-    selector: "app-profiles-list",
-    templateUrl: "./profiles-list.component.html",
-    styleUrls: ["./profiles-list.component.scss"]
+    selector: 'app-profiles-list',
+    templateUrl: './profiles-list.component.html',
+    styleUrls: ['./profiles-list.component.scss']
 })
 export class ProfilesListComponent implements OnInit {
     otherUsers: Observable<RestrictedUser[]>;

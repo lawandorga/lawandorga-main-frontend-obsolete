@@ -43,8 +43,8 @@ export class PathInformationComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes.path){
-            this.getParts(changes.path.currentValue)
+        if (changes.path) {
+            this.getParts(changes.path.currentValue);
         }
     }
 
@@ -53,15 +53,13 @@ export class PathInformationComponent implements OnInit, OnChanges {
         this.this_folder = this.parts.pop();
     }
 
-    onPartClick(part: string){
+    onPartClick(part: string) {
         let newLink = '';
-        for (const currentPart of this.parts){
-            if (newLink !== '')
-                newLink = newLink + '/' + currentPart;
-            else
-                newLink = currentPart;
-            if (currentPart === part){
-               break
+        for (const currentPart of this.parts) {
+            if (newLink !== '') newLink = newLink + '/' + currentPart;
+            else newLink = currentPart;
+            if (currentPart === part) {
+                break;
             }
         }
         this.router.navigateByUrl(GetFolderFrontUrlAbsolute(newLink)).catch(error => {
@@ -69,7 +67,7 @@ export class PathInformationComponent implements OnInit, OnChanges {
         });
     }
 
-    onHomeCLick(){
+    onHomeCLick() {
         this.router.navigateByUrl(FILES_FRONT_URL);
     }
 }

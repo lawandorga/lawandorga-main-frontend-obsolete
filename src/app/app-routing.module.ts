@@ -16,20 +16,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule, PreloadAllModules } from "@angular/router";
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 
-import { AuthGuardService } from "./core/services/auth-guard.service";
+import { AuthGuardService } from './core/services/auth-guard.service';
 
 const appRoutes: Routes = [
     {
-        path: "records",
-        loadChildren: "./recordmanagement/records.module#RecordsModule",
+        path: 'records',
+        loadChildren: './recordmanagement/records.module#RecordsModule',
         canActivate: [AuthGuardService]
     },
     {
-        path: "files",
-        loadChildren: "./filemanagement/filemanagement.module#FilemanagementModule",
+        path: 'files',
+        loadChildren: './filemanagement/filemanagement.module#FilemanagementModule',
         canActivate: [AuthGuardService]
     }
 ];

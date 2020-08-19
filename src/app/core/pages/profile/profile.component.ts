@@ -16,19 +16,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import { FullUser } from "../../models/user.model";
-import { CoreSandboxService } from "../../services/core-sandbox.service";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { take } from "rxjs/operators";
-import { dateInPastValidator } from "../../../statics/validators.statics";
-import { State } from "../../models/state.model";
-import { Observable } from "rxjs";
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FullUser } from '../../models/user.model';
+import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { take } from 'rxjs/operators';
+import { dateInPastValidator } from '../../../statics/validators.statics';
+import { State } from '../../models/state.model';
+import { Observable } from 'rxjs';
 
 @Component({
-    selector: "app-profile",
-    templateUrl: "./profile.component.html",
-    styleUrls: ["./profile.component.scss"]
+    selector: 'app-profile',
+    templateUrl: './profile.component.html',
+    styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
     userForm: FormGroup;
@@ -39,18 +39,18 @@ export class ProfileComponent implements OnInit {
     selectedUserRecordState: State;
     user: FullUser;
 
-    @ViewChild("fileInput")
+    @ViewChild('fileInput')
     fileInput: ElementRef<HTMLInputElement>;
 
     constructor(private coreSB: CoreSandboxService) {
         this.userForm = new FormGroup({
-            email: new FormControl(""),
-            phone_number: new FormControl(""),
-            street: new FormControl(""),
-            postal_code: new FormControl(""),
-            city: new FormControl(""),
-            birthday: new FormControl(""),
-            user_state: new FormControl("")
+            email: new FormControl(''),
+            phone_number: new FormControl(''),
+            street: new FormControl(''),
+            postal_code: new FormControl(''),
+            city: new FormControl(''),
+            birthday: new FormControl(''),
+            user_state: new FormControl('')
         });
     }
 
@@ -69,20 +69,17 @@ export class ProfileComponent implements OnInit {
     }
 
     setValues(): void {
-        this.userForm.controls["phone_number"].setValue(this.user.phone_number);
-        this.userForm.controls["street"].setValue(this.user.street);
-        this.userForm.controls["postal_code"].setValue(this.user.postal_code);
-        this.userForm.controls["city"].setValue(this.user.city);
-        this.userForm.controls["birthday"].setValue(this.user.birthday);
+        this.userForm.controls['phone_number'].setValue(this.user.phone_number);
+        this.userForm.controls['street'].setValue(this.user.street);
+        this.userForm.controls['postal_code'].setValue(this.user.postal_code);
+        this.userForm.controls['city'].setValue(this.user.city);
+        this.userForm.controls['birthday'].setValue(this.user.birthday);
 
         this.coreSB
             .getUserStateByAbbreviation(this.user.user_state)
             .subscribe((user_state: State) => {
                 this.selectedUserState = user_state;
-                if (user_state)
-                    this.userForm.controls["user_state"].setValue(
-                        user_state.full_name
-                    );
+                if (user_state) this.userForm.controls['user_state'].setValue(user_state.full_name);
             });
         this.coreSB
             .getUserRecordStateByAbbreviation(this.user.user_record_state)
@@ -92,14 +89,13 @@ export class ProfileComponent implements OnInit {
     }
 
     loadValuesToUser(): void {
-        this.user.phone_number = this.userForm.value["phone_number"];
-        this.user.street = this.userForm.value["street"];
-        this.user.postal_code = this.userForm.value["postal_code"];
-        this.user.phone_number = this.userForm.value["phone_number"];
-        this.user.city = this.userForm.value["city"];
-        this.user.birthday = CoreSandboxService.transformDate(this.userForm.value["birthday"]);
-        if (this.selectedUserState)
-            this.user.user_state = this.selectedUserState.abbreviation;
+        this.user.phone_number = this.userForm.value['phone_number'];
+        this.user.street = this.userForm.value['street'];
+        this.user.postal_code = this.userForm.value['postal_code'];
+        this.user.phone_number = this.userForm.value['phone_number'];
+        this.user.city = this.userForm.value['city'];
+        this.user.birthday = CoreSandboxService.transformDate(this.userForm.value['birthday']);
+        if (this.selectedUserState) this.user.user_state = this.selectedUserState.abbreviation;
         if (this.selectedUserRecordState)
             this.user.user_record_state = this.selectedUserRecordState.abbreviation;
     }

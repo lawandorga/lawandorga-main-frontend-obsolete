@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-
 import {
     ADD_FOLDER,
     FilesActions,
@@ -34,12 +33,12 @@ import { FolderPermission } from '../models/folder_permission.model';
 import { HasPermission } from '../../core/models/permission.model';
 
 export interface FilesState {
-    current_folder: TableEntry,
-    write_permission: boolean,
-    folders: { [id: number]: TableEntry },
-    files: { [id: number]: TableEntry },
-    folder_permissions: { [id: number]: FolderPermission},
-    folder_has_permissions: { [id: number]: HasPermission}
+    current_folder: TableEntry;
+    write_permission: boolean;
+    folders: { [id: number]: TableEntry };
+    files: { [id: number]: TableEntry };
+    folder_permissions: { [id: number]: FolderPermission };
+    folder_has_permissions: { [id: number]: HasPermission };
 }
 
 export const initialState: FilesState = {
@@ -95,7 +94,7 @@ export function filesReducer(state = initialState, action: FilesActions) {
             return {
                 ...state,
                 write_permission: action.payload
-            }
+            };
         default:
             return state;
     }

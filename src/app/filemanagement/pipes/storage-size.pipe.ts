@@ -37,7 +37,7 @@ export class StorageSizePipe implements PipeTransform {
             }
 
             result = bytes.toFixed(+precision) + ' ' + this.units[unit];
-            result = result.replace('.', ',')
+            result = result.replace('.', ',');
         }
         return result;
     }

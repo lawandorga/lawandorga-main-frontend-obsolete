@@ -32,10 +32,12 @@ import {
     StartAddingNewRecord,
     StartAddingNewRecordMessage,
     StartAdmittingRecordPermissionRequest,
-    StartDecliningRecordPermissionRequest, StartEnlistingPoolConsultant,
+    StartDecliningRecordPermissionRequest,
+    StartEnlistingPoolConsultant,
     StartLoadingClientPossibilities,
     StartLoadingRecordDeletionRequests,
-    StartLoadingRecordPermissionRequests, StartLoadingRecordPool,
+    StartLoadingRecordPermissionRequests,
+    StartLoadingRecordPool,
     StartLoadingRecords,
     StartLoadingRecordStatics,
     StartLoadingSpecialRecord,
@@ -43,7 +45,8 @@ import {
     StartRequestingReadPermission,
     StartRequestingRecordDeletion,
     StartSavingRecord,
-    StartSettingRecordDocumentTags, StartYieldingRecord
+    StartSettingRecordDocumentTags,
+    StartYieldingRecord
 } from '../store/actions/records.actions';
 import { FullClient } from '../models/client.model';
 import { OriginCountry } from '../models/country.model';
@@ -107,16 +110,16 @@ export class RecordsSandboxService {
                 return asArray ? Object.values(values) : values;
             })
         );
-    };
+    }
 
-    startEnlistingPoolConsultant(){
+    startEnlistingPoolConsultant() {
         this.recordStore.dispatch(new StartEnlistingPoolConsultant());
     }
 
     getPoolRecords(): Observable<number | any> {
         return this.recordStore.pipe(
             select((state: any) => {
-                return state.records.pool_records
+                return state.records.pool_records;
             })
         );
     }
@@ -124,7 +127,7 @@ export class RecordsSandboxService {
     getUsersPoolEnlistings(): Observable<number | any> {
         return this.recordStore.pipe(
             select((state: any) => {
-                return state.records.users_pool_enlistings
+                return state.records.users_pool_enlistings;
             })
         );
     }
@@ -132,7 +135,7 @@ export class RecordsSandboxService {
     getPoolConsultants(): Observable<number | any> {
         return this.recordStore.pipe(
             select((state: any) => {
-                return state.records.pool_consultants
+                return state.records.pool_consultants;
             })
         );
     }
@@ -221,7 +224,7 @@ export class RecordsSandboxService {
         this.recordStore.dispatch(new StartLoadingRecordStatics());
     }
 
-    startYieldingRecord(record: FullRecord){
+    startYieldingRecord(record: FullRecord) {
         this.recordStore.dispatch(new StartYieldingRecord(record));
     }
 
@@ -290,25 +293,27 @@ export class RecordsSandboxService {
         // do more
     }
 
-    startSavingRecord(record: FullRecord, client: FullClient) {
-        this.recordStore.dispatch(new StartSavingRecord({ record, client }));
+    startSavingRecord(toSave: any, record_id: number) {
+        this.recordStore.dispatch(
+            new StartSavingRecord({ data: toSave, id: record_id.toString() })
+        );
     }
 
     goBack() {
         this.location.back();
     }
 
-     uploadRecordDocuments(files: File[]) {
+    uploadRecordDocuments(files: File[]) {
         let record_id = null;
         this.recordStore
             .pipe(select((state: any) => state.records.special_record.record))
             .subscribe(record => {
                 record_id = record.id;
             });
-        this.storageService.uploadEncryptedRecordDocuments(files, record_id, (response) => {
+        this.storageService.uploadEncryptedRecordDocuments(files, record_id, response => {
             const documents = RecordDocument.getRecordDocumentsFromJsonArray(response);
-            for (const document of documents){
-                this.recordStore.dispatch(new AddRecordDocument(document))
+            for (const document of documents) {
+                this.recordStore.dispatch(new AddRecordDocument(document));
             }
         });
     }
@@ -414,7 +419,7 @@ export class RecordsSandboxService {
         );
     }
 
-    startLoadingRecordPool(){
+    startLoadingRecordPool() {
         this.recordStore.dispatch(new StartLoadingRecordPool());
     }
 }

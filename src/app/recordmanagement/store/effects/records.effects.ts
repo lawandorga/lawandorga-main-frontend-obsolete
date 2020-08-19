@@ -25,7 +25,9 @@ import { from } from 'rxjs';
 import {
     START_ADMITTING_RECORD_PERMISSION_REQUEST,
     START_DECLINING_RECORD_PERMISSION_REQUEST,
-    START_ENLISTING_POOL_CONSULTANT, START_LOADING_RECORD_POOL,
+    START_ENLISTING_POOL_CONSULTANT,
+    START_LOADING_RECORD_POOL,
+    START_LOADING_SPECIAL_RECORD,
     START_PROCESSING_RECORD_DELETION_REQUEST,
     START_REQUESTING_RECORD_DELETION,
     START_REQUESTING_RECORD_PERMISSION,
@@ -34,7 +36,6 @@ import {
     START_YIELDING_RECORD,
     StartAdmittingRecordPermissionRequest,
     StartDecliningRecordPermissionRequest,
-    StartLoadingRecordPool,
     StartProcessingRecordDeletionRequest,
     StartRequestingReadPermission,
     StartRequestingRecordDeletion,
@@ -71,8 +72,7 @@ export class RecordsEffects {
         private recordSB: RecordsSandboxService,
         private appSB: AppSandboxService,
         private coreSB: CoreSandboxService
-    ) {
-    }
+    ) {}
 
     @Effect()
     startSavingRecord = this.actions.pipe(
@@ -80,14 +80,12 @@ export class RecordsEffects {
         map((action: StartSavingRecord) => {
             return action.payload;
         }),
-        switchMap((payload: { record: FullRecord; client: FullClient }) => {
+        switchMap((payload: { data: any; id: string }) => {
             const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
+
             return from(
                 this.http
-                    .patch(GetSpecialRecordApiURL(payload.record.id), {
-                        record: payload.record,
-                        client: payload.client
-                    }, privateKeyPlaceholder)
+                    .patch(GetSpecialRecordApiURL(payload.id), payload.data, privateKeyPlaceholder)
                     .pipe(
                         catchError(error => {
                             this.recordSB.showError(
@@ -97,7 +95,7 @@ export class RecordsEffects {
                         }),
                         mergeMap((response: any) => {
                             this.recordSB.successfullySavedRecord(response);
-                            return [];
+                            return [{ type: START_LOADING_SPECIAL_RECORD, payload: payload.id }];
                         })
                     )
             );
@@ -172,10 +170,14 @@ export class RecordsEffects {
             const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
             return from(
                 this.http
-                    .post(RECORD_PERMISSIONS_LIST_API_URL, {
-                        id: request.id,
-                        action: 'accept'
-                    }, privateKeyPlaceholder)
+                    .post(
+                        RECORD_PERMISSIONS_LIST_API_URL,
+                        {
+                            id: request.id,
+                            action: 'accept'
+                        },
+                        privateKeyPlaceholder
+                    )
                     .pipe(
                         catchError(error => {
                             this.recordSB.showError(
@@ -275,7 +277,6 @@ export class RecordsEffects {
         }),
         mergeMap((payload: { request: RecordDeletionRequest; action: string }) => {
             if (payload.action !== 'accept' && payload.action !== 'decline') {
-                
                 return [];
             }
 
@@ -322,9 +323,13 @@ export class RecordsEffects {
             const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
             return from(
                 this.http
-                    .post(POOL_RECORD_API_URL, {
-                        record: payload.id
-                    }, privateKeyPlaceholder)
+                    .post(
+                        POOL_RECORD_API_URL,
+                        {
+                            record: payload.id
+                        },
+                        privateKeyPlaceholder
+                    )
                     .pipe(
                         catchError(error => {
                             this.recordSB.showError(
@@ -340,7 +345,9 @@ export class RecordsEffects {
                             if (response['action'] === 'created') {
                                 this.coreSB.showSuccessSnackBar('record added to record pool');
                             } else if (response['action'] === 'matched') {
-                                this.coreSB.showSuccessSnackBar('record matched with consultant from pool, you are no longer responsible for this record');
+                                this.coreSB.showSuccessSnackBar(
+                                    'record matched with consultant from pool, you are no longer responsible for this record'
+                                );
                             }
                             return [{ type: START_LOADING_RECORD_POOL }];
                         })
@@ -353,26 +360,32 @@ export class RecordsEffects {
     startEnlistingPoolConsultant = this.actions.pipe(
         ofType(START_ENLISTING_POOL_CONSULTANT),
         switchMap(() => {
-            return from(this.http.post(POOL_CONSULTANT_API_URL, {}).pipe(catchError(error => {
-                    this.recordSB.showError(
-                        `error at enlisting to consultant pool: ${error.error.detail}`
-                    );
-                    return [];
-                }),
-                mergeMap(response => {
-                    if (response.error) {
-                        this.recordSB.showError('sending error');
+            return from(
+                this.http.post(POOL_CONSULTANT_API_URL, {}).pipe(
+                    catchError(error => {
+                        this.recordSB.showError(
+                            `error at enlisting to consultant pool: ${error.error.detail}`
+                        );
                         return [];
-                    }
-                    if (response['action'] === 'created') {
-                        this.coreSB.showSuccessSnackBar(`you enlisted successfully to consultant pool. You are enlisted ${response.number_of_enlistings} times`);
-                    } else if (response['action'] === 'matched') {
-                        this.coreSB.showSuccessSnackBar('you matched successfully, you are now responsible for another record');
-
-                    }
-                    return [{ type: START_LOADING_RECORD_POOL }];
-                })
-            ));
+                    }),
+                    mergeMap(response => {
+                        if (response.error) {
+                            this.recordSB.showError('sending error');
+                            return [];
+                        }
+                        if (response['action'] === 'created') {
+                            this.coreSB.showSuccessSnackBar(
+                                `you enlisted successfully to consultant pool. You are enlisted ${response.number_of_enlistings} times`
+                            );
+                        } else if (response['action'] === 'matched') {
+                            this.coreSB.showSuccessSnackBar(
+                                'you matched successfully, you are now responsible for another record'
+                            );
+                        }
+                        return [{ type: START_LOADING_RECORD_POOL }];
+                    })
+                )
+            );
         })
     );
 }

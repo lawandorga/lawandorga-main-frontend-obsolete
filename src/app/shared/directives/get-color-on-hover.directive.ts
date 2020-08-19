@@ -19,15 +19,15 @@
 import { Directive, ElementRef, HostListener } from '@angular/core';
 
 @Directive({
-    selector: "[appGetColorOnHover]"
+    selector: '[appGetColorOnHover]'
 })
 export class GetColorOnHoverDirective {
-    notHighlightedBackground = "#e1e1e1";
-    notHighlightedColor = "#b4b4b4";
-    notHighlightedBoxShadow = "";
-    highlightedBackground = "";
-    highlightedColor = "";
-    highlightedBoxShadow = "";
+    notHighlightedBackground = '#e1e1e1';
+    notHighlightedColor = '#b4b4b4';
+    notHighlightedBoxShadow = '';
+    highlightedBackground = '';
+    highlightedColor = '';
+    highlightedBoxShadow = '';
 
     constructor(private el: ElementRef) {
         this.highlightedBackground = this.el.nativeElement.style.backgroundColor;
@@ -42,7 +42,7 @@ export class GetColorOnHoverDirective {
     }
 
     @HostListener('mouseleave') onMouseLeave() {
-        this.unhighlight()
+        this.unhighlight();
     }
 
     private highlight() {
@@ -51,7 +51,7 @@ export class GetColorOnHoverDirective {
         this.el.nativeElement.style.boxShadow = this.highlightedBoxShadow;
     }
 
-    private unhighlight(){
+    private unhighlight() {
         this.el.nativeElement.style.backgroundColor = this.notHighlightedBackground;
         this.el.nativeElement.style.color = this.notHighlightedColor;
         this.el.nativeElement.style.boxShadow = this.notHighlightedBoxShadow;

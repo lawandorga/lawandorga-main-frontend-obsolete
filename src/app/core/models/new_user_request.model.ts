@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { FullUser, RestrictedUser } from "./user.model";
+import { FullUser, RestrictedUser } from './user.model';
 
 export class NewUserRequest {
     constructor(
@@ -38,9 +38,7 @@ export class NewUserRequest {
     static getNewUserRequestFromJsonArray(jsonArray): NewUserRequest[] | null {
         const newUserRequests: NewUserRequest[] = [];
         Object.values(jsonArray).map(jsonNewUserRequest => {
-            newUserRequests.push(
-                NewUserRequest.getNewUserRequestFromJson(jsonNewUserRequest)
-            );
+            newUserRequests.push(NewUserRequest.getNewUserRequestFromJson(jsonNewUserRequest));
         });
         return newUserRequests;
     }

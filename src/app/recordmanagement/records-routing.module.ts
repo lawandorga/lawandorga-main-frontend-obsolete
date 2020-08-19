@@ -16,41 +16,41 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
-import { RecordsListComponent } from "./pages/record-list/records-list.component";
-import { AuthGuardService } from "../core/services/auth-guard.service";
-import { CreateRecordComponent } from "./pages/create-record/create-record.component";
-import { RecordComponent } from "./pages/record/record.component";
-import { RecordsPermitRequestsComponent } from "./pages/records-permit-requests/records-permit-requests.component";
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { RecordsListComponent } from './pages/record-list/records-list.component';
+import { AuthGuardService } from '../core/services/auth-guard.service';
+import { CreateRecordComponent } from './pages/create-record/create-record.component';
+import { RecordComponent } from './pages/record/record.component';
+import { RecordsPermitRequestsComponent } from './pages/records-permit-requests/records-permit-requests.component';
 import { RecordDeletionRequestsComponent } from './pages/record-deletion-requests/record-deletion-requests.component';
 import { RecordPoolComponent } from './pages/record-pool/record-pool.component';
 import { UnsavedGuardService } from '../core/services/unsaved-guard.service';
 
 const recordsRoutes: Routes = [
     {
-        path: "",
-        pathMatch: "full",
+        path: '',
+        pathMatch: 'full',
         component: RecordsListComponent
     },
     {
-        path: "add",
+        path: 'add',
         component: CreateRecordComponent
     },
     {
-        path: "record_pool",
+        path: 'record_pool',
         component: RecordPoolComponent
     },
     {
-        path: "permit_requests",
+        path: 'permit_requests',
         component: RecordsPermitRequestsComponent
     },
     {
-        path: "deletion_requests",
+        path: 'deletion_requests',
         component: RecordDeletionRequestsComponent
     },
     {
-        path: ":id",
+        path: ':id',
         component: RecordComponent,
         canDeactivate: [UnsavedGuardService]
     }

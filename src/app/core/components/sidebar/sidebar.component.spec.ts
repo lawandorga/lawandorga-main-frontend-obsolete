@@ -16,16 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SidebarComponent } from "./sidebar.component";
-import { MatDivider, MatIcon } from "@angular/material";
-import { RouterTestingModule } from "@angular/router/testing";
-import { AppSandboxService } from "../../services/app-sandbox.service";
-import { CoreSandboxService } from "../../services/core-sandbox.service";
-import { Router } from "@angular/router";
-import { StoreModule } from "@ngrx/store";
-describe("SidebarComponent", () => {
+import { SidebarComponent } from './sidebar.component';
+import { MatDivider, MatIcon } from '@angular/material';
+import { RouterTestingModule } from '@angular/router/testing';
+import { AppSandboxService } from '../../services/app-sandbox.service';
+import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { Router } from '@angular/router';
+import { StoreModule } from '@ngrx/store';
+describe('SidebarComponent', () => {
     // let apiSandbox: MockApiSandboxService;
     // let appSandbox: MockAppSandboxService;
     // let router: MockRouter;
@@ -36,7 +36,7 @@ describe("SidebarComponent", () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [
-                RouterTestingModule.withRoutes([]),
+                RouterTestingModule.withRoutes([])
                 // StoreModule.forRoot(fromRoot.reducers)
             ],
             declarations: [SidebarComponent, MatDivider, MatIcon],
@@ -46,7 +46,7 @@ describe("SidebarComponent", () => {
                 {
                     provide: Router,
                     useClass: class {
-                        navigate = jasmine.createSpy("navigate");
+                        navigate = jasmine.createSpy('navigate');
                     }
                 }
             ]
@@ -65,7 +65,7 @@ describe("SidebarComponent", () => {
         fixture.detectChanges();
     });
 
-    it("should create", () => {
+    it('should create', () => {
         expect(component).toBeTruthy();
     });
 });

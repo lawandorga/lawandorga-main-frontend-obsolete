@@ -22,29 +22,30 @@ import {
     EventEmitter,
     Input,
     OnChanges,
+    OnDestroy,
     OnInit,
     Output,
     SimpleChanges,
     ViewChild
-} from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+} from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 
-import { Observable } from "rxjs";
+import { Observable, Subscription } from 'rxjs';
 import {
     MatAutocomplete,
     MatAutocompleteSelectedEvent,
     MatChipInputEvent
-} from "@angular/material";
-import { map, startWith } from "rxjs/operators";
-import { Filterable } from "../../models/filterable.model";
-import { Tag } from "../../../recordmanagement/models/tag.model";
+} from '@angular/material';
+import { map, startWith } from 'rxjs/operators';
+import { Filterable } from '../../models/filterable.model';
+import { Tag } from '../../../recordmanagement/models/tag.model';
 
 @Component({
-    selector: "app-chip-autocomplete",
-    templateUrl: "./chip-autocomplete.component.html",
-    styleUrls: ["./chip-autocomplete.component.scss"]
+    selector: 'app-chip-autocomplete',
+    templateUrl: './chip-autocomplete.component.html',
+    styleUrls: ['./chip-autocomplete.component.scss']
 })
-export class ChipAutocompleteComponent implements OnInit, OnChanges {
+export class ChipAutocompleteComponent implements OnInit, OnChanges, OnDestroy {
     @Input()
     firstSelected: Filterable[];
 
@@ -61,9 +62,9 @@ export class ChipAutocompleteComponent implements OnInit, OnChanges {
     @Input()
     placeholder: string;
 
-    @ViewChild("valueInput")
+    @ViewChild('valueInput')
     valueInput: ElementRef<HTMLInputElement>;
-    @ViewChild("auto")
+    @ViewChild('auto')
     matAutocomplete: MatAutocomplete;
 
     valuesForm: FormGroup;
@@ -71,9 +72,11 @@ export class ChipAutocompleteComponent implements OnInit, OnChanges {
     @Output()
     selectedValuesChanged = new EventEmitter();
 
+    allValuesSubscription: Subscription;
+
     constructor() {
         this.valuesForm = new FormGroup({
-            filterValue: new FormControl("")
+            filterValue: new FormControl('')
         });
     }
 
@@ -84,8 +87,10 @@ export class ChipAutocompleteComponent implements OnInit, OnChanges {
     ngOnInit() {
         this.selectedValues = this.firstSelected ? this.firstSelected : [];
 
-        this.allValuesObservable.subscribe(values => {
+        this.allValuesSubscription = this.allValuesObservable.subscribe(values => {
             this.allValues = values;
+            this.sortAllValues();
+
             if (this.selectedValues && this.allValues) {
                 for (const preSelectedValue of this.selectedValues) {
                     this.allValues = this.allValues.filter(
@@ -96,32 +101,24 @@ export class ChipAutocompleteComponent implements OnInit, OnChanges {
                 }
             }
 
-            this.filteredValues = this.valuesForm.controls[
-                "filterValue"
-            ].valueChanges.pipe(
-                startWith(""),
-                map(
-                    (filterValue: string | null) =>
-                        filterValue
-                            ? this._filter(filterValue)
-                            : this.allValues.slice()
-                )
-            );
+            this.recheckFilteredValues();
         });
+    }
+
+    ngOnDestroy() {
+        this.allValuesSubscription.unsubscribe();
     }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.errors) {
-            this.valuesForm.controls["filterValue"].setErrors(
-                changes.errors.currentValue
-            );
+            this.valuesForm.controls['filterValue'].setErrors(changes.errors.currentValue);
         } else {
-            this.valuesForm.controls["filterValue"].setErrors(null);
+            this.valuesForm.controls['filterValue'].setErrors(null);
         }
     }
 
     private _filter(value): any[] {
-        if (typeof value !== "string") return [];
+        if (typeof value !== 'string') return [];
         const filterValue = value.toLowerCase();
 
         return this.allValues.filter(
@@ -139,34 +136,50 @@ export class ChipAutocompleteComponent implements OnInit, OnChanges {
             this.selectedValues.splice(index, 1);
             this.selectedValuesChanged.emit(this.selectedValues);
 
-            if (this.allValues.indexOf(value) === -1)
+            if (this.allValues.indexOf(value) === -1) {
                 this.allValues.push(value);
+
+                this.sortAllValues();
+                this.recheckFilteredValues();
+            }
         }
+    }
+
+    recheckFilteredValues(): void {
+        this.filteredValues = this.valuesForm.controls['filterValue'].valueChanges.pipe(
+            startWith(''),
+            map((filterValue: string | null) =>
+                filterValue ? this._filter(filterValue) : this.allValues.slice()
+            )
+        );
+    }
+
+    sortAllValues(): void {
+        this.allValues.sort((a, b) =>
+            a.getFilterableProperty().localeCompare(b.getFilterableProperty())
+        );
     }
 
     selected(event: MatAutocompleteSelectedEvent) {
         this.selectedValues.push(
-            this.allValues.find(
-                value =>
-                    value.getFilterableProperty() === event.option.viewValue
-            )
+            this.allValues.find(value => value.getFilterableProperty() === event.option.viewValue)
         );
         this.selectedValuesChanged.emit(this.selectedValues);
 
         this.allValues = this.allValues.filter(
             value => value.getFilterableProperty() !== event.option.viewValue
         );
-        this.valueInput.nativeElement.value = "";
-        this.valuesForm.controls["filterValue"].setValue("");
+        this.valueInput.nativeElement.value = '';
+        this.valuesForm.controls['filterValue'].setValue('');
     }
 
     addValue(event: MatChipInputEvent) {
         if (!this.matAutocomplete.isOpen) {
             const input = event.input;
             if (input) {
-                input.value = "";
+                input.value = '';
             }
-            this.valuesForm.controls["filterValue"].setValue("");
+            this.valuesForm.controls['filterValue'].setValue('');
         }
     }
 }

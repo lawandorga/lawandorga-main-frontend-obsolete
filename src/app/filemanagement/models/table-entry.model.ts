@@ -45,8 +45,8 @@ export class TableEntry {
     }
 
     static getTableEntryFromJson(json: any, type: FilesTypes) {
-        if (!json.creator){
-            json.creator = {id: -1, name: ''}
+        if (!json.creator) {
+            json.creator = { id: -1, name: '' };
         }
         return new TableEntry(
             json.id,
@@ -57,7 +57,7 @@ export class TableEntry {
             new Date(json.created),
             new Date(json.last_edited),
             type === FilesTypes.Folder ? json.number_of_files : -1
-        )
+        );
     }
 
     static getTableEntriesFromJsonArray(jsonArray: any, type: FilesTypes): TableEntry[] {

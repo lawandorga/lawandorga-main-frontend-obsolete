@@ -16,16 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import {Component, Input, OnInit} from '@angular/core';
-import {RecordDocument} from '../../../../models/record_document.model';
-import {Observable} from 'rxjs';
-import {Tag} from '../../../../models/tag.model';
-import {RecordsSandboxService} from '../../../../services/records-sandbox.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { RecordDocument } from '../../../../models/record_document.model';
+import { Observable } from 'rxjs';
+import { Tag } from '../../../../models/tag.model';
+import { RecordsSandboxService } from '../../../../services/records-sandbox.service';
 
 @Component({
-    selector: "app-record-document-item-detail",
-    templateUrl: "./record-document-item-detail.component.html",
-    styleUrls: ["./record-document-item-detail.component.scss"]
+    selector: 'app-record-document-item-detail',
+    templateUrl: './record-document-item-detail.component.html',
+    styleUrls: ['./record-document-item-detail.component.scss']
 })
 export class RecordDocumentItemDetailComponent implements OnInit {
     @Input()
@@ -43,7 +43,7 @@ export class RecordDocumentItemDetailComponent implements OnInit {
         this.selectedTags = this.record_document.tags;
     }
 
-    selectedDocumentTagsChanged(selectedTags: Tag[]){
+    selectedDocumentTagsChanged(selectedTags: Tag[]) {
         this.recordSB.startSettingDocumentTags(selectedTags, this.record_document.id.toString());
     }
 }

@@ -16,20 +16,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit } from "@angular/core";
-import {Observable} from 'rxjs';
-import {Router} from '@angular/router';
-import {tap} from 'rxjs/operators';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { tap } from 'rxjs/operators';
 
-import {GetPermissionFrontUrl} from '../../../statics/frontend_links.statics';
-import {alphabeticalSorterByField} from '../../../shared/other/sorter-helper';
-import {CoreSandboxService} from '../../services/core-sandbox.service';
-import {Permission} from '../../models/permission.model';
+import { GetPermissionFrontUrl } from '../../../statics/frontend_links.statics';
+import { alphabeticalSorterByField } from '../../../shared/other/sorter-helper';
+import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { Permission } from '../../models/permission.model';
 
 @Component({
-    selector: "app-permission-list",
-    templateUrl: "./permission-list.component.html",
-    styleUrls: ["./permission-list.component.scss"]
+    selector: 'app-permission-list',
+    templateUrl: './permission-list.component.html',
+    styleUrls: ['./permission-list.component.scss']
 })
 export class PermissionListComponent implements OnInit {
     permissions: Observable<Permission[]>;
@@ -37,12 +37,14 @@ export class PermissionListComponent implements OnInit {
     constructor(private coreSB: CoreSandboxService, private router: Router) {}
 
     ngOnInit() {
-        this.permissions = this.coreSB.getAllPermissions().pipe(tap(results => {
-            alphabeticalSorterByField(results, 'name');
-        }));
+        this.permissions = this.coreSB.getAllPermissions().pipe(
+            tap(results => {
+                alphabeticalSorterByField(results, 'name');
+            })
+        );
     }
 
-    onPermissionItemClick(permission: Permission){
+    onPermissionItemClick(permission: Permission) {
         this.router.navigate([GetPermissionFrontUrl(permission)]);
     }
 }

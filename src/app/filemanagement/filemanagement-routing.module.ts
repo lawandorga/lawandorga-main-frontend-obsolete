@@ -16,15 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import {RouterModule, Routes} from '@angular/router';
-import {FilesMainViewComponent} from './components/files-main-view/files-main-view.component';
-import {NgModule} from '@angular/core';
-import {AuthGuardService} from '../core/services/auth-guard.service';
+import { RouterModule, Routes } from '@angular/router';
+import { FilesMainViewComponent } from './components/files-main-view/files-main-view.component';
+import { NgModule } from '@angular/core';
+import { AuthGuardService } from '../core/services/auth-guard.service';
 import { FolderViewComponent } from './components/folder-view/folder-view.component';
 
 const fileRoutes: Routes = [
     {
-        path: "",
+        path: '',
         pathMatch: 'full',
         component: FolderViewComponent
     }
