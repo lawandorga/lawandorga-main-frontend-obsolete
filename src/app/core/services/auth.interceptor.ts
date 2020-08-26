@@ -29,7 +29,6 @@ export class AuthInterceptor implements HttpInterceptor {
     constructor(private store: Store<AuthState>, private appSB: AppSandboxService) {}
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        console.log('interception happening');
         return this.store
             .select(state => state['auth'])
             .pipe(
