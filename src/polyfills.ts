@@ -1,3 +1,7 @@
+/***************************************************************************************************
+ * Load `$localize` onto the global scope - used if i18n tags appear in Angular templates.
+ */
+import '@angular/localize/init';
 /*
  * law&orga - record and organization management software for refugee law clinics
  * Copyright (C) 2019  Dominik Walser

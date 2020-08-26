@@ -20,7 +20,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CoreSandboxService } from '../../services/core-sandbox.service';
 import { FullGroup } from '../../models/group.model';
 import { AddGroupMemberComponent } from '../add-group-member/add-group-member.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GetProfileFrontUrl } from '../../../statics/frontend_links.statics';
 import { RestrictedUser } from '../../models/user.model';

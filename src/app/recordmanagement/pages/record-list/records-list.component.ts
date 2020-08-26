@@ -27,7 +27,8 @@ import {
     GetRecordSearchFrontUrl
 } from '../../../statics/frontend_links.statics';
 import { tap } from 'rxjs/internal/operators/tap';
-import { MatSort, MatTableDataSource } from '@angular/material';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
     selector: 'app-records',
@@ -44,7 +45,7 @@ export class RecordsListComponent implements OnInit, OnDestroy {
     subscriptions: Subscription[] = [];
 
     dataSource;
-    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatSort, { static: true }) sort: MatSort;
 
     constructor(
         private recordsSandbox: RecordsSandboxService,

@@ -55,8 +55,8 @@ export class NotificationGroupsListComponent implements AfterViewInit {
     filterValuesObservable: Observable<FilterableTypes[]> = this.generateFilterableTypes();
     currentFilterValues: FilterableTypes[] = [];
 
-    @ViewChild(MatPaginator) paginator: MatPaginator;
-    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: true }) sort: MatSort;
 
     change = new EventEmitter(); // TODO: maybe reload with timer? every x seconds, last updated
 

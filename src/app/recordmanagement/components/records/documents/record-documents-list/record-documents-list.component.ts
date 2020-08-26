@@ -40,7 +40,7 @@ export class RecordDocumentsListComponent implements OnInit {
     columns = ['name', 'tags', 'date', 'download'];
     expandedElement: RecordDocument | null;
 
-    @ViewChild('fileInput')
+    @ViewChild('fileInput', { static: true })
     fileInput: ElementRef<HTMLInputElement>;
 
     constructor(private recordSB: RecordsSandboxService) {}

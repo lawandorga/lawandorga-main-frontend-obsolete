@@ -24,12 +24,12 @@ import { AuthGuardService } from './core/services/auth-guard.service';
 const appRoutes: Routes = [
     {
         path: 'records',
-        loadChildren: './recordmanagement/records.module#RecordsModule',
+        loadChildren: () => import('./recordmanagement/records.module').then(m => m.RecordsModule),
         canActivate: [AuthGuardService]
     },
     {
         path: 'files',
-        loadChildren: './filemanagement/filemanagement.module#FilemanagementModule',
+        loadChildren: () => import('./filemanagement/filemanagement.module').then(m => m.FilemanagementModule),
         canActivate: [AuthGuardService]
     }
 ];

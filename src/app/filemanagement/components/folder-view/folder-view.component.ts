@@ -40,7 +40,7 @@ export class FolderViewComponent implements OnInit {
 
     currentFolder: TableEntry;
 
-    @ViewChild('fileInput')
+    @ViewChild('fileInput', { static: true })
     fileInput: ElementRef<HTMLInputElement>;
 
     columns = ['type', 'name', 'size', 'last_edited', 'more'];

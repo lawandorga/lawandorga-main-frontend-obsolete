@@ -19,7 +19,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { CoreSandboxService } from '../../../services/core-sandbox.service';
 import { RestrictedRlc } from '../../../models/rlc.model';
 import {

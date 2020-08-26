@@ -18,7 +18,7 @@
 
 import { Component, Inject, OnInit } from '@angular/core';
 import { CoreSandboxService } from '../../services/core-sandbox.service';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AddHasPermissionComponent } from '../add-has-permission/add-has-permission.component';
 import { Observable } from 'rxjs';
 import { Permission } from '../../models/permission.model';
