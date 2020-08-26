@@ -35,7 +35,6 @@ import { AuthState } from '../store/auth/auth.reducers';
 import { LOGIN_FRONT_URL } from '../../statics/frontend_links.statics';
 import { CookieService } from 'ngx-cookie-service';
 import { HttpHeaders } from '@angular/common/http';
-import { RequestOptions } from '@angular/http';
 
 @Injectable()
 export class AppSandboxService {
