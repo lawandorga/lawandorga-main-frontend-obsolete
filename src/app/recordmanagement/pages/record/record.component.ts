@@ -32,7 +32,7 @@ export class RecordComponent implements OnInit, HasUnsaved {
     id: string;
     type: string;
 
-    @ViewChild(FullRecordDetailComponent, { static: false }) child: FullRecordDetailComponent;
+    @ViewChild(FullRecordDetailComponent) child: FullRecordDetailComponent;
 
     constructor(private recordSB: RecordsSandboxService, private route: ActivatedRoute) {}
 

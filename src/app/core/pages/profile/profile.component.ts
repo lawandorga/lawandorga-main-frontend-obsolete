@@ -39,7 +39,7 @@ export class ProfileComponent implements OnInit {
     selectedUserRecordState: State;
     user: FullUser;
 
-    @ViewChild('fileInput', { static: false })
+    @ViewChild('fileInput')
     fileInput: ElementRef<HTMLInputElement>;
 
     constructor(private coreSB: CoreSandboxService) {

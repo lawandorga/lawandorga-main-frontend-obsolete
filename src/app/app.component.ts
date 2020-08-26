@@ -38,7 +38,7 @@ import { environment } from '../environments/environment';
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnDestroy, OnInit {
-    @ViewChild('snav', { static: false })
+    @ViewChild('snav')
     snav;
 
     title = 'rlcapp';
