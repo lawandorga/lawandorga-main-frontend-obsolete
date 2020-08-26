@@ -53,6 +53,5 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
         EditTextComponent,
         ConfirmationDialogComponent
     ],
-    entryComponents: [EditTextComponent, ConfirmationDialogComponent]
 })
 export class SharedModule {}

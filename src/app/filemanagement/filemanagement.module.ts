@@ -52,7 +52,6 @@ import { AddPermissionForFolderComponent } from './components/add-permission-for
         TableEntryInformationComponent,
         TableEntryInformationFolderPermissionComponent,
         AddPermissionForFolderComponent
-    ],
-    entryComponents: [AddPermissionForFolderComponent]
+    ]
 })
 export class FilemanagementModule {}

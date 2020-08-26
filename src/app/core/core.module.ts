@@ -109,12 +109,6 @@ import { CdkTableModule } from '@angular/cdk/table';
         NotificationGroupsListComponent,
         NotificationListComponent
     ],
-    entryComponents: [
-        AddGroupMemberComponent,
-        AddHasPermissionComponent,
-        AddHasPermissionForComponent,
-        AddGroupComponent
-    ],
     providers: [],
     exports: [SidebarComponent]
 })

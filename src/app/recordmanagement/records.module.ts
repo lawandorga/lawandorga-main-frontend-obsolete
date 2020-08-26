@@ -80,7 +80,6 @@ import { RecordPoolComponent } from './pages/record-pool/record-pool.component';
         RecordDeletionsProcessedPipe,
         RecordPoolComponent
     ],
-    entryComponents: [SelectClientDialogComponent],
     providers: []
 })
 export class RecordsModule {
