@@ -4,5 +4,16 @@
         "outDir": "../out-tsc/app",
         "types": ["node"]
     },
-    "exclude": ["test.ts", "**/*.spec.ts"]
+    "exclude": [
+        "test.ts",
+        "**/*.spec.ts",
+        "app/statics/error_codes.statics.ts",
+        "app/filemanagement/models/file.model.ts",
+        "app/statics/storage_folders.statics.ts",
+        "app/filemanagement/statics/permissions.statics.ts",
+        "app/recordmanagement/services/records-store-dispatcher.service.ts",
+        "app/recordmanagement/interfaces/record_document.interface.ts",
+        "environments/**",
+        "app/core/components/add-has-permission/add-has-permission.component.ts"
+    ]
 }
