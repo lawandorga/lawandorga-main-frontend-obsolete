@@ -26,7 +26,7 @@ import {
     PERMISSION_CAN_ADD_GROUP_RLC,
     PERMISSION_CAN_MANAGE_GROUPS_RLC
 } from '../../../statics/permissions.statics';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { AddGroupComponent } from '../../components/add-group/add-group.component';
 
 @Component({

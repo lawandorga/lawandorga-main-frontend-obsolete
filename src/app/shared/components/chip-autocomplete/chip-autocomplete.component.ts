@@ -31,11 +31,8 @@ import {
 import { FormControl, FormGroup } from '@angular/forms';
 
 import { Observable, Subscription } from 'rxjs';
-import {
-    MatAutocomplete,
-    MatAutocompleteSelectedEvent,
-    MatChipInputEvent
-} from '@angular/material';
+import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatChipInputEvent } from '@angular/material/chips';
 import { map, startWith } from 'rxjs/operators';
 import { Filterable } from '../../models/filterable.model';
 import { Tag } from '../../../recordmanagement/models/tag.model';
