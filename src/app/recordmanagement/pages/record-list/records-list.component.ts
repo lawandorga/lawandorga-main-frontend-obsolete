@@ -44,7 +44,7 @@ export class RecordsListComponent implements OnInit, OnDestroy {
     subscriptions: Subscription[] = [];
 
     dataSource;
-    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatSort, { static: true }) sort: MatSort;
 
     constructor(
         private recordsSandbox: RecordsSandboxService,

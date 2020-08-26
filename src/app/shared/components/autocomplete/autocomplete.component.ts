@@ -64,7 +64,7 @@ export class AutocompleteComponent implements OnInit, OnChanges {
     @Input()
     valueToShow: string;
 
-    @ViewChild(MatAutocompleteTrigger) autocomplete: MatAutocompleteTrigger;
+    @ViewChild(MatAutocompleteTrigger, { static: true }) autocomplete: MatAutocompleteTrigger;
 
     constructor() {
         this.valueForm = new FormGroup({
