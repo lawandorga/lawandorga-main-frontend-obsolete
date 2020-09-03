@@ -71,3 +71,8 @@ tr.document-element-row:not(.document-expanded-row):active {
     padding: 5px;
     display: inline-block;
 }
+
+.document-delete {
+    color: $c-warn;
+    margin-left: 10px;
+}

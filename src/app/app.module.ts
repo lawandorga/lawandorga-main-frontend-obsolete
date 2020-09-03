@@ -73,7 +73,10 @@ export function logrocketMiddleware(reducer): ActionReducer<any, any> {
         BrowserAnimationsModule,
         CoreModule,
         AppRoutingModule,
-        StoreModule.forRoot(reducers, { metaReducers: [logrocketMiddleware] }),
+        StoreModule.forRoot(reducers, {
+            metaReducers: [logrocketMiddleware],
+            runtimeChecks: { strictStateImmutability: false, strictActionImmutability: false }
+        }),
         EffectsModule.forRoot([AuthEffects]),
         !environment.production ? StoreDevtoolsModule.instrument() : []
     ],

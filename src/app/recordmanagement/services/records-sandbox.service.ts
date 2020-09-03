@@ -228,7 +228,7 @@ export class RecordsSandboxService {
         this.recordStore.dispatch(new StartYieldingRecord(record));
     }
 
-    resetPossibleClients() {
+    resetPossibleClients(): void {
         this.recordStore.dispatch(new ResetPossibleClients());
     }
 
@@ -247,20 +247,7 @@ export class RecordsSandboxService {
         originCountry: OriginCountry,
         consultants: RestrictedUser[],
         tags: Tag[]
-    ) {
-        // let newRecord = {};
-        // if (client) {
-        //     newRecord = {
-        //         client_id: client.id
-        //     };
-        // } else {
-        //     newRecord = {
-        //         client_birthday: CoreSandboxService.transformDateToString(
-        //             new Date(createFormValues.client_birthday)
-        //         ),
-        //         client_name: createFormValues.client_name
-        //     };
-        // }
+    ): void {
         const newRecord = {
             //...newRecord,
             client_birthday: CoreSandboxService.transformDateToString(
@@ -282,28 +269,28 @@ export class RecordsSandboxService {
         this.recordStore.dispatch(new StartAddingNewRecord(newRecord));
     }
 
-    successfullyCreatedRecord(response: any) {
+    successfullyCreatedRecord(response: any): void {
         this.coreSB.showSuccessSnackBar('you successfully created the record');
         this.router.navigate([RECORDS_FRONT_URL]);
         // do more
     }
 
-    successfullySavedRecord(response: any) {
+    successfullySavedRecord(response: any): void {
         this.coreSB.showSuccessSnackBar('you successfully saved the record');
         // do more
     }
 
-    startSavingRecord(toSave: any, record_id: number) {
+    startSavingRecord(toSave: any, record_id: number): void {
         this.recordStore.dispatch(
             new StartSavingRecord({ data: toSave, id: record_id.toString() })
         );
     }
 
-    goBack() {
+    goBack(): void {
         this.location.back();
     }
 
-    uploadRecordDocuments(files: File[]) {
+    uploadRecordDocuments(files: File[]): void {
         let record_id = null;
         this.recordStore
             .pipe(select((state: any) => state.records.special_record.record))
@@ -318,11 +305,11 @@ export class RecordsSandboxService {
         });
     }
 
-    downloadRecordDocument(document: RecordDocument) {
+    downloadRecordDocument(document: RecordDocument): void {
         this.storageService.downloadEncryptedRecordDocument(document);
     }
 
-    downloadAllRecordDocuments() {
+    downloadAllRecordDocuments(): void {
         let record_id = null;
         let record_token = null;
         this.recordStore
@@ -334,24 +321,24 @@ export class RecordsSandboxService {
         this.storageService.downloadAllEncryptedRecordDocuments(record_id, record_token);
     }
 
-    startAddingNewRecordMessage(message: string) {
+    startAddingNewRecordMessage(message: string): void {
         this.recordStore.dispatch(new StartAddingNewRecordMessage(message));
     }
 
-    showError(error_message: string) {
+    showError(error_message: string): void {
         this.coreSB.showErrorSnackBar(error_message);
     }
 
-    startSettingDocumentTags(tags: Tag[], document_id: string) {
+    startSettingDocumentTags(tags: Tag[], document_id: string): void {
         this.recordStore.dispatch(new StartSettingRecordDocumentTags({ tags, document_id }));
     }
 
-    startRequestReadPermission(restrictedRecord: RestrictedRecord) {
+    startRequestReadPermission(restrictedRecord: RestrictedRecord): void {
         this.recordStore.dispatch(new StartRequestingReadPermission(restrictedRecord));
         this.recordStore.dispatch(new SetSpecialRecordRequestState('re'));
     }
 
-    startLoadingRecordPermissionRequests() {
+    startLoadingRecordPermissionRequests(): void {
         this.recordStore.dispatch(new StartLoadingRecordPermissionRequests());
     }
 
@@ -372,15 +359,15 @@ export class RecordsSandboxService {
         );
     }
 
-    admitRecordPermissionRequest(request: RecordPermissionRequest) {
+    admitRecordPermissionRequest(request: RecordPermissionRequest): void {
         this.recordStore.dispatch(new StartAdmittingRecordPermissionRequest(request));
     }
 
-    declineRecordPermissionRequest(request: RecordPermissionRequest) {
+    declineRecordPermissionRequest(request: RecordPermissionRequest): void {
         this.recordStore.dispatch(new StartDecliningRecordPermissionRequest(request));
     }
 
-    resetFullClientInformation() {
+    resetFullClientInformation(): void {
         this.recordStore.dispatch(new ResetFullClientInformation());
     }
 
@@ -390,11 +377,11 @@ export class RecordsSandboxService {
         );
     }
 
-    startRequestingRecordDeletion(record: RestrictedRecord, explanation: string) {
+    startRequestingRecordDeletion(record: RestrictedRecord, explanation: string): void {
         this.recordStore.dispatch(new StartRequestingRecordDeletion({ record, explanation }));
     }
 
-    startLoadingRecordDeletionRequests() {
+    startLoadingRecordDeletionRequests(): void {
         this.recordStore.dispatch(new StartLoadingRecordDeletionRequests());
     }
 
@@ -407,13 +394,13 @@ export class RecordsSandboxService {
         );
     }
 
-    declineRecordDeletionRequest(request: RecordDeletionRequest) {
+    declineRecordDeletionRequest(request: RecordDeletionRequest): void {
         this.recordStore.dispatch(
             new StartProcessingRecordDeletionRequest({ request, action: 'decline' })
         );
     }
 
-    admitRecordDeletionRequest(request: RecordDeletionRequest) {
+    admitRecordDeletionRequest(request: RecordDeletionRequest): void {
         this.recordStore.dispatch(
             new StartProcessingRecordDeletionRequest({ request, action: 'accept' })
         );
@@ -421,5 +408,9 @@ export class RecordsSandboxService {
 
     startLoadingRecordPool() {
         this.recordStore.dispatch(new StartLoadingRecordPool());
+    }
+
+    startRequestingRecordDocumentDeletion(document: RecordDocument, text: string): void {
+        console.log('request deletion for document: ', document);
     }
 }

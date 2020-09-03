@@ -164,7 +164,7 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
     }
 
     onSelectedRecordTagsChanged(newTags: Tag[]): void {
-        this.record.tags = newTags;
+        this.recordEditForm.record_tags = newTags;
         if (newTags.length === 0) {
             this.recordTagErrors = { null: 'true' };
         } else {
@@ -264,6 +264,7 @@ class RecordFormGroup extends FormGroup {
     public recordState: State;
     public working_on_record: RestrictedUser[];
     public current_user_working_on_record: boolean;
+    public record_tags: Tag[];
 
     fields = [
         'client_name',
@@ -330,8 +331,12 @@ class RecordFormGroup extends FormGroup {
 
         this.originCountry = this.recordSB.getOriginCountryById(client.origin_country);
         this.org_hashes['origin_country'] = hash(this.originCountry);
+
         this.recordState = this.recordSB.getRecordStateByAbbreviation(record.state);
         this.org_hashes['record_state'] = hash(this.recordState);
+
+        this.record_tags = record.tags;
+        this.org_hashes['record_tags'] = hash(this.record_tags);
 
         this.coreSB.getUser().subscribe(user => {
             record.working_on_record.forEach(currentUser => {
@@ -358,6 +363,9 @@ class RecordFormGroup extends FormGroup {
         }
         if (hash(this.originCountry) !== this.org_hashes['origin_country']) {
             changes['client']['origin_country'] = this.originCountry.id;
+        }
+        if (hash(this.record_tags) !== this.org_hashes['record_tags']) {
+            changes['record']['tagged'] = this.originCountry.id;
         }
 
         return changes;
