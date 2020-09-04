@@ -20,8 +20,9 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Location } from '@angular/common';
-import { take } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { catchError, mergeMap, take, tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 import { RecordsState } from '../store/records.reducers';
 import {
@@ -62,6 +63,11 @@ import { RECORDS_FRONT_URL } from '../../statics/frontend_links.statics';
 import { State } from '../../core/models/state.model';
 import { RecordDeletionRequest } from '../models/record_deletion_request.model';
 import { RecordDocument } from '../models/record_document.model';
+import {
+    PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS,
+    RECORD_DOCUMENT_DELETIONS_API_URL
+} from '../../statics/api_urls.statics';
+import { RecordDocumentDeletionRequest } from '../models/reocrd_document_deletion_request.model';
 
 @Injectable({
     providedIn: 'root'
@@ -78,7 +84,8 @@ export class RecordsSandboxService {
         private coreSB: CoreSandboxService,
         private snackbarService: SnackbarService,
         private storageService: StorageService,
-        private location: Location
+        private location: Location,
+        private http: HttpClient
     ) {}
 
     loadRecords(searchString?: string) {
@@ -411,6 +418,38 @@ export class RecordsSandboxService {
     }
 
     startRequestingRecordDocumentDeletion(document: RecordDocument, text: string): void {
-        console.log('request deletion for document: ', document);
+        this.http
+            .post(RECORD_DOCUMENT_DELETIONS_API_URL, {
+                document_id: document.id,
+                explanation: text
+            })
+
+            .pipe(
+                tap(
+                    response => {
+                        console.log('success: ', response);
+                        this.snackbarService.showSuccessSnackBar('deletion successfully requested');
+                        return [];
+                    },
+                    error => {
+                        if (error['error']['error_code'] === 'api.already_requested') {
+                            this.snackbarService.showErrorSnackBar('deletion already requested');
+                        }
+                        return [];
+                    }
+                )
+            )
+            .subscribe(() => {});
+    }
+
+    getRecordDocumentDeletionRequestsFromServer(): Promise<RecordDocumentDeletionRequest[]> {
+        return this.http
+            .get<any>(RECORD_DOCUMENT_DELETIONS_API_URL)
+            .toPromise()
+            .then(result => {
+                return RecordDocumentDeletionRequest.getRecordDocumentDeletionRequestsFromJsonArray(
+                    result
+                );
+            });
     }
 }

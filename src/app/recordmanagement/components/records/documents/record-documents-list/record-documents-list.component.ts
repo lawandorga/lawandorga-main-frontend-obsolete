@@ -78,23 +78,21 @@ export class RecordDocumentsListComponent implements OnInit {
                 saveColor: 'warn'
             },
             (deletion_description: string) => {
-                if (deletion_description) {
-                    this.sharedSB.openConfirmDialog(
-                        {
-                            description: 'are you sure you want to delete this document?',
-                            confirmLabel: 'delete',
-                            confirmColor: 'warn'
-                        },
-                        (delete_record: boolean) => {
-                            if (delete_record) {
-                                this.recordSB.startRequestingRecordDocumentDeletion(
-                                    document,
-                                    deletion_description
-                                );
-                            }
+                this.sharedSB.openConfirmDialog(
+                    {
+                        description: 'are you sure you want to delete this document?',
+                        confirmLabel: 'delete',
+                        confirmColor: 'warn'
+                    },
+                    (delete_record: boolean) => {
+                        if (delete_record) {
+                            this.recordSB.startRequestingRecordDocumentDeletion(
+                                document,
+                                deletion_description
+                            );
                         }
-                    );
-                }
+                    }
+                );
             }
         );
     }

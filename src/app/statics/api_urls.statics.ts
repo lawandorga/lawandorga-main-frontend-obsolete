@@ -55,6 +55,10 @@ export const RLC_SETTINGS_API_URL = base + 'api/my_rlc_settings/';
 export const NOTIFICATIONS_API_URL = base + 'api/notifications/';
 export const NOTIFICATION_GROUPS_API_URL = base + 'api/notification_groups/';
 export const UNREAD_NOTIFICATIONS_API_URL = base + 'api/unread_notifications/';
+export const RECORD_DOCUMENT_DELETIONS_API_URL =
+    base + 'api/records/record_document_deletion_requests/';
+export const PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS =
+    base + 'api/records/process_record_document_deletion_request/';
 
 const CHECK_USER_ACTIVATION_API_URL = base + 'api/check_user_activation_link/';
 const ACTIVATE_USER_ACTIVATION_API_URL = 'base + api/activate_user_activation_link/';
