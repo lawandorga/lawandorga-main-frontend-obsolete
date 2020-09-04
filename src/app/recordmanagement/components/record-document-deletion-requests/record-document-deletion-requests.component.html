@@ -17,10 +17,12 @@
   -->
 
 <div *ngIf="deletionRequests.length > 0; else noRequests">
+    <h3>To Process</h3>
     <table
         mat-table
-        [dataSource]="deletionRequests"
+        [dataSource]="deletionRequests | baseRequestRequestedPipe"
         class="record-document-deletion-requests__table"
+        *ngIf="(deletionRequests | baseRequestRequestedPipe).length > 0; else nothingToProcess"
     >
         <ng-container matColumnDef="request_from">
             <th mat-header-cell *matHeaderCellDef class="">
@@ -28,11 +30,11 @@
             </th>
             <td
                 mat-cell
-                *matCellDef="let recordDeletionRequest"
-                (click)="onUserClick(recordDeletionRequest.request_from)"
+                *matCellDef="let recordDocumentDeletionRequest"
+                (click)="onUserClick(recordDocumentDeletionRequest.request_from)"
                 class="is_clickable"
             >
-                <p>{{ recordDeletionRequest.request_from.name }}</p>
+                <p>{{ recordDocumentDeletionRequest.request_from.name }}</p>
             </td>
         </ng-container>
 
@@ -42,11 +44,11 @@
             </th>
             <td
                 mat-cell
-                *matCellDef="let recordDeletionRequest"
-                (click)="onRequestClick(recordDeletionRequest)"
+                *matCellDef="let recordDocumentDeletionRequest"
+                (click)="onRequestClick(recordDocumentDeletionRequest)"
                 class="is_clickable"
             >
-                <p>{{ recordDeletionRequest.record.token }}</p>
+                <p>{{ recordDocumentDeletionRequest.record.token }}</p>
             </td>
         </ng-container>
         <ng-container matColumnDef="document">
@@ -55,65 +57,41 @@
             </th>
             <td
                 mat-cell
-                *matCellDef="let recordDeletionRequest"
-                (click)="onRequestClick(recordDeletionRequest)"
+                *matCellDef="let recordDocumentDeletionRequest"
+                (click)="onRequestClick(recordDocumentDeletionRequest)"
             >
-                <p>{{ recordDeletionRequest.document.name }}</p>
+                <p>{{ recordDocumentDeletionRequest.document.name }}</p>
             </td>
         </ng-container>
         <ng-container matColumnDef="requested">
             <th mat-header-cell *matHeaderCellDef>
                 Request date
             </th>
-            <td mat-cell *matCellDef="let recordDeletionRequest">
-                <p>{{ recordDeletionRequest.requested | date }}</p>
-            </td>
-        </ng-container>
-        <ng-container matColumnDef="state">
-            <th mat-header-cell *matHeaderCellDef>
-                State
-            </th>
-            <td mat-cell *matCellDef="let recordDeletionRequest">
-                <div [ngSwitch]="recordDeletionRequest.state">
-                    <div
-                        class="circle-indicator circle-indicator__green"
-                        *ngSwitchCase="'gr'"
-                        matTooltip="granted"
-                    ></div>
-                    <div
-                        class="circle-indicator circle-indicator__red"
-                        *ngSwitchCase="'de'"
-                        matTooltip="declined"
-                    ></div>
-                    <div
-                        class="circle-indicator circle-indicator__orange"
-                        *ngSwitchCase="'re'"
-                        matTooltip="requested"
-                    ></div>
-                </div>
+            <td mat-cell *matCellDef="let recordDocumentDeletionRequest">
+                <p>{{ recordDocumentDeletionRequest.requested | date }}</p>
             </td>
         </ng-container>
         <ng-container matColumnDef="explanation">
             <th mat-header-cell *matHeaderCellDef>explanation</th>
             <td
                 mat-cell
-                *matCellDef="let recordDeletionRequest"
-                [matTooltip]="recordDeletionRequest.explanation"
+                *matCellDef="let recordDocumentDeletionRequest"
+                [matTooltip]="recordDocumentDeletionRequest.explanation"
             >
                 {{
-                    recordDeletionRequest.explanation !== ''
-                        ? recordDeletionRequest.explanation.substring(0, 9) + '...'
+                    recordDocumentDeletionRequest.explanation !== ''
+                        ? recordDocumentDeletionRequest.explanation.substring(0, 9) + '...'
                         : '-'
                 }}
             </td>
         </ng-container>
         <ng-container matColumnDef="accept">
             <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let recordDeletionRequest">
+            <td mat-cell *matCellDef="let recordDocumentDeletionRequest">
                 <button
                     mat-flat-button
                     color="warn"
-                    (click)="declineRequest(recordDeletionRequest)"
+                    (click)="declineRequest(recordDocumentDeletionRequest)"
                     class="table-action-button-space"
                 >
                     Decline
@@ -121,7 +99,7 @@
                 <button
                     mat-flat-button
                     color="primary"
-                    (click)="admitRequest(recordDeletionRequest)"
+                    (click)="admitRequest(recordDocumentDeletionRequest)"
                     class="table-action-button-space"
                 >
                     Accept
@@ -131,7 +109,98 @@
         <tr mat-header-row *matHeaderRowDef="toProcessColumns; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns: toProcessColumns"></tr>
     </table>
+
+    <ng-template #nothingToProcess>
+        <p>nothing to process</p>
+    </ng-template>
+    <h3>Already Processed</h3>
+    <table
+        mat-table
+        [dataSource]="deletionRequests | baseRequestProcessedPipe"
+        class="record-document-deletion-requests__table"
+    >
+        <ng-container matColumnDef="request_from">
+            <th mat-header-cell *matHeaderCellDef>
+                Requestor
+            </th>
+            <td
+                mat-cell
+                *matCellDef="let recordDocumentDeletionRequest"
+                (click)="onUserClick(recordDocumentDeletionRequest.request_from)"
+            >
+                <p>{{ recordDocumentDeletionRequest.request_from.name }}</p>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="record">
+            <th mat-header-cell *matHeaderCellDef>
+                Record
+            </th>
+            <td
+                mat-cell
+                *matCellDef="let recordDocumentDeletionRequest"
+                (click)="onRequestClick(recordDocumentDeletionRequest)"
+                class="is_clickable"
+            >
+                <p>{{ recordDocumentDeletionRequest.record.token }}</p>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="requested">
+            <th mat-header-cell *matHeaderCellDef>
+                Request Date
+            </th>
+            <td mat-cell *matCellDef="let recordDocumentDeletionRequest">
+                <p>{{ recordDocumentDeletionRequest.requested | date }}</p>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="state">
+            <th mat-header-cell *matHeaderCellDef>
+                State
+            </th>
+            <td mat-cell *matCellDef="let recordDocumentDeletionRequest">
+                <div [ngSwitch]="recordDocumentDeletionRequest.state">
+                    <div
+                        class="circle-indicator circle-indicator__red"
+                        *ngSwitchCase="stateDeclined"
+                        matTooltip="declined"
+                    ></div>
+                    <div
+                        class="circle-indicator circle-indicator__green"
+                        *ngSwitchCase="stateAccepted"
+                        matTooltip="accepted"
+                    ></div>
+                </div>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="processor">
+            <th mat-header-cell *matHeaderCellDef>
+                Processor
+            </th>
+            <td
+                mat-cell
+                *matCellDef="let recordDocumentDeletionRequest"
+                [class.is_clickable]="recordDocumentDeletionRequest.request_processed.id != -1"
+                (click)="onUserClick(recordDocumentDeletionRequest.request_processed)"
+            >
+                <p>{{ recordDocumentDeletionRequest.request_processed.name }}</p>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="processed_on">
+            <th
+                mat-header-cell
+                *matHeaderCellDef
+                class="records-deletion-requests__to-process-column__header"
+            >
+                Process date
+            </th>
+            <td mat-cell *matCellDef="let recordDocumentDeletionRequest">
+                <p>{{ recordDocumentDeletionRequest.processed_on | date }}</p>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="alreadyProcessedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: alreadyProcessedColumns"></tr>
+    </table>
 </div>
+
 <ng-template #noRequests>
-    <p>there are not deletion requests</p>
+    <p>there are no deletion requests</p>
 </ng-template>

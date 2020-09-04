@@ -52,6 +52,7 @@ import {
 import { RecordPoolComponent } from './pages/record-pool/record-pool.component';
 import { DeletionRequestsComponent } from './pages/deletion-requests/deletion-requests.component';
 import { RecordDocumentDeletionRequestsComponent } from './components/record-document-deletion-requests/record-document-deletion-requests.component';
+import { CoreModule } from '../core/core.module';
 
 @NgModule({
     imports: [
@@ -60,7 +61,8 @@ import { RecordDocumentDeletionRequestsComponent } from './components/record-doc
         FormsModule,
         ReactiveFormsModule,
         StoreModule.forFeature('records', recordsReducer),
-        EffectsModule.forFeature([RecordsEffects, RecordsAddEffects, RecordsLoadingEffects])
+        EffectsModule.forFeature([RecordsEffects, RecordsAddEffects, RecordsLoadingEffects]),
+        CoreModule
     ],
     declarations: [
         RecordsListComponent,

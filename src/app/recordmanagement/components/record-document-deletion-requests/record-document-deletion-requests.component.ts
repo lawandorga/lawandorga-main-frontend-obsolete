@@ -16,12 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { RecordsSandboxService } from '../../services/records-sandbox.service';
 import { RecordDocumentDeletionRequest } from '../../models/reocrd_document_deletion_request.model';
 import { RestrictedUser } from '../../../core/models/user.model';
 import { GetProfileFrontUrl } from '../../../statics/frontend_links.statics';
 import { Router } from '@angular/router';
+import { BaseRequestStates } from '../../../core/models/base_request.model';
 
 @Component({
     selector: 'app-record-document-deletion-requests',
@@ -29,17 +30,9 @@ import { Router } from '@angular/router';
     styleUrls: ['./record-document-deletion-requests.component.scss']
 })
 export class RecordDocumentDeletionRequestsComponent implements OnInit {
-    deletionRequests: RecordDocumentDeletionRequest[] = [];
+    @Input() deletionRequests: RecordDocumentDeletionRequest[] = [];
 
-    toProcessColumns = [
-        'request_from',
-        'record',
-        'document',
-        'requested',
-        'state',
-        'explanation',
-        'accept'
-    ];
+    toProcessColumns = ['request_from', 'record', 'document', 'requested', 'explanation', 'accept'];
 
     alreadyProcessedColumns = [
         'request_from',
@@ -50,6 +43,9 @@ export class RecordDocumentDeletionRequestsComponent implements OnInit {
         'processed_on'
     ];
 
+    stateAccepted = BaseRequestStates.ACCEPTED;
+    stateDeclined = BaseRequestStates.DECLINED;
+
     constructor(private recordSB: RecordsSandboxService, private router: Router) {}
 
     ngOnInit(): void {
@@ -59,15 +55,27 @@ export class RecordDocumentDeletionRequestsComponent implements OnInit {
     }
 
     onUserClick(user: RestrictedUser): void {
-        this.router.navigateByUrl(GetProfileFrontUrl(user));
+        if (user.id !== '-1') this.router.navigateByUrl(GetProfileFrontUrl(user));
     }
 
     declineRequest(request: RecordDocumentDeletionRequest): void {
-        console.log('recline');
+        this.recordSB.declineRecordDocumentDeletionRequest(request).then(response => {
+            if (response.success) {
+                request.state = BaseRequestStates.DECLINED;
+            } else {
+                this.recordSB.showError('error at declining request');
+            }
+        });
     }
 
     admitRequest(request: RecordDocumentDeletionRequest): void {
-        console.log('admit');
+        this.recordSB.acceptRecordDocumentDeletionRequest(request).then(response => {
+            if (response.success) {
+                request.state = BaseRequestStates.ACCEPTED;
+            } else {
+                this.recordSB.showError('error at accepting request');
+            }
+        });
     }
 
     onRequestClick(request: RecordDocumentDeletionRequest): void {

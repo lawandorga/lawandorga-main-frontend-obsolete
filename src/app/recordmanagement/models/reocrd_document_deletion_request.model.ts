@@ -18,30 +18,31 @@
 
 import { RestrictedUser } from '../../core/models/user.model';
 import { TokenRecord } from './record.model';
-import { Reference } from '../../core/models/reference.model';
 import { NameRecordDocument } from './record_document.model';
+import { BaseRequest } from '../../core/models/base_request.model';
 
-export class RecordDocumentDeletionRequest {
+export class RecordDocumentDeletionRequest extends BaseRequest {
     constructor(
         public id: string,
         public request_from: RestrictedUser,
         public request_processed: RestrictedUser,
         public requested: Date,
         public processed_on: Date,
-        public state: string,
+        state: string,
         public explanation: string,
         public document?: NameRecordDocument,
         public record?: TokenRecord
     ) {
+        super();
         this.id = id;
         this.request_from = request_from;
         this.request_processed = request_processed;
         this.requested = requested;
         this.processed_on = processed_on;
-        this.state = state;
         this.explanation = explanation;
         this.document = document;
         this.record = record;
+        this.state = BaseRequest.getState(state);
     }
 
     static getRecordDocumentDeletionRequestsFromJsonArray(
@@ -65,8 +66,8 @@ export class RecordDocumentDeletionRequest {
             new Date(json.processed_on),
             json.state,
             json.explanation,
-            new NameRecordDocument(json.document.id, json.document.name),
-            new TokenRecord(json.document.record.id, json.document.record.record_token)
+            NameRecordDocument.getNameRecordDocumentFromJson(json.document),
+            TokenRecord.getTokenRecordFromJson(json.document ? json.document.record : null)
         );
     }
 }

@@ -447,9 +447,32 @@ export class RecordsSandboxService {
             .get<any>(RECORD_DOCUMENT_DELETIONS_API_URL)
             .toPromise()
             .then(result => {
+                console.log('result in service', result);
                 return RecordDocumentDeletionRequest.getRecordDocumentDeletionRequestsFromJsonArray(
                     result
                 );
             });
+    }
+
+    acceptRecordDocumentDeletionRequest(
+        deletion_request: RecordDocumentDeletionRequest
+    ): Promise<any> {
+        return this.http
+            .post<any>(PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS, {
+                request_id: deletion_request.id,
+                action: 'accept'
+            })
+            .toPromise();
+    }
+
+    declineRecordDocumentDeletionRequest(
+        deletion_request: RecordDocumentDeletionRequest
+    ): Promise<any> {
+        return this.http
+            .post<any>(PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS, {
+                request_id: deletion_request.id,
+                action: 'decline'
+            })
+            .toPromise();
     }
 }
