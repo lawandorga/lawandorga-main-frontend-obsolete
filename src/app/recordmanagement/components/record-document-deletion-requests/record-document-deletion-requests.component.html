@@ -127,6 +127,7 @@
                 mat-cell
                 *matCellDef="let recordDocumentDeletionRequest"
                 (click)="onUserClick(recordDocumentDeletionRequest.request_from)"
+                class="is_clickable"
             >
                 <p>{{ recordDocumentDeletionRequest.request_from.name }}</p>
             </td>

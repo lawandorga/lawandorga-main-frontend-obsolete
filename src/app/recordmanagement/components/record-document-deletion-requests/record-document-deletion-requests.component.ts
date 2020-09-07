@@ -30,7 +30,7 @@ import { BaseRequestStates } from '../../../core/models/base_request.model';
     styleUrls: ['./record-document-deletion-requests.component.scss']
 })
 export class RecordDocumentDeletionRequestsComponent implements OnInit {
-    @Input() deletionRequests: RecordDocumentDeletionRequest[] = [];
+    deletionRequests: RecordDocumentDeletionRequest[] = [];
 
     toProcessColumns = ['request_from', 'record', 'document', 'requested', 'explanation', 'accept'];
 
