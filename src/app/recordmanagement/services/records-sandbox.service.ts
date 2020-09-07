@@ -427,7 +427,6 @@ export class RecordsSandboxService {
             .pipe(
                 tap(
                     response => {
-                        console.log('success: ', response);
                         this.snackbarService.showSuccessSnackBar('deletion successfully requested');
                         return [];
                     },
@@ -447,7 +446,6 @@ export class RecordsSandboxService {
             .get<any>(RECORD_DOCUMENT_DELETIONS_API_URL)
             .toPromise()
             .then(result => {
-                console.log('result in service', result);
                 return RecordDocumentDeletionRequest.getRecordDocumentDeletionRequestsFromJsonArray(
                     result
                 );
