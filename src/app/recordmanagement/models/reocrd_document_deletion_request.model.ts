@@ -67,7 +67,7 @@ export class RecordDocumentDeletionRequest extends BaseRequest {
             json.state,
             json.explanation,
             NameRecordDocument.getNameRecordDocumentFromJson(json.document),
-            TokenRecord.getTokenRecordFromJson(json.document ? json.document.record : null)
+            TokenRecord.getTokenRecordFromJson(json.record ? json.record : null)
         );
     }
 }

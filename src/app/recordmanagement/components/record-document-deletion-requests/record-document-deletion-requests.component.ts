@@ -16,11 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RecordsSandboxService } from '../../services/records-sandbox.service';
 import { RecordDocumentDeletionRequest } from '../../models/reocrd_document_deletion_request.model';
 import { RestrictedUser } from '../../../core/models/user.model';
-import { GetProfileFrontUrl } from '../../../statics/frontend_links.statics';
+import { GetProfileFrontUrl, GetRecordFrontUrl } from '../../../statics/frontend_links.statics';
 import { Router } from '@angular/router';
 import { BaseRequestStates } from '../../../core/models/base_request.model';
 
@@ -61,7 +61,11 @@ export class RecordDocumentDeletionRequestsComponent implements OnInit {
     declineRequest(request: RecordDocumentDeletionRequest): void {
         this.recordSB.declineRecordDocumentDeletionRequest(request).then(response => {
             if (response.success) {
-                request.state = BaseRequestStates.DECLINED;
+                this.deletionRequests.filter(
+                    currentRequest => currentRequest.id === request.id
+                )[0].state = BaseRequestStates.DECLINED;
+
+                this.updateData();
             } else {
                 this.recordSB.showError('error at declining request');
             }
@@ -71,14 +75,23 @@ export class RecordDocumentDeletionRequestsComponent implements OnInit {
     admitRequest(request: RecordDocumentDeletionRequest): void {
         this.recordSB.acceptRecordDocumentDeletionRequest(request).then(response => {
             if (response.success) {
-                request.state = BaseRequestStates.ACCEPTED;
+                this.deletionRequests.filter(
+                    currentRequest => currentRequest.id === request.id
+                )[0].state = BaseRequestStates.ACCEPTED;
+                this.updateData();
             } else {
                 this.recordSB.showError('error at accepting request');
             }
         });
     }
 
+    updateData() {
+        const reqCopy = [];
+        this.deletionRequests.forEach(val => reqCopy.push(Object.assign({}, val)));
+        this.deletionRequests = reqCopy;
+    }
+
     onRequestClick(request: RecordDocumentDeletionRequest): void {
-        console.log('goto record');
+        this.router.navigateByUrl(GetRecordFrontUrl(request.record));
     }
 }
