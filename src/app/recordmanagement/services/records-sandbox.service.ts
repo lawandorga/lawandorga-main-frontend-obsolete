@@ -248,19 +248,6 @@ export class RecordsSandboxService {
         consultants: RestrictedUser[],
         tags: Tag[]
     ) {
-        // let newRecord = {};
-        // if (client) {
-        //     newRecord = {
-        //         client_id: client.id
-        //     };
-        // } else {
-        //     newRecord = {
-        //         client_birthday: CoreSandboxService.transformDateToString(
-        //             new Date(createFormValues.client_birthday)
-        //         ),
-        //         client_name: createFormValues.client_name
-        //     };
-        // }
         const newRecord = {
             //...newRecord,
             client_birthday: CoreSandboxService.transformDateToString(

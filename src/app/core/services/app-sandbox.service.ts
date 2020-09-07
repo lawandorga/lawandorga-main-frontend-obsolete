@@ -19,7 +19,7 @@
 import { Injectable } from '@angular/core';
 import { AppState } from '../../store/app.reducers';
 import { select, Store } from '@ngrx/store';
-import { switchMap, take } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import {
     ForgotPassword,
     ReloadStaticInformation,
@@ -103,6 +103,15 @@ export class AppSandboxService {
     saveTokenAndUsersPrivateKey(token: string, users_private_key: string): void {
         this.cookieService.set('token', token);
         this.cookieService.set('users_private_key', users_private_key);
+
+        if (
+            window.navigator.userAgent.toLowerCase().indexOf('chrome') > -1 &&
+            !!(<any>window).chrome
+        ) {
+            document.cookie = `token=${token}`;
+            document.cookie = `users_private_key=${users_private_key}`;
+            console.log('cookies set "manually"');
+        }
     }
 
     loadTokenAndUsersPrivateKey(): any {
