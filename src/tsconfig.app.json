@@ -2,7 +2,8 @@
     "extends": "../tsconfig.base.json",
     "compilerOptions": {
         "outDir": "../out-tsc/app",
-        "types": ["node"]
+        "types": ["node"],
+        "jsx": "react"
     },
     "exclude": [
         "test.ts",

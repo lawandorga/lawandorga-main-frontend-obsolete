@@ -6,6 +6,7 @@
 */
 {
   "files": [],
+  "jsx": "react",
   "references": [
     {
       "path": "./src/tsconfig.app.json"

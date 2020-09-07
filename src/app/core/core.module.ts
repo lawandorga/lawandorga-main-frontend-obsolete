@@ -62,6 +62,7 @@ import { PrivacyStatementComponent } from './pages/privacy-statement/privacy-sta
 import { NotificationGroupsListComponent } from './pages/notification-groups-list/notification-groups-list.component';
 import { NotificationListComponent } from './components/notification-list/notification-list.component';
 import { CdkTableModule } from '@angular/cdk/table';
+import { ReactTestComponent } from './components/react-test/react-test.component';
 
 @NgModule({
     imports: [
@@ -107,7 +108,8 @@ import { CdkTableModule } from '@angular/cdk/table';
         InactiveUsersComponent,
         PrivacyStatementComponent,
         NotificationGroupsListComponent,
-        NotificationListComponent
+        NotificationListComponent,
+        ReactTestComponent
     ],
     providers: [],
     exports: [SidebarComponent]
