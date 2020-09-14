@@ -1,0 +1,17 @@
+<div class="quill-test__container">
+    <p>focused: {{ focused }}, blurred: {{ blurred }}</p>
+
+    <quill-editor
+        (onEditorChanged)="changedEditor($event)"
+        [(ngModel)]="model"
+        (onEditorCreated)="created($event)"
+    ></quill-editor>
+</div>
+<button mat-button (click)="onInsertTableClick()">table</button>
+<!--        [modules]="modules"-->
+
+<!--    [styles]="{ height: '200px' }"-->
+<!--    (onFocus)="focus($event)"-->
+<!--    (onEditorChanged)="changedEditor($event)"-->
+<!--    (onBlur)="blur($event)"-->
+<!--    (onEditorCreated)="created($event)"-->

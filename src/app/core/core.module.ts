@@ -62,7 +62,20 @@ import { PrivacyStatementComponent } from './pages/privacy-statement/privacy-sta
 import { NotificationGroupsListComponent } from './pages/notification-groups-list/notification-groups-list.component';
 import { NotificationListComponent } from './components/notification-list/notification-list.component';
 import { CdkTableModule } from '@angular/cdk/table';
-import { ReactTestComponent } from './components/react-test/react-test.component';
+import { QuillTestComponent } from './components/quill-test/quill-test.component';
+import { QuillModule } from 'ngx-quill';
+
+// import {MatQuillModule} from './mat-quill/mat-quill-module';
+
+//old config
+//{
+//             customOptions: [
+//                 {
+//                     import: 'formats/font',
+//                     whitelist: ['mirza', 'roboto', 'aref', 'serif', 'sansserif', 'monospace']
+//                 }
+//             ]
+//         }
 
 @NgModule({
     imports: [
@@ -75,7 +88,8 @@ import { ReactTestComponent } from './components/react-test/react-test.component
         MatTabsModule,
         MatProgressSpinnerModule,
         NgMaterialMultilevelMenuModule,
-        CdkTableModule
+        CdkTableModule,
+        QuillModule
     ],
     declarations: [
         ProfileComponent,
@@ -109,7 +123,7 @@ import { ReactTestComponent } from './components/react-test/react-test.component
         PrivacyStatementComponent,
         NotificationGroupsListComponent,
         NotificationListComponent,
-        ReactTestComponent
+        QuillTestComponent
     ],
     providers: [],
     exports: [SidebarComponent]

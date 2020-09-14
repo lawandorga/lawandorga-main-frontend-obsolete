@@ -44,6 +44,38 @@ import { SnackbarService } from './shared/services/snackbar.service';
 import { FilesSandboxService } from './filemanagement/services/files-sandbox.service';
 import { SharedSandboxService } from './shared/services/shared-sandbox.service';
 import { CookieService } from 'ngx-cookie-service';
+import { QuillConfig, QuillModule } from 'ngx-quill';
+import Quill from 'quill';
+import QuillBetterTable from 'quill-better-table';
+
+Quill.register(
+    {
+        'modules/better-table': QuillBetterTable
+    },
+    true
+);
+
+const quillConfig: QuillConfig = {
+    modules: {
+        // table: false, // disable table module
+        'better-table': {
+            operationMenu: {
+                items: {
+                    unmergeCells: {
+                        text: 'Another unmerge cells name'
+                    }
+                },
+                color: {
+                    colors: ['#fff', 'red', 'rgb(0, 0, 0)'], // colors in operationMenu
+                    text: 'Background Colors' // subtitle
+                }
+            }
+        },
+        keyboard: {
+            bindings: QuillBetterTable.keyboardBindings
+        }
+    }
+};
 
 registerLocaleData(localeDE);
 
@@ -75,7 +107,8 @@ export function logrocketMiddleware(reducer): ActionReducer<any, any> {
         AppRoutingModule,
         StoreModule.forRoot(reducers, { metaReducers: [logrocketMiddleware] }),
         EffectsModule.forRoot([AuthEffects]),
-        !environment.production ? StoreDevtoolsModule.instrument() : []
+        !environment.production ? StoreDevtoolsModule.instrument() : [],
+        QuillModule.forRoot(quillConfig)
     ],
     providers: [
         AuthGuardService,
