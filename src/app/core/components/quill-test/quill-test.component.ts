@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import Quill from 'quill';
 import { EditorChangeContent, EditorChangeSelection, QuillModule, QuillModules } from 'ngx-quill';
-
+import 'quill-mention';
 // const parchment = Quill.import('parchment');
 // const block = parchment.query('block');
 // block.tagName = 'DIV';
@@ -11,6 +11,7 @@ import { EditorChangeContent, EditorChangeSelection, QuillModule, QuillModules }
 // interface Quill {
 //     getModule(moduleName: string);
 // }
+import { QuillEditorComponent } from 'ngx-quill';
 
 interface BetterTableModule {
     insertTable(rows: number, columns: number): void;
@@ -56,6 +57,57 @@ export class QuillTestComponent implements OnInit {
     //         table: true
     //     }
     // };
+    @ViewChild(QuillEditorComponent, { static: true }) editor: QuillEditorComponent;
+    modules = {
+        mention: {
+            allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+            onSelect: (item, insertItem) => {
+                const editor = this.editor;
+                insertItem(item);
+                // necessary because quill-mention triggers changes as 'api' instead of 'user'
+                // editor.insertText(editor.getLength() - 1, '', 'user');
+            },
+            source: (searchTerm, renderList) => {
+                const values = [
+                    { id: 1, value: 'Fredrik Sundqvist' },
+                    { id: 2, value: 'Patrik Sjölin' }
+                ];
+
+                if (searchTerm.length === 0) {
+                    renderList(values, searchTerm);
+                } else {
+                    const matches = [];
+
+                    values.forEach(entry => {
+                        if (entry.value.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1) {
+                            matches.push(entry);
+                        }
+                    });
+                    renderList(matches, searchTerm);
+                }
+            }
+        },
+        toolbar: [
+            ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+            ['blockquote'],
+
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
+            [{ direction: 'rtl' }], // text direction
+
+            // [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
+            [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+            [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+            [{ font: [] }],
+            [{ align: [] }],
+
+            ['clean'], // remove formatting button
+
+            ['link', 'image', 'video'], // link and image, video
+            ['table']
+        ]
+    };
 
     constructor() {}
 
@@ -75,6 +127,7 @@ export class QuillTestComponent implements OnInit {
         // tslint:disable-next-line:no-console
         console.log('editor-change', event);
         console.log('model: ', this.model);
+        console.log('editor: ', this.editor);
     }
 
     focus($event) {

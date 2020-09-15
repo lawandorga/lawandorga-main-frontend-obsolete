@@ -5,6 +5,7 @@
         (onEditorChanged)="changedEditor($event)"
         [(ngModel)]="model"
         (onEditorCreated)="created($event)"
+        [modules]="modules"
     ></quill-editor>
 </div>
 <button mat-button (click)="onInsertTableClick()">table</button>
