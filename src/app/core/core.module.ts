@@ -65,18 +65,6 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { QuillTestComponent } from './components/quill-test/quill-test.component';
 import { QuillModule } from 'ngx-quill';
 
-// import {MatQuillModule} from './mat-quill/mat-quill-module';
-
-//old config
-//{
-//             customOptions: [
-//                 {
-//                     import: 'formats/font',
-//                     whitelist: ['mirza', 'roboto', 'aref', 'serif', 'sansserif', 'monospace']
-//                 }
-//             ]
-//         }
-
 @NgModule({
     imports: [
         CoreRoutingModule,

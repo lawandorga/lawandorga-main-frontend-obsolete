@@ -46,13 +46,16 @@ import { CookieService } from 'ngx-cookie-service';
 import { QuillConfig, QuillModule } from 'ngx-quill';
 import Quill from 'quill';
 import QuillBetterTable from 'quill-better-table';
+import QuillCursors from 'quill-cursors';
 
-Quill.register(
-    {
-        'modules/better-table': QuillBetterTable
-    },
-    true
-);
+// Quill.register(
+//     {
+//         'modules/better-table': QuillBetterTable
+//     },
+//     true
+// );
+Quill.register('modules/cursors', QuillCursors);
+Quill.register('modules/better-table', QuillBetterTable);
 
 const quillConfig: QuillConfig = {
     modules: {
@@ -72,7 +75,8 @@ const quillConfig: QuillConfig = {
         },
         keyboard: {
             bindings: QuillBetterTable.keyboardBindings
-        }
+        },
+        cursors: true
     }
 };
 

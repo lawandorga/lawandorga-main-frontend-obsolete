@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import Quill from 'quill';
 import { EditorChangeContent, EditorChangeSelection, QuillModule, QuillModules } from 'ngx-quill';
 import 'quill-mention';
+import 'quill-cursors';
 // const parchment = Quill.import('parchment');
 // const block = parchment.query('block');
 // block.tagName = 'DIV';
@@ -106,7 +107,8 @@ export class QuillTestComponent implements OnInit {
 
             ['link', 'image', 'video'], // link and image, video
             ['table']
-        ]
+        ],
+        cursors: true
     };
 
     constructor() {}
@@ -121,6 +123,11 @@ export class QuillTestComponent implements OnInit {
         // tslint:disable-next-line:no-console
         console.log('editor-created', event);
         this.quillRef = event;
+
+        const cursors = this.quillRef.getModule('cursors');
+        console.log('cursors: ', cursors);
+        const cursor = cursors.createCursor('123', 'peter parker', 'maroon');
+        cursors.moveCursor('123', { index: 0, length: 3 });
     }
 
     changedEditor(event: EditorChangeContent | EditorChangeSelection) {
