@@ -108,7 +108,10 @@ export class QuillTestComponent implements OnInit {
             ['link', 'image', 'video'], // link and image, video
             ['table']
         ],
-        cursors: true
+        cursors: true,
+        table: true,
+        tableUI: true
+        // 'better-table': true
     };
 
     constructor() {}
@@ -128,6 +131,9 @@ export class QuillTestComponent implements OnInit {
         console.log('cursors: ', cursors);
         const cursor = cursors.createCursor('123', 'peter parker', 'maroon');
         cursors.moveCursor('123', { index: 0, length: 3 });
+
+        const table = this.quillRef.getModule('table');
+        console.log('table: ', table);
     }
 
     changedEditor(event: EditorChangeContent | EditorChangeSelection) {

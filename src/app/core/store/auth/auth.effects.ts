@@ -37,7 +37,6 @@ import {
     LOGOUT,
     SET_USERS_PRIVATE_KEY
 } from './auth.actions';
-import LogRocket from 'logrocket';
 import {
     FORGOT_PASSWORD_API_URL,
     GetResetPasswordApiUrl,
