@@ -133,7 +133,7 @@ export class QuillTestComponent implements OnInit {
         cursors.moveCursor('123', { index: 0, length: 3 });
 
         const table = this.quillRef.getModule('table');
-        console.log('table: ', table);
+        console.log('table:', table);
     }
 
     changedEditor(event: EditorChangeContent | EditorChangeSelection) {
