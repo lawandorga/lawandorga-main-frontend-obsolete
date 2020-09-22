@@ -292,7 +292,7 @@ export class AuthEffects {
     }
 
     logoutStatics() {
-        localStorage.clear();
+        this.appSB.resetTokenAndUsersPrivateKey();
         this.router.navigate([LOGIN_FRONT_URL]);
     }
 }
