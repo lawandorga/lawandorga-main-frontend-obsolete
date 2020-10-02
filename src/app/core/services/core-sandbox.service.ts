@@ -69,6 +69,8 @@ import { RlcSettings } from '../models/rlc_settings.model';
 
 @Injectable()
 export class CoreSandboxService {
+    openedGuardDialogs = 0;
+
     constructor(
         public router: Router,
         private snackbarService: SnackbarService,
