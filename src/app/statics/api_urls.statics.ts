@@ -57,7 +57,7 @@ export const NOTIFICATION_GROUPS_API_URL = base + 'api/notification_groups/';
 export const UNREAD_NOTIFICATIONS_API_URL = base + 'api/unread_notifications/';
 
 const CHECK_USER_ACTIVATION_API_URL = base + 'api/check_user_activation_link/';
-const ACTIVATE_USER_ACTIVATION_API_URL = 'base + api/activate_user_activation_link/';
+const ACTIVATE_USER_ACTIVATION_API_URL = base + 'api/activate_user_activation_link/';
 const RESET_PASSWORD_API_URL = base + 'api/reset_password/';
 const SPECIAL_RECORD_BASE_API_URL = base + 'api/records/e_record/'; // deprecated??? is it?
 const DOWNLOAD_SIGNING_BASE_API_URL = base + 'api/storage_down/'; // deprecated
