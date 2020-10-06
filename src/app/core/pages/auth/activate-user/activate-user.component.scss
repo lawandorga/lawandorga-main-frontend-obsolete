@@ -16,3 +16,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
+.activate-user__card {
+    margin-top: 50px;
+    max-width: 800px;
+}
+
+.activate-user__container {
+    display: flex;
+    justify-content: center;
+}
+
+.activate-user__button-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
