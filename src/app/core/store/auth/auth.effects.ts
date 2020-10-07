@@ -208,7 +208,6 @@ export class AuthEffects {
     startLoggingOut = this.actions.pipe(
         ofType(START_LOGGING_OUT),
         mergeMap(() => {
-            this.logoutStatics();
             return from(
                 this.http.post(LOGOUT_API_URL, {}).pipe(
                     catchError(error => {
@@ -235,6 +234,7 @@ export class AuthEffects {
     logoutEffect = this.actions.pipe(
         ofType(LOGOUT),
         mergeMap(() => {
+            this.appSB.resetTokenAndUsersPrivateKey();
             this.router.navigate([LOGIN_FRONT_URL]);
             return [];
         })
@@ -289,10 +289,5 @@ export class AuthEffects {
                 payload: response.notifications
             }
         ];
-    }
-
-    logoutStatics() {
-        this.appSB.resetTokenAndUsersPrivateKey();
-        this.router.navigate([LOGIN_FRONT_URL]);
     }
 }

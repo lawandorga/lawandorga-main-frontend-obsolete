@@ -23,10 +23,15 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { catchError, switchMap, take } from 'rxjs/operators';
 import { AppSandboxService } from './app-sandbox.service';
+import { CoreSandboxService } from './core-sandbox.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-    constructor(private store: Store<AuthState>, private appSB: AppSandboxService) {}
+    constructor(
+        private store: Store<AuthState>,
+        private appSB: AppSandboxService,
+        private coreSB: CoreSandboxService
+    ) {}
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return this.store
@@ -52,6 +57,9 @@ export class AuthInterceptor implements HttpInterceptor {
                                 }
                                 this.appSB.saveLocation();
                                 this.appSB.logout();
+                                this.coreSB.showErrorSnackBar(
+                                    'you were logged out. please login again.'
+                                );
                                 return [];
                             }
                             throw error;
