@@ -168,12 +168,12 @@ export class FilesEffects {
                             return [];
                         }),
                         mergeMap((response: any) => {
+                            console.log('response from download files/folders');
+                            let path = 'root';
                             if (payload.entries.length === 1) {
-                                payload.path = payload.entries[0].name;
-                            } else if (payload.path === '') {
-                                payload.path = 'root';
+                                path = payload.entries[0].name;
                             }
-                            StorageService.saveFile(response, payload.path + '.zip');
+                            StorageService.saveFile(response, path + '.zip');
                             return [];
                         })
                     )
