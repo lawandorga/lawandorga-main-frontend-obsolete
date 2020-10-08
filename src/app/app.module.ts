@@ -16,55 +16,35 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { BrowserModule } from "@angular/platform-browser";
+import { BrowserModule } from '@angular/platform-browser';
 import { LOCALE_ID, NgModule } from '@angular/core';
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { ActionReducer, StoreModule } from "@ngrx/store";
-import { EffectsModule } from "@ngrx/effects";
-import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
-import { StoreDevtoolsModule } from "@ngrx/store-devtools";
-import LogRocket from "logrocket";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { registerLocaleData } from '@angular/common';
 import localeDE from '@angular/common/locales/de';
 
-
-import { AppRoutingModule } from "./app-routing.module";
-import { AppComponent } from "./app.component";
-import { AuthGuardService } from "./core/services/auth-guard.service";
-import { CustomMaterialModule } from "./custom-material.module";
-import { reducers } from "./store/app.reducers";
-import { AuthEffects } from "./core/store/auth/auth.effects";
-import { CoreSandboxService } from "./core/services/core-sandbox.service";
-import { CoreModule } from "./core/core.module";
-import { RecordsSandboxService } from "./recordmanagement/services/records-sandbox.service";
-import { AuthInterceptor } from "./core/services/auth.interceptor";
-import { environment } from "../environments/environment";
-import { AppSandboxService } from "./core/services/app-sandbox.service";
-import { StorageService } from "./shared/services/storage.service";
-import { SnackbarService } from "./shared/services/snackbar.service";
-import {FilesSandboxService} from './filemanagement/services/files-sandbox.service';
-import {SharedSandboxService} from "./shared/services/shared-sandbox.service";
-import {CookieService} from "ngx-cookie-service";
-
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { AuthGuardService } from './core/services/auth-guard.service';
+import { CustomMaterialModule } from './custom-material.module';
+import { reducers } from './store/app.reducers';
+import { AuthEffects } from './core/store/auth/auth.effects';
+import { CoreSandboxService } from './core/services/core-sandbox.service';
+import { CoreModule } from './core/core.module';
+import { RecordsSandboxService } from './recordmanagement/services/records-sandbox.service';
+import { AuthInterceptor } from './core/services/auth.interceptor';
+import { environment } from '../environments/environment';
+import { AppSandboxService } from './core/services/app-sandbox.service';
+import { StorageService } from './shared/services/storage.service';
+import { SnackbarService } from './shared/services/snackbar.service';
+import { FilesSandboxService } from './filemanagement/services/files-sandbox.service';
+import { SharedSandboxService } from './shared/services/shared-sandbox.service';
+import { CookieService } from 'ngx-cookie-service';
 
 registerLocaleData(localeDE);
-
-
-const reduxMiddleware = LogRocket.reduxMiddleware();
-
-export function logrocketMiddleware(reducer): ActionReducer<any, any> {
-    let currentState;
-    const fakeDispatch = reduxMiddleware({
-        getState: () => currentState
-    })(() => {});
-
-    return function(state, action) {
-        const newState = reducer(state, action);
-        currentState = state;
-        fakeDispatch(action);
-        return newState;
-    };
-}
 
 @NgModule({
     declarations: [AppComponent],
@@ -76,7 +56,7 @@ export function logrocketMiddleware(reducer): ActionReducer<any, any> {
         BrowserAnimationsModule,
         CoreModule,
         AppRoutingModule,
-        StoreModule.forRoot(reducers, { metaReducers: [logrocketMiddleware] }),
+        StoreModule.forRoot(reducers),
         EffectsModule.forRoot([AuthEffects]),
         !environment.production ? StoreDevtoolsModule.instrument() : []
     ],
@@ -91,7 +71,7 @@ export function logrocketMiddleware(reducer): ActionReducer<any, any> {
         SharedSandboxService,
         CookieService,
         { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-        {provide: LOCALE_ID, useValue: "de"}
+        { provide: LOCALE_ID, useValue: 'de' }
     ],
     bootstrap: [AppComponent]
 })

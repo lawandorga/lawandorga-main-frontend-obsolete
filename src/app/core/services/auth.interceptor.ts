@@ -23,43 +23,49 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { catchError, switchMap, take } from 'rxjs/operators';
 import { AppSandboxService } from './app-sandbox.service';
+import { CoreSandboxService } from './core-sandbox.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private store: Store<AuthState>, private appSB: AppSandboxService) {}
+    constructor(
+        private store: Store<AuthState>,
+        private appSB: AppSandboxService,
+        private coreSB: CoreSandboxService
+    ) {}
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        return this.store.select('auth').pipe(
-            take(1),
-            switchMap((authState: AuthState) => {
-                // if (req.url.startsWith("http")) {
-                //     return next.handle(req);
-                // }
+        return this.store
+            .select(state => state['auth'])
+            .pipe(
+                take(1),
+                switchMap((authState: AuthState) => {
+                    let newHeaders = req.headers;
+                    newHeaders = newHeaders.append('Authorization', 'Token ' + authState.token);
+                    if (newHeaders.get('private-key')) {
+                        newHeaders = newHeaders.delete('private-key');
+                        let priv_key = authState.users_private_key;
+                        priv_key = priv_key.replace(/(?:\r\n|\r|\n)/g, '<linebreak>');
+                        newHeaders = newHeaders.append('private-key', priv_key);
+                    }
+                    const clonedRequest = req.clone({ headers: newHeaders });
 
-                let newHeaders = req.headers;
-                newHeaders = newHeaders.append('Authorization', 'Token ' + authState.token);
-                if (newHeaders.get('private-key')) {
-                    newHeaders = newHeaders.delete('private-key');
-                    let priv_key = authState.users_private_key;
-                    priv_key = priv_key.replace(/(?:\r\n|\r|\n)/g, '<linebreak>');
-                    newHeaders = newHeaders.append('private-key', priv_key);
-                }
-                const clonedRequest = req.clone({ headers: newHeaders });
-
-                return next.handle(clonedRequest).pipe(
-                    catchError((error, caught) => {
-                        if (error.status === 401) {
-                            if (error.url && error.url.includes('logout')){
-                               return [];
+                    return next.handle(clonedRequest).pipe(
+                        catchError((error, caught) => {
+                            if (error.status === 401) {
+                                if (error.url && error.url.includes('logout')) {
+                                    return [];
+                                }
+                                this.appSB.saveLocation();
+                                this.appSB.logout();
+                                this.coreSB.showErrorSnackBar(
+                                    'you were logged out. please login again.'
+                                );
+                                return [];
                             }
-                            this.appSB.saveLocation();
-                            this.appSB.logout();
-                            return [];
-                        }
-                        throw error;
-                    })
-                );
-            })
-        );
+                            throw error;
+                        })
+                    );
+                })
+            );
     }
 }

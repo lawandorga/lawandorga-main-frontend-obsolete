@@ -15,33 +15,21 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
-import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 
-import { RecordsSandboxService } from "../../../../services/records-sandbox.service";
-import { RecordDocument } from "../../../../models/record_document.model";
-import {
-    animate,
-    state,
-    style,
-    transition,
-    trigger
-} from "@angular/animations";
+import { RecordsSandboxService } from '../../../../services/records-sandbox.service';
+import { RecordDocument } from '../../../../models/record_document.model';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
-    selector: "app-record-documents-list",
-    templateUrl: "./record-documents-list.component.html",
-    styleUrls: ["./record-documents-list.component.scss"],
+    selector: 'app-record-documents-list',
+    templateUrl: './record-documents-list.component.html',
+    styleUrls: ['./record-documents-list.component.scss'],
     animations: [
-        trigger("detailExpand", [
-            state(
-                "collapsed",
-                style({ height: "0px", minHeight: "0" })
-            ),
-            state("expanded", style({ height: "*" })),
-            transition(
-                "expanded <=> collapsed",
-                animate("225ms cubic-bezier(0.4, 0.0, 0.2, 1)")
-            )
+        trigger('detailExpand', [
+            state('collapsed', style({ height: '0px', minHeight: '0' })),
+            state('expanded', style({ height: '*' })),
+            transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'))
         ])
     ]
 })
@@ -49,10 +37,10 @@ export class RecordDocumentsListComponent implements OnInit {
     @Input()
     documents: RecordDocument[];
 
-    columns = ["name", "tags", "date", "download"];
+    columns = ['name', 'tags', 'date', 'download'];
     expandedElement: RecordDocument | null;
 
-    @ViewChild("fileInput")
+    @ViewChild('fileInput', { static: true })
     fileInput: ElementRef<HTMLInputElement>;
 
     constructor(private recordSB: RecordsSandboxService) {}

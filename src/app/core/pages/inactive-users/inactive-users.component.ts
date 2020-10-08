@@ -16,24 +16,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit } from "@angular/core";
-import {CoreSandboxService} from '../../services/core-sandbox.service';
-import {Observable} from 'rxjs';
-import {FullUser} from '../../models/user.model';
+import { Component, OnInit } from '@angular/core';
+import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { Observable } from 'rxjs';
+import { FullUser } from '../../models/user.model';
 
 @Component({
-    selector: "app-inactive-users",
-    templateUrl: "./inactive-users.component.html",
-    styleUrls: ["./inactive-users.component.scss"]
+    selector: 'app-inactive-users',
+    templateUrl: './inactive-users.component.html',
+    styleUrls: ['./inactive-users.component.scss']
 })
 export class InactiveUsersComponent implements OnInit {
     inactive_users: Observable<FullUser[]>;
 
-    columns = [
-        'name',
-        'email',
-        'activate'
-    ];
+    columns = ['name', 'email', 'activate'];
 
     constructor(private coreSB: CoreSandboxService) {}
 

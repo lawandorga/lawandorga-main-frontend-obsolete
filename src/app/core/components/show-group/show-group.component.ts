@@ -16,14 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit } from "@angular/core";
-import { FullGroup } from "../../models/group.model";
-import { CoreSandboxService } from "../../services/core-sandbox.service";
+import { Component, OnInit } from '@angular/core';
+import { FullGroup } from '../../models/group.model';
+import { CoreSandboxService } from '../../services/core-sandbox.service';
 
 @Component({
-    selector: "app-show-group",
-    templateUrl: "./show-group.component.html",
-    styleUrls: ["./show-group.component.scss"]
+    selector: 'app-show-group',
+    templateUrl: './show-group.component.html',
+    styleUrls: ['./show-group.component.scss']
 })
 export class ShowGroupComponent implements OnInit {
     group: FullGroup;

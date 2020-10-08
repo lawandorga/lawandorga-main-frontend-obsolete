@@ -16,24 +16,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { HasPermission, Permission } from "../../models/permission.model";
-import { CoreSandboxService } from "../../services/core-sandbox.service";
-import { ActivatedRoute, Params } from "@angular/router";
-import { MatDialog } from "@angular/material";
-import { AddHasPermissionComponent } from "../../components/add-has-permission/add-has-permission.component";
-import { PERMISSION_CAN_MANAGE_PERMISSIONS_RLC } from "../../../statics/permissions.statics";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { HasPermission, Permission } from '../../models/permission.model';
+import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { ActivatedRoute, Params } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { AddHasPermissionComponent } from '../../components/add-has-permission/add-has-permission.component';
+import { PERMISSION_CAN_MANAGE_PERMISSIONS_RLC } from '../../../statics/permissions.statics';
 
 @Component({
-    selector: "app-edit-permission",
-    templateUrl: "./edit-permission.component.html",
-    styleUrls: ["./edit-permission.component.scss"]
+    selector: 'app-edit-permission',
+    templateUrl: './edit-permission.component.html',
+    styleUrls: ['./edit-permission.component.scss']
 })
 export class EditPermissionComponent implements OnInit, OnDestroy {
     permission: Permission = null;
     has_permissions: HasPermission[] = [];
     canEditPermissions = false;
-    columns = ["id", "has_permission", "permission_for", "remove"];
+    columns = ['id', 'has_permission', 'permission_for', 'remove'];
 
     id: string;
 
@@ -54,37 +54,25 @@ export class EditPermissionComponent implements OnInit, OnDestroy {
         );
 
         this.route.params.subscribe((params: Params) => {
-            this.id = params["id"];
+            this.id = params['id'];
             this.coreSB.startLoadingSpecialPermission(this.id);
 
-            this.coreSB
-                .getSpecialPermission()
-                .subscribe((special_perm: Permission) => {
-                    this.permission = special_perm;
-                });
+            this.coreSB.getSpecialPermission().subscribe((special_perm: Permission) => {
+                this.permission = special_perm;
+            });
         });
 
-        this.coreSB
-            .getActualHasPermissions()
-            .subscribe((actualHasPermissions: HasPermission[]) => {
-                this.has_permissions = actualHasPermissions.sort(
-                    (a: HasPermission, b: HasPermission) => {
-                        // TODO complex sorting
-                        if (
-                            (a.userHas && !b.userHas) ||
-                            (a.groupHas && b.rlcHas)
-                        )
-                            return -1;
-                        if (
-                            (b.userHas && !a.userHas) ||
-                            (b.groupHas && a.rlcHas)
-                        )
-                            return 1;
+        this.coreSB.getActualHasPermissions().subscribe((actualHasPermissions: HasPermission[]) => {
+            this.has_permissions = actualHasPermissions.sort(
+                (a: HasPermission, b: HasPermission) => {
+                    // TODO complex sorting
+                    if ((a.userHas && !b.userHas) || (a.groupHas && b.rlcHas)) return -1;
+                    if ((b.userHas && !a.userHas) || (b.groupHas && a.rlcHas)) return 1;
 
-                        return 0;
-                    }
-                );
-            });
+                    return 0;
+                }
+            );
+        });
     }
 
     ngOnDestroy(): void {
@@ -92,8 +80,7 @@ export class EditPermissionComponent implements OnInit, OnDestroy {
     }
 
     onRemoveClick(hasPermission: HasPermission): void {
-        if (this.canEditPermissions)
-            this.coreSB.startRemovingHasPermission(hasPermission.id);
+        if (this.canEditPermissions) this.coreSB.startRemovingHasPermission(hasPermission.id);
     }
 
     onAddClick(): void {

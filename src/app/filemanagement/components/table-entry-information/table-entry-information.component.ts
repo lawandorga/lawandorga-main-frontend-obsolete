@@ -38,7 +38,7 @@ export class TableEntryInformationComponent implements OnInit, OnChanges {
     constructor(private coreSB: CoreSandboxService, private fileSB: FilesSandboxService) {}
 
     ngOnInit() {
-        this.folderEnum =  FilesTypes.Folder;
+        this.folderEnum = FilesTypes.Folder;
         this.coreSB.hasPermissionFromStringForOwnRlc(
             PERMISSION_MANAGE_FOLDER_PERMISSIONS_RLC,
             hasPermission => {
@@ -51,8 +51,8 @@ export class TableEntryInformationComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         const currentItem: SimpleChange = changes.entry;
-        if (currentItem){
-            if (this.showPermissions && this.entry.type === FilesTypes.Folder){
+        if (currentItem) {
+            if (this.showPermissions && this.entry.type === FilesTypes.Folder) {
                 this.fileSB.startLoadingFolderPermissions('' + this.entry.id);
             }
         }

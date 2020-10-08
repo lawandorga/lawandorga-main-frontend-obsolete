@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import {RestrictedUser} from '../../core/models/user.model';
+import { RestrictedUser } from '../../core/models/user.model';
 
 export class RecordMessage {
     constructor(
@@ -31,7 +31,7 @@ export class RecordMessage {
         this.created_on = created_on;
     }
 
-    static getRecordMessagesFromJsonArray(jsonArray){
+    static getRecordMessagesFromJsonArray(jsonArray) {
         const recordMessages: RecordMessage[] = [];
         Object.values(jsonArray).map(jsonRecordMessage => {
             recordMessages.push(RecordMessage.getRecordMessageFromJson(jsonRecordMessage));
@@ -41,11 +41,6 @@ export class RecordMessage {
 
     static getRecordMessageFromJson(json) {
         const sender = RestrictedUser.getRestrictedUserFromJson(json.sender);
-        return new RecordMessage(
-            json.id,
-            json.message,
-            sender,
-            json.created_on
-        );
+        return new RecordMessage(json.id, json.message, sender, json.created_on);
     }
 }

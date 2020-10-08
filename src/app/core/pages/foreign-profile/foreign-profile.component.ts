@@ -16,15 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Params} from '@angular/router';
-import { CoreSandboxService } from "../../services/core-sandbox.service";
-import {ForeignUser} from '../../models/user.model';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { ForeignUser } from '../../models/user.model';
 
 @Component({
-    selector: "app-foreign-profile",
-    templateUrl: "./foreign-profile.component.html",
-    styleUrls: ["./foreign-profile.component.scss"]
+    selector: 'app-foreign-profile',
+    templateUrl: './foreign-profile.component.html',
+    styleUrls: ['./foreign-profile.component.scss']
 })
 export class ForeignProfileComponent implements OnInit, OnDestroy {
     foreignUser: ForeignUser;
@@ -33,10 +33,12 @@ export class ForeignProfileComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.route.params.subscribe((params: Params) => {
-            this.coreSB.loadAndGetSpecialForeignUser(params["id"]).subscribe((foreignUser: ForeignUser) => {
-                this.foreignUser = foreignUser;
-            });
-        })
+            this.coreSB
+                .loadAndGetSpecialForeignUser(params['id'])
+                .subscribe((foreignUser: ForeignUser) => {
+                    this.foreignUser = foreignUser;
+                });
+        });
     }
 
     ngOnDestroy(): void {

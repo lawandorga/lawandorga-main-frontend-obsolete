@@ -74,7 +74,7 @@
                             <td mat-cell *matCellDef="let entry" class="folder-view__column-content folder-view__small-column">
                                 <mat-menu #actionMenu="matMenu">
                                     <button mat-menu-item class="button-normal" (click)="onDownloadClick(entry)"><mat-icon>cloud</mat-icon>download</button>
-                                    <button mat-menu-item class="button-normal" (click)="onDeleteClick(entry)"><mat-icon>delete_forever</mat-icon>delete</button>
+                                    <button mat-menu-item class="button-normal" *ngIf="write_permission" (click)="onDeleteClick(entry)"><mat-icon>delete_forever</mat-icon>delete</button>
                                     <button mat-menu-item class="button-normal" (click)="onFolderInformation(entry)"><mat-icon>info</mat-icon>information</button>
                                 </mat-menu>
                                 <button mat-icon-button [matMenuTriggerFor]="actionMenu">

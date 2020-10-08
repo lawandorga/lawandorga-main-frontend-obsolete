@@ -16,8 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { CoreSandboxService } from "../services/core-sandbox.service";
-import { Filterable } from "../../shared/models/filterable.model";
+import { CoreSandboxService } from '../services/core-sandbox.service';
+import { Filterable } from '../../shared/models/filterable.model';
 
 export class RestrictedUser implements Filterable {
     constructor(public id: string, public name: string) {
@@ -28,9 +28,7 @@ export class RestrictedUser implements Filterable {
     static getRestrictedUsersFromJsonArray(jsonArray): RestrictedUser[] {
         const restrictedUsers: RestrictedUser[] = [];
         Object.values(jsonArray).map(restrictedJsonUser => {
-            restrictedUsers.push(
-                RestrictedUser.getRestrictedUserFromJson(restrictedJsonUser)
-            );
+            restrictedUsers.push(RestrictedUser.getRestrictedUserFromJson(restrictedJsonUser));
         });
         return restrictedUsers;
     }
@@ -51,10 +49,10 @@ export class ForeignUser extends RestrictedUser {
      * RestrictedUser < foreign < full
      */
     constructor(
-        id: string = "",
-        public email: string = "",
-        name: string = "",
-        public phone_number: string = ""
+        id: string = '',
+        public email: string = '',
+        name: string = '',
+        public phone_number: string = ''
     ) {
         super(id, name);
         this.email = email;
@@ -62,13 +60,7 @@ export class ForeignUser extends RestrictedUser {
     }
 
     static getForeignUserFromJson(json): ForeignUser {
-        if (json)
-            return new ForeignUser(
-                json.id,
-                json.email,
-                json.name,
-                json.phone_number
-            );
+        if (json) return new ForeignUser(json.id, json.email, json.name, json.phone_number);
         return null;
     }
 }
@@ -88,16 +80,16 @@ export class FullUser extends RestrictedUser {
      * @param user_record_state
      */
     constructor(
-        id: string = "",
-        public email: string = "",
-        name: string = "",
+        id: string = '',
+        public email: string = '',
+        name: string = '',
         public birthday: Date = new Date(),
-        public phone_number: string = "",
-        public street: string = "",
-        public city: string = "",
-        public postal_code: string = "",
-        public user_state: string = "",
-        public user_record_state: string = ""
+        public phone_number: string = '',
+        public street: string = '',
+        public city: string = '',
+        public postal_code: string = '',
+        public user_state: string = '',
+        public user_record_state: string = ''
     ) {
         super(id, name);
         this.email = email;

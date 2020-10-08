@@ -16,24 +16,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { RecordsSandboxService } from "../../services/records-sandbox.service";
-import {DateAdapter, MatDatepickerInputEvent, MatDialog} from '@angular/material';
-import { SelectClientDialogComponent } from "../../components/select-client-dialog/select-client-dialog.component";
-import { FullClient } from "../../models/client.model";
-import { OriginCountry } from "../../models/country.model";
-import { RestrictedUser } from "../../../core/models/user.model";
-import { Tag } from "../../models/tag.model";
-import { Observable } from "rxjs";
-import { dateInPastValidator } from "../../../statics/validators.statics";
-import { tap } from "rxjs/internal/operators/tap";
-import { alphabeticalSorterByField } from "../../../shared/other/sorter-helper";
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { RecordsSandboxService } from '../../services/records-sandbox.service';
+import { DateAdapter } from '@angular/material/core';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatDialog } from '@angular/material/dialog';
+import { SelectClientDialogComponent } from '../../components/select-client-dialog/select-client-dialog.component';
+import { FullClient } from '../../models/client.model';
+import { OriginCountry } from '../../models/country.model';
+import { RestrictedUser } from '../../../core/models/user.model';
+import { Tag } from '../../models/tag.model';
+import { Observable } from 'rxjs';
+import { dateInPastValidator } from '../../../statics/validators.statics';
+import { tap } from 'rxjs/internal/operators/tap';
+import { alphabeticalSorterByField } from '../../../shared/other/sorter-helper';
 
 @Component({
-    selector: "app-add-record",
-    templateUrl: "./create-record.component.html",
-    styleUrls: ["./create-record.component.scss"]
+    selector: 'app-add-record',
+    templateUrl: './create-record.component.html',
+    styleUrls: ['./create-record.component.scss']
 })
 export class CreateRecordComponent implements OnInit {
     createRecordForm: FormGroup;
@@ -52,31 +54,24 @@ export class CreateRecordComponent implements OnInit {
     recordTagErrors: any;
     selectedRecordTags: Tag[];
 
-    constructor(
-        private recordSB: RecordsSandboxService,
-        public dialog: MatDialog
-    ) {
+    constructor(private recordSB: RecordsSandboxService, public dialog: MatDialog) {
         const date = new Date();
         date.setFullYear(date.getFullYear() - 20);
 
         this.createRecordForm = new FormGroup({
-            first_contact_date: new FormControl(
-                new Date(),
-                dateInPastValidator
-            ),
+            first_contact_date: new FormControl(new Date(), dateInPastValidator),
             client_birthday: new FormControl(date, dateInPastValidator),
             // client_birthday: new FormControl(date),
-            client_name: new FormControl("", [Validators.required]),
-            client_phone_number: new FormControl(""),
-            client_note: new FormControl(""),
-            record_token: new FormControl("", [Validators.required]),
-            record_note: new FormControl("")
+            client_name: new FormControl('', [Validators.required]),
+            client_phone_number: new FormControl(''),
+            client_note: new FormControl(''),
+            record_token: new FormControl('', [Validators.required]),
+            record_note: new FormControl('')
         });
-
 
         this.allConsultants = this.recordSB.getConsultants().pipe(
             tap(results => {
-                alphabeticalSorterByField(results, "name");
+                alphabeticalSorterByField(results, 'name');
             })
         );
         this.allCountries = this.recordSB.getOriginCountries().pipe(
@@ -86,14 +81,14 @@ export class CreateRecordComponent implements OnInit {
         );
         this.allRecordTags = this.recordSB.getRecordTags().pipe(
             tap(results => {
-                alphabeticalSorterByField(results, "name");
+                alphabeticalSorterByField(results, 'name');
             })
         );
     }
 
     ngOnInit() {}
 
-    onClientBirthdayChange(event: MatDatepickerInputEvent<Date>){
+    onClientBirthdayChange(event: MatDatepickerInputEvent<Date>) {
         // const birthday = this.createRecordForm.get("client_birthday").value;
         // if (birthday !== null){
         //     this.recordSB.loadClientPossibilities(new Date(this.createRecordForm.get("client_birthday").value));
@@ -104,7 +99,7 @@ export class CreateRecordComponent implements OnInit {
     selectedConsultantsChanged(selectedConsultants) {
         this.selectedConsultants = selectedConsultants;
         if (selectedConsultants.length <= 1) {
-            this.consultantErrors = { null: "true" };
+            this.consultantErrors = { null: 'true' };
         } else {
             this.consultantErrors = null;
         }
@@ -117,7 +112,7 @@ export class CreateRecordComponent implements OnInit {
     selectedRecordTagsChanged(selectedRecordTags) {
         this.selectedRecordTags = selectedRecordTags;
         if (selectedRecordTags.length === 0) {
-            this.recordTagErrors = { null: "true" };
+            this.recordTagErrors = { null: 'true' };
         } else {
             this.recordTagErrors = null;
         }
@@ -128,9 +123,7 @@ export class CreateRecordComponent implements OnInit {
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
                 if (result !== -1) {
-                    this.client = this.recordSB.getSpecialPossibleClient(
-                        result
-                    );
+                    this.client = this.recordSB.getSpecialPossibleClient(result);
                     this.originCountry = this.recordSB.getOriginCountryById(
                         this.client.origin_country
                     );
@@ -153,36 +146,30 @@ export class CreateRecordComponent implements OnInit {
     }
 
     setClientFields() {
-        this.createRecordForm.controls["client_name"].setValue(
-            this.client.name
-        );
-        this.createRecordForm.controls["client_phone_number"].setValue(
-            this.client.phone_number
-        );
+        this.createRecordForm.controls['client_name'].setValue(this.client.name);
+        this.createRecordForm.controls['client_phone_number'].setValue(this.client.phone);
 
-        this.createRecordForm.controls["client_note"].setValue(
-            this.client.note
-        );
+        this.createRecordForm.controls['client_note'].setValue(this.client.note);
 
-        this.createRecordForm.controls["client_name"].disable();
+        this.createRecordForm.controls['client_name'].disable();
     }
 
     resetClientFields() {
-        this.createRecordForm.controls["client_name"].setValue("");
-        this.createRecordForm.controls["client_phone_number"].setValue("");
-        this.createRecordForm.controls["client_note"].setValue("");
+        this.createRecordForm.controls['client_name'].setValue('');
+        this.createRecordForm.controls['client_phone_number'].setValue('');
+        this.createRecordForm.controls['client_note'].setValue('');
 
-        this.createRecordForm.controls["client_name"].enable();
+        this.createRecordForm.controls['client_name'].enable();
     }
 
     onAddRecordClick() {
         let invalid = false;
         if (!this.selectedRecordTags || this.selectedRecordTags.length < 1) {
-            this.recordTagErrors = { null: "true" };
+            this.recordTagErrors = { null: 'true' };
             invalid = true;
         }
         if (!this.selectedConsultants || this.selectedConsultants.length < 2) {
-            this.consultantErrors = { null: "true" };
+            this.consultantErrors = { null: 'true' };
             invalid = true;
         }
 

@@ -16,10 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { GetColorOnHoverDirective } from "./get-color-on-hover.directive";
+import { GetColorOnHoverDirective } from './get-color-on-hover.directive';
 
-describe("GetColorOnHoverDirective", () => {
-    it("should create an instance", () => {
+describe('GetColorOnHoverDirective', () => {
+    it('should create an instance', () => {
         const directive = new GetColorOnHoverDirective(null);
         expect(directive).toBeTruthy();
     });

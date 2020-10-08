@@ -21,23 +21,22 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { AddPermissionForFolderComponent } from './add-permission-for-folder.component';
 
 describe('AddPermissionForFolderComponent', () => {
-  let component: AddPermissionForFolderComponent;
-  let fixture: ComponentFixture<AddPermissionForFolderComponent>;
+    let component: AddPermissionForFolderComponent;
+    let fixture: ComponentFixture<AddPermissionForFolderComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ AddPermissionForFolderComponent ]
-    })
-    .compileComponents();
-  }));
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [AddPermissionForFolderComponent]
+        }).compileComponents();
+    }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(AddPermissionForFolderComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(AddPermissionForFolderComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

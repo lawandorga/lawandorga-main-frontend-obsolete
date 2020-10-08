@@ -16,15 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-
 import {
     ADD_FOLDER,
     FilesActions,
     RESET_FOLDER_PERMISSIONS,
     SET_CURRENT_FOLDER,
-    SET_FILES, SET_FOLDER_HAS_PERMISSIONS,
+    SET_FILES,
+    SET_FOLDER_HAS_PERMISSIONS,
     SET_FOLDER_PERMISSIONS,
-    SET_FOLDERS
+    SET_FOLDERS,
+    SET_WRITE_PERMISSION
 } from './files.actions';
 import { getIdObjects } from '../../shared/other/reducer-helper';
 import { TableEntry } from '../models/table-entry.model';
@@ -32,15 +33,17 @@ import { FolderPermission } from '../models/folder_permission.model';
 import { HasPermission } from '../../core/models/permission.model';
 
 export interface FilesState {
-    current_folder: TableEntry,
-    folders: { [id: number]: TableEntry },
-    files: { [id: number]: TableEntry },
-    folder_permissions: { [id: number]: FolderPermission},
-    folder_has_permissions: { [id: number]: HasPermission}
+    current_folder: TableEntry;
+    write_permission: boolean;
+    folders: { [id: number]: TableEntry };
+    files: { [id: number]: TableEntry };
+    folder_permissions: { [id: number]: FolderPermission };
+    folder_has_permissions: { [id: number]: HasPermission };
 }
 
 export const initialState: FilesState = {
     current_folder: null,
+    write_permission: false,
     folders: {},
     files: {},
     folder_permissions: {},
@@ -86,6 +89,11 @@ export function filesReducer(state = initialState, action: FilesActions) {
                     ...state.folders,
                     [action.payload.id]: action.payload
                 }
+            };
+        case SET_WRITE_PERMISSION:
+            return {
+                ...state,
+                write_permission: action.payload
             };
         default:
             return state;

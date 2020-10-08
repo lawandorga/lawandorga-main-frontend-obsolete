@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import {Tag} from './tag.model';
+import { Tag } from './tag.model';
 
 export class RecordDocument {
     constructor(
@@ -37,7 +37,7 @@ export class RecordDocument {
         this.tags = tags;
     }
 
-    static getRecordDocumentsFromJsonArray(jsonArray){
+    static getRecordDocumentsFromJsonArray(jsonArray) {
         const recordDocuments: RecordDocument[] = [];
         Object.values(jsonArray).map(jsonRecordDocument => {
             recordDocuments.push(RecordDocument.getRecordDocumentFromJson(jsonRecordDocument));

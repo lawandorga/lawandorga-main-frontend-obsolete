@@ -25,7 +25,7 @@ export class FullClient {
         public birthday: Date,
         public origin_country: string,
         public note: string,
-        public phone_number: string
+        public phone: string
     ) {
         this.id = id;
         this.name = name;
@@ -34,10 +34,10 @@ export class FullClient {
         this.birthday = birthday;
         this.origin_country = origin_country;
         this.note = note;
-        this.phone_number = phone_number;
+        this.phone = phone;
     }
 
-    static getFullClientsFromJsonArray(jsonArray){
+    static getFullClientsFromJsonArray(jsonArray) {
         const clients: FullClient[] = [];
         Object.values(jsonArray).map(jsonClient => {
             clients.push(FullClient.getFullClientFromJson(jsonClient));

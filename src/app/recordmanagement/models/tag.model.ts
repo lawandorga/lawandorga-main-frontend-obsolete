@@ -16,15 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import {Filterable} from '../../shared/models/filterable.model';
+import { Filterable } from '../../shared/models/filterable.model';
 
-export class Tag implements Filterable{
-    constructor(public id: string, public name: string){
+export class Tag implements Filterable {
+    constructor(public id: string, public name: string) {
         this.id = id;
         this.name = name;
     }
 
-    static getTagsFromJsonArray(jsonArray){
+    static getTagsFromJsonArray(jsonArray) {
         const tags: Tag[] = [];
 
         Object.values(jsonArray).map(jsonTag => {
@@ -33,11 +33,11 @@ export class Tag implements Filterable{
         return tags;
     }
 
-    static getTagFromJson(json){
+    static getTagFromJson(json) {
         return new Tag(json.id, json.name);
     }
 
-    getFilterableProperty(){
+    getFilterableProperty() {
         return this.name;
     }
 }

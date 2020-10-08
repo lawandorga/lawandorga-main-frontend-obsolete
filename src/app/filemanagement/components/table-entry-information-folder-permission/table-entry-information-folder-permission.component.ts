@@ -92,17 +92,20 @@ export class TableEntryInformationFolderPermissionComponent implements OnInit {
     }
 
     onRemoveFolderPermissionClick(folderPermission: FolderPermission) {
-        this.sharedSB.openConfirmDialog({
-            confirmLabel: 'delete',
-            cancelLabel: 'cancel',
-            title: 'sure?',
-            description: `are you sure you want to remove permission ${folderPermission.permission} from group ${folderPermission.group.name}?`,
-            confirmColor: 'warn'
-        }, (confirm) => {
-            if (confirm){
-                this.fileSB.startDeletingFolderPermission(folderPermission);
+        this.sharedSB.openConfirmDialog(
+            {
+                confirmLabel: 'delete',
+                cancelLabel: 'cancel',
+                title: 'sure?',
+                description: `are you sure you want to remove permission ${folderPermission.permission} from group ${folderPermission.group.name}?`,
+                confirmColor: 'warn'
+            },
+            confirm => {
+                if (confirm) {
+                    this.fileSB.startDeletingFolderPermission(folderPermission);
+                }
             }
-        });
+        );
     }
 
     onFolderPermissionGoToFolderClick(folderPermission: FolderPermission) {

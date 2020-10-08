@@ -16,8 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Injectable } from "@angular/core";
-import {MatSnackBar, MatSnackBarConfig} from '@angular/material';
+import { Injectable } from '@angular/core';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 @Injectable()
 export class SnackbarService {
@@ -25,17 +25,17 @@ export class SnackbarService {
 
     public showSuccessSnackBar(message: string) {
         const config = new MatSnackBarConfig();
-        config.panelClass = ["snackbar__success"];
+        config.panelClass = ['snackbar__success'];
         config.duration = 2500;
-        config.verticalPosition = "top";
-        this.snackBar.open(message, "", config);
+        config.verticalPosition = 'top';
+        this.snackBar.open(message, '', config);
     }
 
     public showErrorSnackBar(message: string) {
         const config = new MatSnackBarConfig();
-        config.panelClass = ["snackbar__error"];
+        config.panelClass = ['snackbar__error'];
         config.duration = 3000;
-        config.verticalPosition = "top";
-        this.snackBar.open(message, "", config);
+        config.verticalPosition = 'top';
+        this.snackBar.open(message, '', config);
     }
 }

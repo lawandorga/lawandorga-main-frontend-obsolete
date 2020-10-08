@@ -16,11 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddHasPermissionComponent } from "./add-has-permission.component";
+import { AddHasPermissionComponent } from './add-has-permission.component';
 
-describe("AddHasPermissionComponent", () => {
+describe('AddHasPermissionComponent', () => {
     let component: AddHasPermissionComponent;
     let fixture: ComponentFixture<AddHasPermissionComponent>;
 
@@ -36,7 +36,7 @@ describe("AddHasPermissionComponent", () => {
         fixture.detectChanges();
     });
 
-    it("should create", () => {
+    it('should create', () => {
         expect(component).toBeTruthy();
     });
 });

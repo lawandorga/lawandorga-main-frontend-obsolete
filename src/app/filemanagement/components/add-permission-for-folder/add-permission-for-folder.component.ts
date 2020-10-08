@@ -46,10 +46,11 @@ export class AddPermissionForFolderComponent implements OnInit {
 
     ngOnInit() {
         this.coreSB.startLoadingGroups();
-        this.groups = this.coreSB.getGroups().pipe(tap(results => {
-            alphabeticalSorterByField(results, 'name')
-        }));
-
+        this.groups = this.coreSB.getGroups().pipe(
+            tap(results => {
+                alphabeticalSorterByField(results, 'name');
+            })
+        );
     }
 
     selectedGroupChanged(selectedGroup: RestrictedGroup): void {
@@ -61,12 +62,15 @@ export class AddPermissionForFolderComponent implements OnInit {
     }
 
     onAddClick() {
-        if (this.selectedPermission){
-            this.fileSB.startCreatingFolderPermission(this.data, this.selectedGroup, this.selectedPermission);
+        if (this.selectedPermission) {
+            this.fileSB.startCreatingFolderPermission(
+                this.data,
+                this.selectedGroup,
+                this.selectedPermission
+            );
             this.dialogRef.close();
         } else {
             this.coreSB.showErrorSnackBar('please select a permission');
         }
-
     }
 }

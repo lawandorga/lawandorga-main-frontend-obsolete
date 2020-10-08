@@ -90,7 +90,7 @@ export const initialState: RecordsState = {
         origin_country: null,
         record_documents: {},
         record_messages: {},
-        request_state: null,
+        request_state: null
     },
     admin: {
         record_permission_requests: {},
@@ -302,4 +302,4 @@ export function recordsReducer(state = initialState, action: RecordsActions) {
         default:
             return state;
     }
-};
+}

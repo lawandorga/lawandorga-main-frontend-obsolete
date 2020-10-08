@@ -16,15 +16,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import {Injectable} from '@angular/core';
-import {Router} from '@angular/router';
-import {CoreSandboxService} from '../../core/services/core-sandbox.service';
-import {SnackbarService} from '../../shared/services/snackbar.service';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { CoreSandboxService } from '../../core/services/core-sandbox.service';
+import { SnackbarService } from '../../shared/services/snackbar.service';
 import { FilesState } from '../store/files.reducers';
 import { select, Store } from '@ngrx/store';
 import {
-    StartCreatingFolderPermission, StartCreatingNewFolder,
-    StartDeletingFilesAndFolders, StartDeletingFolderPermission,
+    StartCreatingFolderPermission,
+    StartCreatingNewFolder,
+    StartDeletingFilesAndFolders,
+    StartDeletingFolderPermission,
     StartDownloadFilesAndFolders,
     StartLoadingFolder,
     StartLoadingFolderPermissions
@@ -39,7 +41,7 @@ import { HasPermission } from '../../core/models/permission.model';
 import { GetFolderFrontUrlAbsolute } from '../../statics/frontend_links.statics';
 
 @Injectable({
-    providedIn: "root"
+    providedIn: 'root'
 })
 export class FilesSandboxService {
     constructor(
@@ -48,11 +50,9 @@ export class FilesSandboxService {
         private coreSB: CoreSandboxService,
         private snackbarService: SnackbarService,
         private storage: StorageService
-    ) {
+    ) {}
 
-    }
-
-    startLoadingFolderInformation(path: string){
+    startLoadingFolderInformation(path: string) {
         this.filesStore.dispatch(new StartLoadingFolder(path));
     }
 
@@ -62,7 +62,7 @@ export class FilesSandboxService {
                 const values = state.files.folders;
                 return asArray ? Object.values(values) : values;
             })
-        )
+        );
     }
 
     getFiles(asArray: boolean = true): Observable<TableEntry[]> {
@@ -71,7 +71,7 @@ export class FilesSandboxService {
                 const values = state.files.files;
                 return asArray ? Object.values(values) : values;
             })
-        )
+        );
     }
 
     getCurrentFolder(): Observable<TableEntry> {
@@ -82,26 +82,22 @@ export class FilesSandboxService {
         );
     }
 
-    upload(stuff: any, path: string){
+    upload(stuff: any, path: string) {
         this.storage.upload(stuff, path, () => {
             this.startLoadingFolderInformation(path);
-            this.snackbarService.showSuccessSnackBar("uploaded sucessfully")
+            this.snackbarService.showSuccessSnackBar('uploaded sucessfully');
         });
-        // this.storage.uploadFiles(stuff, path, () => {
-        //     this.startLoadingFolderInformation(path);
-        //     this.snackbarService.showSuccessSnackBar("uploaded sucessfully")
-        // });
     }
 
-    startDeleting(stuff: TableEntry[], path: string){
-        this.filesStore.dispatch(new StartDeletingFilesAndFolders({'entries': stuff, path}));
+    startDeleting(stuff: TableEntry[], path: string) {
+        this.filesStore.dispatch(new StartDeletingFilesAndFolders({ entries: stuff, path }));
     }
 
-    startDownloading(stuff: TableEntry[], path: string){
-        this.filesStore.dispatch(new StartDownloadFilesAndFolders({'entries': stuff, path}));
+    startDownloading(stuff: TableEntry[], path: string) {
+        this.filesStore.dispatch(new StartDownloadFilesAndFolders({ entries: stuff, path }));
     }
 
-    startLoadingFolderPermissions(folder_id: string){
+    startLoadingFolderPermissions(folder_id: string) {
         this.filesStore.dispatch(new StartLoadingFolderPermissions(folder_id));
     }
 
@@ -120,11 +116,11 @@ export class FilesSandboxService {
                 const values = state.files.folder_has_permissions;
                 return asArray ? Object.values(values) : values;
             })
-        )
+        );
     }
 
-    startCreatingFolderPermission(folder: TableEntry, group: RestrictedGroup, permission: string){
-        this.filesStore.dispatch(new StartCreatingFolderPermission({group, folder, permission}));
+    startCreatingFolderPermission(folder: TableEntry, group: RestrictedGroup, permission: string) {
+        this.filesStore.dispatch(new StartCreatingFolderPermission({ group, folder, permission }));
     }
 
     startDeletingFolderPermission(folder: FolderPermission): void {
@@ -132,7 +128,14 @@ export class FilesSandboxService {
     }
 
     startCreatingNewFolder(name: string, parent: TableEntry): void {
-        this.filesStore.dispatch(new StartCreatingNewFolder({name, parent}));
+        this.filesStore.dispatch(new StartCreatingNewFolder({ name, parent }));
+    }
+
+    getCurrentFolderWritePermission(): Observable<boolean> {
+        return this.filesStore.pipe(
+            select((state: any) => {
+                return state.files.write_permission;
+            })
+        );
     }
 }
-

@@ -16,15 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, Input, OnInit } from "@angular/core";
-import { RestrictedUser } from "../../../core/models/user.model";
-import {Router} from '@angular/router';
-import {GetRecordSearchFrontUrl} from '../../../statics/frontend_links.statics';
+import { Component, Input, OnInit } from '@angular/core';
+import { RestrictedUser } from '../../../core/models/user.model';
+import { Router } from '@angular/router';
+import { GetRecordSearchFrontUrl } from '../../../statics/frontend_links.statics';
 
 @Component({
-    selector: "app-users-field",
-    templateUrl: "./users-field.component.html",
-    styleUrls: ["./users-field.component.scss"]
+    selector: 'app-users-field',
+    templateUrl: './users-field.component.html',
+    styleUrls: ['./users-field.component.scss']
 })
 export class UsersFieldComponent implements OnInit {
     @Input()
@@ -34,7 +34,7 @@ export class UsersFieldComponent implements OnInit {
 
     ngOnInit() {}
 
-    onUserClick(consultant: RestrictedUser){
+    onUserClick(consultant: RestrictedUser) {
         this.router.navigateByUrl(GetRecordSearchFrontUrl(consultant.name));
     }
 }

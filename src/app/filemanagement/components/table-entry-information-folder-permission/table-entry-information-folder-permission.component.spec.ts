@@ -21,23 +21,22 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { TableEntryInformationFolderPermissionComponent } from './table-entry-information-folder-permission.component';
 
 describe('TableEntryInformationFolderPermissionComponent', () => {
-  let component: TableEntryInformationFolderPermissionComponent;
-  let fixture: ComponentFixture<TableEntryInformationFolderPermissionComponent>;
+    let component: TableEntryInformationFolderPermissionComponent;
+    let fixture: ComponentFixture<TableEntryInformationFolderPermissionComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ TableEntryInformationFolderPermissionComponent ]
-    })
-    .compileComponents();
-  }));
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [TableEntryInformationFolderPermissionComponent]
+        }).compileComponents();
+    }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(TableEntryInformationFolderPermissionComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(TableEntryInformationFolderPermissionComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

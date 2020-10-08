@@ -51,13 +51,18 @@ export class FolderPermission {
             json.folder.path,
             json.folder.name,
             from
-        )
+        );
     }
 
-    static getFolderPermissionsFromJsonArray(jsonArray: any, from: FolderPermissionFrom): FolderPermission[] {
+    static getFolderPermissionsFromJsonArray(
+        jsonArray: any,
+        from: FolderPermissionFrom
+    ): FolderPermission[] {
         const folderPermissions: FolderPermission[] = [];
         Object.values(jsonArray).map(folderPermissionJson => {
-            folderPermissions.push(FolderPermission.getFolderPermissionFromJson(folderPermissionJson, from));
+            folderPermissions.push(
+                FolderPermission.getFolderPermissionFromJson(folderPermissionJson, from)
+            );
         });
         return folderPermissions;
     }

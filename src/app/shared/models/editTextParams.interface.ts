@@ -17,12 +17,12 @@
  */
 
 interface EditTextParamsInterface {
-  short: boolean;
-  title?: string;
-  text?: string;
-  descriptionText?: string;
-  descriptionLabel: string;
-  cancelLabel?: string;
-  saveLabel?: string;
-  saveColor?: string;
+    short: boolean;
+    title?: string;
+    text?: string;
+    descriptionText?: string;
+    descriptionLabel: string;
+    cancelLabel?: string;
+    saveLabel?: string;
+    saveColor?: string;
 }

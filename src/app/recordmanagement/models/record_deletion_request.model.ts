@@ -16,8 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { RestrictedUser } from "../../core/models/user.model";
-import {TokenRecord} from './record.model';
+import { RestrictedUser } from '../../core/models/user.model';
+import { TokenRecord } from './record.model';
 
 export class RecordDeletionRequest {
     constructor(
@@ -40,15 +40,11 @@ export class RecordDeletionRequest {
         this.explanation = explanation;
     }
 
-    static getRecordDeletionRequestsFromJsonArray(
-        jsonArray
-    ): RecordDeletionRequest[] {
+    static getRecordDeletionRequestsFromJsonArray(jsonArray): RecordDeletionRequest[] {
         const recordPermissions: RecordDeletionRequest[] = [];
         Object.values(jsonArray).map(jsonRecordPermission => {
             recordPermissions.push(
-                RecordDeletionRequest.getRecordDeletionRequestFromJson(
-                    jsonRecordPermission
-                )
+                RecordDeletionRequest.getRecordDeletionRequestFromJson(jsonRecordPermission)
             );
         });
         return recordPermissions;

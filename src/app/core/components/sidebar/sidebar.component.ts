@@ -16,45 +16,56 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, isDevMode, OnInit } from '@angular/core';
-import {Router} from "@angular/router";
-import {AppSandboxService} from "../../services/app-sandbox.service";
-import {FullUser} from "../../models/user.model";
-import {CoreSandboxService} from "../../services/core-sandbox.service";
+import { Component, isDevMode, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AppSandboxService } from '../../services/app-sandbox.service';
+import { FullUser } from '../../models/user.model';
+import { CoreSandboxService } from '../../services/core-sandbox.service';
 import {
-    PERMISSION_ACCEPT_NEW_USERS_RLC, PERMISSION_ACCESS_TO_FILES_RLC,
+    PERMISSION_ACCEPT_NEW_USERS_RLC,
+    PERMISSION_ACCESS_TO_FILES_RLC,
     PERMISSION_ACTIVATE_INACTIVE_USERS,
-    PERMISSION_CAN_ADD_RECORD_RLC, PERMISSION_CAN_CONSULT,
+    PERMISSION_CAN_ADD_RECORD_RLC,
+    PERMISSION_CAN_CONSULT,
     PERMISSION_CAN_PERMIT_RECORD_PERMISSION_REQUESTS,
     PERMISSION_CAN_VIEW_PERMISSIONS_RLC,
-    PERMISSION_CAN_VIEW_RECORDS, PERMISSION_PROCESS_RECORD_DELETION_REQUESTS
+    PERMISSION_CAN_VIEW_RECORDS,
+    PERMISSION_PROCESS_RECORD_DELETION_REQUESTS
 } from '../../../statics/permissions.statics';
 import {
-    ACCEPT_NEW_USER_REQUESTS_FRONT_URL, DELETION_REQUESTS_FRONT_URL, FILES_FRONT_URL,
+    ACCEPT_NEW_USER_REQUESTS_FRONT_URL,
+    DELETION_REQUESTS_FRONT_URL,
+    FILES_FRONT_URL,
     GROUPS_FRONT_URL,
     INACTIVE_USERS_FRONT_URL,
     LEGAL_NOTICE_FRONT_URL,
     OWN_PROFILE_FRONT_URL,
     PERMISSIONS_FRONT_URL,
-    PRIVACY_STATEMENT_FRONT_URL,
-    PROFILES_FRONT_URL, RECORD_POOL_FRONT_URL,
+    PROFILES_FRONT_URL,
+    RECORD_POOL_FRONT_URL,
     RECORDS_ADD_FRONT_URL,
     RECORDS_FRONT_URL,
     RECORDS_PERMIT_REQUEST_FRONT_URL
 } from '../../../statics/frontend_links.statics';
 import { RlcSettings } from '../../models/rlc_settings.model';
-import set = Reflect.set;
+import { Subscription } from 'rxjs';
 
 @Component({
-    selector: "app-sidebar",
-    templateUrl: "./sidebar.component.html",
-    styleUrls: ["./sidebar.component.scss"]
+    selector: 'app-sidebar',
+    templateUrl: './sidebar.component.html',
+    styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent implements OnInit {
-    name = "";
-    email = "";
-    timer = null;
+export class SidebarComponent implements OnInit, OnDestroy {
+    subscriptions: Subscription[] = [];
+    name = '';
+    email = '';
+
+    timerCheckPermissions = null;
+    timerLoadUnreadNotifications = null;
     checkPermissionInterval = 30000;
+    checkNotificationsInterval = 5000;
+
+    number_of_notifications = '0';
 
     legalNoticeUrl = LEGAL_NOTICE_FRONT_URL;
 
@@ -72,76 +83,72 @@ export class SidebarComponent implements OnInit {
 
     sidebarItemsOrg = [
         {
-            label: "Records",
-            icon: "folder",
+            label: 'Records',
+            icon: 'folder',
             link: RECORDS_FRONT_URL
         },
         {
-            label: "Create Record",
-            icon: "create_new_folder",
+            label: 'Create Record',
+            icon: 'create_new_folder',
             link: RECORDS_ADD_FRONT_URL
         },
         {
-            label: "Record Pool",
-            icon: "library_books",
+            label: 'Record Pool',
+            icon: 'library_books',
             link: RECORD_POOL_FRONT_URL
         },
         {
-            label: "Profiles",
-            icon: "people_outline",
+            label: 'Profiles',
+            icon: 'people_outline',
             link: PROFILES_FRONT_URL
         },
         {
-            label: "Groups",
-            icon: "group",
+            label: 'Groups',
+            icon: 'group',
             link: GROUPS_FRONT_URL
         },
         {
-            label: "Files",
-            icon: "folder_open",
+            label: 'Files',
+            icon: 'folder_open',
             link: FILES_FRONT_URL
         },
         {
-            label: "Admin",
-            icon: "lock",
+            label: 'Admin',
+            icon: 'lock',
             items: [
                 {
-                    label: "Permit Requests",
-                    icon: "offline_pin",
+                    label: 'Permit Requests',
+                    icon: 'offline_pin',
                     link: RECORDS_PERMIT_REQUEST_FRONT_URL
                 },
                 {
-                    label: "Permissions",
-                    icon: "vpn_key",
+                    label: 'Permissions',
+                    icon: 'vpn_key',
                     link: PERMISSIONS_FRONT_URL
                 },
                 {
-                    label: "New Users",
-                    icon: "person_add",
+                    label: 'New Users',
+                    icon: 'person_add',
                     link: ACCEPT_NEW_USER_REQUESTS_FRONT_URL
                 },
                 {
-                    label: "Inactive Users",
-                    icon: "perm_identity",
+                    label: 'Inactive Users',
+                    icon: 'perm_identity',
                     link: INACTIVE_USERS_FRONT_URL
                 },
                 {
-                    label: "Deletion Requests",
-                    icon: "delete_forever",
+                    label: 'Deletion Requests',
+                    icon: 'delete_forever',
                     link: DELETION_REQUESTS_FRONT_URL
                 }
             ]
-        },
-        {
-            label: "Logout",
-            icon: "power_settings_new"
         }
     ];
     actualSidebarItems = [];
 
     config = {
         // interfaceWithRoute: true,
-        highlightOnSelect: true,
+        highlightOnSelect: true
     };
 
     static removeLink(
@@ -152,9 +159,7 @@ export class SidebarComponent implements OnInit {
             if (item.link === link) {
                 return {
                     removed: true,
-                    newItems: itemsToSearch.filter(
-                        innerItem => innerItem.link !== link
-                    ),
+                    newItems: itemsToSearch.filter(innerItem => innerItem.link !== link),
                     deleteMe: itemsToSearch.length < 2
                 };
             }
@@ -163,9 +168,7 @@ export class SidebarComponent implements OnInit {
                 if (result.deleteMe) {
                     return {
                         removed: true,
-                        newItems: itemsToSearch.filter(
-                            innerItem => innerItem !== item
-                        ),
+                        newItems: itemsToSearch.filter(innerItem => innerItem !== item),
                         deleteMe: itemsToSearch.length < 2
                     };
                 }
@@ -195,15 +198,12 @@ export class SidebarComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.coreSB.hasPermissionFromStringForOwnRlc(
-            PERMISSION_CAN_VIEW_RECORDS,
-            hasPermission => {
-                if (this.show_tab_permissions.records !== hasPermission) {
-                    this.show_tab_permissions.records = hasPermission;
-                    this.recheckSidebarItems();
-                }
+        this.coreSB.hasPermissionFromStringForOwnRlc(PERMISSION_CAN_VIEW_RECORDS, hasPermission => {
+            if (this.show_tab_permissions.records !== hasPermission) {
+                this.show_tab_permissions.records = hasPermission;
+                this.recheckSidebarItems();
             }
-        );
+        });
 
         this.coreSB.hasPermissionFromStringForOwnRlc(
             PERMISSION_CAN_ADD_RECORD_RLC,
@@ -275,58 +275,60 @@ export class SidebarComponent implements OnInit {
             }
         );
 
-        this.coreSB.hasPermissionFromStringForOwnRlc(
-            PERMISSION_CAN_CONSULT,
-            hasPermission => {
-                this.coreSB.getRlcSettings().subscribe((settings: RlcSettings) => {
-                    if (settings && settings.recordPoolEnabled && hasPermission){
-                        this.show_tab_permissions.record_pool = true;
-                        this.recheckSidebarItems();
-                    }
-                });
-            }
+        this.coreSB.hasPermissionFromStringForOwnRlc(PERMISSION_CAN_CONSULT, hasPermission => {
+            this.coreSB.getRlcSettings().subscribe((settings: RlcSettings) => {
+                if (settings && settings.recordPoolEnabled && hasPermission) {
+                    this.show_tab_permissions.record_pool = true;
+                    this.recheckSidebarItems();
+                }
+            });
+        });
+        this.recheckSidebarItems();
+
+        this.subscriptions.push(
+            this.coreSB.getUser().subscribe((user: FullUser) => {
+                this.name = user ? user.name : '';
+                this.email = user ? user.email : '';
+            })
         );
 
-        this.coreSB.getUser().subscribe((user: FullUser) => {
-            this.name = user ? user.name : "";
-            this.email = user ? user.email : "";
-        });
+        this.subscriptions.push(
+            this.coreSB.getNotifications().subscribe((number_of_notifications: number) => {
+                this.number_of_notifications = number_of_notifications.toString();
+            })
+        );
 
-        if (!isDevMode()){
-            this.timer = setInterval(() => {
+        if (!isDevMode()) {
+            this.timerCheckPermissions = setInterval(() => {
                 this.coreSB.startCheckingUserHasPermissions();
             }, this.checkPermissionInterval);
             this.recheckSidebarItems();
         }
+
+        this.timerLoadUnreadNotifications = setInterval(() => {
+            this.coreSB.startLoadingUnreadNotifications();
+        }, this.checkNotificationsInterval);
     }
 
     recheckSidebarItems() {
         let newSidebarItems = JSON.parse(JSON.stringify(this.sidebarItemsOrg));
         if (!this.show_tab_permissions.records)
-            newSidebarItems = SidebarComponent.removeLink(
-                RECORDS_FRONT_URL,
-                newSidebarItems
-            ).newItems;
+            newSidebarItems = SidebarComponent.removeLink(RECORDS_FRONT_URL, newSidebarItems)
+                .newItems;
         if (!this.show_tab_permissions.add_record)
-            newSidebarItems = SidebarComponent.removeLink(
-                RECORDS_ADD_FRONT_URL,
-                newSidebarItems
-            ).newItems;
+            newSidebarItems = SidebarComponent.removeLink(RECORDS_ADD_FRONT_URL, newSidebarItems)
+                .newItems;
         if (!this.show_tab_permissions.record_permission_request)
             newSidebarItems = SidebarComponent.removeLink(
                 RECORDS_PERMIT_REQUEST_FRONT_URL,
                 newSidebarItems
             ).newItems;
         if (!this.show_tab_permissions.permissions)
-            newSidebarItems = SidebarComponent.removeLink(
-                PERMISSIONS_FRONT_URL,
-                newSidebarItems
-            ).newItems;
+            newSidebarItems = SidebarComponent.removeLink(PERMISSIONS_FRONT_URL, newSidebarItems)
+                .newItems;
         if (!this.show_tab_permissions.activate_inactive_users)
-            newSidebarItems = SidebarComponent.removeLink(
-                INACTIVE_USERS_FRONT_URL,
-                newSidebarItems
-            ).newItems;
+            newSidebarItems = SidebarComponent.removeLink(INACTIVE_USERS_FRONT_URL, newSidebarItems)
+                .newItems;
         if (!this.show_tab_permissions.accept_new_user)
             newSidebarItems = SidebarComponent.removeLink(
                 ACCEPT_NEW_USER_REQUESTS_FRONT_URL,
@@ -338,20 +340,17 @@ export class SidebarComponent implements OnInit {
                 newSidebarItems
             ).newItems;
         if (!this.show_tab_permissions.show_files)
-            newSidebarItems = SidebarComponent.removeLink(
-                FILES_FRONT_URL,
-                newSidebarItems
-            ).newItems;
+            newSidebarItems = SidebarComponent.removeLink(FILES_FRONT_URL, newSidebarItems)
+                .newItems;
         if (!this.show_tab_permissions.record_pool)
-            newSidebarItems = SidebarComponent.removeLink(
-                RECORD_POOL_FRONT_URL,
-                newSidebarItems
-            ).newItems;
+            newSidebarItems = SidebarComponent.removeLink(RECORD_POOL_FRONT_URL, newSidebarItems)
+                .newItems;
         this.actualSidebarItems = newSidebarItems;
     }
 
     logout() {
-        clearInterval(this.timer);
+        clearInterval(this.timerCheckPermissions);
+        clearInterval(this.timerLoadUnreadNotifications);
         this.appSB.logout();
     }
 
@@ -360,7 +359,14 @@ export class SidebarComponent implements OnInit {
     }
 
     selectedItem(event) {
-        if (event.label === "Logout") this.logout();
-        else this.router.navigate([event.link]);
+        this.router.navigate([event.link]);
+    }
+
+    ngOnDestroy() {
+        for (const sub of this.subscriptions) {
+            sub.unsubscribe();
+        }
+        clearInterval(this.timerCheckPermissions);
+        clearInterval(this.timerLoadUnreadNotifications);
     }
 }

@@ -17,7 +17,7 @@
  */
 
 import { Pipe, PipeTransform } from '@angular/core';
-import {RecordPermissionRequest} from '../models/record_permission.model';
+import { RecordPermissionRequest } from '../models/record_permission.model';
 
 @Pipe({ name: 'recordPermissionsRequested' })
 export class RecordPermissionsRequestedPipe implements PipeTransform {

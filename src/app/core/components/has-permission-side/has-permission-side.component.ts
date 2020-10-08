@@ -16,18 +16,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, Input, OnInit } from "@angular/core";
-import { HasPermission } from "../../models/permission.model";
-import { CoreSandboxService } from "../../services/core-sandbox.service";
-import { RestrictedUser } from "../../models/user.model";
-import { Router } from "@angular/router";
-import {RestrictedGroup} from '../../models/group.model';
-import {GetGroupFrontUrl, GetProfileFrontUrl} from '../../../statics/frontend_links.statics';
+import { Component, Input, OnInit } from '@angular/core';
+import { HasPermission } from '../../models/permission.model';
+import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { RestrictedUser } from '../../models/user.model';
+import { Router } from '@angular/router';
+import { RestrictedGroup } from '../../models/group.model';
+import { GetGroupFrontUrl, GetProfileFrontUrl } from '../../../statics/frontend_links.statics';
 
 @Component({
-    selector: "app-has-permission-side",
-    templateUrl: "./has-permission-side.component.html",
-    styleUrls: ["./has-permission-side.component.scss"]
+    selector: 'app-has-permission-side',
+    templateUrl: './has-permission-side.component.html',
+    styleUrls: ['./has-permission-side.component.scss']
 })
 export class HasPermissionSideComponent implements OnInit {
     @Input()
@@ -41,35 +41,23 @@ export class HasPermissionSideComponent implements OnInit {
     constructor(private coreSB: CoreSandboxService, private router: Router) {}
 
     ngOnInit() {
-        if (!this.hasPermission)
-            throw new Error("HasPermissionSide-Error: no haspermission given");
-        if (
-            !this.whichSide ||
-            (this.whichSide !== "has" && this.whichSide !== "for")
-        )
+        if (!this.hasPermission) throw new Error('HasPermissionSide-Error: no haspermission given');
+        if (!this.whichSide || (this.whichSide !== 'has' && this.whichSide !== 'for'))
             throw new Error(
                 'HasPermissionSide-Error: whichSide has to be set and equals "has" or "for"'
             );
 
-        if (this.whichSide === "has") {
+        if (this.whichSide === 'has') {
             if (this.hasPermission.userHas) {
-                this.name = this.coreSB.getOtherUserById(
-                    this.hasPermission.userHas
-                ).name;
+                this.name = this.coreSB.getOtherUserById(this.hasPermission.userHas).name;
             } else if (this.hasPermission.groupHas) {
-                this.name = this.coreSB.getGroupById(
-                    this.hasPermission.groupHas
-                ).name;
+                this.name = this.coreSB.getGroupById(this.hasPermission.groupHas).name;
             }
-        } else if (this.whichSide === "for") {
+        } else if (this.whichSide === 'for') {
             if (this.hasPermission.forUser) {
-                this.name = this.coreSB.getOtherUserById(
-                    this.hasPermission.forUser
-                ).name;
+                this.name = this.coreSB.getOtherUserById(this.hasPermission.forUser).name;
             } else if (this.hasPermission.forGroup) {
-                this.name = this.coreSB.getGroupById(
-                    this.hasPermission.forGroup
-                ).name;
+                this.name = this.coreSB.getGroupById(this.hasPermission.forGroup).name;
             }
         }
     }
@@ -77,14 +65,12 @@ export class HasPermissionSideComponent implements OnInit {
     onUserClick(): void {
         if (this.whichSide === 'for')
             this.router.navigateByUrl(GetProfileFrontUrl(this.hasPermission.forUser));
-        else
-            this.router.navigateByUrl(GetProfileFrontUrl(this.hasPermission.userHas));
+        else this.router.navigateByUrl(GetProfileFrontUrl(this.hasPermission.userHas));
     }
 
     onGroupClick(): void {
         if (this.whichSide === 'for')
             this.router.navigateByUrl(GetGroupFrontUrl(this.hasPermission.forGroup));
-        else
-            this.router.navigateByUrl(GetGroupFrontUrl(this.hasPermission.groupHas));
+        else this.router.navigateByUrl(GetGroupFrontUrl(this.hasPermission.groupHas));
     }
 }

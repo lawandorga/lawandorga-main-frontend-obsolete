@@ -16,22 +16,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, Inject, OnInit } from "@angular/core";
-import { CoreSandboxService } from "../../services/core-sandbox.service";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
-import { AddHasPermissionComponent } from "../add-has-permission/add-has-permission.component";
-import { Observable } from "rxjs";
-import { Permission } from "../../models/permission.model";
-import { RestrictedUser } from "../../models/user.model";
-import { RestrictedGroup } from "../../models/group.model";
-import { RestrictedRlc } from "../../models/rlc.model";
-import {tap} from 'rxjs/operators';
-import {alphabeticalSorterByField} from '../../../shared/other/sorter-helper';
+import { Component, Inject, OnInit } from '@angular/core';
+import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { AddHasPermissionComponent } from '../add-has-permission/add-has-permission.component';
+import { Observable } from 'rxjs';
+import { Permission } from '../../models/permission.model';
+import { RestrictedUser } from '../../models/user.model';
+import { RestrictedGroup } from '../../models/group.model';
+import { RestrictedRlc } from '../../models/rlc.model';
+import { tap } from 'rxjs/operators';
+import { alphabeticalSorterByField } from '../../../shared/other/sorter-helper';
 
 @Component({
-    selector: "app-add-has-permission-for",
-    templateUrl: "./add-has-permission-for.component.html",
-    styleUrls: ["./add-has-permission-for.component.scss"]
+    selector: 'app-add-has-permission-for',
+    templateUrl: './add-has-permission-for.component.html',
+    styleUrls: ['./add-has-permission-for.component.scss']
 })
 export class AddHasPermissionForComponent implements OnInit {
     allPermissions: Observable<Permission[]>;
@@ -53,15 +53,21 @@ export class AddHasPermissionForComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.allUsers = this.coreSB.getOtherUsers().pipe(tap(results => {
-            alphabeticalSorterByField(results, 'name')
-        }));
-        this.allGroups = this.coreSB.getGroups().pipe(tap(results => {
-            alphabeticalSorterByField(results, 'name')
-        }));
-        this.allPermissions = this.coreSB.getAllPermissions().pipe(tap(results => {
-            alphabeticalSorterByField(results, 'name')
-        }));
+        this.allUsers = this.coreSB.getOtherUsers().pipe(
+            tap(results => {
+                alphabeticalSorterByField(results, 'name');
+            })
+        );
+        this.allGroups = this.coreSB.getGroups().pipe(
+            tap(results => {
+                alphabeticalSorterByField(results, 'name');
+            })
+        );
+        this.allPermissions = this.coreSB.getAllPermissions().pipe(
+            tap(results => {
+                alphabeticalSorterByField(results, 'name');
+            })
+        );
 
         this.coreSB.getRlc().subscribe((rlc: RestrictedRlc) => {
             this.ownRlc = rlc;

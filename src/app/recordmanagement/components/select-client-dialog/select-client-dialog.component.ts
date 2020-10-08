@@ -16,17 +16,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit } from "@angular/core";
-import { MatDialogRef } from "@angular/material";
-import { RecordsSandboxService } from "../../services/records-sandbox.service";
-import { FullClient } from "../../models/client.model";
-import { Observable } from "rxjs";
-import { map, take } from "rxjs/operators";
+import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { RecordsSandboxService } from '../../services/records-sandbox.service';
+import { FullClient } from '../../models/client.model';
+import { Observable } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 
 @Component({
-    selector: "app-select-client-dialog",
-    templateUrl: "./select-client-dialog.component.html",
-    styleUrls: ["./select-client-dialog.component.scss"]
+    selector: 'app-select-client-dialog',
+    templateUrl: './select-client-dialog.component.html',
+    styleUrls: ['./select-client-dialog.component.scss']
 })
 export class SelectClientDialogComponent implements OnInit {
     possibleClients: Observable<FullClient[]>;

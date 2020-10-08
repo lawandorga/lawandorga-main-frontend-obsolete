@@ -16,17 +16,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Injectable } from "@angular/core";
-import { Router } from "@angular/router";
-import { take } from "rxjs/operators";
-import moment from "moment";
-import { HttpClient } from "@angular/common/http";
-import { select, Store } from "@ngrx/store";
-
-import { AppState } from "../../store/app.reducers";
-import { CoreState } from "../store/core.reducers";
-import { ForeignUser, FullUser, RestrictedUser } from "../models/user.model";
+import moment from 'moment';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { take } from 'rxjs/operators';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../../store/app.reducers';
+import { CoreState } from '../store/core.reducers';
+import { ForeignUser, FullUser, RestrictedUser } from '../models/user.model';
 import {
+    DecrementNotificationCounter,
+    IncrementNotificationCounter,
     RemoveActualHasPermissions,
     ResetSpecialForeignUser,
     ResetSpecialGroup,
@@ -47,45 +47,45 @@ import {
     StartLoadingInactiveUsers,
     StartLoadingNewUserRequests,
     StartLoadingOtherUsers,
-    StartLoadingRlcs, StartLoadingRlcSettings,
+    StartLoadingRlcs,
+    StartLoadingRlcSettings,
     StartLoadingSpecialForeignUser,
     StartLoadingSpecialGroup,
     StartLoadingSpecialGroupHasPermissions,
     StartLoadingSpecialPermission,
+    StartLoadingUnreadNotifications,
     StartRemovingGroupMember,
     StartRemovingHasPermission,
     StartSavingUser
 } from '../store/core.actions';
-import { StorageService } from "../../shared/services/storage.service";
-import { SnackbarService } from "../../shared/services/snackbar.service";
-import { Observable } from "rxjs";
-import { HasPermission, Permission } from "../models/permission.model";
-import { FullGroup, RestrictedGroup } from "../models/group.model";
-import { RestrictedRlc } from "../models/rlc.model";
-import { NewUserRequest } from "../models/new_user_request.model";
-import { State } from "../models/state.model";
+import { SnackbarService } from '../../shared/services/snackbar.service';
+import { Observable } from 'rxjs';
+import { HasPermission, Permission } from '../models/permission.model';
+import { FullGroup, RestrictedGroup } from '../models/group.model';
+import { RestrictedRlc } from '../models/rlc.model';
+import { NewUserRequest } from '../models/new_user_request.model';
+import { State } from '../models/state.model';
 import { RlcSettings } from '../models/rlc_settings.model';
 
 @Injectable()
 export class CoreSandboxService {
+    openedGuardDialogs = 0;
+
     constructor(
         public router: Router,
         private snackbarService: SnackbarService,
         private appStateStore: Store<AppState>,
-        private coreStateStore: Store<CoreState>,
-        private storageService: StorageService
+        private coreStateStore: Store<CoreState>
     ) {}
 
     static transformDateToString(date: Date | string): string {
-        if (typeof date === "string")
-            return moment(new Date(date)).format("YYYY-MM-DD");
-        return moment(date).format("YYYY-MM-DD");
+        if (typeof date === 'string') return moment(new Date(date)).format('YYYY-MM-DD');
+        return moment(date).format('YYYY-MM-DD');
     }
 
     static transformDate(date: Date | string): Date {
-        if (typeof date === "string")
-            return new Date(moment(new Date(date)).format("YYYY-MM-DD"));
-        else return new Date(moment(date).format("YYYY-MM-DD"));
+        if (typeof date === 'string') return new Date(moment(new Date(date)).format('YYYY-MM-DD'));
+        else return new Date(moment(date).format('YYYY-MM-DD'));
     }
 
     getUser(): Observable<FullUser> {
@@ -97,14 +97,10 @@ export class CoreSandboxService {
     }
 
     getGroup(): Observable<FullGroup> {
-        return this.coreStateStore.pipe(
-            select((state: any) => state.core.special_group)
-        );
+        return this.coreStateStore.pipe(select((state: any) => state.core.special_group));
     }
 
-    getUserPermissions(
-        asArray: boolean = true
-    ): Observable<HasPermission[] | any> {
+    getUserPermissions(asArray: boolean = true): Observable<HasPermission[] | any> {
         return this.coreStateStore.pipe(
             select((state: any) => {
                 const values = state.core.user_permissions;
@@ -122,10 +118,7 @@ export class CoreSandboxService {
         );
     }
 
-    hasPermissionFromStringForOwnRlc(
-        permission: string,
-        subscriberCallback
-    ): void {
+    hasPermissionFromStringForOwnRlc(permission: string, subscriberCallback): void {
         this.getRlc().subscribe((rlc: RestrictedRlc) => {
             if (rlc)
                 this.hasPermissionFromString(permission, subscriberCallback, {
@@ -142,43 +135,32 @@ export class CoreSandboxService {
         /*
         checks if the user has permission and returns to subscriberCallback true or false
          */
-        this.getAllPermissions().subscribe((all_permissions: Permission[]) => {
-            if (all_permissions.length > 0) {
-                try {
-                    const id = Number(
-                        all_permissions.filter(
-                            single_permission =>
-                                single_permission.name === permission
-                        )[0].id
-                    );
-                    this.hasPermissionFromId(
-                        id,
-                        subscriberCallback,
-                        permission_for
-                    );
-                } catch (e) {
-                    subscriberCallback(false);
+        this.getAllPermissions()
+            .subscribe((all_permissions: Permission[]) => {
+                if (all_permissions.length > 0) {
+                    try {
+                        const id = Number(
+                            all_permissions.filter(
+                                single_permission => single_permission.name === permission
+                            )[0].id
+                        );
+                        this.hasPermissionFromId(id, subscriberCallback, permission_for);
+                    } catch (e) {
+                        subscriberCallback(false);
+                    }
                 }
-            }
-        });
+            })
+            .unsubscribe();
     }
 
-    hasPermissionFromId(
-        permission: number,
-        subscriberCallback,
-        permission_for: any = null
-    ): void {
+    hasPermissionFromId(permission: number, subscriberCallback, permission_for: any = null): void {
         /*
         checks if the user has permission and returns to subscriberCallback true or false
          */
         this.getUserPermissions()
             .subscribe((user_permissions: HasPermission[]) => {
                 subscriberCallback(
-                    HasPermission.checkPermissionMet(
-                        user_permissions,
-                        permission,
-                        permission_for
-                    )
+                    HasPermission.checkPermissionMet(user_permissions, permission, permission_for)
                 );
             })
             .unsubscribe();
@@ -237,7 +219,7 @@ export class CoreSandboxService {
     }
 
     relogUser() {
-        this.router.navigate(["login"]);
+        this.router.navigate(['login']);
     }
 
     setForeignUser(foreignUser: ForeignUser) {
@@ -249,9 +231,7 @@ export class CoreSandboxService {
     }
 
     getSpecialForeignUser(): Observable<ForeignUser | any> {
-        return this.coreStateStore.pipe(
-            select((state: any) => state.core.foreign_user)
-        );
+        return this.coreStateStore.pipe(select((state: any) => state.core.foreign_user));
     }
 
     loadAndGetSpecialForeignUser(id: string): Observable<ForeignUser | any> {
@@ -268,25 +248,19 @@ export class CoreSandboxService {
     }
 
     addGroupMembers(user_ids: string[], group_id: string): void {
-        return this.coreStateStore.dispatch(new StartAddingGroupMembers({user_ids, group_id}));
+        return this.coreStateStore.dispatch(new StartAddingGroupMembers({ user_ids, group_id }));
     }
 
     removeGroupMember(user_id: string, group_id: string): void {
-        return this.coreStateStore.dispatch(
-            new StartRemovingGroupMember({ user_id, group_id })
-        );
+        return this.coreStateStore.dispatch(new StartRemovingGroupMember({ user_id, group_id }));
     }
 
     startLoadingSpecialPermission(id: string): void {
-        return this.coreStateStore.dispatch(
-            new StartLoadingSpecialPermission(id)
-        );
+        return this.coreStateStore.dispatch(new StartLoadingSpecialPermission(id));
     }
 
     getSpecialPermission(): Observable<Permission> {
-        return this.coreStateStore.pipe(
-            select((state: any) => state.core.special_permission)
-        );
+        return this.coreStateStore.pipe(select((state: any) => state.core.special_permission));
     }
 
     resetSpecialPermission(): void {
@@ -369,14 +343,10 @@ export class CoreSandboxService {
     }
 
     startLoadingGroupHasPermissions(group_id: string): void {
-        this.coreStateStore.dispatch(
-            new StartLoadingSpecialGroupHasPermissions(group_id)
-        );
+        this.coreStateStore.dispatch(new StartLoadingSpecialGroupHasPermissions(group_id));
     }
 
-    getActualHasPermissions(
-        asArray: boolean = true
-    ): Observable<HasPermission[]> | any {
+    getActualHasPermissions(asArray: boolean = true): Observable<HasPermission[]> | any {
         return this.coreStateStore.pipe(
             select((state: any) => {
                 const values = state.core.actual_has_permissions;
@@ -397,9 +367,7 @@ export class CoreSandboxService {
         this.coreStateStore.dispatch(new StartLoadingNewUserRequests());
     }
 
-    getNewUserRequests(
-        asArray: boolean = true
-    ): Observable<NewUserRequest[]> | any {
+    getNewUserRequests(asArray: boolean = true): Observable<NewUserRequest[]> | any {
         return this.coreStateStore.pipe(
             select((state: any) => {
                 const values = state.core.new_user_requests;
@@ -409,15 +377,11 @@ export class CoreSandboxService {
     }
 
     startAdmittingNewUserRequest(newUserRequest: NewUserRequest): void {
-        this.coreStateStore.dispatch(
-            new StartAdmittingNewUserRequest(newUserRequest)
-        );
+        this.coreStateStore.dispatch(new StartAdmittingNewUserRequest(newUserRequest));
     }
 
     startDecliningNewUserRequest(newUserRequest: NewUserRequest): void {
-        this.coreStateStore.dispatch(
-            new StartDecliningNewUserRequest(newUserRequest)
-        );
+        this.coreStateStore.dispatch(new StartDecliningNewUserRequest(newUserRequest));
     }
 
     startCheckingUserActivationLink(link: string): void {
@@ -447,15 +411,11 @@ export class CoreSandboxService {
     }
 
     getUserStateByAbbreviation(abb: string): Observable<State> {
-        return this.coreStateStore.pipe(
-            select((state: any) => state.core.user_states[abb])
-        );
+        return this.coreStateStore.pipe(select((state: any) => state.core.user_states[abb]));
     }
 
     getUserRecordStateByAbbreviation(abb: string): Observable<State> {
-        return this.coreStateStore.pipe(
-            select((state: any) => state.core.user_record_states[abb])
-        );
+        return this.coreStateStore.pipe(select((state: any) => state.core.user_record_states[abb]));
     }
 
     startLoadingInactiveUsers(): void {
@@ -483,11 +443,31 @@ export class CoreSandboxService {
         this.coreStateStore.dispatch(new StartLoadingRlcSettings());
     }
 
+    startLoadingUnreadNotifications(): void {
+        this.coreStateStore.dispatch(new StartLoadingUnreadNotifications());
+    }
+
     getRlcSettings(): Observable<RlcSettings> {
         return this.coreStateStore.pipe(
             select((state: any) => {
                 return state.core.rlc_settings;
             })
-        )
+        );
+    }
+
+    getNotifications(): Observable<number> {
+        return this.coreStateStore.pipe(
+            select((state: any) => {
+                return state.core.notifications;
+            })
+        );
+    }
+
+    decrementNotificationCounter(): void {
+        this.coreStateStore.dispatch(new DecrementNotificationCounter());
+    }
+
+    incrementNotificationCounter(): void {
+        this.coreStateStore.dispatch(new IncrementNotificationCounter());
     }
 }

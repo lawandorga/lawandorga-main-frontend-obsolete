@@ -23,19 +23,19 @@ import {
     OnChanges,
     OnInit,
     Output,
-    SimpleChanges, ViewChild
+    SimpleChanges,
+    ViewChild
 } from '@angular/core';
-import { FormControl, FormGroup } from "@angular/forms";
-import { Filterable } from "../../models/filterable.model";
-import { Observable } from "rxjs";
-import { map, startWith } from "rxjs/operators";
-import {MatAutocompleteTrigger} from '@angular/material';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Filterable } from '../../models/filterable.model';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
 @Component({
-    selector: "app-autocomplete",
-    templateUrl: "./autocomplete.component.html",
-    styleUrls: ["./autocomplete.component.scss"]
-
+    selector: 'app-autocomplete',
+    templateUrl: './autocomplete.component.html',
+    styleUrls: ['./autocomplete.component.scss']
 })
 export class AutocompleteComponent implements OnInit, OnChanges {
     valueForm: FormGroup;
@@ -64,36 +64,28 @@ export class AutocompleteComponent implements OnInit, OnChanges {
     @Input()
     valueToShow: string;
 
-    @ViewChild(MatAutocompleteTrigger) autocomplete: MatAutocompleteTrigger;
+    @ViewChild(MatAutocompleteTrigger, { static: true }) autocomplete: MatAutocompleteTrigger;
 
     constructor() {
         this.valueForm = new FormGroup({
-            value: new FormControl("")
+            value: new FormControl('')
         });
     }
 
     ngOnInit() {
-        this.disableAfterSetSelectedValue =
-            this.disableAfterSetSelectedValue !== undefined;
-        this.noErrorIfNotInAllValues = !(
-            this.noErrorIfNotInAllValues !== undefined
-        );
+        this.disableAfterSetSelectedValue = this.disableAfterSetSelectedValue !== undefined;
+        this.noErrorIfNotInAllValues = !(this.noErrorIfNotInAllValues !== undefined);
 
-        if (!this.valueToShow){
+        if (!this.valueToShow) {
             this.valueToShow = 'name';
         }
 
         this.allValuesObservable.subscribe(values => {
             this.allValues = values;
-            this.filteredValues = this.valueForm.controls[
-                "value"
-            ].valueChanges.pipe(
-                startWith(""),
-                map(
-                    filterValue =>
-                        filterValue
-                            ? this._filter(filterValue)
-                            : this.allValues.slice()
+            this.filteredValues = this.valueForm.controls['value'].valueChanges.pipe(
+                startWith(''),
+                map(filterValue =>
+                    filterValue ? this._filter(filterValue) : this.allValues.slice()
                 )
             );
         });
@@ -101,23 +93,18 @@ export class AutocompleteComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.errors) {
-            this.valueForm.controls["value"].setErrors(
-                changes.errors.currentValue
-            );
+            this.valueForm.controls['value'].setErrors(changes.errors.currentValue);
         } else {
-            this.valueForm.controls["value"].setErrors(null);
+            this.valueForm.controls['value'].setErrors(null);
         }
         if (changes.setSelectedValue) {
             if (changes.setSelectedValue.currentValue) {
-                this.valueForm.controls["value"].setValue(
-                    changes.setSelectedValue.currentValue
-                );
+                this.valueForm.controls['value'].setValue(changes.setSelectedValue.currentValue);
                 this.selectionError = null;
-                if (this.disableAfterSetSelectedValue)
-                    this.valueForm.controls["value"].disable();
+                if (this.disableAfterSetSelectedValue) this.valueForm.controls['value'].disable();
             } else {
-                this.valueForm.controls["value"].setValue("");
-                this.valueForm.controls["value"].enable();
+                this.valueForm.controls['value'].setValue('');
+                this.valueForm.controls['value'].enable();
             }
         }
     }
@@ -127,7 +114,7 @@ export class AutocompleteComponent implements OnInit, OnChanges {
     }
 
     private _filter(value): any[] {
-        if (typeof value !== "string") return [];
+        if (typeof value !== 'string') return [];
         const filterValue = value.toLowerCase();
         return this.allValues.filter(
             fromAllValues =>
@@ -139,7 +126,7 @@ export class AutocompleteComponent implements OnInit, OnChanges {
     }
 
     selected() {
-        this.selectedValueChanged.emit(this.valueForm.controls["value"].value);
+        this.selectedValueChanged.emit(this.valueForm.controls['value'].value);
     }
 
     onInputChange() {
@@ -147,15 +134,14 @@ export class AutocompleteComponent implements OnInit, OnChanges {
             if (
                 this.allValues.filter(
                     (toFilter: Filterable) =>
-                        toFilter.getFilterableProperty() ===
-                        this.valueForm.controls["value"].value
+                        toFilter.getFilterableProperty() === this.valueForm.controls['value'].value
                 ).length === 0
             ) {
-                this.valueForm.controls["value"].setValue("");
+                this.valueForm.controls['value'].setValue('');
                 this.selectionError = {
                     notInAllValues: true
                 };
-                this.valueForm.controls["value"].setErrors({
+                this.valueForm.controls['value'].setErrors({
                     notInAllValues: true
                 });
             }

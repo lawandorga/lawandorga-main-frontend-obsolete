@@ -74,6 +74,24 @@ mat-icon{
     background-color: none;
 }
 
+.sidebar__list {
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar__list .mat-list-item.mat-list-item-with-avatar {
+    height: 48px;
+}
+
+.sidebar__list .mat-list-item:hover {
+    background: #FFFFFF;
+}
+
+.sidebar__list_item mat-icon {
+    margin: 0 16px 0 0;
+    padding: 0;
+}
+
 .sidebar__nav-holder {
     display: flex;
     flex-direction: column;

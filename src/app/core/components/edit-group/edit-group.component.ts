@@ -16,21 +16,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { FullGroup } from "../../models/group.model";
-import { CoreSandboxService } from "../../services/core-sandbox.service";
-import { MatDialog } from "@angular/material";
-import { AddGroupMemberComponent } from "../add-group-member/add-group-member.component";
-import { PERMISSION_CAN_MANAGE_PERMISSIONS_RLC } from "../../../statics/permissions.statics";
-import { RestrictedRlc } from "../../models/rlc.model";
-import {Observable} from 'rxjs';
-import {HasPermission} from '../../models/permission.model';
-import {AddHasPermissionForComponent} from '../add-has-permission-for/add-has-permission-for.component';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FullGroup } from '../../models/group.model';
+import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AddGroupMemberComponent } from '../add-group-member/add-group-member.component';
+import { PERMISSION_CAN_MANAGE_PERMISSIONS_RLC } from '../../../statics/permissions.statics';
+import { RestrictedRlc } from '../../models/rlc.model';
+import { Observable } from 'rxjs';
+import { HasPermission } from '../../models/permission.model';
+import { AddHasPermissionForComponent } from '../add-has-permission-for/add-has-permission-for.component';
 
 @Component({
-    selector: "app-edit-group",
-    templateUrl: "./edit-group.component.html",
-    styleUrls: ["./edit-group.component.scss"]
+    selector: 'app-edit-group',
+    templateUrl: './edit-group.component.html',
+    styleUrls: ['./edit-group.component.scss']
 })
 export class EditGroupComponent implements OnInit, OnDestroy {
     group: FullGroup;
@@ -46,9 +46,9 @@ export class EditGroupComponent implements OnInit, OnDestroy {
         this.coreSB.startLoadingPermissionStatics();
 
         this.coreSB.getGroup().subscribe((group: FullGroup) => {
-            if (group){
+            if (group) {
                 this.group = group;
-                if (this.group && this.canEditPermissions && !this.groupPermissionsLoaded){
+                if (this.group && this.canEditPermissions && !this.groupPermissionsLoaded) {
                     this.coreSB.startLoadingGroupHasPermissions(this.group.id);
                     this.groupPermissionsLoaded = true;
                 }
@@ -63,7 +63,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
 
         this.coreSB.getActualHasPermissions().subscribe((hasPermissions: HasPermission[]) => {
             this.groupHasPermissions = hasPermissions;
-        })
+        });
     }
 
     ngOnDestroy(): void {
@@ -80,6 +80,6 @@ export class EditGroupComponent implements OnInit, OnDestroy {
 
     onEditPermissionsClick(): void {
         if (this.canEditPermissions)
-            this.dialog.open(AddHasPermissionForComponent, {data: this.group});
+            this.dialog.open(AddHasPermissionForComponent, { data: this.group });
     }
 }

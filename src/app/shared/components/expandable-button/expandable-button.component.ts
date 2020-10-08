@@ -25,7 +25,7 @@ import {
     Input,
     OnInit,
     Output
-} from "@angular/core";
+} from '@angular/core';
 import {
     animate,
     animateChild,
@@ -35,66 +35,63 @@ import {
     style,
     transition,
     trigger
-} from "@angular/animations";
-import { colorPrimary, colorWarn } from "../../other/color-helper";
+} from '@angular/animations';
+import { colorPrimary, colorWarn } from '../../other/color-helper';
 
 @Component({
-    selector: "app-expandable-button",
-    templateUrl: "./expandable-button.component.html",
-    styleUrls: ["./expandable-button.component.scss"],
+    selector: 'app-expandable-button',
+    templateUrl: './expandable-button.component.html',
+    styleUrls: ['./expandable-button.component.scss'],
     animations: [
-        trigger("unFold", [
+        trigger('unFold', [
+            state('folded', style({})),
             state(
-                "folded",
+                'unfolded',
                 style({
-                })
+                    color: 'white',
+                    backgroundColor: '{{color}}'
+                }),
+                { params: { color: '#003c4d' } }
             ),
-            state(
-                "unfolded",
-                style({
-                    color: "white",
-                    backgroundColor: "{{color}}"
-                }), {params: {color: '#003c4d'}}
-            ),
-            transition("folded <=> unfolded", [
+            transition('folded <=> unfolded', [
                 group([
-                    query("@unFoldText", animateChild()),
+                    query('@unFoldText', animateChild()),
                     animate(
                         225,
                         style({
-                            color: "white",
-                            backgroundColor: "{{color}}"
+                            color: 'white',
+                            backgroundColor: '{{color}}'
                         })
                     )
                 ])
             ])
         ]),
-        trigger("unFoldText", [
+        trigger('unFoldText', [
             state(
-                "folded",
+                'folded',
                 style({
                     opacity: 0,
-                    "max-width": "0px",
-                    width: "0px"
+                    'max-width': '0px',
+                    width: '0px'
                 })
             ),
             state(
-                "unfolded",
+                'unfolded',
                 style({
                     opacity: 1.0,
-                    "max-width": "{{width}}px",
-                    width: "{{width}}px"
+                    'max-width': '{{width}}px',
+                    width: '{{width}}px'
                 }),
                 { params: { width: 100 } }
             ),
-            transition("folded <=> unfolded", animate(225))
+            transition('folded <=> unfolded', animate(225))
         ])
     ]
 })
 export class ExpandableButtonComponent implements AfterViewInit, OnInit {
     colorCode;
 
-    foldState = "folded";
+    foldState = 'folded';
 
     realWidth;
 
@@ -116,44 +113,49 @@ export class ExpandableButtonComponent implements AfterViewInit, OnInit {
     constructor(private _changeDetectionRef: ChangeDetectorRef, private el: ElementRef) {}
 
     ngOnInit(): void {
-        if (this.color === "warn") this.colorCode = colorWarn;
-        else if (this.color === "primary") this.colorCode = colorPrimary;
-        else
-            throw Error(
-                'ExpandableButtonComponent: color must be "primary" or "warn"'
-            );
+        if (this.color === 'warn') this.colorCode = colorWarn;
+        else if (this.color === 'primary') this.colorCode = colorPrimary;
+        else throw Error('ExpandableButtonComponent: color must be "primary" or "warn"');
     }
 
     ngAfterViewInit(): void {
-        if (this.styleParams && this.styleParams['fontSize']){
-            this.el.nativeElement.querySelector("#textHolder").style.fontSize = this.styleParams['fontSize'];
+        if (this.styleParams && this.styleParams['fontSize']) {
+            this.el.nativeElement.querySelector('#textHolder').style.fontSize = this.styleParams[
+                'fontSize'
+            ];
 
-            const sizeIndex =  /[^0-9]/.exec(this.styleParams['fontSize']);
-            const realSize = parseInt(this.styleParams['fontSize'].substring(0, sizeIndex.index), 10);
+            const sizeIndex = /[^0-9]/.exec(this.styleParams['fontSize']);
+            const realSize = parseInt(
+                this.styleParams['fontSize'].substring(0, sizeIndex.index),
+                10
+            );
 
             const newIconFontSize = realSize * 1.5;
-            this.el.nativeElement.querySelector("#iconHolder").style.fontSize = newIconFontSize + 'px';
+            this.el.nativeElement.querySelector('#iconHolder').style.fontSize =
+                newIconFontSize + 'px';
 
             const newPaddingTop = realSize * (1 / 4.0);
-            this.el.nativeElement.querySelector("#iconHolder").style.paddingTop = newPaddingTop + 'px';
+            this.el.nativeElement.querySelector('#iconHolder').style.paddingTop =
+                newPaddingTop + 'px';
 
             const newHeight = realSize * (36 / 14.0);
-            this.el.nativeElement.querySelector("#mainDiv").style.height = newHeight + 'px';
+            this.el.nativeElement.querySelector('#mainDiv').style.height = newHeight + 'px';
 
-            this.realWidth = this.el.nativeElement.querySelector("#textHolder").offsetWidth + realSize / 2.0;
+            this.realWidth =
+                this.el.nativeElement.querySelector('#textHolder').offsetWidth + realSize / 2.0;
         } else {
-            this.realWidth = this.el.nativeElement.querySelector("#textHolder").offsetWidth + 10;
+            this.realWidth = this.el.nativeElement.querySelector('#textHolder').offsetWidth + 10;
         }
 
         this._changeDetectionRef.detectChanges();
     }
 
     onMouseLeave() {
-        this.foldState = "folded";
+        this.foldState = 'folded';
     }
 
     onMouseEnter() {
-        this.foldState = "unfolded";
+        this.foldState = 'unfolded';
     }
 
     onButtonClick() {

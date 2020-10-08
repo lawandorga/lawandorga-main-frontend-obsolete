@@ -16,14 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Injectable } from "@angular/core";
-import { Actions, Effect, ofType } from "@ngrx/effects";
-import { catchError, map, mergeMap, switchMap } from "rxjs/operators";
-import { HttpClient } from "@angular/common/http";
-import { from } from "rxjs";
-import { isDevMode } from "@angular/core";
+import { Injectable } from '@angular/core';
+import { Actions, Effect, ofType } from '@ngrx/effects';
+import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { from } from 'rxjs';
+import { isDevMode } from '@angular/core';
 
-import { Router } from "@angular/router";
+import { Router } from '@angular/router';
 import {
     TRY_RELOAD_STATIC_INFORMATION,
     SET_TOKEN,
@@ -37,30 +37,32 @@ import {
     LOGOUT,
     SET_USERS_PRIVATE_KEY
 } from './auth.actions';
-import LogRocket from "logrocket";
 import {
     FORGOT_PASSWORD_API_URL,
     GetResetPasswordApiUrl,
     LOGIN_API_URL,
     LOGOUT_API_URL
-} from "../../../statics/api_urls.statics";
+} from '../../../statics/api_urls.statics';
 import {
     SET_ALL_PERMISSIONS,
+    SET_NOTIFICATIONS,
     SET_RLC,
     SET_USER,
     SET_USER_PERMISSIONS,
     SET_USER_RECORD_STATES,
-    SET_USER_STATES, START_LOADING_RLC_SETTINGS
+    SET_USER_STATES,
+    START_LOADING_RLC_SETTINGS
 } from '../core.actions';
-import { AuthGuardService } from "../../services/auth-guard.service";
-import { FullUser } from "../../models/user.model";
-import { RecordsSandboxService } from "../../../recordmanagement/services/records-sandbox.service";
-import { CoreSandboxService } from "../../services/core-sandbox.service";
-import { HasPermission, Permission } from "../../models/permission.model";
-import { RestrictedRlc } from "../../models/rlc.model";
-import { AppSandboxService } from "../../services/app-sandbox.service";
-import { LOGIN_FRONT_URL } from "../../../statics/frontend_links.statics";
-import { State } from "../../models/state.model";
+import { AuthGuardService } from '../../services/auth-guard.service';
+import { FullUser } from '../../models/user.model';
+import { RecordsSandboxService } from '../../../recordmanagement/services/records-sandbox.service';
+import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { HasPermission, Permission } from '../../models/permission.model';
+import { RestrictedRlc } from '../../models/rlc.model';
+import { AppSandboxService } from '../../services/app-sandbox.service';
+import { LOGIN_FRONT_URL } from '../../../statics/frontend_links.statics';
+import { State } from '../../models/state.model';
+import { Notification } from '../../models/notification.model';
 
 @Injectable()
 export class AuthEffects {
@@ -85,22 +87,16 @@ export class AuthEffects {
                 this.http.post(LOGIN_API_URL, authData).pipe(
                     catchError(error => {
                         console.log('error: ', error);
-                        if(error.name === 'HttpErrorResponse'){
-                            this.coreSB.showErrorSnackBar(
-                                `Login not successful: error from server. Try again later.`
-                            );
-                        } else {
-                            this.coreSB.showErrorSnackBar(
-                                `Login not successful: ${error.error.detail}`
-                            );
-                        }
+                        this.coreSB.showErrorSnackBar(
+                            `Login not successful: ${error.error.detail}`
+                        );
 
                         return [];
                     }),
                     mergeMap(
                         (response: {
                             token: string;
-                            users_private_key: string,
+                            users_private_key: string;
                             user: any;
                             all_permissions: any;
                             permissions: any;
@@ -108,17 +104,16 @@ export class AuthEffects {
                             error: string;
                             error_message: string;
                             user_states: any;
-                            user_record_states;
+                            user_record_states: any;
+                            notifications: any;
                         }) => {
-                            this.appSB.saveTokenAndUsersPrivateKey(response.token, response.users_private_key);
+                            this.appSB.saveTokenAndUsersPrivateKey(
+                                response.token,
+                                response.users_private_key
+                            );
                             if (this.guard.lastVisitedUrl)
-                                this.router.navigate([
-                                    this.guard.getLastVisitedUrl()
-                                ]);
-                            else
-                                this.router.navigate([
-                                    this.appSB.savedLocation
-                                ]);
+                                this.router.navigate([this.guard.getLastVisitedUrl()]);
+                            else this.router.navigate([this.appSB.savedLocation]);
                             return [
                                 {
                                     type: SET_TOKEN,
@@ -165,21 +160,19 @@ export class AuthEffects {
         }),
         mergeMap((payload: { email: string }) => {
             return from(
-                this.http
-                    .post(FORGOT_PASSWORD_API_URL, { email: payload.email })
-                    .pipe(
-                        catchError(error => {
-                            this.recordSB.showError(error.error.detail);
-                            return [];
-                        }),
-                        mergeMap(response => {
-                            this.coreSB.showSuccessSnackBar(
-                                "a reactivation email was sent to the given email address"
-                            );
-                            this.router.navigate([LOGIN_FRONT_URL]);
-                            return [];
-                        })
-                    )
+                this.http.post(FORGOT_PASSWORD_API_URL, { email: payload.email }).pipe(
+                    catchError(error => {
+                        this.recordSB.showError(error.error.detail);
+                        return [];
+                    }),
+                    mergeMap(response => {
+                        this.coreSB.showSuccessSnackBar(
+                            'a reactivation email was sent to the given email address'
+                        );
+                        this.router.navigate([LOGIN_FRONT_URL]);
+                        return [];
+                    })
+                )
             );
         })
     );
@@ -202,7 +195,7 @@ export class AuthEffects {
                             return [];
                         }),
                         mergeMap(response => {
-                            this.coreSB.showSuccessSnackBar("password resetted");
+                            this.coreSB.showSuccessSnackBar('password resetted');
                             this.router.navigate([LOGIN_FRONT_URL]);
                             return [];
                         })
@@ -215,7 +208,6 @@ export class AuthEffects {
     startLoggingOut = this.actions.pipe(
         ofType(START_LOGGING_OUT),
         mergeMap(() => {
-            this.logoutStatics();
             return from(
                 this.http.post(LOGOUT_API_URL, {}).pipe(
                     catchError(error => {
@@ -242,6 +234,7 @@ export class AuthEffects {
     logoutEffect = this.actions.pipe(
         ofType(LOGOUT),
         mergeMap(() => {
+            this.appSB.resetTokenAndUsersPrivateKey();
             this.router.navigate([LOGIN_FRONT_URL]);
             return [];
         })
@@ -254,13 +247,14 @@ export class AuthEffects {
         rlc: any;
         user_states: any;
         user_record_states: any;
+        notifications: any;
     }) {
         // not on prod
         if (!isDevMode()) {
             // for logging
             // LogRocket.identify(response.user.id); TODO: remove logrocket completely
             // keep this console.log
-            console.log("identified: ", response.user.id);
+            console.log('identified: ', response.user.id);
         }
         return [
             {
@@ -269,15 +263,11 @@ export class AuthEffects {
             },
             {
                 type: SET_ALL_PERMISSIONS,
-                payload: Permission.getPermissionsFromJsonArray(
-                    response.all_permissions
-                )
+                payload: Permission.getPermissionsFromJsonArray(response.all_permissions)
             },
             {
                 type: SET_USER_PERMISSIONS,
-                payload: HasPermission.getPermissionsFromJsonArray(
-                    response.permissions
-                )
+                payload: HasPermission.getPermissionsFromJsonArray(response.permissions)
             },
             {
                 type: SET_RLC,
@@ -289,18 +279,15 @@ export class AuthEffects {
             },
             {
                 type: SET_USER_RECORD_STATES,
-                payload: State.getStatesFromJsonArray(
-                    response.user_record_states
-                )
+                payload: State.getStatesFromJsonArray(response.user_record_states)
             },
             {
                 type: START_LOADING_RLC_SETTINGS
+            },
+            {
+                type: SET_NOTIFICATIONS,
+                payload: response.notifications
             }
         ];
-    }
-
-    logoutStatics() {
-        localStorage.clear();
-        this.router.navigate([LOGIN_FRONT_URL]);
     }
 }

@@ -16,8 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { RestrictedUser } from "../../core/models/user.model";
-import {TokenRecord} from './record.model';
+import { RestrictedUser } from '../../core/models/user.model';
+import { TokenRecord } from './record.model';
 
 export class RecordPermissionRequest {
     constructor(
@@ -40,15 +40,11 @@ export class RecordPermissionRequest {
         this.state = state;
     }
 
-    static getRecordPermissionRequestsFromJsonArray(
-        jsonArray
-    ): RecordPermissionRequest[] {
+    static getRecordPermissionRequestsFromJsonArray(jsonArray): RecordPermissionRequest[] {
         const recordPermissions: RecordPermissionRequest[] = [];
         Object.values(jsonArray).map(jsonRecordPermission => {
             recordPermissions.push(
-                RecordPermissionRequest.getRecordPermissionRequestFromJson(
-                    jsonRecordPermission
-                )
+                RecordPermissionRequest.getRecordPermissionRequestFromJson(jsonRecordPermission)
             );
         });
         return recordPermissions;
@@ -62,7 +58,7 @@ export class RecordPermissionRequest {
             TokenRecord.getTokenRecordFromJson(json.record),
             new Date(json.requested),
             new Date(json.processed_on),
-            json.can_edit === "true",
+            json.can_edit === 'true',
             json.state
         );
     }

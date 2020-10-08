@@ -16,20 +16,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit } from "@angular/core";
-import { CoreSandboxService } from "../../services/core-sandbox.service";
-import { Observable } from "rxjs";
-import { RestrictedGroup } from "../../models/group.model";
-import { Router } from "@angular/router";
-import { GetGroupFrontUrl } from "../../../statics/frontend_links.statics";
-import {PERMISSION_CAN_ADD_GROUP_RLC, PERMISSION_CAN_MANAGE_GROUPS_RLC} from '../../../statics/permissions.statics';
-import { MatDialog } from "@angular/material";
-import {AddGroupComponent} from '../../components/add-group/add-group.component';
+import { Component, OnInit } from '@angular/core';
+import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { Observable } from 'rxjs';
+import { RestrictedGroup } from '../../models/group.model';
+import { Router } from '@angular/router';
+import { GetGroupFrontUrl } from '../../../statics/frontend_links.statics';
+import {
+    PERMISSION_CAN_ADD_GROUP_RLC,
+    PERMISSION_CAN_MANAGE_GROUPS_RLC
+} from '../../../statics/permissions.statics';
+import { MatDialog } from '@angular/material/dialog';
+import { AddGroupComponent } from '../../components/add-group/add-group.component';
 
 @Component({
-    selector: "app-manage-groups",
-    templateUrl: "./groups-list.component.html",
-    styleUrls: ["./groups-list.component.scss"]
+    selector: 'app-manage-groups',
+    templateUrl: './groups-list.component.html',
+    styleUrls: ['./groups-list.component.scss']
 })
 export class GroupsListComponent implements OnInit {
     groups: Observable<RestrictedGroup[]>;
@@ -49,15 +52,13 @@ export class GroupsListComponent implements OnInit {
         this.coreSB.hasPermissionFromStringForOwnRlc(
             PERMISSION_CAN_MANAGE_GROUPS_RLC,
             hasPermission => {
-                if (hasPermission)
-                    this.canAddGroup = hasPermission;
+                if (hasPermission) this.canAddGroup = hasPermission;
             }
         );
         this.coreSB.hasPermissionFromStringForOwnRlc(
             PERMISSION_CAN_ADD_GROUP_RLC,
             hasPermission => {
-                if (hasPermission)
-                    this.canAddGroup = hasPermission;
+                if (hasPermission) this.canAddGroup = hasPermission;
             }
         );
     }
@@ -70,7 +71,7 @@ export class GroupsListComponent implements OnInit {
         if (this.canAddGroup) {
             this.dialog.open(AddGroupComponent);
         } else {
-            this.coreSB.showErrorSnackBar("no permission to add new group");
+            this.coreSB.showErrorSnackBar('no permission to add new group');
         }
     }
 }

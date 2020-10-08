@@ -16,41 +16,32 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit } from "@angular/core";
-import { Observable } from "rxjs";
-import { Router } from "@angular/router";
-import { RecordsSandboxService } from "../../services/records-sandbox.service";
-import { RecordPermissionRequest } from "../../models/record_permission.model";
-import { RestrictedUser } from "../../../core/models/user.model";
-import {GetProfileFrontUrl, GetRecordFrontUrl} from '../../../statics/frontend_links.statics';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { RecordsSandboxService } from '../../services/records-sandbox.service';
+import { RecordPermissionRequest } from '../../models/record_permission.model';
+import { RestrictedUser } from '../../../core/models/user.model';
+import { GetProfileFrontUrl, GetRecordFrontUrl } from '../../../statics/frontend_links.statics';
 
 @Component({
-    selector: "app-records-permit-requests",
-    templateUrl: "./records-permit-requests.component.html",
-    styleUrls: ["./records-permit-requests.component.scss"]
+    selector: 'app-records-permit-requests',
+    templateUrl: './records-permit-requests.component.html',
+    styleUrls: ['./records-permit-requests.component.scss']
 })
 export class RecordsPermitRequestsComponent implements OnInit {
     recordPermissionRequests: Observable<RecordPermissionRequest[]>;
 
-    constructor(
-        private recordSB: RecordsSandboxService,
-        private router: Router
-    ) {}
+    constructor(private recordSB: RecordsSandboxService, private router: Router) {}
 
-    toProcessColumns = [
-        "request_from",
-        "record",
-        "requested",
-        "state",
-        "accept"
-    ];
+    toProcessColumns = ['request_from', 'record', 'requested', 'state', 'accept'];
     alreadyProcessedColumns = [
-        "request_from",
-        "record",
-        "requested",
-        "state",
-        "processor",
-        "processed_on"
+        'request_from',
+        'record',
+        'requested',
+        'state',
+        'processor',
+        'processed_on'
     ];
 
     ngOnInit() {

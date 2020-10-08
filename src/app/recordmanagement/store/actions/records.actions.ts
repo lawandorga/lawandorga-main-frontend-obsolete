@@ -16,26 +16,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Action } from "@ngrx/store";
-export * from "./records-start.actions";
-export * from "./records-set.actions";
+import { Action } from '@ngrx/store';
+export * from './records-start.actions';
+export * from './records-set.actions';
 
-import { RecordDocument } from "../../models/record_document.model";
-import { RecordMessage } from "../../models/record_message.model";
-import { RecordStartActions } from "./records-start.actions";
-import { RecordsSetActions } from "./records-set.actions";
-import {RecordPermissionRequest} from '../../models/record_permission.model';
+import { RecordDocument } from '../../models/record_document.model';
+import { RecordMessage } from '../../models/record_message.model';
+import { RecordStartActions } from './records-start.actions';
+import { RecordsSetActions } from './records-set.actions';
+import { RecordPermissionRequest } from '../../models/record_permission.model';
 import { RecordDeletionRequest } from '../../models/record_deletion_request.model';
 
-export const RESET_FULL_CLIENT_INFORMATION = "RESET_FULL_CLIENT_INFORMATION";
-export const RESET_POSSIBLE_CLIENTS = "RESET_POSSIBLE_CLIENTS";
-export const RESET_SPECIAL_RECORD_REQUEST_STATE = "RESET_SPECIAL_RECORD_REQUEST_STATE";
+export const RESET_FULL_CLIENT_INFORMATION = 'RESET_FULL_CLIENT_INFORMATION';
+export const RESET_POSSIBLE_CLIENTS = 'RESET_POSSIBLE_CLIENTS';
+export const RESET_SPECIAL_RECORD_REQUEST_STATE = 'RESET_SPECIAL_RECORD_REQUEST_STATE';
 
-export const ADD_RECORD_DOCUMENT = "ADD_RECORD_DOCUMENT";
-export const ADD_RECORD_MESSAGE = "ADD_RECORD_MESSAGE";
+export const ADD_RECORD_DOCUMENT = 'ADD_RECORD_DOCUMENT';
+export const ADD_RECORD_MESSAGE = 'ADD_RECORD_MESSAGE';
 
-export const UPDATE_RECORD_PERMISSION_REQUEST = "UPDATE_RECORD_PERMISSION_REQUEST";
-export const UPDATE_RECORD_DELETION_REQUEST = "UPDATE_RECORD_DELETION_REQUEST";
+export const UPDATE_RECORD_PERMISSION_REQUEST = 'UPDATE_RECORD_PERMISSION_REQUEST';
+export const UPDATE_RECORD_DELETION_REQUEST = 'UPDATE_RECORD_DELETION_REQUEST';
 
 export class AddRecordDocument implements Action {
     readonly type = ADD_RECORD_DOCUMENT;
@@ -60,7 +60,7 @@ export class ResetFullClientInformation implements Action {
 export class UpdateRecordPermissionRequest implements Action {
     readonly type = UPDATE_RECORD_PERMISSION_REQUEST;
 
-    constructor(public payload: RecordPermissionRequest){}
+    constructor(public payload: RecordPermissionRequest) {}
 }
 
 export class ResetSpecialRecordRequestState implements Action {

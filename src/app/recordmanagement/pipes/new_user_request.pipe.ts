@@ -17,8 +17,7 @@
  */
 
 import { Pipe, PipeTransform } from '@angular/core';
-import {NewUserRequest} from '../../core/models/new_user_request.model';
-
+import { NewUserRequest } from '../../core/models/new_user_request.model';
 
 @Pipe({ name: 'newUserRequestRequested' })
 export class NewUserRequestRequestedPipe implements PipeTransform {

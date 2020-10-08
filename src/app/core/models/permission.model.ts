@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Filterable } from "../../shared/models/filterable.model";
+import { Filterable } from '../../shared/models/filterable.model';
 
 export class Permission implements Filterable {
     constructor(public id: string, public name: string) {
@@ -75,9 +75,7 @@ export class HasPermission {
                 permission_for_group;
                 permission_for_rlc;
             }) => {
-                hasPermissions.push(
-                    HasPermission.getHasPermissionFromJson(permission)
-                );
+                hasPermissions.push(HasPermission.getHasPermissionFromJson(permission));
             }
         );
         return hasPermissions;
@@ -117,50 +115,36 @@ export class HasPermission {
         /*
         checks if a permissionId with permission_for restriction is met by any permission in result
          */
-        const result: HasPermission[] = permissions.filter(
-            (hasPermission: HasPermission) => {
-                if (Number(hasPermission.permission_id) !== permissionId)
-                    return false;
-                if (!permission_for) return true;
+        const result: HasPermission[] = permissions.filter((hasPermission: HasPermission) => {
+            if (Number(hasPermission.permission_id) !== permissionId) return false;
+            if (!permission_for) return true;
 
-                if (
-                    !permission_for.for_user &&
-                    !permission_for.for_group &&
-                    !permission_for.for_rlc
-                ) {
-                    return true;
-                } else if (
-                    permission_for.for_user &&
-                    !permission_for.for_group &&
-                    !permission_for.for_rlc
-                ) {
-                    return (
-                        Number(hasPermission.forUser) ===
-                        Number(permission_for.for_user)
-                    );
-                } else if (
-                    !permission_for.for_user &&
-                    permission_for.for_group &&
-                    !permission_for.for_rlc
-                ) {
-                    return (
-                        Number(hasPermission.forGroup) ===
-                        Number(permission_for.for_group)
-                    );
-                } else if (
-                    !permission_for.for_user &&
-                    !permission_for.for_group &&
-                    permission_for.for_rlc
-                ) {
-                    return (
-                        Number(hasPermission.forRlc) ===
-                        Number(permission_for.for_rlc)
-                    );
-                } else {
-                    throw new Error("error, permission_for cannot apply to multiple permission holders");
-                }
+            if (!permission_for.for_user && !permission_for.for_group && !permission_for.for_rlc) {
+                return true;
+            } else if (
+                permission_for.for_user &&
+                !permission_for.for_group &&
+                !permission_for.for_rlc
+            ) {
+                return Number(hasPermission.forUser) === Number(permission_for.for_user);
+            } else if (
+                !permission_for.for_user &&
+                permission_for.for_group &&
+                !permission_for.for_rlc
+            ) {
+                return Number(hasPermission.forGroup) === Number(permission_for.for_group);
+            } else if (
+                !permission_for.for_user &&
+                !permission_for.for_group &&
+                permission_for.for_rlc
+            ) {
+                return Number(hasPermission.forRlc) === Number(permission_for.for_rlc);
+            } else {
+                throw new Error(
+                    'error, permission_for cannot apply to multiple permission holders'
+                );
             }
-        );
+        });
         return result.length !== 0;
     }
 }
