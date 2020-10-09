@@ -63,7 +63,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     timerCheckPermissions = null;
     timerLoadUnreadNotifications = null;
     checkPermissionInterval = 30000;
-    checkNotificationsInterval = 5000;
+    checkNotificationsInterval = 15000;
 
     number_of_notifications = '0';
 

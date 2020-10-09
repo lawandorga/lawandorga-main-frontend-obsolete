@@ -168,7 +168,6 @@ export class FilesEffects {
                             return [];
                         }),
                         mergeMap((response: any) => {
-                            console.log('response from download files/folders');
                             let path = 'root';
                             if (payload.entries.length === 1) {
                                 path = payload.entries[0].name;
