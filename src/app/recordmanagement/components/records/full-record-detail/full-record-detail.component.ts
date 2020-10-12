@@ -124,7 +124,17 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
                     this.record_documents = Object.values(special_record.record_documents);
                     this.record_messages = Object.values(special_record.record_messages);
 
-                    if (this.client && this.record) this.loadValues();
+                    if (this.client && this.record) {
+                        this.loadValues();
+                    }
+                    this.coreSB.getUser().subscribe(user => {
+                        for (const currentUser of this.record.working_on_record) {
+                            console.log('currentUser: ', currentUser['id']);
+                            if (user.id === currentUser['id']) {
+                                this.user_working_on_record = true;
+                            }
+                        }
+                    });
                 }
             );
 
