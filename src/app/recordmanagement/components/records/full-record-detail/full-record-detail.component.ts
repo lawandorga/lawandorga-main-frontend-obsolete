@@ -70,6 +70,7 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
 
     settingsSubscription: Subscription;
     specialRecordSubscription: Subscription;
+    userSubscription: Subscription;
 
     constructor(
         private recordSB: RecordsSandboxService,
@@ -91,9 +92,11 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
     }
 
     ngOnDestroy() {
+        if (this.settingsSubscription) this.settingsSubscription.unsubscribe();
+        if (this.specialRecordSubscription) this.specialRecordSubscription.unsubscribe();
+        if (this.userSubscription) this.userSubscription.unsubscribe();
+
         this.recordSB.resetFullClientInformation();
-        this.settingsSubscription.unsubscribe();
-        this.specialRecordSubscription.unsubscribe();
     }
 
     ngOnInit() {
@@ -127,9 +130,8 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
                     if (this.client && this.record) {
                         this.loadValues();
                     }
-                    this.coreSB.getUser().subscribe(user => {
+                    this.userSubscription = this.coreSB.getUser().subscribe(user => {
                         for (const currentUser of this.record.working_on_record) {
-                            console.log('currentUser: ', currentUser['id']);
                             if (user.id === currentUser['id']) {
                                 this.user_working_on_record = true;
                             }
