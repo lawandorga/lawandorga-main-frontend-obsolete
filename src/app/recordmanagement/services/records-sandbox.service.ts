@@ -297,7 +297,7 @@ export class RecordsSandboxService {
         this.location.back();
     }
 
-    uploadRecordDocuments(files: File[]): void {
+    uploadRecordDocuments(files: File[]) {
         let record_id = null;
         this.recordStore
             .pipe(select((state: any) => state.records.special_record.record))
@@ -336,7 +336,7 @@ export class RecordsSandboxService {
         this.coreSB.showErrorSnackBar(error_message);
     }
 
-    startSettingDocumentTags(tags: Tag[], document_id: string): void {
+    startSettingDocumentTags(tags: Tag[], document_id: string) {
         this.recordStore.dispatch(new StartSettingRecordDocumentTags({ tags, document_id }));
     }
 

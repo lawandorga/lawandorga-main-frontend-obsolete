@@ -31,6 +31,7 @@ import { FullRecordDetailComponent } from '../../components/records/full-record-
 export class RecordComponent implements OnInit, HasUnsaved {
     id: string;
     type: string;
+    loading = true;
 
     @ViewChild(FullRecordDetailComponent) child: FullRecordDetailComponent;
 
@@ -38,8 +39,12 @@ export class RecordComponent implements OnInit, HasUnsaved {
 
     ngOnInit() {
         this.route.params.subscribe((params: Params) => {
+            this.loading = true;
             this.id = params['id'];
             this.recordSB.loadAndGetSpecialRecord(this.id).subscribe(special_record => {
+                if (special_record.record !== null) {
+                    this.loading = false;
+                }
                 if (special_record.client) {
                     this.type = 'FullRecord';
                 } else {

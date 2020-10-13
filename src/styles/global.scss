@@ -39,7 +39,7 @@
 }
 
 .is_link {
-    color: $c-link-color;
+    color: $c-primary;
     text-decoration: underline;
 }
 
@@ -91,6 +91,10 @@
 
 .spacer {
     flex: 1 1 auto;
+}
+
+.card-width {
+    max-width: 800px;
 }
 
 .table-action-button-space {

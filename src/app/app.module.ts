@@ -19,11 +19,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ActionReducer, StoreModule } from '@ngrx/store';
+import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import LogRocket from 'logrocket';
 import { registerLocaleData } from '@angular/common';
 import localeDE from '@angular/common/locales/de';
 
@@ -47,22 +46,6 @@ import { CookieService } from 'ngx-cookie-service';
 
 registerLocaleData(localeDE);
 
-const reduxMiddleware = LogRocket.reduxMiddleware();
-
-export function logrocketMiddleware(reducer): ActionReducer<any, any> {
-    let currentState;
-    const fakeDispatch = reduxMiddleware({
-        getState: () => currentState
-    })(() => {});
-
-    return function(state, action) {
-        const newState = reducer(state, action);
-        currentState = state;
-        fakeDispatch(action);
-        return newState;
-    };
-}
-
 @NgModule({
     declarations: [AppComponent],
     imports: [
@@ -73,10 +56,7 @@ export function logrocketMiddleware(reducer): ActionReducer<any, any> {
         BrowserAnimationsModule,
         CoreModule,
         AppRoutingModule,
-        StoreModule.forRoot(reducers, {
-            metaReducers: [logrocketMiddleware],
-            runtimeChecks: { strictStateImmutability: false, strictActionImmutability: false }
-        }),
+        StoreModule.forRoot(reducers),
         EffectsModule.forRoot([AuthEffects]),
         !environment.production ? StoreDevtoolsModule.instrument() : []
     ],

@@ -20,7 +20,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthState } from './core/store/auth/auth.reducers';
 import { Observable } from 'rxjs';
-import LogRocket from 'logrocket';
 import { AppSandboxService } from './core/services/app-sandbox.service';
 
 import { MediaMatcher } from '@angular/cdk/layout';
@@ -59,7 +58,6 @@ export class AppComponent implements OnDestroy, OnInit {
         media: MediaMatcher
     ) {
         this.authState = this.appSB.startApp();
-        LogRocket.init('mndnnu/rlc_app');
         this.mobileQuery = media.matchMedia('(max-width: 600px)');
         this._mobileQueryListener = () => changeDetectorRef.detectChanges();
         this.mobileQuery.addListener(this._mobileQueryListener);

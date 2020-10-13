@@ -37,7 +37,6 @@ import {
     LOGOUT,
     SET_USERS_PRIVATE_KEY
 } from './auth.actions';
-import LogRocket from 'logrocket';
 import {
     FORGOT_PASSWORD_API_URL,
     GetResetPasswordApiUrl,
@@ -88,15 +87,9 @@ export class AuthEffects {
                 this.http.post(LOGIN_API_URL, authData).pipe(
                     catchError(error => {
                         console.log('error: ', error);
-                        // if (error.name === 'HttpErrorResponse'){
-                        //     this.coreSB.showErrorSnackBar(
-                        //         `Login not successful: error from server. Try again later.`
-                        //     );
-                        // } else {
                         this.coreSB.showErrorSnackBar(
                             `Login not successful: ${error.error.detail}`
                         );
-                        // }
 
                         return [];
                     }),
@@ -215,7 +208,6 @@ export class AuthEffects {
     startLoggingOut = this.actions.pipe(
         ofType(START_LOGGING_OUT),
         mergeMap(() => {
-            this.logoutStatics();
             return from(
                 this.http.post(LOGOUT_API_URL, {}).pipe(
                     catchError(error => {
@@ -242,6 +234,7 @@ export class AuthEffects {
     logoutEffect = this.actions.pipe(
         ofType(LOGOUT),
         mergeMap(() => {
+            this.appSB.resetTokenAndUsersPrivateKey();
             this.router.navigate([LOGIN_FRONT_URL]);
             return [];
         })
@@ -296,10 +289,5 @@ export class AuthEffects {
                 payload: response.notifications
             }
         ];
-    }
-
-    logoutStatics() {
-        localStorage.clear();
-        this.router.navigate([LOGIN_FRONT_URL]);
     }
 }

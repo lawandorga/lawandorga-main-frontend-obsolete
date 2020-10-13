@@ -37,8 +37,6 @@
     "env-cmd": "^10.1.0",
     "file-saver": "^2.0.1",
     "fstream": "^1.0.12",
-    "logrocket": "^0.6.21",
-    "logrocket-ngrx": "^0.1.1",
     "mime": "^2.4.6",
     "moment": "^2.27.0",
     "ng-material-multilevel-menu": "^4.12.2",
