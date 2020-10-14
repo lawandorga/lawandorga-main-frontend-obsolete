@@ -16,38 +16,48 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+    AfterViewInit,
+    Component,
+    EventEmitter,
+    OnDestroy,
+    OnInit,
+    ViewChild
+} from '@angular/core';
 import { RecordsSandboxService } from '../../services/records-sandbox.service';
-import { Observable, Subscription } from 'rxjs';
+import { merge, Observable, of, Subscription } from 'rxjs';
 import { isRestrictedRecord, RestrictedRecord } from '../../models/record.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Tag } from '../../models/tag.model';
 import {
     GetRecordFrontUrl,
+    GetRecordListFrontUrl,
     GetRecordSearchFrontUrl
 } from '../../../statics/frontend_links.statics';
 import { tap } from 'rxjs/internal/operators/tap';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { catchError, map, startWith, switchMap } from 'rxjs/operators';
+import { NotificationGroup } from '../../../core/models/notification_group.model';
 
 @Component({
     selector: 'app-records',
     templateUrl: './records-list.component.html',
     styleUrls: ['./records-list.component.scss']
 })
-export class RecordsListComponent implements OnInit, OnDestroy {
+export class RecordsListComponent implements OnInit, OnDestroy, AfterViewInit {
     timeout = 400;
-
-    columns = ['access', 'token', 'state', 'consultants', 'tags'];
-    searchValue = '';
     timer = null;
 
-    results_length = 0;
+    columns = ['access', 'token', 'state', 'consultants', 'tags'];
 
     subscriptions: Subscription[] = [];
 
-    dataSource;
+    dataSource: RestrictedRecord[] = [];
+    searchValue = '';
+    results_length = 0;
+    searchParams: SearchParamsInterface;
 
     @ViewChild(MatSort, { static: true }) sort: MatSort;
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -56,41 +66,58 @@ export class RecordsListComponent implements OnInit, OnDestroy {
         private recordsSandbox: RecordsSandboxService,
         private route: ActivatedRoute,
         private router: Router
-    ) {
-        this.subscriptions.push(
-            this.route.queryParamMap.subscribe(map => {
-                console.log('search: ', map.get('search'));
-                const params: SearchParamsInterface = {
-                    filter: map.get('search'),
-                    sort: map.get('sort'),
-                    sort_direction: map.get('sort_direction'),
-                    limit: Number(map.get('limit')),
-                    offset: Number(map.get('offset'))
-                };
-                this.recordsSandbox.startLoadingRecords(params);
+    ) {}
 
-                // if (map.get('search')) {
-                //     this.recordsSandbox.loadRecords(map.get('search'));
-                //     this.searchValue = map.get('search');
-                // } else {
-                //     this.recordsSandbox.loadRecords();
-                // }
-            })
-        );
+    ngAfterViewInit() {
+        this.sort.sortChange.subscribe(event => {
+            this.searchParams = {
+                ...this.searchParams,
+                sort: this.sort.active,
+                sort_direction: this.sort.direction
+            };
+            this.router.navigateByUrl(GetRecordListFrontUrl(this.searchParams));
+        });
+
+        this.paginator.page.subscribe(event => {
+            this.searchParams = {
+                ...this.searchParams,
+                offset: this.paginator.pageSize * this.paginator.pageIndex,
+                limit: this.paginator.pageSize
+            };
+            this.router.navigateByUrl(GetRecordListFrontUrl(this.searchParams));
+        });
     }
 
     ngOnInit() {
         this.subscriptions.push(
-            this.recordsSandbox.getRecords().subscribe(records => {
-                this.dataSource = new MatTableDataSource(records);
-                this.dataSource.sort = this.sort;
+            this.route.queryParamMap.subscribe(queryParams => {
+                // console.log('search: ', queryParams.get('search'));
+                this.searchValue = queryParams.get('filter');
+                this.searchParams = {
+                    filter: queryParams.get('filter'),
+                    sort: queryParams.get('sort'),
+                    sort_direction: queryParams.get('sort_direction'),
+                    limit: Number(queryParams.get('limit')),
+                    offset: Number(queryParams.get('offset'))
+                };
+                this.recordsSandbox.startLoadingRecords(this.searchParams);
+            })
+        );
+
+        this.subscriptions.push(
+            this.recordsSandbox.getRecords().subscribe((records: RestrictedRecord[]) => {
+                this.dataSource = records;
             })
         );
     }
 
     onSearchClick() {
         if (this.searchValue && this.searchValue !== '') {
-            this.router.navigateByUrl(GetRecordSearchFrontUrl(this.searchValue));
+            this.searchParams = {
+                ...this.searchParams,
+                filter: this.searchValue
+            };
+            this.router.navigateByUrl(GetRecordListFrontUrl(this.searchParams));
         } else this.router.navigateByUrl(`records`);
     }
 
@@ -108,7 +135,11 @@ export class RecordsListComponent implements OnInit, OnDestroy {
     }
 
     onTagClick(tag: Tag) {
-        this.router.navigateByUrl(GetRecordSearchFrontUrl(tag.name));
+        this.searchParams = {
+            ...this.searchParams,
+            filter: tag.name
+        };
+        this.router.navigateByUrl(GetRecordListFrontUrl(this.searchParams));
     }
 
     ngOnDestroy() {

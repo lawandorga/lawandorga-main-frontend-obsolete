@@ -21,6 +21,7 @@ import { RestrictedRecord, TokenRecord } from '../recordmanagement/models/record
 import { RestrictedGroup } from '../core/models/group.model';
 import { Permission } from '../core/models/permission.model';
 import { FullFolder } from '../filemanagement/models/folder.model';
+import { GenerateSearchAppendix } from './api_urls.statics';
 
 export const MAIN_PAGE_FRONT_URL = '';
 export const REGISTER_FRONT_URL = 'register';
@@ -48,6 +49,14 @@ export const GetProfileFrontUrl = (profile: RestrictedUser | string): string => 
 
 export const GetRecordSearchFrontUrl = (searchTerm: string): string => {
     return `${RECORDS_FRONT_URL}?search=${searchTerm}`;
+};
+
+export const GetRecordListFrontUrl = (searchParams: SearchParamsInterface) => {
+    const url = GenerateSearchAppendix(RECORDS_FRONT_URL, searchParams);
+    console.log('new frontend url: ', url);
+    return url;
+
+    // return `${RECORDS_FRONT_URL}?filter=${searchParams.filter}`;
 };
 
 export const GetRecordFrontUrl = (record: TokenRecord | string): string => {

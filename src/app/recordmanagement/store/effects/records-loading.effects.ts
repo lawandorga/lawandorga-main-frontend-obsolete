@@ -99,9 +99,11 @@ export class RecordsLoadingEffects {
         }),
         switchMap((searchParamsInterface: SearchParamsInterface) => {
             const url = GetFullRecordSearchApiUrl(searchParamsInterface);
+            console.log('url loading records from backend: ', url);
             return from(
                 this.http.get(url).pipe(
                     catchError(error => {
+                        console.log('error at loading records from backend', error);
                         this.snackbarService.showErrorSnackBar(
                             `error at loading records: ${error.error.detail}`
                         );
@@ -110,7 +112,7 @@ export class RecordsLoadingEffects {
                     mergeMap(response => {
                         const loadedRecords: Array<RestrictedRecord> = [];
                         console.log('response from record list: ', response);
-                        Object.values(response).map(record => {
+                        Object.values(response.results).map(record => {
                             // TODO: refactor, all are 'restricted' in full view
                             if (record['has_permission']) {
                                 loadedRecords.push(FullRecord.getFullRecordFromJson(record));
