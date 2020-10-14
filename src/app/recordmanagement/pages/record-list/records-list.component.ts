@@ -29,6 +29,7 @@ import {
 import { tap } from 'rxjs/internal/operators/tap';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
     selector: 'app-records',
@@ -39,13 +40,17 @@ export class RecordsListComponent implements OnInit, OnDestroy {
     timeout = 400;
 
     columns = ['access', 'token', 'state', 'consultants', 'tags'];
-    value = '';
+    searchValue = '';
     timer = null;
+
+    results_length = 0;
 
     subscriptions: Subscription[] = [];
 
     dataSource;
+
     @ViewChild(MatSort, { static: true }) sort: MatSort;
+    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
     constructor(
         private recordsSandbox: RecordsSandboxService,
@@ -54,12 +59,22 @@ export class RecordsListComponent implements OnInit, OnDestroy {
     ) {
         this.subscriptions.push(
             this.route.queryParamMap.subscribe(map => {
-                if (map.get('search')) {
-                    this.recordsSandbox.loadRecords(map.get('search'));
-                    this.value = map.get('search');
-                } else {
-                    this.recordsSandbox.loadRecords();
-                }
+                console.log('search: ', map.get('search'));
+                const params: SearchParamsInterface = {
+                    filter: map.get('search'),
+                    sort: map.get('sort'),
+                    sort_direction: map.get('sort_direction'),
+                    limit: Number(map.get('limit')),
+                    offset: Number(map.get('offset'))
+                };
+                this.recordsSandbox.startLoadingRecords(params);
+
+                // if (map.get('search')) {
+                //     this.recordsSandbox.loadRecords(map.get('search'));
+                //     this.searchValue = map.get('search');
+                // } else {
+                //     this.recordsSandbox.loadRecords();
+                // }
             })
         );
     }
@@ -71,33 +86,11 @@ export class RecordsListComponent implements OnInit, OnDestroy {
                 this.dataSource.sort = this.sort;
             })
         );
-
-        // this.records = this.recordsSandbox.getRecords().pipe(
-        //     tap(results => {
-        //         results.sort((a, b) => {
-        //             if (isRestrictedRecord(a) && !isRestrictedRecord(b)) {
-        //                 return 1;
-        //             } else if (
-        //                 !isRestrictedRecord(a) &&
-        //                 isRestrictedRecord(b)
-        //             ) {
-        //                 return -1;
-        //             }
-        //             return 0;
-        //         });
-        //         this.fullAccess = new Array(results.length).fill(false);
-        //         results.forEach((record: RestrictedRecord, index) => {
-        //             if (!isRestrictedRecord(record)) {
-        //                 this.fullAccess[index] = true;
-        //             }
-        //         });
-        //     })
-        // );
     }
 
     onSearchClick() {
-        if (this.value && this.value !== '') {
-            this.router.navigateByUrl(GetRecordSearchFrontUrl(this.value));
+        if (this.searchValue && this.searchValue !== '') {
+            this.router.navigateByUrl(GetRecordSearchFrontUrl(this.searchValue));
         } else this.router.navigateByUrl(`records`);
     }
 

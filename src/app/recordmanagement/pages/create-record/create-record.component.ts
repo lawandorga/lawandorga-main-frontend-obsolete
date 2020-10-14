@@ -89,9 +89,9 @@ export class CreateRecordComponent implements OnInit {
     ngOnInit() {}
 
     onClientBirthdayChange(event: MatDatepickerInputEvent<Date>) {
-        // const birthday = this.createRecordForm.get("client_birthday").value;
+        // const birthday = this.createRecordForm.get("client_birthday").searchValue;
         // if (birthday !== null){
-        //     this.recordSB.loadClientPossibilities(new Date(this.createRecordForm.get("client_birthday").value));
+        //     this.recordSB.loadClientPossibilities(new Date(this.createRecordForm.get("client_birthday").searchValue));
         //     this.openSelectClientDialog();
         // }
     }

@@ -43,7 +43,8 @@ import {
     RECORDS_STATICS_API_URL,
     RECORDS_API_URL,
     RECORD_DELETIONS_API_URL,
-    RECORD_POOL_API_URL
+    RECORD_POOL_API_URL,
+    GetFullRecordSearchApiUrl
 } from '../../../statics/api_urls.statics';
 import { FullRecord, RestrictedRecord } from '../../models/record.model';
 import {
@@ -96,8 +97,8 @@ export class RecordsLoadingEffects {
         map((action: StartLoadingRecords) => {
             return action.payload;
         }),
-        switchMap((searchString: string) => {
-            const url = searchString ? GetRecordsSearchApiURL(searchString) : RECORDS_API_URL;
+        switchMap((searchParamsInterface: SearchParamsInterface) => {
+            const url = GetFullRecordSearchApiUrl(searchParamsInterface);
             return from(
                 this.http.get(url).pipe(
                     catchError(error => {
@@ -108,6 +109,7 @@ export class RecordsLoadingEffects {
                     }),
                     mergeMap(response => {
                         const loadedRecords: Array<RestrictedRecord> = [];
+                        console.log('response from record list: ', response);
                         Object.values(response).map(record => {
                             // TODO: refactor, all are 'restricted' in full view
                             if (record['has_permission']) {

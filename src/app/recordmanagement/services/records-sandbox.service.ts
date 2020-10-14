@@ -89,7 +89,11 @@ export class RecordsSandboxService {
     ) {}
 
     loadRecords(searchString?: string) {
-        this.recordStore.dispatch(new StartLoadingRecords(searchString));
+        // this.recordStore.dispatch(new StartLoadingRecords(searchString));
+    }
+
+    startLoadingRecords(searchParams: SearchParamsInterface): void {
+        this.recordStore.dispatch(new StartLoadingRecords(searchParams));
     }
 
     getRecords(asArray: boolean = true): Observable<RestrictedRecord[] | any> {
