@@ -128,7 +128,6 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
                     }
                     this.coreSB.getUser().subscribe(user => {
                         for (const currentUser of this.record.working_on_record) {
-                            console.log('currentUser: ', currentUser['id']);
                             if (user.id === currentUser['id']) {
                                 this.user_working_on_record = true;
                             }
@@ -206,13 +205,10 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
             },
             (newToken: string) => {
                 if (newToken) {
-                    this.record.token = newToken;
-                    this.record.last_contact_date = CoreSandboxService.transformDate(
-                        this.recordEditForm.value['last_contact_date']
-                    );
-                    this.client.birthday = CoreSandboxService.transformDate(
-                        this.recordEditForm.value['client_birthday']
-                    );
+                    this.recordEditForm.value['token'] = newToken;
+                    const changes = this.recordEditForm.getChanges();
+                    this.recordSB.startSavingRecord(changes, this.record.id);
+                    this.startHash = this.recordEditForm.getHash();
                 }
             }
         );
@@ -276,6 +272,7 @@ class RecordFormGroup extends FormGroup {
     public current_user_working_on_record: boolean;
 
     fields = [
+        'token',
         'client_name',
         'client_birthday',
         'client_phone',
@@ -300,6 +297,7 @@ class RecordFormGroup extends FormGroup {
 
     constructor(private recordSB: RecordsSandboxService, private coreSB: CoreSandboxService) {
         super({
+            token: new FormControl(''),
             client_name: new FormControl(''),
             client_birthday: new FormControl('', [dateInPastValidator]),
             client_phone: new FormControl(''),
@@ -363,6 +361,11 @@ class RecordFormGroup extends FormGroup {
                 }
             }
         }
+        if (changes['record']['token']) {
+            changes['record']['record_token'] = changes['record']['token'];
+            delete changes['record']['token'];
+        }
+
         if (hash(this.recordState) !== this.org_hashes['record_state']) {
             changes['record']['state'] = this.recordState;
         }
