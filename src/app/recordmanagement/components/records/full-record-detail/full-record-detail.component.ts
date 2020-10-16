@@ -81,7 +81,6 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
 
     @HostListener('window:beforeunload', ['$event'])
     onWindowClose(event: any): void {
-        // Do something
         if (this.startHash !== this.recordEditForm.getHash()) {
             alert('unsaved content');
 
@@ -159,6 +158,7 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
     onSaveClick() {
         const changes = this.recordEditForm.getChanges();
         if (Object.keys(changes).length === 0) {
+            this.coreSB.showSuccessSnackBar('already saved everything');
         } else {
             this.recordSB.startSavingRecord(changes, this.record.id);
             this.startHash = this.recordEditForm.getHash();
@@ -368,6 +368,12 @@ class RecordFormGroup extends FormGroup {
         }
         if (hash(this.originCountry) !== this.org_hashes['origin_country']) {
             changes['client']['origin_country'] = this.originCountry.id;
+        }
+        if (Object.keys(changes['record']).length === 0) {
+            delete changes['record'];
+        }
+        if (Object.keys(changes['client']).length === 0) {
+            delete changes['client'];
         }
 
         return changes;
