@@ -290,8 +290,8 @@ export class RecordsLoadingEffects {
                                     response.record
                                 );
                                 return [
-                                    { type: SET_SPECIAL_RECORD, payload: record },
                                     { type: RESET_FULL_CLIENT_INFORMATION },
+                                    { type: SET_SPECIAL_RECORD, payload: record },
                                     {
                                         type: SET_SPECIAL_RECORD_REQUEST_STATE,
                                         payload: response.request_state
