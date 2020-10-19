@@ -40,6 +40,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 import { NotificationGroup } from '../../../core/models/notification_group.model';
+import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
 
 @Component({
     selector: 'app-records',
@@ -64,6 +65,7 @@ export class RecordsListComponent implements OnInit, OnDestroy, AfterViewInit {
 
     constructor(
         private recordsSandbox: RecordsSandboxService,
+        private coreSB: CoreSandboxService,
         private route: ActivatedRoute,
         private router: Router
     ) {}
@@ -112,6 +114,11 @@ export class RecordsListComponent implements OnInit, OnDestroy, AfterViewInit {
         this.subscriptions.push(
             this.recordsSandbox.getRecords(false).subscribe((records: RestrictedRecord[]) => {
                 this.dataSource = records;
+            })
+        );
+        this.subscriptions.push(
+            this.coreSB.getResultsLength().subscribe((results_length: number) => {
+                this.results_length = results_length;
             })
         );
     }

@@ -52,11 +52,7 @@ export const GetRecordSearchFrontUrl = (searchTerm: string): string => {
 };
 
 export const GetRecordListFrontUrl = (searchParams: SearchParamsInterface) => {
-    const url = GenerateSearchAppendix(RECORDS_FRONT_URL, searchParams);
-    console.log('new frontend url: ', url);
-    return url;
-
-    // return `${RECORDS_FRONT_URL}?filter=${searchParams.filter}`;
+    return GenerateSearchAppendix(RECORDS_FRONT_URL, searchParams);
 };
 
 export const GetRecordFrontUrl = (record: TokenRecord | string): string => {

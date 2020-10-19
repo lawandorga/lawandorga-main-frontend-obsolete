@@ -80,6 +80,7 @@ import { RecordPermissionRequest } from '../../models/record_permission.model';
 import { SnackbarService } from '../../../shared/services/snackbar.service';
 import { State } from '../../../core/models/state.model';
 import { RecordDeletionRequest } from '../../models/record_deletion_request.model';
+import { SET_RESULTS_LENGTH } from '../../../core/store/core.actions';
 
 @Injectable()
 export class RecordsLoadingEffects {
@@ -98,7 +99,6 @@ export class RecordsLoadingEffects {
         }),
         switchMap((searchParamsInterface: SearchParamsInterface) => {
             const url = GetFullRecordSearchApiUrl(searchParamsInterface);
-            console.log('url loading records from backend: ', url);
             return from(
                 this.http.get(url).pipe(
                     catchError(error => {
@@ -119,7 +119,10 @@ export class RecordsLoadingEffects {
                                 );
                             }
                         });
-                        return [{ type: SET_RECORDS, payload: loadedRecords }];
+                        return [
+                            { type: SET_RECORDS, payload: loadedRecords },
+                            { type: SET_RESULTS_LENGTH, payload: response.count }
+                        ];
                     })
                 )
             );
@@ -292,7 +295,6 @@ export class RecordsLoadingEffects {
                                 );
                                 return [
                                     { type: SET_SPECIAL_RECORD, payload: record },
-                                    { type: RESET_FULL_CLIENT_INFORMATION },
                                     {
                                         type: SET_SPECIAL_RECORD_REQUEST_STATE,
                                         payload: response.request_state
