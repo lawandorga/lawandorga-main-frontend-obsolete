@@ -20,7 +20,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Location } from '@angular/common';
-import { catchError, mergeMap, take, tap } from 'rxjs/operators';
+import { take, tap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
@@ -80,17 +80,12 @@ export class RecordsSandboxService {
     constructor(
         private router: Router,
         private recordStore: Store<RecordsState>,
-        private coreStateStore: Store<CoreState>,
         private coreSB: CoreSandboxService,
         private snackbarService: SnackbarService,
         private storageService: StorageService,
         private location: Location,
         private http: HttpClient
     ) {}
-
-    loadRecords(searchString?: string) {
-        // this.recordStore.dispatch(new StartLoadingRecords(searchString));
-    }
 
     startLoadingRecords(searchParams: SearchParamsInterface): void {
         this.recordStore.dispatch(new StartLoadingRecords(searchParams));

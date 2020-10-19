@@ -16,30 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import {
-    AfterViewInit,
-    Component,
-    EventEmitter,
-    OnDestroy,
-    OnInit,
-    ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { RecordsSandboxService } from '../../services/records-sandbox.service';
-import { merge, Observable, of, Subscription } from 'rxjs';
-import { isRestrictedRecord, RestrictedRecord } from '../../models/record.model';
+import { Subscription } from 'rxjs';
+import { RestrictedRecord } from '../../models/record.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Tag } from '../../models/tag.model';
-import {
-    GetRecordFrontUrl,
-    GetRecordListFrontUrl,
-    GetRecordSearchFrontUrl
-} from '../../../statics/frontend_links.statics';
-import { tap } from 'rxjs/internal/operators/tap';
+import { GetRecordFrontUrl, GetRecordListFrontUrl } from '../../../statics/frontend_links.statics';
 import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { catchError, map, startWith, switchMap } from 'rxjs/operators';
-import { NotificationGroup } from '../../../core/models/notification_group.model';
 import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
 
 @Component({
