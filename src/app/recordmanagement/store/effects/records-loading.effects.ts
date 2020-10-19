@@ -80,7 +80,6 @@ import { RecordPermissionRequest } from '../../models/record_permission.model';
 import { SnackbarService } from '../../../shared/services/snackbar.service';
 import { State } from '../../../core/models/state.model';
 import { RecordDeletionRequest } from '../../models/record_deletion_request.model';
-import { AuthState } from '../../../core/store/auth/auth.reducers';
 
 @Injectable()
 export class RecordsLoadingEffects {
@@ -111,10 +110,8 @@ export class RecordsLoadingEffects {
                     }),
                     mergeMap(response => {
                         const loadedRecords: Array<RestrictedRecord> = [];
-                        console.log('response from record list: ', response);
                         Object.values(response.results).map(record => {
-                            // TODO: refactor, all are 'restricted' in full view
-                            if (record['has_permission']) {
+                            if (record['access'] === 1) {
                                 loadedRecords.push(FullRecord.getFullRecordFromJson(record));
                             } else {
                                 loadedRecords.push(

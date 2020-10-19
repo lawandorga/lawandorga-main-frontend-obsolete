@@ -82,7 +82,6 @@ export const GetRecordsSearchApiURL = (toSearch: string) => {
 export const GenerateSearchAppendix = (urlPrefix: string, searchParams: SearchParamsInterface) => {
     let urlAppendix = '';
     let first = true;
-    console.log('searchParams: ', searchParams);
     if (searchParams.filter) {
         urlAppendix += `filter=${searchParams.filter}`;
         first = false;
@@ -113,76 +112,20 @@ export const GenerateSearchAppendix = (urlPrefix: string, searchParams: SearchPa
             urlAppendix += '&';
         }
         urlAppendix += `sortdirection=${searchParams.sort_direction}`;
+        first = false;
     }
 
-    // return first
-    //     ? `${urlPrefix}`
-    //     : urlPrefix.endsWith('/')
-    //     ? `${urlPrefix.substr(0, urlPrefix.length - 1)}?${urlAppendix}`
-    //     : `${urlPrefix}?${urlAppendix}`;
-
     return first ? `${urlPrefix}` : `${urlPrefix}?${urlAppendix}`;
-
-    // if (urlPrefix.endsWith('/')) {
-    //     return first
-    //         ? `${urlPrefix}`
-    //         : `${urlPrefix.substr(0, urlPrefix.length - 1)}?${urlAppendix}`;
-    // }
 };
 
 export const GetFullRecordSearchApiUrl = (searchParams: SearchParamsInterface) => {
-    // let urlAppendix = '';
-    // let first = true;
-    console.log('searchParams (api): ', searchParams);
-    // if (searchParams.filter) {
-    //     urlAppendix += `filter=${searchParams.filter}`;
-    //     first = false;
-    // }
-    // if (searchParams.limit) {
-    //     if (!first) {
-    //         urlAppendix += '&';
-    //     }
-    //     urlAppendix += `limit=${searchParams.limit}`;
-    //     first = false;
-    // }
-    // if (searchParams.offset) {
-    //     if (!first) {
-    //         urlAppendix += '&';
-    //     }
-    //     urlAppendix += `offset=${searchParams.offset}`;
-    //     first = false;
-    // }
-    // if (searchParams.sort) {
-    //     if (!first) {
-    //         urlAppendix += '&';
-    //     }
-    //     urlAppendix += `sort=${searchParams.sort}`;
-    //     first = false;
-    // }
-    // if (searchParams.sort_direction) {
-    //     if (!first) {
-    //         urlAppendix += '&';
-    //     }
-    //     urlAppendix += `sortdirection=${searchParams.sort_direction}`;
-    // }
-    // console.log(
-    //     'url to reach for: ',
-    //     first
-    //         ? `${RECORDS_API_URL}`
-    //         : `${RECORDS_API_URL.substr(0, RECORDS_API_URL.length - 1)}?${urlAppendix}`
-    // );
-    // return first ? `${RECORDS_API_URL}` : `${RECORDS_API_URL}?${urlAppendix}`;
     if (!searchParams.limit) {
-        console.log('make page size up');
         searchParams = {
             ...searchParams,
-            limit: 5
+            limit: 10
         };
     }
-
-    const url = GenerateSearchAppendix(RECORDS_API_URL, searchParams);
-    console.log('api url: ', url);
-    return url;
+    return GenerateSearchAppendix(RECORDS_API_URL, searchParams);
 };
 
 export const GetSpecialRecordApiURL = (id: string | number) => {

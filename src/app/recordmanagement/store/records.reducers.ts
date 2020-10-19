@@ -70,7 +70,7 @@ export interface RecordsState {
         record_permission_requests: { [id: number]: RecordPermissionRequest };
         record_deletion_requests: { [id: number]: RecordDeletionRequest };
     };
-    records: { [id: number]: RestrictedRecord };
+    records: RestrictedRecord[];
     consultants: { [id: number]: RestrictedUser };
     origin_countries: { [id: number]: OriginCountry };
     record_tags: { [id: number]: Tag };
@@ -96,7 +96,7 @@ export const initialState: RecordsState = {
         record_permission_requests: {},
         record_deletion_requests: {}
     },
-    records: {},
+    records: null,
     consultants: {},
     origin_countries: {},
     record_tags: {},
@@ -138,7 +138,7 @@ export function recordsReducer(state = initialState, action: RecordsActions) {
         case SET_RECORDS:
             return {
                 ...state,
-                records: getIdObjects(action.payload)
+                records: action.payload
             };
         case SET_CONSULTANTS:
             return {

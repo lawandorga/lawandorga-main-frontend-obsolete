@@ -93,19 +93,24 @@ export class RecordsListComponent implements OnInit, OnDestroy, AfterViewInit {
             this.route.queryParamMap.subscribe(queryParams => {
                 // console.log('search: ', queryParams.get('search'));
                 this.searchValue = queryParams.get('filter');
+                this.paginator.pageSize = Number(queryParams.get('limit'));
                 this.searchParams = {
                     filter: queryParams.get('filter'),
                     sort: queryParams.get('sort'),
-                    sort_direction: queryParams.get('sort_direction'),
+                    sort_direction: queryParams.get('sortdirection'),
                     limit: Number(queryParams.get('limit')),
                     offset: Number(queryParams.get('offset'))
                 };
+                if (this.searchParams.sort === 'token') {
+                    this.searchParams.sort = 'record_token';
+                }
+                // console.log('search params: ', this.searchParams);
                 this.recordsSandbox.startLoadingRecords(this.searchParams);
             })
         );
 
         this.subscriptions.push(
-            this.recordsSandbox.getRecords().subscribe((records: RestrictedRecord[]) => {
+            this.recordsSandbox.getRecords(false).subscribe((records: RestrictedRecord[]) => {
                 this.dataSource = records;
             })
         );
