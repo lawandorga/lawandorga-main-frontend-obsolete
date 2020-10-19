@@ -20,6 +20,7 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { RecordsSandboxService } from '../../../../services/records-sandbox.service';
 import { RecordDocument } from '../../../../models/record_document.model';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { SharedSandboxService } from '../../../../../shared/services/shared-sandbox.service';
 
 @Component({
     selector: 'app-record-documents-list',
@@ -37,13 +38,13 @@ export class RecordDocumentsListComponent implements OnInit {
     @Input()
     documents: RecordDocument[];
 
-    columns = ['name', 'tags', 'date', 'download'];
+    columns = ['name', 'tags', 'date', 'actions'];
     expandedElement: RecordDocument | null;
 
     @ViewChild('fileInput', { static: true })
     fileInput: ElementRef<HTMLInputElement>;
 
-    constructor(private recordSB: RecordsSandboxService) {}
+    constructor(private recordSB: RecordsSandboxService, private sharedSB: SharedSandboxService) {}
 
     ngOnInit() {}
 
@@ -59,9 +60,41 @@ export class RecordDocumentsListComponent implements OnInit {
         this.recordSB.uploadRecordDocuments(files);
     }
 
-    onDocumentClick(document: RecordDocument, $event) {
+    onDocumentDownloadClick(document: RecordDocument, $event): void {
         $event.stopPropagation();
         this.recordSB.downloadRecordDocument(document);
+    }
+
+    onDocumentDeleteClick(document: RecordDocument, $event): void {
+        $event.stopPropagation();
+
+        this.sharedSB.openEditTextDialog(
+            {
+                short: false,
+                descriptionLabel: 'record document deletion',
+                text: '',
+                descriptionText: 'please explain why you want to delete this document',
+                saveLabel: 'delete',
+                saveColor: 'warn'
+            },
+            (deletion_description: string) => {
+                this.sharedSB.openConfirmDialog(
+                    {
+                        description: 'are you sure you want to delete this document?',
+                        confirmLabel: 'delete',
+                        confirmColor: 'warn'
+                    },
+                    (delete_record: boolean) => {
+                        if (delete_record) {
+                            this.recordSB.startRequestingRecordDocumentDeletion(
+                                document,
+                                deletion_description
+                            );
+                        }
+                    }
+                );
+            }
+        );
     }
 
     dragover($event) {

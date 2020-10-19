@@ -127,6 +127,10 @@ export class CoreSandboxService {
         });
     }
 
+    getResultsLength(): Observable<number> {
+        return this.coreStateStore.pipe(select((state: any) => state.core.results_length));
+    }
+
     hasPermissionFromString(
         permission: string,
         subscriberCallback,

@@ -43,7 +43,8 @@ import {
     RECORDS_STATICS_API_URL,
     RECORDS_API_URL,
     RECORD_DELETIONS_API_URL,
-    RECORD_POOL_API_URL
+    RECORD_POOL_API_URL,
+    GetFullRecordSearchApiUrl
 } from '../../../statics/api_urls.statics';
 import { FullRecord, RestrictedRecord } from '../../models/record.model';
 import {
@@ -79,7 +80,7 @@ import { RecordPermissionRequest } from '../../models/record_permission.model';
 import { SnackbarService } from '../../../shared/services/snackbar.service';
 import { State } from '../../../core/models/state.model';
 import { RecordDeletionRequest } from '../../models/record_deletion_request.model';
-import { AuthState } from '../../../core/store/auth/auth.reducers';
+import { SET_RESULTS_LENGTH } from '../../../core/store/core.actions';
 
 @Injectable()
 export class RecordsLoadingEffects {
@@ -96,11 +97,12 @@ export class RecordsLoadingEffects {
         map((action: StartLoadingRecords) => {
             return action.payload;
         }),
-        switchMap((searchString: string) => {
-            const url = searchString ? GetRecordsSearchApiURL(searchString) : RECORDS_API_URL;
+        switchMap((searchParamsInterface: SearchParamsInterface) => {
+            const url = GetFullRecordSearchApiUrl(searchParamsInterface);
             return from(
                 this.http.get(url).pipe(
                     catchError(error => {
+                        console.log('error at loading records from backend', error);
                         this.snackbarService.showErrorSnackBar(
                             `error at loading records: ${error.error.detail}`
                         );
@@ -108,9 +110,8 @@ export class RecordsLoadingEffects {
                     }),
                     mergeMap(response => {
                         const loadedRecords: Array<RestrictedRecord> = [];
-                        Object.values(response).map(record => {
-                            // TODO: refactor, all are 'restricted' in full view
-                            if (record['has_permission']) {
+                        Object.values(response.results).map(record => {
+                            if (record['access'] === 1) {
                                 loadedRecords.push(FullRecord.getFullRecordFromJson(record));
                             } else {
                                 loadedRecords.push(
@@ -118,7 +119,10 @@ export class RecordsLoadingEffects {
                                 );
                             }
                         });
-                        return [{ type: SET_RECORDS, payload: loadedRecords }];
+                        return [
+                            { type: SET_RECORDS, payload: loadedRecords },
+                            { type: SET_RESULTS_LENGTH, payload: response.count }
+                        ];
                     })
                 )
             );
@@ -290,7 +294,6 @@ export class RecordsLoadingEffects {
                                     response.record
                                 );
                                 return [
-                                    { type: RESET_FULL_CLIENT_INFORMATION },
                                     { type: SET_SPECIAL_RECORD, payload: record },
                                     {
                                         type: SET_SPECIAL_RECORD_REQUEST_STATE,

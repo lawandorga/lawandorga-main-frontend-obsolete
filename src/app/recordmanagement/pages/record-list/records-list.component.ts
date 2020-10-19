@@ -16,88 +16,105 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { RecordsSandboxService } from '../../services/records-sandbox.service';
-import { Observable, Subscription } from 'rxjs';
-import { isRestrictedRecord, RestrictedRecord } from '../../models/record.model';
+import { Subscription } from 'rxjs';
+import { RestrictedRecord } from '../../models/record.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Tag } from '../../models/tag.model';
-import {
-    GetRecordFrontUrl,
-    GetRecordSearchFrontUrl
-} from '../../../statics/frontend_links.statics';
-import { tap } from 'rxjs/internal/operators/tap';
+import { GetRecordFrontUrl, GetRecordListFrontUrl } from '../../../statics/frontend_links.statics';
 import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
 
 @Component({
     selector: 'app-records',
     templateUrl: './records-list.component.html',
     styleUrls: ['./records-list.component.scss']
 })
-export class RecordsListComponent implements OnInit, OnDestroy {
+export class RecordsListComponent implements OnInit, OnDestroy, AfterViewInit {
     timeout = 400;
+    timer = null;
 
     columns = ['access', 'token', 'state', 'consultants', 'tags'];
-    value = '';
-    timer = null;
 
     subscriptions: Subscription[] = [];
 
-    dataSource;
+    dataSource: RestrictedRecord[] = [];
+    searchValue = '';
+    results_length = 0;
+    searchParams: SearchParamsInterface;
+
     @ViewChild(MatSort, { static: true }) sort: MatSort;
+    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
     constructor(
         private recordsSandbox: RecordsSandboxService,
+        private coreSB: CoreSandboxService,
         private route: ActivatedRoute,
         private router: Router
-    ) {
-        this.subscriptions.push(
-            this.route.queryParamMap.subscribe(map => {
-                if (map.get('search')) {
-                    this.recordsSandbox.loadRecords(map.get('search'));
-                    this.value = map.get('search');
-                } else {
-                    this.recordsSandbox.loadRecords();
-                }
-            })
-        );
+    ) {}
+
+    ngAfterViewInit() {
+        this.sort.sortChange.subscribe(event => {
+            this.searchParams = {
+                ...this.searchParams,
+                sort: this.sort.active,
+                sort_direction: this.sort.direction
+            };
+            this.router.navigateByUrl(GetRecordListFrontUrl(this.searchParams));
+        });
+
+        this.paginator.page.subscribe(event => {
+            this.searchParams = {
+                ...this.searchParams,
+                offset: this.paginator.pageSize * this.paginator.pageIndex,
+                limit: this.paginator.pageSize
+            };
+            this.router.navigateByUrl(GetRecordListFrontUrl(this.searchParams));
+        });
     }
 
     ngOnInit() {
         this.subscriptions.push(
-            this.recordsSandbox.getRecords().subscribe(records => {
-                this.dataSource = new MatTableDataSource(records);
-                this.dataSource.sort = this.sort;
+            this.route.queryParamMap.subscribe(queryParams => {
+                // console.log('search: ', queryParams.get('search'));
+                this.searchValue = queryParams.get('filter');
+                this.paginator.pageSize = Number(queryParams.get('limit'));
+                this.searchParams = {
+                    filter: queryParams.get('filter'),
+                    sort: queryParams.get('sort'),
+                    sort_direction: queryParams.get('sortdirection'),
+                    limit: Number(queryParams.get('limit')),
+                    offset: Number(queryParams.get('offset'))
+                };
+                if (this.searchParams.sort === 'token') {
+                    this.searchParams.sort = 'record_token';
+                }
+                // console.log('search params: ', this.searchParams);
+                this.recordsSandbox.startLoadingRecords(this.searchParams);
             })
         );
 
-        // this.records = this.recordsSandbox.getRecords().pipe(
-        //     tap(results => {
-        //         results.sort((a, b) => {
-        //             if (isRestrictedRecord(a) && !isRestrictedRecord(b)) {
-        //                 return 1;
-        //             } else if (
-        //                 !isRestrictedRecord(a) &&
-        //                 isRestrictedRecord(b)
-        //             ) {
-        //                 return -1;
-        //             }
-        //             return 0;
-        //         });
-        //         this.fullAccess = new Array(results.length).fill(false);
-        //         results.forEach((record: RestrictedRecord, index) => {
-        //             if (!isRestrictedRecord(record)) {
-        //                 this.fullAccess[index] = true;
-        //             }
-        //         });
-        //     })
-        // );
+        this.subscriptions.push(
+            this.recordsSandbox.getRecords(false).subscribe((records: RestrictedRecord[]) => {
+                this.dataSource = records;
+            })
+        );
+        this.subscriptions.push(
+            this.coreSB.getResultsLength().subscribe((results_length: number) => {
+                this.results_length = results_length;
+            })
+        );
     }
 
     onSearchClick() {
-        if (this.value && this.value !== '') {
-            this.router.navigateByUrl(GetRecordSearchFrontUrl(this.value));
+        if (this.searchValue && this.searchValue !== '') {
+            this.searchParams = {
+                ...this.searchParams,
+                filter: this.searchValue
+            };
+            this.router.navigateByUrl(GetRecordListFrontUrl(this.searchParams));
         } else this.router.navigateByUrl(`records`);
     }
 
@@ -115,7 +132,11 @@ export class RecordsListComponent implements OnInit, OnDestroy {
     }
 
     onTagClick(tag: Tag) {
-        this.router.navigateByUrl(GetRecordSearchFrontUrl(tag.name));
+        this.searchParams = {
+            ...this.searchParams,
+            filter: tag.name
+        };
+        this.router.navigateByUrl(GetRecordListFrontUrl(this.searchParams));
     }
 
     ngOnDestroy() {

@@ -70,6 +70,7 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
 
     settingsSubscription: Subscription;
     specialRecordSubscription: Subscription;
+    userSubscription: Subscription;
 
     constructor(
         private recordSB: RecordsSandboxService,
@@ -90,9 +91,11 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
     }
 
     ngOnDestroy() {
+        if (this.settingsSubscription) this.settingsSubscription.unsubscribe();
+        if (this.specialRecordSubscription) this.specialRecordSubscription.unsubscribe();
+        if (this.userSubscription) this.userSubscription.unsubscribe();
+
         this.recordSB.resetFullClientInformation();
-        this.settingsSubscription.unsubscribe();
-        this.specialRecordSubscription.unsubscribe();
     }
 
     ngOnInit() {
@@ -126,7 +129,7 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
                     if (this.client && this.record) {
                         this.loadValues();
                     }
-                    this.coreSB.getUser().subscribe(user => {
+                   this.userSubscription = this.coreSB.getUser().subscribe(user => {
                         if (this.record) {
                             for (const currentUser of this.record.working_on_record) {
                                 if (user.id === currentUser['id']) {
@@ -175,7 +178,7 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
     }
 
     onSelectedRecordTagsChanged(newTags: Tag[]): void {
-        this.record.tags = newTags;
+        this.recordEditForm.record_tags = newTags;
         if (newTags.length === 0) {
             this.recordTagErrors = { null: 'true' };
         } else {
@@ -272,6 +275,7 @@ class RecordFormGroup extends FormGroup {
     public recordState: State;
     public working_on_record: RestrictedUser[];
     public current_user_working_on_record: boolean;
+    public record_tags: Tag[];
 
     fields = [
         'token',
@@ -340,8 +344,12 @@ class RecordFormGroup extends FormGroup {
 
         this.originCountry = this.recordSB.getOriginCountryById(client.origin_country);
         this.org_hashes['origin_country'] = hash(this.originCountry);
+
         this.recordState = this.recordSB.getRecordStateByAbbreviation(record.state);
         this.org_hashes['record_state'] = hash(this.recordState);
+
+        this.record_tags = record.tags;
+        this.org_hashes['record_tags'] = hash(this.record_tags);
 
         this.coreSB.getUser().subscribe(user => {
             record.working_on_record.forEach(currentUser => {
@@ -373,6 +381,9 @@ class RecordFormGroup extends FormGroup {
         }
         if (hash(this.originCountry) !== this.org_hashes['origin_country']) {
             changes['client']['origin_country'] = this.originCountry.id;
+        }
+        if (hash(this.record_tags) !== this.org_hashes['record_tags']) {
+            changes['record']['tagged'] = this.originCountry.id;
         }
         if (Object.keys(changes['record']).length === 0) {
             delete changes['record'];

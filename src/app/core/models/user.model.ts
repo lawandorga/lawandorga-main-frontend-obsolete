@@ -35,7 +35,7 @@ export class RestrictedUser implements Filterable {
 
     static getRestrictedUserFromJson(json): RestrictedUser {
         if (json) return new RestrictedUser(json.id, json.name);
-        return null;
+        return new RestrictedUser('-1', 'DELETED');
     }
 
     getFilterableProperty() {

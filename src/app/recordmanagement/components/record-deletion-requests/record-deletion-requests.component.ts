@@ -33,7 +33,7 @@ import { RecordPermissionRequest } from '../../models/record_permission.model';
 export class RecordDeletionRequestsComponent implements OnInit {
     recordDeletionRequests: Observable<RecordDeletionRequest[]>;
 
-    toProcessColumns = ['request_from', 'record', 'requested', 'state', 'explanation', 'accept'];
+    toProcessColumns = ['request_from', 'record', 'requested', 'explanation', 'accept'];
 
     alreadyProcessedColumns = [
         'request_from',

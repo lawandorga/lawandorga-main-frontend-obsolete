@@ -18,16 +18,31 @@
 
 import { Tag } from './tag.model';
 
-export class RecordDocument {
+export class NameRecordDocument {
+    constructor(public id: number, public name: string) {
+        this.id = id;
+        this.name = name;
+    }
+
+    static getNameRecordDocumentFromJson(json) {
+        if (!json) {
+            return new NameRecordDocument(-1, 'DELETED');
+        }
+        return new NameRecordDocument(json.id, json.name);
+    }
+}
+
+export class RecordDocument extends NameRecordDocument {
     constructor(
-        public id: number,
-        public name: string,
+        id: number,
+        name: string,
         public creator: string,
         public created_on: Date,
         public last_edited: Date,
         public file_size: number,
         public tags: Tag[]
     ) {
+        super(id, name);
         this.id = id;
         this.name = name;
         this.creator = creator;
