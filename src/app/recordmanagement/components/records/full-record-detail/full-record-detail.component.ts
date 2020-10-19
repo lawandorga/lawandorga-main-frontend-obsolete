@@ -82,7 +82,6 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
 
     @HostListener('window:beforeunload', ['$event'])
     onWindowClose(event: any): void {
-        // Do something
         if (this.startHash !== this.recordEditForm.getHash()) {
             alert('unsaved content');
 
@@ -130,10 +129,12 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
                     if (this.client && this.record) {
                         this.loadValues();
                     }
-                    this.userSubscription = this.coreSB.getUser().subscribe(user => {
-                        for (const currentUser of this.record.working_on_record) {
-                            if (user.id === currentUser['id']) {
-                                this.user_working_on_record = true;
+                   this.userSubscription = this.coreSB.getUser().subscribe(user => {
+                        if (this.record) {
+                            for (const currentUser of this.record.working_on_record) {
+                                if (user.id === currentUser['id']) {
+                                    this.user_working_on_record = true;
+                                }
                             }
                         }
                     });
@@ -161,6 +162,7 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
     onSaveClick() {
         const changes = this.recordEditForm.getChanges();
         if (Object.keys(changes).length === 0) {
+            this.coreSB.showSuccessSnackBar('already saved everything');
         } else {
             this.recordSB.startSavingRecord(changes, this.record.id);
             this.startHash = this.recordEditForm.getHash();
@@ -208,13 +210,10 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
             },
             (newToken: string) => {
                 if (newToken) {
-                    this.record.token = newToken;
-                    this.record.last_contact_date = CoreSandboxService.transformDate(
-                        this.recordEditForm.value['last_contact_date']
-                    );
-                    this.client.birthday = CoreSandboxService.transformDate(
-                        this.recordEditForm.value['client_birthday']
-                    );
+                    this.recordEditForm.value['token'] = newToken;
+                    const changes = this.recordEditForm.getChanges();
+                    this.recordSB.startSavingRecord(changes, this.record.id);
+                    this.startHash = this.recordEditForm.getHash();
                 }
             }
         );
@@ -279,6 +278,7 @@ class RecordFormGroup extends FormGroup {
     public record_tags: Tag[];
 
     fields = [
+        'token',
         'client_name',
         'client_birthday',
         'client_phone',
@@ -303,6 +303,7 @@ class RecordFormGroup extends FormGroup {
 
     constructor(private recordSB: RecordsSandboxService, private coreSB: CoreSandboxService) {
         super({
+            token: new FormControl(''),
             client_name: new FormControl(''),
             client_birthday: new FormControl('', [dateInPastValidator]),
             client_phone: new FormControl(''),
@@ -370,6 +371,11 @@ class RecordFormGroup extends FormGroup {
                 }
             }
         }
+        if (changes['record']['token']) {
+            changes['record']['record_token'] = changes['record']['token'];
+            delete changes['record']['token'];
+        }
+
         if (hash(this.recordState) !== this.org_hashes['record_state']) {
             changes['record']['state'] = this.recordState;
         }
@@ -378,6 +384,12 @@ class RecordFormGroup extends FormGroup {
         }
         if (hash(this.record_tags) !== this.org_hashes['record_tags']) {
             changes['record']['tagged'] = this.originCountry.id;
+        }
+        if (Object.keys(changes['record']).length === 0) {
+            delete changes['record'];
+        }
+        if (Object.keys(changes['client']).length === 0) {
+            delete changes['client'];
         }
 
         return changes;

@@ -54,7 +54,7 @@ export class RecordComponent implements OnInit, HasUnsaved, OnDestroy {
         });
     }
 
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.recordSB.resetFullClientInformation();
     }
 
