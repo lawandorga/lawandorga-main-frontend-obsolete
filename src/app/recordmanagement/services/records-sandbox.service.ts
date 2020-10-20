@@ -20,8 +20,9 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Location } from '@angular/common';
-import { take } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { take, tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 import { RecordsState } from '../store/records.reducers';
 import {
@@ -62,6 +63,11 @@ import { RECORDS_FRONT_URL } from '../../statics/frontend_links.statics';
 import { State } from '../../core/models/state.model';
 import { RecordDeletionRequest } from '../models/record_deletion_request.model';
 import { RecordDocument } from '../models/record_document.model';
+import {
+    PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS,
+    RECORD_DOCUMENT_DELETIONS_API_URL
+} from '../../statics/api_urls.statics';
+import { RecordDocumentDeletionRequest } from '../models/reocrd_document_deletion_request.model';
 
 @Injectable({
     providedIn: 'root'
@@ -74,15 +80,15 @@ export class RecordsSandboxService {
     constructor(
         private router: Router,
         private recordStore: Store<RecordsState>,
-        private coreStateStore: Store<CoreState>,
         private coreSB: CoreSandboxService,
         private snackbarService: SnackbarService,
         private storageService: StorageService,
-        private location: Location
+        private location: Location,
+        private http: HttpClient
     ) {}
 
-    loadRecords(searchString?: string) {
-        this.recordStore.dispatch(new StartLoadingRecords(searchString));
+    startLoadingRecords(searchParams: SearchParamsInterface): void {
+        this.recordStore.dispatch(new StartLoadingRecords(searchParams));
     }
 
     getRecords(asArray: boolean = true): Observable<RestrictedRecord[] | any> {
@@ -228,7 +234,7 @@ export class RecordsSandboxService {
         this.recordStore.dispatch(new StartYieldingRecord(record));
     }
 
-    resetPossibleClients() {
+    resetPossibleClients(): void {
         this.recordStore.dispatch(new ResetPossibleClients());
     }
 
@@ -247,7 +253,7 @@ export class RecordsSandboxService {
         originCountry: OriginCountry,
         consultants: RestrictedUser[],
         tags: Tag[]
-    ) {
+    ): void {
         const newRecord = {
             //...newRecord,
             client_birthday: CoreSandboxService.transformDateToString(
@@ -269,24 +275,24 @@ export class RecordsSandboxService {
         this.recordStore.dispatch(new StartAddingNewRecord(newRecord));
     }
 
-    successfullyCreatedRecord(response: any) {
+    successfullyCreatedRecord(response: any): void {
         this.coreSB.showSuccessSnackBar('you successfully created the record');
         this.router.navigate([RECORDS_FRONT_URL]);
         // do more
     }
 
-    successfullySavedRecord(response: any) {
+    successfullySavedRecord(response: any): void {
         this.coreSB.showSuccessSnackBar('you successfully saved the record');
         // do more
     }
 
-    startSavingRecord(toSave: any, record_id: number) {
+    startSavingRecord(toSave: any, record_id: number): void {
         this.recordStore.dispatch(
             new StartSavingRecord({ data: toSave, id: record_id.toString() })
         );
     }
 
-    goBack() {
+    goBack(): void {
         this.location.back();
     }
 
@@ -305,11 +311,11 @@ export class RecordsSandboxService {
         });
     }
 
-    downloadRecordDocument(document: RecordDocument) {
+    downloadRecordDocument(document: RecordDocument): void {
         this.storageService.downloadEncryptedRecordDocument(document);
     }
 
-    downloadAllRecordDocuments() {
+    downloadAllRecordDocuments(): void {
         let record_id = null;
         let record_token = null;
         this.recordStore
@@ -321,11 +327,11 @@ export class RecordsSandboxService {
         this.storageService.downloadAllEncryptedRecordDocuments(record_id, record_token);
     }
 
-    startAddingNewRecordMessage(message: string) {
+    startAddingNewRecordMessage(message: string): void {
         this.recordStore.dispatch(new StartAddingNewRecordMessage(message));
     }
 
-    showError(error_message: string) {
+    showError(error_message: string): void {
         this.coreSB.showErrorSnackBar(error_message);
     }
 
@@ -333,12 +339,12 @@ export class RecordsSandboxService {
         this.recordStore.dispatch(new StartSettingRecordDocumentTags({ tags, document_id }));
     }
 
-    startRequestReadPermission(restrictedRecord: RestrictedRecord) {
+    startRequestReadPermission(restrictedRecord: RestrictedRecord): void {
         this.recordStore.dispatch(new StartRequestingReadPermission(restrictedRecord));
         this.recordStore.dispatch(new SetSpecialRecordRequestState('re'));
     }
 
-    startLoadingRecordPermissionRequests() {
+    startLoadingRecordPermissionRequests(): void {
         this.recordStore.dispatch(new StartLoadingRecordPermissionRequests());
     }
 
@@ -359,15 +365,15 @@ export class RecordsSandboxService {
         );
     }
 
-    admitRecordPermissionRequest(request: RecordPermissionRequest) {
+    admitRecordPermissionRequest(request: RecordPermissionRequest): void {
         this.recordStore.dispatch(new StartAdmittingRecordPermissionRequest(request));
     }
 
-    declineRecordPermissionRequest(request: RecordPermissionRequest) {
+    declineRecordPermissionRequest(request: RecordPermissionRequest): void {
         this.recordStore.dispatch(new StartDecliningRecordPermissionRequest(request));
     }
 
-    resetFullClientInformation() {
+    resetFullClientInformation(): void {
         this.recordStore.dispatch(new ResetFullClientInformation());
     }
 
@@ -377,11 +383,11 @@ export class RecordsSandboxService {
         );
     }
 
-    startRequestingRecordDeletion(record: RestrictedRecord, explanation: string) {
+    startRequestingRecordDeletion(record: RestrictedRecord, explanation: string): void {
         this.recordStore.dispatch(new StartRequestingRecordDeletion({ record, explanation }));
     }
 
-    startLoadingRecordDeletionRequests() {
+    startLoadingRecordDeletionRequests(): void {
         this.recordStore.dispatch(new StartLoadingRecordDeletionRequests());
     }
 
@@ -394,13 +400,13 @@ export class RecordsSandboxService {
         );
     }
 
-    declineRecordDeletionRequest(request: RecordDeletionRequest) {
+    declineRecordDeletionRequest(request: RecordDeletionRequest): void {
         this.recordStore.dispatch(
             new StartProcessingRecordDeletionRequest({ request, action: 'decline' })
         );
     }
 
-    admitRecordDeletionRequest(request: RecordDeletionRequest) {
+    admitRecordDeletionRequest(request: RecordDeletionRequest): void {
         this.recordStore.dispatch(
             new StartProcessingRecordDeletionRequest({ request, action: 'accept' })
         );
@@ -408,5 +414,62 @@ export class RecordsSandboxService {
 
     startLoadingRecordPool() {
         this.recordStore.dispatch(new StartLoadingRecordPool());
+    }
+
+    startRequestingRecordDocumentDeletion(document: RecordDocument, text: string): void {
+        this.http
+            .post(RECORD_DOCUMENT_DELETIONS_API_URL, {
+                document_id: document.id,
+                explanation: text
+            })
+
+            .pipe(
+                tap(
+                    response => {
+                        this.snackbarService.showSuccessSnackBar('deletion successfully requested');
+                        return [];
+                    },
+                    error => {
+                        if (error['error']['error_code'] === 'api.already_requested') {
+                            this.snackbarService.showErrorSnackBar('deletion already requested');
+                        }
+                        return [];
+                    }
+                )
+            )
+            .subscribe(() => {});
+    }
+
+    getRecordDocumentDeletionRequestsFromServer(): Promise<RecordDocumentDeletionRequest[]> {
+        return this.http
+            .get<any>(RECORD_DOCUMENT_DELETIONS_API_URL)
+            .toPromise()
+            .then(result => {
+                return RecordDocumentDeletionRequest.getRecordDocumentDeletionRequestsFromJsonArray(
+                    result
+                );
+            });
+    }
+
+    acceptRecordDocumentDeletionRequest(
+        deletion_request: RecordDocumentDeletionRequest
+    ): Promise<any> {
+        return this.http
+            .post<any>(PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS, {
+                request_id: deletion_request.id,
+                action: 'accept'
+            })
+            .toPromise();
+    }
+
+    declineRecordDocumentDeletionRequest(
+        deletion_request: RecordDocumentDeletionRequest
+    ): Promise<any> {
+        return this.http
+            .post<any>(PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS, {
+                request_id: deletion_request.id,
+                action: 'decline'
+            })
+            .toPromise();
     }
 }

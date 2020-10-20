@@ -44,12 +44,15 @@ import {
     RecordPermissionsRequestedPipe
 } from './pipes/record_permission.pipe';
 import { RecordDocumentItemDetailComponent } from './components/records/documents/record-document-item-detail/record-document-item-detail.component';
-import { RecordDeletionRequestsComponent } from './pages/record-deletion-requests/record-deletion-requests.component';
+import { RecordDeletionRequestsComponent } from './components/record-deletion-requests/record-deletion-requests.component';
 import {
     RecordDeletionsProcessedPipe,
     RecordDeletionsRequestedPipe
 } from './pipes/record_deletions.pipe';
 import { RecordPoolComponent } from './pages/record-pool/record-pool.component';
+import { DeletionRequestsComponent } from './pages/deletion-requests/deletion-requests.component';
+import { RecordDocumentDeletionRequestsComponent } from './components/record-document-deletion-requests/record-document-deletion-requests.component';
+import { CoreModule } from '../core/core.module';
 
 @NgModule({
     imports: [
@@ -58,7 +61,8 @@ import { RecordPoolComponent } from './pages/record-pool/record-pool.component';
         FormsModule,
         ReactiveFormsModule,
         StoreModule.forFeature('records', recordsReducer),
-        EffectsModule.forFeature([RecordsEffects, RecordsAddEffects, RecordsLoadingEffects])
+        EffectsModule.forFeature([RecordsEffects, RecordsAddEffects, RecordsLoadingEffects]),
+        CoreModule
     ],
     declarations: [
         RecordsListComponent,
@@ -78,7 +82,9 @@ import { RecordPoolComponent } from './pages/record-pool/record-pool.component';
         RecordDeletionRequestsComponent,
         RecordDeletionsRequestedPipe,
         RecordDeletionsProcessedPipe,
-        RecordPoolComponent
+        RecordPoolComponent,
+        DeletionRequestsComponent,
+        RecordDocumentDeletionRequestsComponent
     ],
     providers: []
 })

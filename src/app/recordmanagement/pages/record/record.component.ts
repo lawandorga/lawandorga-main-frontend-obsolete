@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { RecordsSandboxService } from '../../services/records-sandbox.service';
 import { FullRecord, RestrictedRecord } from '../../models/record.model';
 import { ActivatedRoute, Params } from '@angular/router';
@@ -28,7 +28,7 @@ import { FullRecordDetailComponent } from '../../components/records/full-record-
     templateUrl: './record.component.html',
     styleUrls: ['./record.component.scss']
 })
-export class RecordComponent implements OnInit, HasUnsaved {
+export class RecordComponent implements OnInit, HasUnsaved, OnDestroy {
     id: string;
     type: string;
     loading = true;
@@ -52,6 +52,10 @@ export class RecordComponent implements OnInit, HasUnsaved {
                 }
             });
         });
+    }
+
+    ngOnDestroy(): void {
+        this.recordSB.resetFullClientInformation();
     }
 
     hasUnsaved(): boolean {

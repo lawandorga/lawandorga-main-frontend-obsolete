@@ -49,8 +49,7 @@ export class AppSandboxService {
     constructor(
         private store: Store<AppState>,
         private router: Router,
-        private cookieService: CookieService,
-        private authStore: Store<AuthState>
+        private cookieService: CookieService
     ) {}
 
     isAuthenticated(): boolean {
@@ -81,10 +80,6 @@ export class AppSandboxService {
             this.store.dispatch(new SetUsersPrivateKey(loginInformation.users_private_key));
             this.store.dispatch(new ReloadStaticInformation());
         }
-        return this.store.pipe(select('auth'));
-    }
-
-    getAuthState(): Observable<AuthState> {
         return this.store.pipe(select('auth'));
     }
 

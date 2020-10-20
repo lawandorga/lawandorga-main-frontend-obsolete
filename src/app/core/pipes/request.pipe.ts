@@ -1,6 +1,6 @@
-/*!
+/*
  * law&orga - record and organization management software for refugee law clinics
- * Copyright (C) 2019  Dominik Walser
+ * Copyright (C) 2020  Dominik Walser
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -16,15 +16,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-.records-deletion-requests__card {
-    max-width: 850px;
+import { Pipe, PipeTransform } from '@angular/core';
+import { BaseRequest, BaseRequestStates } from '../models/base_request.model';
+
+@Pipe({ name: 'baseRequestRequestedPipe' })
+export class BaseRequestRequestedPipe implements PipeTransform {
+    transform(allRequests: BaseRequest[]): any {
+        return allRequests.filter(request => request.state === BaseRequestStates.REQUESTED);
+    }
 }
 
-.records-deletion-requests__to-process-column__header {
-    padding-right: 15px;
-}
-
-.records-deletion-requests__to-process-column__content {
-    padding-right: 15px;
-    width: 125px;
+@Pipe({ name: 'baseRequestProcessedPipe' })
+export class BaseRequestProcessedPipe implements PipeTransform {
+    transform(allRequests: BaseRequest[]): any {
+        return allRequests.filter(request => request.state !== BaseRequestStates.REQUESTED);
+    }
 }

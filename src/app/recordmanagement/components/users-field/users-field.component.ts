@@ -19,7 +19,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { RestrictedUser } from '../../../core/models/user.model';
 import { Router } from '@angular/router';
-import { GetRecordSearchFrontUrl } from '../../../statics/frontend_links.statics';
+import {
+    GetRecordListFrontUrl,
+    GetRecordSearchFrontUrl
+} from '../../../statics/frontend_links.statics';
 
 @Component({
     selector: 'app-users-field',
@@ -35,6 +38,14 @@ export class UsersFieldComponent implements OnInit {
     ngOnInit() {}
 
     onUserClick(consultant: RestrictedUser) {
-        this.router.navigateByUrl(GetRecordSearchFrontUrl(consultant.name));
+        this.router.navigateByUrl(
+            GetRecordListFrontUrl({
+                filter: consultant.name,
+                sort: undefined,
+                sort_direction: undefined,
+                limit: 0,
+                offset: 0
+            })
+        );
     }
 }

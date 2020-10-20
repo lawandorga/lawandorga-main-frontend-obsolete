@@ -44,6 +44,7 @@ export class RecordDocumentItemDetailComponent implements OnInit {
     }
 
     selectedDocumentTagsChanged(selectedTags: Tag[]) {
+        this.record_document.tags = selectedTags;
         this.recordSB.startSettingDocumentTags(selectedTags, this.record_document.id.toString());
     }
 }

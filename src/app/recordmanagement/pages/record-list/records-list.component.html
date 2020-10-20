@@ -17,13 +17,24 @@
   -->
 
 <mat-card class="records-list__container">
-
     <mat-card-header>
         <h2>Records</h2>
         <mat-form-field class="records-list__search-input">
-            <input matInput type="text" placeholder="Search" [(ngModel)]="value" (keyup.enter)="onSearchClick()"
-                   (input)="onSearchChange($event.target.value)">
-            <button mat-button matSuffix mat-icon-button aria-label="Search" (click)="onSearchClick()">
+            <input
+                matInput
+                type="text"
+                placeholder="Search"
+                [(ngModel)]="searchValue"
+                (keyup.enter)="onSearchClick()"
+                (input)="onSearchChange($event.target.value)"
+            />
+            <button
+                mat-button
+                matSuffix
+                mat-icon-button
+                aria-label="Search"
+                (click)="onSearchClick()"
+            >
                 <mat-icon>search</mat-icon>
             </button>
         </mat-form-field>
@@ -31,12 +42,21 @@
 
     <mat-card-content>
         <div class="records-list__table-container">
-            <!--            <table mat-table [dataSource]="(records | async)" matSort>-->
-            <table mat-table [dataSource]="dataSource" matSort>
+            <table
+                mat-table
+                [dataSource]="dataSource"
+                matSort
+                matSortActive="access"
+                matSortDisableClear
+                matSortDirection="desc"
+            >
                 <ng-container matColumnDef="access" class="records-list__access-container">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>access</th>
                     <td mat-cell *matCellDef="let record">
-                        <mat-icon *ngIf="!record.is_restricted; else not_visible" matTooltip="full access">visibility
+                        <mat-icon
+                            *ngIf="!record.is_restricted; else not_visible"
+                            matTooltip="full access"
+                            >visibility
                         </mat-icon>
                         <ng-template #not_visible>
                             <mat-icon matTooltip="restricted access">visibility_off</mat-icon>
@@ -45,7 +65,12 @@
                 </ng-container>
                 <ng-container matColumnDef="token">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>token</th>
-                    <td mat-cell *matCellDef="let record" (click)="this.onRecordSelect(record)" class="is_clickable">
+                    <td
+                        mat-cell
+                        *matCellDef="let record"
+                        (click)="this.onRecordSelect(record)"
+                        class="is_clickable"
+                    >
                         <p>{{ record.token }}</p>
                     </td>
                 </ng-container>
@@ -53,12 +78,21 @@
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>state</th>
                     <td mat-cell *matCellDef="let record">
                         <div [ngSwitch]="record.state">
-                            <div class="circle-indicator circle-indicator__green"
-                                 *ngSwitchCase="'op'" matTooltip="open"></div>
-                            <div class="circle-indicator circle-indicator__orange"
-                                 *ngSwitchCase="'wa'" matTooltip="waiting"></div>
-                            <div class="circle-indicator circle-indicator__grey"
-                                 *ngSwitchCase="'cl'" matTooltip="closed"></div>
+                            <div
+                                class="circle-indicator circle-indicator__green"
+                                *ngSwitchCase="'op'"
+                                matTooltip="open"
+                            ></div>
+                            <div
+                                class="circle-indicator circle-indicator__orange"
+                                *ngSwitchCase="'wa'"
+                                matTooltip="waiting"
+                            ></div>
+                            <div
+                                class="circle-indicator circle-indicator__grey"
+                                *ngSwitchCase="'cl'"
+                                matTooltip="closed"
+                            ></div>
                         </div>
                     </td>
                 </ng-container>
@@ -73,17 +107,25 @@
                     <td mat-cell *matCellDef="let record">
                         <div class="records-list__chip-container">
                             <mat-chip-list>
-                                <mat-chip *ngFor="let tag of record.tags" (click)="this.onTagClick(tag)"
-                                          class="records-list__mat-chip">{{ tag.name }}</mat-chip>
+                                <mat-chip
+                                    *ngFor="let tag of record.tags"
+                                    (click)="this.onTagClick(tag)"
+                                    class="records-list__mat-chip"
+                                    >{{ tag.name }}</mat-chip
+                                >
                             </mat-chip-list>
                         </div>
                     </td>
                 </ng-container>
-                <tr mat-header-row
-                    *matHeaderRowDef="columns; sticky: true"></tr>
-                <tr mat-row *matRowDef="let row; columns: columns;"
-                    class="record-list-item"></tr>
+                <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: columns" class="record-list-item"></tr>
             </table>
+
+            <mat-paginator
+                [length]="results_length"
+                [pageSizeOptions]="[10, 15, 20, 50]"
+                showFirstLastButtons
+            ></mat-paginator>
         </div>
     </mat-card-content>
 </mat-card>

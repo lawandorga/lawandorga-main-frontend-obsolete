@@ -19,16 +19,14 @@
 <div class="record-document-item-detail__container">
     <div>
         <div>
-            <p>Description?</p>
-        </div>
-        <div>
-            <app-chip-autocomplete [allValuesObservable]="record_document_tags" class=""
-                                   placeholder="tags"
-                                   (selectedValuesChanged)="selectedDocumentTagsChanged($event)"
-                                   [firstSelected]="selectedTags">
+            <app-chip-autocomplete
+                [allValuesObservable]="record_document_tags"
+                class=""
+                placeholder="tags"
+                (selectedValuesChanged)="selectedDocumentTagsChanged($event)"
+                [firstSelected]="selectedTags"
+            >
             </app-chip-autocomplete>
         </div>
     </div>
-
-
 </div>
