@@ -382,7 +382,7 @@ class RecordFormGroup extends FormGroup {
         }
 
         if (hash(this.recordState) !== this.org_hashes['record_state']) {
-            changes['record']['state'] = this.recordState;
+            changes['record']['state'] = this.recordState.abbreviation;
         }
         if (hash(this.originCountry) !== this.org_hashes['origin_country']) {
             changes['client']['origin_country'] = this.originCountry.id;
