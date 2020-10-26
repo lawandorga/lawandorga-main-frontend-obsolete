@@ -73,7 +73,7 @@
             [allValuesObservable]="allRecordStates"
             placeholder="record state"
             (selectedValueChanged)="onSelectedRecordStateChanged($event)"
-            [setSelectedValue]="givenRecordState"
+            [setSelectedValue]="recordEditForm.recordState"
             valueToShow="full_name"
             class="full-record-detail__select-state full_width"
         >

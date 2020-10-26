@@ -24,6 +24,10 @@ export class State implements Filterable {
         this.full_name = full_name;
     }
 
+    static getStateAbbreviationFromDirtyString(dirtyString: string): string {
+        return JSON.parse(dirtyString.replace(/\'/g, '"'))['abbreviation'];
+    }
+
     static getStatesFromJsonArray(array) {
         const states: Array<State> = [];
         array.map(stateArray => {

@@ -129,7 +129,7 @@ export class FullRecordDetailComponent implements OnInit, OnDestroy, HasUnsaved 
                     if (this.client && this.record) {
                         this.loadValues();
                     }
-                   this.userSubscription = this.coreSB.getUser().subscribe(user => {
+                    this.userSubscription = this.coreSB.getUser().subscribe(user => {
                         if (this.record) {
                             for (const currentUser of this.record.working_on_record) {
                                 if (user.id === currentUser['id']) {
@@ -345,7 +345,12 @@ class RecordFormGroup extends FormGroup {
         this.originCountry = this.recordSB.getOriginCountryById(client.origin_country);
         this.org_hashes['origin_country'] = hash(this.originCountry);
 
-        this.recordState = this.recordSB.getRecordStateByAbbreviation(record.state);
+        let recordState = record.state;
+        if (recordState.length > 2 && recordState.indexOf('abbreviation') !== -1) {
+            // recordState = JSON.parse(recordState.replace(/\'/g, '"'))['abbreviation'];
+            recordState = State.getStateAbbreviationFromDirtyString(recordState);
+        }
+        this.recordState = this.recordSB.getRecordStateByAbbreviation(recordState);
         this.org_hashes['record_state'] = hash(this.recordState);
 
         this.record_tags = record.tags;
@@ -377,7 +382,7 @@ class RecordFormGroup extends FormGroup {
         }
 
         if (hash(this.recordState) !== this.org_hashes['record_state']) {
-            changes['record']['state'] = this.recordState;
+            changes['record']['state'] = this.recordState.abbreviation;
         }
         if (hash(this.originCountry) !== this.org_hashes['origin_country']) {
             changes['client']['origin_country'] = this.originCountry.id;

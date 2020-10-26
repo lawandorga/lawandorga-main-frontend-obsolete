@@ -17,6 +17,7 @@
  */
 
 import { Tag } from './tag.model';
+import { State } from '../../core/models/state.model';
 
 export class TokenRecord {
     constructor(public id: number, public token: string) {
@@ -47,7 +48,12 @@ export class RestrictedRecord extends TokenRecord {
         this.id = id;
         this.token = token;
         this.last_contact_date = last_contact_date;
-        this.state = state;
+
+        if (state.length > 2) {
+            this.state = State.getStateAbbreviationFromDirtyString(state);
+        } else {
+            this.state = state;
+        }
         this.tags = tags;
         this.working_on_record = working_on_record;
         this.official_note = official_note;
