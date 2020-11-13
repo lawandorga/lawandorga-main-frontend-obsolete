@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { InactiveUsersComponent } from './inactive-users.component';
 
@@ -24,7 +24,7 @@ describe('InactiveUsersComponent', () => {
     let component: InactiveUsersComponent;
     let fixture: ComponentFixture<InactiveUsersComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [InactiveUsersComponent]
         }).compileComponents();

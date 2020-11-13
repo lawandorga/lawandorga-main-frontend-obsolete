@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { TableEntryInformationFolderPermissionComponent } from './table-entry-information-folder-permission.component';
 
@@ -24,7 +24,7 @@ describe('TableEntryInformationFolderPermissionComponent', () => {
     let component: TableEntryInformationFolderPermissionComponent;
     let fixture: ComponentFixture<TableEntryInformationFolderPermissionComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [TableEntryInformationFolderPermissionComponent]
         }).compileComponents();

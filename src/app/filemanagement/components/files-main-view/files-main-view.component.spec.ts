@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { FilesMainViewComponent } from './files-main-view.component';
 
@@ -24,7 +24,7 @@ describe('FilesMainViewComponent', () => {
     let component: FilesMainViewComponent;
     let fixture: ComponentFixture<FilesMainViewComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [FilesMainViewComponent]
         }).compileComponents();

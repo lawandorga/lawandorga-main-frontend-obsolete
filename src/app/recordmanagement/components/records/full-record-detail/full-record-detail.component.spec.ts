@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { FullRecordDetailComponent } from './full-record-detail.component';
 
@@ -24,7 +24,7 @@ describe('FullRecordDetailComponent', () => {
     let component: FullRecordDetailComponent;
     let fixture: ComponentFixture<FullRecordDetailComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [FullRecordDetailComponent]
         }).compileComponents();

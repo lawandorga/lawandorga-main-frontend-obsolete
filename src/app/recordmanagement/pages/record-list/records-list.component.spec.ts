@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { RecordsListComponent } from './records-list.component';
 
@@ -24,7 +24,7 @@ describe('RecordsListComponent', () => {
     let component: RecordsListComponent;
     let fixture: ComponentFixture<RecordsListComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [RecordsListComponent]
         }).compileComponents();
