@@ -42,7 +42,7 @@
     "ng-material-multilevel-menu": "^4.12.2",
     "ngx-cookie-service": "^2.4.0",
     "object-hash": "^2.0.3",
-    "rxjs": "^6.6.2",
+    "rxjs": "^6.6.3",
     "tar": "^4.4.10",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
