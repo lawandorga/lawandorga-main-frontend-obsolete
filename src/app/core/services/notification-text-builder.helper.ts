@@ -86,7 +86,13 @@ export class NotificationTextBuilderHelper {
         if (event_type === NotificationType.RECORD__NEW_RECORD_PERMISSION) {
             return `${source_user_name} granted access to record`;
         }
+        if (event_type === NotificationType.FOLDER__FILE_UPLOAD_ERROR) {
+            return `file couldn't be uploaded ${text}`;
+        }
+        if (event_type === NotificationType.FOLDER__FILE_NOT_EXISTING) {
+            return `download was not possible, file not existing ${text}`;
+        }
 
-        return 'notification text needs to be added';
+        return 'text needs to be added';
     }
 }

@@ -165,6 +165,7 @@ export class FilesEffects {
                     .pipe(
                         catchError(error => {
                             console.log('error: ', error);
+                            this.coreSB.showErrorSnackBar(error.error.detail);
                             return [];
                         }),
                         mergeMap((response: any) => {
