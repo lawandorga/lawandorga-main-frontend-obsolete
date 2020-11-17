@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { HasPermissionSideComponent } from './has-permission-side.component';
 
@@ -24,7 +24,7 @@ describe('HasPermissionSideComponent', () => {
     let component: HasPermissionSideComponent;
     let fixture: ComponentFixture<HasPermissionSideComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [HasPermissionSideComponent]
         }).compileComponents();

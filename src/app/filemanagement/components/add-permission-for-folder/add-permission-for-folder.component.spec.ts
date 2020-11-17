@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AddPermissionForFolderComponent } from './add-permission-for-folder.component';
 
@@ -24,7 +24,7 @@ describe('AddPermissionForFolderComponent', () => {
     let component: AddPermissionForFolderComponent;
     let fixture: ComponentFixture<AddPermissionForFolderComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [AddPermissionForFolderComponent]
         }).compileComponents();

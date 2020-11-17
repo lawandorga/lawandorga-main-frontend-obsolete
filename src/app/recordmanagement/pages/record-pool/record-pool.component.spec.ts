@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { RecordPoolComponent } from './record-pool.component';
 
@@ -24,7 +24,7 @@ describe('RecordPoolComponent', () => {
     let component: RecordPoolComponent;
     let fixture: ComponentFixture<RecordPoolComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [RecordPoolComponent]
         }).compileComponents();
