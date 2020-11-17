@@ -108,9 +108,9 @@ export class QuillTestComponent implements OnInit {
             ['link', 'image', 'video'], // link and image, video
             ['table']
         ],
-        cursors: true,
-        table: true,
-        tableUI: true
+        cursors: true
+        // table: true,
+        // tableUI: true
         // 'better-table': true
     };
 
@@ -129,11 +129,11 @@ export class QuillTestComponent implements OnInit {
 
         const cursors = this.quillRef.getModule('cursors');
         console.log('cursors: ', cursors);
-        const cursor = cursors.createCursor('123', 'peter parker', 'maroon');
-        cursors.moveCursor('123', { index: 0, length: 3 });
+        const cursor = cursors.createCursor('123', 'peter parker', 'red');
+        cursors.moveCursor('123', { index: 0, length: 1, color: 'red' });
 
-        const table = this.quillRef.getModule('table');
-        console.log('table:', table);
+        // const table = this.quillRef.getModule('table');
+        // console.log('table:', table);
     }
 
     changedEditor(event: EditorChangeContent | EditorChangeSelection) {
@@ -162,7 +162,6 @@ export class QuillTestComponent implements OnInit {
         // if (!table) {
         //     console.log('module table not found');
         // } else table.insertTable(3, 3);
-
-        this.tableModule.insertTable(3, 3);
+        // this.tableModule.insertTable(3, 3);
     }
 }
