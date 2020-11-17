@@ -165,15 +165,15 @@ export class FilesEffects {
                     .pipe(
                         catchError(error => {
                             console.log('error: ', error);
+                            this.coreSB.showErrorSnackBar(error.error.detail);
                             return [];
                         }),
                         mergeMap((response: any) => {
+                            let path = 'root';
                             if (payload.entries.length === 1) {
-                                payload.path = payload.entries[0].name;
-                            } else if (payload.path === '') {
-                                payload.path = 'root';
+                                path = payload.entries[0].name;
                             }
-                            StorageService.saveFile(response, payload.path + '.zip');
+                            StorageService.saveFile(response, path + '.zip');
                             return [];
                         })
                     )

@@ -20,15 +20,20 @@ import { Injectable } from '@angular/core';
 import { CanDeactivate } from '@angular/router';
 import { HasUnsaved } from './can-have-unsaved.interface';
 import { SharedSandboxService } from '../../shared/services/shared-sandbox.service';
-import { bindCallback, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
+import { CoreSandboxService } from './core-sandbox.service';
 
 @Injectable()
 export class UnsavedGuardService implements CanDeactivate<HasUnsaved> {
-    constructor(private sharedSB: SharedSandboxService) {}
+    constructor(private sharedSB: SharedSandboxService, private coreSB: CoreSandboxService) {}
 
     canDeactivate(component: HasUnsaved): Observable<any> | boolean {
+        this.coreSB.openedGuardDialogs++;
         if (!component.hasUnsaved()) return true;
 
+        if (this.coreSB.openedGuardDialogs === 1) {
+            return false;
+        }
         return new Observable<boolean>(observer => {
             this.sharedSB.openConfirmDialog(
                 {
@@ -39,6 +44,7 @@ export class UnsavedGuardService implements CanDeactivate<HasUnsaved> {
                     cancelLabel: 'stay'
                 },
                 (leave: boolean) => {
+                    this.coreSB.openedGuardDialogs = 0;
                     observer.next(leave);
                     observer.complete();
                 }

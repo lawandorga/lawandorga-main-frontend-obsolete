@@ -23,9 +23,10 @@ import { AuthGuardService } from '../core/services/auth-guard.service';
 import { CreateRecordComponent } from './pages/create-record/create-record.component';
 import { RecordComponent } from './pages/record/record.component';
 import { RecordsPermitRequestsComponent } from './pages/records-permit-requests/records-permit-requests.component';
-import { RecordDeletionRequestsComponent } from './pages/record-deletion-requests/record-deletion-requests.component';
+import { RecordDeletionRequestsComponent } from './components/record-deletion-requests/record-deletion-requests.component';
 import { RecordPoolComponent } from './pages/record-pool/record-pool.component';
 import { UnsavedGuardService } from '../core/services/unsaved-guard.service';
+import { DeletionRequestsComponent } from './pages/deletion-requests/deletion-requests.component';
 
 const recordsRoutes: Routes = [
     {
@@ -47,7 +48,7 @@ const recordsRoutes: Routes = [
     },
     {
         path: 'deletion_requests',
-        component: RecordDeletionRequestsComponent
+        component: DeletionRequestsComponent
     },
     {
         path: ':id',

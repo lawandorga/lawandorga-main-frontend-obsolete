@@ -99,6 +99,7 @@ import {
     HAS_PERMISSION_API_URL,
     HAS_PERMISSIONS_STATICS_API_URL,
     INACTIVE_USERS_API_URL,
+    LOGIN_API_URL,
     NEW_USER_REQUEST_ADMIT_API_URL,
     NEW_USER_REQUEST_API_URL,
     PROFILES_API_URL,
@@ -117,6 +118,8 @@ import { NewUserRequest } from '../models/new_user_request.model';
 import { AppSandboxService } from '../services/app-sandbox.service';
 import { RlcSettings } from '../models/rlc_settings.model';
 import { alphabeticalSorterByField } from '../../shared/other/sorter-helper';
+import { Router } from '@angular/router';
+import { LOGIN_FRONT_URL } from '../../statics/frontend_links.statics';
 
 @Injectable()
 export class CoreEffects {
@@ -125,7 +128,7 @@ export class CoreEffects {
         private http: HttpClient,
         private coreSB: CoreSandboxService,
         private snackbar: SnackbarService,
-        private appSB: AppSandboxService
+        private router: Router
     ) {}
 
     @Effect()
@@ -730,6 +733,7 @@ export class CoreEffects {
                     }),
                     mergeMap((response: any) => {
                         this.snackbar.showSuccessSnackBar('account successfully activated');
+                        this.router.navigate([LOGIN_FRONT_URL]);
                         return [];
                     })
                 )

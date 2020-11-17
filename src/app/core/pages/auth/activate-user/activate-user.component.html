@@ -16,12 +16,19 @@
   ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
   -->
 
-<mat-card>
-    <mat-card-header>
-        <h1>Activate your account</h1>
-    </mat-card-header>
-    <mat-card-content>
-        <p>Press the button below to activate your account!</p>
-        <button mat-flat-button matSuffix (click)="onActivateClick()" color="primary">activate</button>
-    </mat-card-content>
-</mat-card>
+<div class="activate-user__container">
+    <mat-card class="activate-user__card">
+        <!--        <mat-card-header>-->
+        <!--            <h1>Activate your account</h1>-->
+        <!--        </mat-card-header>-->
+        <mat-card-content>
+            <h1>Activate your account</h1>
+            <p>Press the button below to activate your account!</p>
+            <div class="activate-user__button-container">
+                <button mat-flat-button matSuffix (click)="onActivateClick()" color="primary">
+                    activate
+                </button>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

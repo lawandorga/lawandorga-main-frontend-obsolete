@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ProfilesListComponent } from './profiles-list.component';
 
@@ -24,7 +24,7 @@ describe('ProfilesListComponent', () => {
     let component: ProfilesListComponent;
     let fixture: ComponentFixture<ProfilesListComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [ProfilesListComponent]
         }).compileComponents();

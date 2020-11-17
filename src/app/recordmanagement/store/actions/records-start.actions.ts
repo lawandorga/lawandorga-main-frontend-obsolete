@@ -67,7 +67,7 @@ export class StartRequestingRecordDeletion implements Action {
 export class StartLoadingRecords implements Action {
     readonly type = START_LOADING_RECORDS;
 
-    constructor(public payload: string) {}
+    constructor(public payload: SearchParamsInterface) {}
 }
 
 export class StartLoadingRecordStatics implements Action {

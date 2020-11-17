@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { RecordsSandboxService } from '../../services/records-sandbox.service';
 import { FullRecord, RestrictedRecord } from '../../models/record.model';
 import { ActivatedRoute, Params } from '@angular/router';
@@ -28,9 +28,10 @@ import { FullRecordDetailComponent } from '../../components/records/full-record-
     templateUrl: './record.component.html',
     styleUrls: ['./record.component.scss']
 })
-export class RecordComponent implements OnInit, HasUnsaved {
+export class RecordComponent implements OnInit, HasUnsaved, OnDestroy {
     id: string;
     type: string;
+    loading = true;
 
     @ViewChild(FullRecordDetailComponent) child: FullRecordDetailComponent;
 
@@ -38,8 +39,12 @@ export class RecordComponent implements OnInit, HasUnsaved {
 
     ngOnInit() {
         this.route.params.subscribe((params: Params) => {
+            this.loading = true;
             this.id = params['id'];
             this.recordSB.loadAndGetSpecialRecord(this.id).subscribe(special_record => {
+                if (special_record.record !== null) {
+                    this.loading = false;
+                }
                 if (special_record.client) {
                     this.type = 'FullRecord';
                 } else {
@@ -47,6 +52,10 @@ export class RecordComponent implements OnInit, HasUnsaved {
                 }
             });
         });
+    }
+
+    ngOnDestroy(): void {
+        this.recordSB.resetFullClientInformation();
     }
 
     hasUnsaved(): boolean {

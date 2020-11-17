@@ -89,6 +89,7 @@ const quillConfig: QuillConfig = {
 
 registerLocaleData(localeDE);
 
+
 @NgModule({
     declarations: [AppComponent],
     imports: [

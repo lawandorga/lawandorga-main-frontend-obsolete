@@ -152,9 +152,11 @@ export class ChipAutocompleteComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     sortAllValues(): void {
-        this.allValues.sort((a, b) =>
-            a.getFilterableProperty().localeCompare(b.getFilterableProperty())
-        );
+        this.allValues.sort((a, b) => {
+            if (a && b && a.getFilterableProperty() && b.getFilterableProperty())
+                return a.getFilterableProperty().localeCompare(b.getFilterableProperty());
+            else return 0;
+        });
     }
 
     selected(event: MatAutocompleteSelectedEvent) {

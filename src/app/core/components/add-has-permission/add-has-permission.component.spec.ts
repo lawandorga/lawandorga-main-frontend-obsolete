@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AddHasPermissionComponent } from './add-has-permission.component';
 
@@ -24,7 +24,7 @@ describe('AddHasPermissionComponent', () => {
     let component: AddHasPermissionComponent;
     let fixture: ComponentFixture<AddHasPermissionComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [AddHasPermissionComponent]
         }).compileComponents();

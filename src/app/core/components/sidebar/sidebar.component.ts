@@ -30,7 +30,8 @@ import {
     PERMISSION_CAN_PERMIT_RECORD_PERMISSION_REQUESTS,
     PERMISSION_CAN_VIEW_PERMISSIONS_RLC,
     PERMISSION_CAN_VIEW_RECORDS,
-    PERMISSION_PROCESS_RECORD_DELETION_REQUESTS
+    PERMISSION_PROCESS_RECORD_DELETION_REQUESTS,
+    PERMISSION_PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS
 } from '../../../statics/permissions.statics';
 import {
     ACCEPT_NEW_USER_REQUESTS_FRONT_URL,
@@ -63,7 +64,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     timerCheckPermissions = null;
     timerLoadUnreadNotifications = null;
     checkPermissionInterval = 30000;
-    checkNotificationsInterval = 5000;
+    checkNotificationsInterval = 15000;
 
     number_of_notifications = '0';
 
@@ -76,7 +77,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         permissions: false,
         accept_new_user: false,
         activate_inactive_users: false,
-        process_record_deletion_requests: false,
+        process_deletion_requests: false,
         show_files: false,
         record_pool: false
     };
@@ -258,8 +259,18 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this.coreSB.hasPermissionFromStringForOwnRlc(
             PERMISSION_PROCESS_RECORD_DELETION_REQUESTS,
             hasPermission => {
-                if (this.show_tab_permissions.process_record_deletion_requests !== hasPermission) {
-                    this.show_tab_permissions.process_record_deletion_requests = hasPermission;
+                if (this.show_tab_permissions.process_deletion_requests !== hasPermission) {
+                    this.show_tab_permissions.process_deletion_requests = hasPermission;
+                    this.recheckSidebarItems();
+                }
+            }
+        );
+
+        this.coreSB.hasPermissionFromStringForOwnRlc(
+            PERMISSION_PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS,
+            hasPermission => {
+                if (this.show_tab_permissions.process_deletion_requests !== hasPermission) {
+                    this.show_tab_permissions.process_deletion_requests = hasPermission;
                     this.recheckSidebarItems();
                 }
             }
@@ -334,7 +345,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
                 ACCEPT_NEW_USER_REQUESTS_FRONT_URL,
                 newSidebarItems
             ).newItems;
-        if (!this.show_tab_permissions.process_record_deletion_requests)
+        if (!this.show_tab_permissions.process_deletion_requests)
             newSidebarItems = SidebarComponent.removeLink(
                 DELETION_REQUESTS_FRONT_URL,
                 newSidebarItems

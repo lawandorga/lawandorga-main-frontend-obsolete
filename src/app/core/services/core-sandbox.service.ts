@@ -69,6 +69,8 @@ import { RlcSettings } from '../models/rlc_settings.model';
 
 @Injectable()
 export class CoreSandboxService {
+    openedGuardDialogs = 0;
+
     constructor(
         public router: Router,
         private snackbarService: SnackbarService,
@@ -123,6 +125,10 @@ export class CoreSandboxService {
                     for_rlc: rlc.id
                 });
         });
+    }
+
+    getResultsLength(): Observable<number> {
+        return this.coreStateStore.pipe(select((state: any) => state.core.results_length));
     }
 
     hasPermissionFromString(

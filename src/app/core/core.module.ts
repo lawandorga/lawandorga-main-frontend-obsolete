@@ -23,6 +23,9 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { NgModule } from '@angular/core';
 import { NgMaterialMultilevelMenuModule } from 'ng-material-multilevel-menu';
+import { CdkTableModule } from '@angular/cdk/table';
+import { QuillTestComponent } from './components/quill-test/quill-test.component';
+import { QuillModule } from 'ngx-quill';
 
 import { CoreRoutingModule } from './core-routing.module';
 import { ProfileComponent } from './pages/profile/profile.component';
@@ -61,9 +64,7 @@ import { InactiveUsersComponent } from './pages/inactive-users/inactive-users.co
 import { PrivacyStatementComponent } from './pages/privacy-statement/privacy-statement.component';
 import { NotificationGroupsListComponent } from './pages/notification-groups-list/notification-groups-list.component';
 import { NotificationListComponent } from './components/notification-list/notification-list.component';
-import { CdkTableModule } from '@angular/cdk/table';
-import { QuillTestComponent } from './components/quill-test/quill-test.component';
-import { QuillModule } from 'ngx-quill';
+import { BaseRequestProcessedPipe, BaseRequestRequestedPipe } from './pipes/request.pipe';
 
 @NgModule({
     imports: [
@@ -111,9 +112,11 @@ import { QuillModule } from 'ngx-quill';
         PrivacyStatementComponent,
         NotificationGroupsListComponent,
         NotificationListComponent,
-        QuillTestComponent
+        QuillTestComponent,
+        BaseRequestRequestedPipe,
+        BaseRequestProcessedPipe
     ],
     providers: [],
-    exports: [SidebarComponent]
+    exports: [SidebarComponent, BaseRequestRequestedPipe, BaseRequestProcessedPipe]
 })
 export class CoreModule {}

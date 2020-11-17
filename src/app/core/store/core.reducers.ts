@@ -27,6 +27,7 @@ import {
     REMOVE_INACTIVE_USER,
     REMOVE_SINGLE_HAS_PERMISSION,
     RESET_INACTIVE_USERS,
+    RESET_RESULTS_LENGTH,
     RESET_SPECIAL_FOREIGN_USER,
     RESET_SPECIAL_GROUP,
     RESET_SPECIAL_PERMISSION,
@@ -37,6 +38,7 @@ import {
     SET_NEW_USER_REQUESTS,
     SET_NOTIFICATIONS,
     SET_OTHER_USERS,
+    SET_RESULTS_LENGTH,
     SET_RLC,
     SET_RLC_SETTINGS,
     SET_RLCS,
@@ -74,6 +76,7 @@ export interface CoreState {
     new_user_requests: { [id: number]: NewUserRequest };
     inactive_users: { [id: number]: FullUser };
     notifications: number;
+    results_length: number;
 }
 
 const initialState: CoreState = {
@@ -93,7 +96,8 @@ const initialState: CoreState = {
     rlcs: {},
     new_user_requests: {},
     inactive_users: {},
-    notifications: 0
+    notifications: 0,
+    results_length: 0
 };
 
 export function coreReducer(state = initialState, action: CoreActions) {
@@ -258,6 +262,16 @@ export function coreReducer(state = initialState, action: CoreActions) {
             return {
                 ...state,
                 notifications: state.notifications - 1
+            };
+        case RESET_RESULTS_LENGTH:
+            return {
+                ...state,
+                results_length: 0
+            };
+        case SET_RESULTS_LENGTH:
+            return {
+                ...state,
+                results_length: action.payload
             };
         default:
             return state;

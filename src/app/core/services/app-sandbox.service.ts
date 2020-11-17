@@ -49,8 +49,7 @@ export class AppSandboxService {
     constructor(
         private store: Store<AppState>,
         private router: Router,
-        private cookieService: CookieService,
-        private authStore: Store<AuthState>
+        private cookieService: CookieService
     ) {}
 
     isAuthenticated(): boolean {
@@ -65,9 +64,9 @@ export class AppSandboxService {
     }
 
     logout() {
-        this.resetTokenAndUsersPrivateKey();
+        // this.resetTokenAndUsersPrivateKey();
         this.store.dispatch(new StartLoggingOut());
-        this.router.navigate([LOGIN_FRONT_URL]);
+        // this.router.navigate([LOGIN_FRONT_URL]);
     }
 
     login(username: string, password: string) {
@@ -84,10 +83,6 @@ export class AppSandboxService {
         return this.store.pipe(select('auth'));
     }
 
-    getAuthState(): Observable<AuthState> {
-        return this.store.pipe(select('auth'));
-    }
-
     saveLocation() {
         this.savedLocation = this.router.url;
     }
@@ -101,28 +96,39 @@ export class AppSandboxService {
     }
 
     saveTokenAndUsersPrivateKey(token: string, users_private_key: string): void {
-        this.cookieService.set('token', token);
-        this.cookieService.set('users_private_key', users_private_key);
-
-        if (
-            window.navigator.userAgent.toLowerCase().indexOf('chrome') > -1 &&
-            !!(<any>window).chrome
-        ) {
-            document.cookie = `token=${token}`;
-            document.cookie = `users_private_key=${users_private_key}`;
-            console.log('cookies set "manually"');
-        }
+        localStorage.setItem('token', token);
+        localStorage.setItem('users_private_key', users_private_key);
+        // if (
+        //     window.navigator.userAgent.toLowerCase().indexOf('chrome') > -1 &&
+        //     !!(<any>window).chrome
+        // ) {
+        //     document.cookie = `token=${token}`;
+        //     console.log('chrome want to set private key: ', users_private_key);
+        //     document.cookie = `users_private_key=${users_private_key}`;
+        //     console.log('cookies set "manually"');
+        // } else {
+        //     this.cookieService.set('token', token);
+        //     this.cookieService.set('users_private_key', users_private_key);
+        // }
     }
 
     loadTokenAndUsersPrivateKey(): any {
+        // console.log('read private key: ', this.cookieService.get('users_private_key'));
+        //
+        // return {
+        //     token: this.cookieService.get('token'),
+        //     users_private_key: this.cookieService.get('users_private_key')
+        // };
+
         return {
-            token: this.cookieService.get('token'),
-            users_private_key: this.cookieService.get('users_private_key')
+            token: localStorage.getItem('token'),
+            users_private_key: localStorage.getItem('users_private_key')
         };
     }
 
     resetTokenAndUsersPrivateKey(): void {
-        this.cookieService.delete('token');
-        this.cookieService.delete('users_private_key');
+        // this.cookieService.delete('token');
+        // this.cookieService.delete('users_private_key');
+        localStorage.clear();
     }
 }

@@ -16,15 +16,18 @@
   ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
   -->
 
-<mat-card>
+<mat-card class="card-width">
     <mat-card-content>
         <h1 matLine>Permission list</h1>
         <h2>all Permissions:</h2>
         <div *ngIf="permissions | async as catalog; else loading">
             <ng-container *ngIf="catalog.length; else noItems">
                 <mat-list>
-                    <mat-list-item *ngFor="let permission of (permissions | async)" class="is_clickable"
-                                   (click)="onPermissionItemClick(permission)">
+                    <mat-list-item
+                        *ngFor="let permission of permissions | async"
+                        class="is_clickable"
+                        (click)="onPermissionItemClick(permission)"
+                    >
                         <p>{{ permission.name }}</p>
                     </mat-list-item>
                 </mat-list>
