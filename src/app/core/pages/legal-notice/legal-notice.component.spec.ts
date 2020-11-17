@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { LegalNoticeComponent } from './legal-notice.component';
 
@@ -24,7 +24,7 @@ describe('LegalNoticeComponent', () => {
     let component: LegalNoticeComponent;
     let fixture: ComponentFixture<LegalNoticeComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [LegalNoticeComponent]
         }).compileComponents();

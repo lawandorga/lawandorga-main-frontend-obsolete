@@ -71,7 +71,6 @@ export class NotificationGroupsListComponent implements AfterViewInit {
             .pipe(
                 startWith({}),
                 switchMap(() => {
-                    console.log('change in params');
                     // this.isLoadingResults = true;
                     return this.getNotifications(
                         this.paginator.pageSize,

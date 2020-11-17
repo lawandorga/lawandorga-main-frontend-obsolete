@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ListFolderItemComponent } from './list-folder-item.component';
 
@@ -24,7 +24,7 @@ describe('ListFolderItemComponent', () => {
     let component: ListFolderItemComponent;
     let fixture: ComponentFixture<ListFolderItemComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [ListFolderItemComponent]
         }).compileComponents();

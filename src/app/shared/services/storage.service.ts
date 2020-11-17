@@ -101,7 +101,7 @@ export class StorageService {
             });
     }
 
-    upload(dataTransferItemList, path, callback) {
+    upload(dataTransferItemList, path: string, callback: (any) => void) {
         if (Array.isArray(dataTransferItemList)) {
             this.uploadFiles(dataTransferItemList, path, callback);
             return;

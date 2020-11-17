@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { GroupComponent } from './group.component';
 
@@ -24,7 +24,7 @@ describe('GroupComponent', () => {
     let component: GroupComponent;
     let fixture: ComponentFixture<GroupComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [GroupComponent]
         }).compileComponents();

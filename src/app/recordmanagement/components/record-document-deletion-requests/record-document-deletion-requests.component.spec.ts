@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { RecordDocumentDeletionRequestsComponent } from './record-document-deletion-requests.component';
 
@@ -6,7 +6,7 @@ describe('RecordDocumentDeletionRequestsComponent', () => {
   let component: RecordDocumentDeletionRequestsComponent;
   let fixture: ComponentFixture<RecordDocumentDeletionRequestsComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ RecordDocumentDeletionRequestsComponent ]
     })
