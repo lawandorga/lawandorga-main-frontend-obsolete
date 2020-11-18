@@ -37,6 +37,7 @@
     "env-cmd": "^10.1.0",
     "file-saver": "^2.0.1",
     "fstream": "^1.0.12",
+    "lib0": "^0.2.34",
     "mime": "^2.4.6",
     "moment": "^2.27.0",
     "ng-material-multilevel-menu": "^4.12.2",
@@ -51,6 +52,10 @@
     "rxjs": "^6.6.3",
     "tar": "^4.4.10",
     "tslib": "^2.0.0",
+    "y-protocols": "^1.0.1",
+    "y-quill": "^0.1.4",
+    "y-webrtc": "^10.1.6",
+    "yjs": "^13.3.2",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {

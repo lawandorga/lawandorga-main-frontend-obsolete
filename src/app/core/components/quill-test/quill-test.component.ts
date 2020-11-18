@@ -3,20 +3,10 @@ import Quill from 'quill';
 import { EditorChangeContent, EditorChangeSelection, QuillModule, QuillModules } from 'ngx-quill';
 import 'quill-mention';
 import 'quill-cursors';
-// const parchment = Quill.import('parchment');
-// const block = parchment.query('block');
-// block.tagName = 'DIV';
-// // or class NewBlock extends Block {} NewBlock.tagName = 'DIV'
-// Quill.register(block /* or NewBlock */, true);
-//
-// interface Quill {
-//     getModule(moduleName: string);
-// }
 import { QuillEditorComponent } from 'ngx-quill';
-
-interface BetterTableModule {
-    insertTable(rows: number, columns: number): void;
-}
+import * as Y from 'yjs';
+import { QuillBinding } from 'y-quill';
+import { WebrtcProvider } from 'y-webrtc';
 
 @Component({
     selector: 'app-quill-test',
@@ -29,35 +19,6 @@ export class QuillTestComponent implements OnInit {
     model = '<p>hello there <span id="123123">dd</span></p>';
     quillRef: Quill;
 
-    // content;
-    //
-    // modules: QuillModules = {
-    //     toolbar: [
-    //         ['bold', 'italic', 'underline', 'strike'], // toggled buttons
-    //         ['blockquote', 'code-block'],
-    //
-    //         [{ header: 1 }, { header: 2 }], // custom button values
-    //         [{ list: 'ordered' }, { list: 'bullet' }],
-    //         [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
-    //         [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
-    //         [{ direction: 'rtl' }], // text direction
-    //
-    //         [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
-    //         [{ header: [1, 2, 3, 4, 5, 6, false] }],
-    //
-    //         [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-    //         [{ font: [] }],
-    //         [{ align: [] }],
-    //
-    //         ['clean'], // remove formatting button
-    //
-    //         ['link', 'image', 'video'], // link and image, video
-    //         ['table']
-    //     ],
-    //     modules: {
-    //         table: true
-    //     }
-    // };
     @ViewChild(QuillEditorComponent, { static: true }) editor: QuillEditorComponent;
     modules = {
         mention: {
@@ -109,18 +70,11 @@ export class QuillTestComponent implements OnInit {
             ['table']
         ],
         cursors: true
-        // table: true,
-        // tableUI: true
-        // 'better-table': true
     };
 
     constructor() {}
 
     ngOnInit(): void {}
-
-    private get tableModule(): BetterTableModule {
-        return this.quillRef.getModule('better-table');
-    }
 
     created(event: Quill) {
         // tslint:disable-next-line:no-console
@@ -134,13 +88,28 @@ export class QuillTestComponent implements OnInit {
 
         // const table = this.quillRef.getModule('table');
         // console.log('table:', table);
+
+        const ydoc = new Y.Doc();
+        // clients connected to the same room-name share document updates
+        // @ts-ignore
+        const provider = new WebrtcProvider('your-room-name', ydoc, {
+            password: 'optional-room-password'
+        });
+        const yarray = ydoc.get('array', Y.Array);
+        provider.connect();
+        provider.awareness.setLocalStateField('user', { name: 'bruce wayne' });
+        const binding = new QuillBinding(ydoc.getText('quill'), event, provider.awareness);
+        // tslint:disable-next-line:no-shadowed-variable
+        provider.awareness.on('change', event => {
+            console.log('change!!! ', event);
+        });
     }
 
     changedEditor(event: EditorChangeContent | EditorChangeSelection) {
         // tslint:disable-next-line:no-console
-        console.log('editor-change', event);
-        console.log('model: ', this.model);
-        console.log('editor: ', this.editor);
+        // console.log('editor-change', event);
+        // console.log('model: ', this.model);
+        // console.log('editor: ', this.editor);
     }
 
     focus($event) {
@@ -155,13 +124,5 @@ export class QuillTestComponent implements OnInit {
         console.log('blur', $event);
         this.focused = false;
         this.blurred = true;
-    }
-
-    onInsertTableClick() {
-        // const table = this.quillRef.getModule('better-table');
-        // if (!table) {
-        //     console.log('module table not found');
-        // } else table.insertTable(3, 3);
-        // this.tableModule.insertTable(3, 3);
     }
 }
