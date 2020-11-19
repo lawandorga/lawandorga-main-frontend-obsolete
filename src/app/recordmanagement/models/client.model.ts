@@ -25,7 +25,7 @@ export class FullClient {
         public birthday: Date,
         public origin_country: string,
         public note: string,
-        public phone: string
+        public phone_number: string
     ) {
         this.id = id;
         this.name = name;
@@ -34,7 +34,7 @@ export class FullClient {
         this.birthday = birthday;
         this.origin_country = origin_country;
         this.note = note;
-        this.phone = phone;
+        this.phone_number = phone_number;
     }
 
     static getFullClientsFromJsonArray(jsonArray) {
