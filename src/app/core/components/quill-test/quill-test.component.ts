@@ -101,6 +101,8 @@ export class QuillTestComponent implements OnInit {
         const binding = new QuillBinding(ydoc.getText('quill'), event, provider.awareness);
         // tslint:disable-next-line:no-shadowed-variable
         provider.awareness.on('change', event => {
+            // TODO: check how many users are currently here -> save
+            // TODO: if quit an no one else here -> send current version to backend (maybe save, maybe just as draft)
             console.log('change!!! ', event);
         });
     }
