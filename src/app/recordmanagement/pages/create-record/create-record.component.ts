@@ -147,7 +147,7 @@ export class CreateRecordComponent implements OnInit {
 
     setClientFields() {
         this.createRecordForm.controls['client_name'].setValue(this.client.name);
-        this.createRecordForm.controls['client_phone_number'].setValue(this.client.phone);
+        this.createRecordForm.controls['client_phone_number'].setValue(this.client.phone_number);
 
         this.createRecordForm.controls['client_note'].setValue(this.client.note);
 
