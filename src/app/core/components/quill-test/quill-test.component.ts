@@ -81,37 +81,47 @@ export class QuillTestComponent implements OnInit {
         console.log('editor-created', event);
         this.quillRef = event;
 
-        const cursors = this.quillRef.getModule('cursors');
-        console.log('cursors: ', cursors);
-        const cursor = cursors.createCursor('123', 'peter parker', 'red');
-        cursors.moveCursor('123', { index: 0, length: 1, color: 'red' });
-
+        // const cursors = this.quillRef.getModule('cursors');
+        // console.log('cursors: ', cursors);
+        // const cursor = cursors.createCursor('123', 'peter parker', 'red');
+        // cursors.moveCursor('123', { index: 0, length: 1, color: 'red' });
         // const table = this.quillRef.getModule('table');
         // console.log('table:', table);
 
+        // here
         const ydoc = new Y.Doc();
+        // ydoc.clientID = 12839123; // setting own id! (for differentiating between users)
         // clients connected to the same room-name share document updates
         // @ts-ignore
         const provider = new WebrtcProvider('your-room-name', ydoc, {
+            // generate room name and password in backend
             password: 'optional-room-password'
         });
-        const yarray = ydoc.get('array', Y.Array);
-        provider.connect();
-        provider.awareness.setLocalStateField('user', { name: 'bruce wayne' });
-        const binding = new QuillBinding(ydoc.getText('quill'), event, provider.awareness);
-        // tslint:disable-next-line:no-shadowed-variable
+        // const yarray = ydoc.get('array', Y.Array); // dont need it
         provider.awareness.on('change', event => {
-            // TODO: check how many users are currently here -> save
             // TODO: if quit an no one else here -> send current version to backend (maybe save, maybe just as draft)
             console.log('change!!! ', event);
+            console.log('clientid: ', provider.doc.clientID);
+            console.log('states: ', provider.awareness.states.size);
+        });
+        provider.connect();
+        provider.awareness.setLocalStateField('user', { name: 'bruce wayne', id: '11111111' }); // showing correct name and id of user?
+        const binding = new QuillBinding(ydoc.getText('quill'), event, provider.awareness);
+        binding.awareness.once('update', () => {
+            // check initial users
+            console.log('states: ', provider.awareness.states.size);
         });
     }
 
     changedEditor(event: EditorChangeContent | EditorChangeSelection) {
         // tslint:disable-next-line:no-console
-        // console.log('editor-change', event);
+        console.log('editor-change', event);
         // console.log('model: ', this.model);
-        // console.log('editor: ', this.editor);
+        console.log('editor: ', this.editor);
+        // console.log('html: ', event.html);
+        // if (this.ydoc) {
+        //     console.log('from ydoc: ', this.ydoc.getText('quill'));
+        // }
     }
 
     focus($event) {
