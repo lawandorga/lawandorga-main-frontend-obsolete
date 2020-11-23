@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import Quill from 'quill';
 import { EditorChangeContent, EditorChangeSelection, QuillModule, QuillModules } from 'ngx-quill';
 import 'quill-mention';
@@ -13,11 +13,16 @@ import { WebrtcProvider } from 'y-webrtc';
     templateUrl: './quill-test.component.html',
     styleUrls: ['./quill-test.component.scss']
 })
-export class QuillTestComponent implements OnInit {
+export class QuillTestComponent implements OnInit, OnDestroy {
     blurred = false;
     focused = false;
     model = '<p>asdfasdfasd <span style="background-color: rgb(255, 235, 204);">asdfsdf</span></p>';
+    testModel =
+        '{"ops":[{"insert":"asdfasd ehelalsd "},{"attributes":{"background":"#f06666"},"insert":"asdf"},{"insert":"\\n"}]}';
     quillRef: Quill;
+    aloneTimer: NodeJS.Timeout;
+    imalone: boolean;
+    // provider: WebrtcProvider;
 
     @ViewChild(QuillEditorComponent, { static: true }) editor: QuillEditorComponent;
     modules = {
@@ -76,64 +81,66 @@ export class QuillTestComponent implements OnInit {
 
     ngOnInit(): void {}
 
+    ngOnDestroy(): void {
+        console.log('destroyed');
+    }
+
     created(event: Quill) {
         // tslint:disable-next-line:no-console
         console.log('editor-created', event);
-        event.setText('<p>a<span style="background-color: rgb(240, 102, 102);">sdfdfd</span></p>');
+        // event.setText('<p>a<span style="background-color: rgb(240, 102, 102);">sdfdfd</span></p>');
         this.quillRef = event;
-
-        // const cursors = this.quillRef.getModule('cursors');
-        // console.log('cursors: ', cursors);
-        // const cursor = cursors.createCursor('123', 'peter parker', 'red');
-        // cursors.moveCursor('123', { index: 0, length: 1, color: 'red' });
-        // const table = this.quillRef.getModule('table');
-        // console.log('table:', table);
 
         const ydoc = new Y.Doc();
         // ydoc.clientID = 12839123; // setting own id! (for differentiating between users)
-        // clients connected to the same room-name share document updates
         // @ts-ignore
-        const provider = new WebrtcProvider('your-room-name', ydoc, {
-            // generate room name and password in backend
-            password: 'optional-room-password'
+        const provider = new WebrtcProvider('law-orga-really-my-room', ydoc, {
+            password: 'ladsflh'
         });
-        // const yarray = ydoc.get('array', Y.Array); // dont need it
-        // provider.awareness.on('change', event => {
-        //     // TODO: if quit an no one else here -> send current version to backend (maybe save, maybe just as draft)
-        //     // console.log('change!!! ', event);
-        //     // console.log('clientid: ', provider.doc.clientID);
-        //     const states = provider.awareness.states.size;
-        //     console.log('states: ', states);
-        // });
+
         provider.connect();
         provider.awareness.setLocalStateField('user', { name: 'bruce wayne', id: '11111111' }); // showing correct name and id of user?
         const binding = new QuillBinding(ydoc.getText('quill'), event, provider.awareness);
+
+        console.log('local state: ', binding.awareness.getStates());
+        if (binding.awareness.getStates().size <= 1) {
+            console.log('im alone? ');
+            // event.setContents(JSON.parse(this.testModel));
+            this.imalone = true;
+            this.aloneTimer = setTimeout(() => {
+                if (this.imalone) {
+                    console.log('contents set because really alone');
+                    event.setContents(JSON.parse(this.testModel));
+                }
+            }, 1000);
+        }
+
         binding.awareness.once('update', () => {
             const states = provider.awareness.states.size;
             // check initial users
             console.log('states: ', states);
             if (states > 1) {
                 console.log('im not alone in here');
+                this.imalone = false;
             } else {
                 console.log('im alone here');
-
-                // event.setText(this.model);
+                event.setContents(JSON.parse(this.testModel));
+                // event.setText(this.testModel);
+                this.imalone = true;
             }
         });
     }
 
     changedEditor(event: EditorChangeContent | EditorChangeSelection) {
+        console.log('changedEditor: ', event);
+
         // tslint:disable-next-line:no-console
         if (event.event !== 'selection-change') {
-            console.log('editor-change, only html', event.html);
+            // console.log('editor-change, only html', event.html);
             console.log('editor-change, event', event);
+            console.log(JSON.stringify(event.content));
         }
-        // console.log('model: ', this.model);
-        console.log('editor: ', this.editor);
-        // console.log('html: ', event.html);
-        // if (this.ydoc) {
-        //     console.log('from ydoc: ', this.ydoc.getText('quill'));
-        // }
+        // console.log('editor: ', this.editor);
     }
 
     focus($event) {
