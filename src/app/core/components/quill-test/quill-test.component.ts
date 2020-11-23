@@ -7,6 +7,7 @@ import { QuillEditorComponent } from 'ngx-quill';
 import * as Y from 'yjs';
 import { QuillBinding } from 'y-quill';
 import { WebrtcProvider } from 'y-webrtc';
+import { Awareness } from 'y-protocols/awareness';
 
 @Component({
     selector: 'app-quill-test',
@@ -23,6 +24,7 @@ export class QuillTestComponent implements OnInit, OnDestroy {
     aloneTimer: NodeJS.Timeout;
     imalone: boolean;
     // provider: WebrtcProvider;
+    // awareness: Awareness;
 
     @ViewChild(QuillEditorComponent, { static: true }) editor: QuillEditorComponent;
     modules = {
@@ -71,8 +73,7 @@ export class QuillTestComponent implements OnInit, OnDestroy {
 
             ['clean'], // remove formatting button
 
-            ['link', 'image', 'video'], // link and image, video
-            ['table']
+            ['link', 'image', 'video'] // link and image, video
         ],
         cursors: true
     };
@@ -82,6 +83,7 @@ export class QuillTestComponent implements OnInit, OnDestroy {
     ngOnInit(): void {}
 
     ngOnDestroy(): void {
+        // this.awareness.setLocalState(null);
         console.log('destroyed');
     }
 
@@ -100,6 +102,7 @@ export class QuillTestComponent implements OnInit, OnDestroy {
 
         provider.connect();
         provider.awareness.setLocalStateField('user', { name: 'bruce wayne', id: '11111111' }); // showing correct name and id of user?
+        // this.awareness = provider.awareness;
         const binding = new QuillBinding(ydoc.getText('quill'), event, provider.awareness);
 
         console.log('local state: ', binding.awareness.getStates());
@@ -139,6 +142,9 @@ export class QuillTestComponent implements OnInit, OnDestroy {
             // console.log('editor-change, only html', event.html);
             console.log('editor-change, event', event);
             console.log(JSON.stringify(event.content));
+        } else {
+            console.log('selection changed: ', event);
+            // editor.editor.delta.ops
         }
         // console.log('editor: ', this.editor);
     }

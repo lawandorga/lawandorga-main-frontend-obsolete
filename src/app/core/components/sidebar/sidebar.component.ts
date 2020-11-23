@@ -114,8 +114,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
             link: FILES_FRONT_URL
         },
         {
-            label: 'TEST',
-            icon: 'folder_open',
+            label: 'Collab',
+            icon: 'article',
             link: 'test'
         },
         {
