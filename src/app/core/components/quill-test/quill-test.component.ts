@@ -7,7 +7,6 @@ import { QuillEditorComponent } from 'ngx-quill';
 import * as Y from 'yjs';
 import { QuillBinding } from 'y-quill';
 import { WebrtcProvider } from 'y-webrtc';
-import { Awareness } from 'y-protocols/awareness';
 
 @Component({
     selector: 'app-quill-test',
@@ -15,8 +14,6 @@ import { Awareness } from 'y-protocols/awareness';
     styleUrls: ['./quill-test.component.scss']
 })
 export class QuillTestComponent implements OnInit, OnDestroy {
-    blurred = false;
-    focused = false;
     model = '<p>asdfasdfasd <span style="background-color: rgb(255, 235, 204);">asdfsdf</span></p>';
     testModel =
         '{"ops":[{"insert":"asdfasd ehelalsd "},{"attributes":{"background":"#f06666"},"insert":"asdf"},{"insert":"\\n"}]}';
@@ -149,17 +146,8 @@ export class QuillTestComponent implements OnInit, OnDestroy {
         // console.log('editor: ', this.editor);
     }
 
-    focus($event) {
-        // tslint:disable-next-line:no-console
-        console.log('focus', $event);
-        this.focused = true;
-        this.blurred = false;
-    }
-
-    blur($event) {
-        // tslint:disable-next-line:no-console
-        console.log('blur', $event);
-        this.focused = false;
-        this.blurred = true;
+    onShowCommentClick() {
+        console.log('show something');
+        // first 5 chars, bacground color yellow/orange
     }
 }

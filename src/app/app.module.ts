@@ -82,6 +82,7 @@ const quillConfig: QuillConfig = {
         cursors: true,
         table: true,
         tableUI: true
+        // comment: true
     }
 };
 
