@@ -23,6 +23,8 @@ import { CollabRoutingModule } from './collab-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CoreModule } from '../core/core.module';
+import { collabReducer } from './store/collab.reducers';
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
     imports: [
@@ -31,7 +33,8 @@ import { CoreModule } from '../core/core.module';
         SharedModule,
         FormsModule,
         ReactiveFormsModule,
-        CoreModule
+        CoreModule,
+        StoreModule.forFeature('collab', collabReducer)
     ],
     declarations: [CollabMainViewComponent],
     providers: []
