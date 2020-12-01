@@ -116,7 +116,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         {
             label: 'Collab',
             icon: 'article',
-            link: 'test'
+            link: 'collab'
         },
         {
             label: 'Admin',

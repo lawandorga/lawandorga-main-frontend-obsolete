@@ -46,6 +46,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { QuillConfig, QuillModule } from 'ngx-quill';
 import Quill from 'quill';
 import QuillCursors from 'quill-cursors';
+import { CollabSandboxService } from './collab/services/collab-sandbox.service';
 
 // Quill.register(
 //     {
@@ -109,6 +110,7 @@ registerLocaleData(localeDE);
         CoreSandboxService,
         RecordsSandboxService,
         FilesSandboxService,
+        CollabSandboxService,
         StorageService,
         SnackbarService,
         SharedSandboxService,

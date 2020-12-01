@@ -57,7 +57,6 @@ import { CoreSandboxService } from '../../core/services/core-sandbox.service';
 import { FullRecord, RestrictedRecord } from '../models/record.model';
 import { StorageService } from '../../shared/services/storage.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
-import { CoreState } from '../../core/store/core.reducers';
 import { RecordPermissionRequest } from '../models/record_permission.model';
 import { RECORDS_FRONT_URL } from '../../statics/frontend_links.statics';
 import { State } from '../../core/models/state.model';
