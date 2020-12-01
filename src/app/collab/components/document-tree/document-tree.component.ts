@@ -43,4 +43,8 @@ export class DocumentTreeComponent implements OnInit {
     }
 
     hasChild = (_: number, node: NameCollabDocument) => !!node.children && node.children.length > 0;
+
+    onNodeClick(data): void {
+        console.log('click on node: ', data);
+    }
 }
