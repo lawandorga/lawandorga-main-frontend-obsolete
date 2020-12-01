@@ -20,6 +20,7 @@ import { Action } from '@ngrx/store';
 import { NameCollabDocument } from '../models/collab-document.model';
 
 export const SET_ALL_DOCUMENTS = 'SET_ALL_DOCUMENTS';
+export const START_LOADING_ALL_DOCUMENTS = 'START_LOADING_ALL_DOCUMENTS';
 
 export class SetAllDocuments implements Action {
     readonly type = SET_ALL_DOCUMENTS;
@@ -27,4 +28,8 @@ export class SetAllDocuments implements Action {
     constructor(public payload: NameCollabDocument[]) {}
 }
 
-export type CollabActions = SetAllDocuments;
+export class StartLoadingAllDocuments implements Action {
+    readonly type = START_LOADING_ALL_DOCUMENTS;
+}
+
+export type CollabActions = SetAllDocuments | StartLoadingAllDocuments;

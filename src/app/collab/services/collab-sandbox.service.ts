@@ -17,10 +17,19 @@
  */
 
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { CollabState } from '../store/collab.reducers';
+import { StartLoadingAllDocuments } from '../store/collab.actions';
 
 @Injectable({
     providedIn: 'root'
 })
 export class CollabSandboxService {
-    constructor() {}
+    constructor(private router: Router, private collabStore: Store<CollabState>) {}
+
+    startLoadingAllDocuments(): void {
+        console.log('dispatch startLoadingAllDocuments');
+        this.collabStore.dispatch(new StartLoadingAllDocuments());
+    }
 }

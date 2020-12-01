@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { CollabSandboxService } from '../../services/collab-sandbox.service';
 
 @Component({
-  selector: 'app-collab-main-view',
-  templateUrl: './collab-main-view.component.html',
-  styleUrls: ['./collab-main-view.component.scss']
+    selector: 'app-collab-main-view',
+    templateUrl: './collab-main-view.component.html',
+    styleUrls: ['./collab-main-view.component.scss']
 })
 export class CollabMainViewComponent implements OnInit {
+    constructor(public collabSB: CollabSandboxService) {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+    ngOnInit(): void {
+        this.collabSB.startLoadingAllDocuments();
+    }
 }

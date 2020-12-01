@@ -60,6 +60,8 @@ export const RECORD_DOCUMENT_DELETIONS_API_URL =
 export const PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS =
     base + 'api/records/process_record_document_deletion_request/';
 
+export const COLLAB_DOCUMENTS = base + 'api/collab/collab_documents/';
+
 const CHECK_USER_ACTIVATION_API_URL = base + 'api/check_user_activation_link/';
 const ACTIVATE_USER_ACTIVATION_API_URL = base + 'api/activate_user_activation_link/';
 const RESET_PASSWORD_API_URL = base + 'api/reset_password/';

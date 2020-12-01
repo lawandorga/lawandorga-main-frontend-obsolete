@@ -15,3 +15,39 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
+
+import { Injectable } from '@angular/core';
+import { Actions, Effect, ofType } from '@ngrx/effects';
+import { HttpClient } from '@angular/common/http';
+import { SET_ALL_DOCUMENTS, START_LOADING_ALL_DOCUMENTS } from './collab.actions';
+import { catchError, mergeMap, switchMap } from 'rxjs/operators';
+import { from } from 'rxjs';
+import { COLLAB_DOCUMENTS } from '../../statics/api_urls.statics';
+import { NameCollabDocument } from '../models/collab-document.model';
+
+@Injectable()
+export class CollabEffects {
+    constructor(private actions: Actions, private http: HttpClient) {}
+
+    @Effect()
+    startLoadingAllDocuments = this.actions.pipe(
+        ofType(START_LOADING_ALL_DOCUMENTS),
+        switchMap(() => {
+            return from(
+                this.http.get(COLLAB_DOCUMENTS).pipe(
+                    catchError(err => {
+                        console.log('error');
+                        return [];
+                    }),
+                    mergeMap(response => {
+                        console.log('response from getting collab documents: ', response);
+                        const documents = NameCollabDocument.getNameCollabDocumentsFromJsonArray(
+                            response
+                        );
+                        return [{ type: SET_ALL_DOCUMENTS, payload: documents }];
+                    })
+                )
+            );
+        })
+    );
+}
