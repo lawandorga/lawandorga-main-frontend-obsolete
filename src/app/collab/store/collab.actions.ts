@@ -21,6 +21,7 @@ import { NameCollabDocument } from '../models/collab-document.model';
 
 export const SET_ALL_DOCUMENTS = 'SET_ALL_DOCUMENTS';
 export const START_LOADING_ALL_DOCUMENTS = 'START_LOADING_ALL_DOCUMENTS';
+export const START_ADDING_DOCUMENT = 'START_ADDING_DOCUMENT';
 
 export class SetAllDocuments implements Action {
     readonly type = SET_ALL_DOCUMENTS;
@@ -32,4 +33,10 @@ export class StartLoadingAllDocuments implements Action {
     readonly type = START_LOADING_ALL_DOCUMENTS;
 }
 
-export type CollabActions = SetAllDocuments | StartLoadingAllDocuments;
+export class StartAddingDocument implements Action {
+    readonly type = START_ADDING_DOCUMENT;
+
+    constructor(public payload: { name: string; parent_id: number }) {}
+}
+
+export type CollabActions = SetAllDocuments | StartLoadingAllDocuments | StartAddingDocument;

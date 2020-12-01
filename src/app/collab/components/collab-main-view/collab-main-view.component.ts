@@ -12,4 +12,9 @@ export class CollabMainViewComponent implements OnInit {
     ngOnInit(): void {
         this.collabSB.startLoadingAllDocuments();
     }
+
+    onAddNewClick() {
+        console.log('add new collab document');
+        this.collabSB.addNewCollabDocument();
+    }
 }

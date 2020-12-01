@@ -19,8 +19,13 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { HttpClient } from '@angular/common/http';
-import { SET_ALL_DOCUMENTS, START_LOADING_ALL_DOCUMENTS } from './collab.actions';
-import { catchError, mergeMap, switchMap } from 'rxjs/operators';
+import {
+    SET_ALL_DOCUMENTS,
+    START_ADDING_DOCUMENT,
+    START_LOADING_ALL_DOCUMENTS,
+    StartAddingDocument
+} from './collab.actions';
+import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
 import { from } from 'rxjs';
 import { COLLAB_DOCUMENTS } from '../../statics/api_urls.statics';
 import { NameCollabDocument } from '../models/collab-document.model';
@@ -47,6 +52,34 @@ export class CollabEffects {
                         return [{ type: SET_ALL_DOCUMENTS, payload: documents }];
                     })
                 )
+            );
+        })
+    );
+
+    @Effect()
+    startAddingDocument = this.actions.pipe(
+        ofType(START_ADDING_DOCUMENT),
+        map((action: StartAddingDocument) => {
+            return action.payload;
+        }),
+        switchMap((payload: { name: string; parent_id: number }) => {
+            console.log('start adding document effect');
+            return from(
+                this.http
+                    .post(COLLAB_DOCUMENTS, {
+                        name: payload.name,
+                        parent_id: payload.parent_id
+                    })
+                    .pipe(
+                        catchError(err => {
+                            console.log('error');
+                            return [];
+                        }),
+                        mergeMap(response => {
+                            console.log('response from creating collab document: ', response);
+                            return [];
+                        })
+                    )
             );
         })
     );

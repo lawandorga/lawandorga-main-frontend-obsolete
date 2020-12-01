@@ -25,6 +25,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CoreModule } from '../core/core.module';
 import { collabReducer } from './store/collab.reducers';
 import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { CollabEffects } from './store/collab.effects';
 
 @NgModule({
     imports: [
@@ -34,7 +36,8 @@ import { StoreModule } from '@ngrx/store';
         FormsModule,
         ReactiveFormsModule,
         CoreModule,
-        StoreModule.forFeature('collab', collabReducer)
+        StoreModule.forFeature('collab', collabReducer),
+        EffectsModule.forFeature([CollabEffects])
     ],
     declarations: [CollabMainViewComponent],
     providers: []

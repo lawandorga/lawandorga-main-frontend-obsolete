@@ -28,14 +28,6 @@ export class NameCollabDocument {
             return null;
         }
 
-        // if (json.children) {
-        //     const children = NameCollabDocument.getNameCollabDocumentsFromJsonArray(json.children);
-        //     return new NameCollabDocument(
-        //         json.id,
-        //         json.name,
-        //         NameCollabDocument.getNameCollabDocumentsFromJsonArray(json.children)
-        //     );
-        // }
         return json.children
             ? new NameCollabDocument(
                   json.id,

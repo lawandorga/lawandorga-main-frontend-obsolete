@@ -18,18 +18,58 @@
 
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { CollabState } from '../store/collab.reducers';
-import { StartLoadingAllDocuments } from '../store/collab.actions';
+import { StartAddingDocument, StartLoadingAllDocuments } from '../store/collab.actions';
+import { HttpClient } from '@angular/common/http';
+import { SharedSandboxService } from '../../shared/services/shared-sandbox.service';
+import { NameCollabDocument } from '../models/collab-document.model';
+import { Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
 })
 export class CollabSandboxService {
-    constructor(private router: Router, private collabStore: Store<CollabState>) {}
+    constructor(
+        private router: Router,
+        private collabStore: Store<CollabState>,
+        private http: HttpClient,
+        private sharedSB: SharedSandboxService
+    ) {}
 
     startLoadingAllDocuments(): void {
         console.log('dispatch startLoadingAllDocuments');
         this.collabStore.dispatch(new StartLoadingAllDocuments());
+    }
+
+    addNewCollabDocument(): void {
+        this.sharedSB.openEditTextDialog(
+            {
+                short: true,
+                descriptionLabel: 'name',
+                saveLabel: 'create',
+                title: 'add new document'
+            },
+            result => {
+                if (result) {
+                    // otherwise adding was cancelled
+                    // this.
+                    console.log('got result, sending effect now?');
+                    this.collabStore.dispatch(
+                        new StartAddingDocument({ name: result, parent_id: null })
+                    );
+                }
+            }
+        );
+    }
+
+    getAllDocuments(): Observable<NameCollabDocument[]> {
+        return this.collabStore.pipe(
+            select(
+                (state: any) =>
+                    // Object.values(state.all_documents)
+                    state.all_documents
+            )
+        );
     }
 }
