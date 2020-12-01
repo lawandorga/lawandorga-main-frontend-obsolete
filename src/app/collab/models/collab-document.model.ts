@@ -30,7 +30,7 @@ export class NameCollabDocument {
 
         return json.children
             ? new NameCollabDocument(
-                  json.id,
+                  json.pk,
                   json.name,
                   NameCollabDocument.getNameCollabDocumentsFromJsonArray(json.children)
               )
@@ -39,6 +39,7 @@ export class NameCollabDocument {
     }
 
     static getNameCollabDocumentsFromJsonArray(jsonArray: any): NameCollabDocument[] {
+        console.log('json array: ', jsonArray);
         const documents: NameCollabDocument[] = [];
         Object.values(jsonArray).map(json => {
             documents.push(NameCollabDocument.getNameCollabDocumentFromJson(json));

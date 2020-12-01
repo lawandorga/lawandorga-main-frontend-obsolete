@@ -53,8 +53,6 @@ export class CollabSandboxService {
             result => {
                 if (result) {
                     // otherwise adding was cancelled
-                    // this.
-                    console.log('got result, sending effect now?');
                     this.collabStore.dispatch(
                         new StartAddingDocument({ name: result, parent_id: null })
                     );
@@ -68,7 +66,7 @@ export class CollabSandboxService {
             select(
                 (state: any) =>
                     // Object.values(state.all_documents)
-                    state.all_documents
+                    state.collab.all_documents
             )
         );
     }

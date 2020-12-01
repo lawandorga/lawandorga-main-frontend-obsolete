@@ -77,7 +77,7 @@ export class CollabEffects {
                         }),
                         mergeMap(response => {
                             console.log('response from creating collab document: ', response);
-                            return [];
+                            return [{ type: START_LOADING_ALL_DOCUMENTS }];
                         })
                     )
             );

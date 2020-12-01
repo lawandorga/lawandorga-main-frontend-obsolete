@@ -27,6 +27,7 @@ import { collabReducer } from './store/collab.reducers';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { CollabEffects } from './store/collab.effects';
+import { DocumentTreeComponent } from './components/document-tree/document-tree.component';
 
 @NgModule({
     imports: [
@@ -39,7 +40,7 @@ import { CollabEffects } from './store/collab.effects';
         StoreModule.forFeature('collab', collabReducer),
         EffectsModule.forFeature([CollabEffects])
     ],
-    declarations: [CollabMainViewComponent],
+    declarations: [CollabMainViewComponent, DocumentTreeComponent],
     providers: []
 })
 export class CollabModule {}

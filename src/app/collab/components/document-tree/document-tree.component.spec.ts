@@ -18,20 +18,20 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CollabMainViewComponent } from './collab-main-view.component';
+import { DocumentTreeComponent } from './document-tree.component';
 
-describe('CollabMainViewComponent', () => {
-    let component: CollabMainViewComponent;
-    let fixture: ComponentFixture<CollabMainViewComponent>;
+describe('DocumentTreeComponent', () => {
+    let component: DocumentTreeComponent;
+    let fixture: ComponentFixture<DocumentTreeComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [CollabMainViewComponent]
+            declarations: [DocumentTreeComponent]
         }).compileComponents();
     });
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(CollabMainViewComponent);
+        fixture = TestBed.createComponent(DocumentTreeComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
