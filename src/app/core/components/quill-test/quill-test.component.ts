@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import Quill from 'quill';
+import Quill, { Delta } from 'quill';
 import { EditorChangeContent, EditorChangeSelection, QuillModule, QuillModules } from 'ngx-quill';
 import 'quill-mention';
 import 'quill-cursors';
@@ -124,7 +124,7 @@ export class QuillTestComponent implements OnInit, OnDestroy {
                 this.imalone = false;
             } else {
                 console.log('im alone here');
-                event.setContents(JSON.parse(this.testModel));
+                // event.setContents(JSON.parse(this.testModel));
                 // event.setText(this.testModel);
                 this.imalone = true;
             }
@@ -148,6 +148,7 @@ export class QuillTestComponent implements OnInit, OnDestroy {
 
     onShowCommentClick() {
         console.log('show something');
-        // first 5 chars, bacground color yellow/orange
+        // first 5 chars, background color yellow/orange
+        console.log(this.quillRef.getContents(0, 5));
     }
 }

@@ -16,15 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-
-//@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 @import "styles/basic.scss";
 @import "styles/global.scss";
 
-//@import '~quill/dist/quill.core.css';
-//@import '~quill/dist/quill.bubble.css';
-
-@import "~quill/dist/quill.snow.css";
+@import '~quill/dist/quill.core.css';
+@import '~quill/dist/quill.bubble.css';
+@import '~quill/dist/quill.snow.css';
 @import "~quill-mention/dist/quill.mention.css";
 
 html,
