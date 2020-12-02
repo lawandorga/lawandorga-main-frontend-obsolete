@@ -42,7 +42,7 @@ export class CollabSandboxService {
         this.collabStore.dispatch(new StartLoadingAllDocuments());
     }
 
-    addNewCollabDocument(): void {
+    addNewCollabDocument(id?: number): void {
         this.sharedSB.openEditTextDialog(
             {
                 short: true,
@@ -54,7 +54,7 @@ export class CollabSandboxService {
                 if (result) {
                     // otherwise adding was cancelled
                     this.collabStore.dispatch(
-                        new StartAddingDocument({ name: result, parent_id: null })
+                        new StartAddingDocument({ name: result, parent_id: id ? id : null })
                     );
                 }
             }

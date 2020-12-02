@@ -18,7 +18,7 @@
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CollabMainViewComponent } from './components/collab-main-view/collab-main-view.component';
+import { CollabMainViewComponent } from './pages/collab-main-view/collab-main-view.component';
 import { CollabRoutingModule } from './collab-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -28,6 +28,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { CollabEffects } from './store/collab.effects';
 import { DocumentTreeComponent } from './components/document-tree/document-tree.component';
+import { PageViewComponent } from './pages/page-view/page-view.component';
 
 @NgModule({
     imports: [
@@ -40,7 +41,7 @@ import { DocumentTreeComponent } from './components/document-tree/document-tree.
         StoreModule.forFeature('collab', collabReducer),
         EffectsModule.forFeature([CollabEffects])
     ],
-    declarations: [CollabMainViewComponent, DocumentTreeComponent],
+    declarations: [CollabMainViewComponent, DocumentTreeComponent, PageViewComponent],
     providers: []
 })
 export class CollabModule {}

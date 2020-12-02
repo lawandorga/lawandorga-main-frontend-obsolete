@@ -21,6 +21,7 @@ import { CollabSandboxService } from '../../services/collab-sandbox.service';
 import { NameCollabDocument } from '../../models/collab-document.model';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-document-tree',
@@ -31,11 +32,12 @@ export class DocumentTreeComponent implements OnInit {
     treeControl = new NestedTreeControl<NameCollabDocument>(node => node.children);
     dataSource = new MatTreeNestedDataSource<NameCollabDocument>();
 
-    constructor(private collabSB: CollabSandboxService) {
+    constructor(private collabSB: CollabSandboxService, private router: Router) {
         this.dataSource.data = [];
     }
 
     ngOnInit(): void {
+        this.collabSB.startLoadingAllDocuments();
         this.collabSB.getAllDocuments().subscribe((documents: NameCollabDocument[]) => {
             console.log('subscribed documents: ', documents);
             this.dataSource.data = documents;
@@ -46,5 +48,6 @@ export class DocumentTreeComponent implements OnInit {
 
     onNodeClick(data): void {
         console.log('click on node: ', data);
+        this.router.navigateByUrl('collab/' + data.id);
     }
 }
