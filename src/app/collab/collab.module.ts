@@ -30,6 +30,20 @@ import { CollabEffects } from './store/collab.effects';
 import { DocumentTreeComponent } from './components/document-tree/document-tree.component';
 import { PageViewComponent } from './pages/page-view/page-view.component';
 import { CollabDocumentViewerComponent } from './components/collab-document-viewer/collab-document-viewer.component';
+import { QuillConfig, QuillModule } from 'ngx-quill';
+import Quill from 'quill';
+import QuillCursors from 'quill-cursors';
+
+Quill.register('modules/cursors', QuillCursors);
+// Quill.register('modules/better-table', QuillBetterTable);
+// Quill.register('modules/table');
+const quillConfig: QuillConfig = {
+    modules: {
+        cursors: true,
+        table: true,
+        tableUI: true
+    }
+};
 
 @NgModule({
     imports: [
@@ -40,9 +54,15 @@ import { CollabDocumentViewerComponent } from './components/collab-document-view
         ReactiveFormsModule,
         CoreModule,
         StoreModule.forFeature('collab', collabReducer),
-        EffectsModule.forFeature([CollabEffects])
+        EffectsModule.forFeature([CollabEffects]),
+        QuillModule.forRoot(quillConfig)
     ],
-    declarations: [CollabMainViewComponent, DocumentTreeComponent, PageViewComponent, CollabDocumentViewerComponent],
+    declarations: [
+        CollabMainViewComponent,
+        DocumentTreeComponent,
+        PageViewComponent,
+        CollabDocumentViewerComponent
+    ],
     providers: []
 })
 export class CollabModule {}

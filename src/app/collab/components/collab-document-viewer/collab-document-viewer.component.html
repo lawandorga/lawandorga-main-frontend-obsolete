@@ -16,4 +16,16 @@
   ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
   -->
 
-<p>collab-document-viewer works!</p>
+<div *ngIf="text_document">
+    <h1>{{ text_document.name }}</h1>
+    <quill-editor
+        theme="bubble"
+        (onEditorCreated)="created($event)"
+        [modules]="modules"
+        placeholder=""
+    >
+    </quill-editor>
+    <div *ngIf="text_document.content === ''">
+        <h2>empty document</h2>
+    </div>
+</div>

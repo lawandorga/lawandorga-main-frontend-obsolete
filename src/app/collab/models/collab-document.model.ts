@@ -17,8 +17,9 @@
  */
 
 import { RestrictedUser } from '../../core/models/user.model';
+import { NameTextDocument, TextDocument } from './text-document.model';
 
-export class NameCollabDocument {
+export class NameCollabDocument implements NameTextDocument {
     constructor(public id: number, public name: string, public children: NameCollabDocument[]) {
         this.id = id;
         this.name = name;
@@ -48,7 +49,7 @@ export class NameCollabDocument {
     }
 }
 
-export class CollabDocument extends NameCollabDocument {
+export class CollabDocument extends NameCollabDocument implements TextDocument {
     constructor(
         id: number,
         name: string,

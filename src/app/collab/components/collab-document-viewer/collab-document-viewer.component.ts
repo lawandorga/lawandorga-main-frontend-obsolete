@@ -16,9 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { CollabSandboxService } from '../../services/collab-sandbox.service';
-import { CollabDocument } from '../../models/collab-document.model';
+import { TextDocument } from '../../models/text-document.model';
+import Quill from 'quill';
+import { QuillEditorComponent } from 'ngx-quill';
+import * as Y from 'yjs';
+import { WebrtcProvider } from 'y-webrtc';
+import { QuillBinding } from 'y-quill';
 
 @Component({
     selector: 'app-collab-document-viewer',
@@ -31,10 +36,16 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges {
 
     current_id: number;
 
-    text_;
+    text_document: TextDocument;
+
+    quillRef: Quill;
+
+    @ViewChild(QuillEditorComponent, { static: true }) editor: QuillEditorComponent;
+    modules = {};
 
     constructor(private collabSB: CollabSandboxService) {
         this.current_id = undefined;
+        this.text_document = undefined;
     }
 
     ngOnInit(): void {
@@ -49,8 +60,14 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges {
         if (this.document_id && this.current_id !== this.document_id) {
             this.current_id = this.document_id;
             this.collabSB.fetchTextDocument(this.document_id).subscribe(response => {
-                const collab_document = CollabDocument.getCollabDocumentFromJson(response);
+                this.text_document = TextDocument.getTextDocumentFromJson(response);
+                // this.quillRef.setContents(JSON.parse(this.text_document.content));
             });
         }
+    }
+
+    created(event: Quill) {
+        this.quillRef = event;
+        this.quillRef.enable(false);
     }
 }
