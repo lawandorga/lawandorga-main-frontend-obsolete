@@ -60,7 +60,8 @@ export const RECORD_DOCUMENT_DELETIONS_API_URL =
 export const PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS =
     base + 'api/records/process_record_document_deletion_request/';
 
-export const COLLAB_DOCUMENTS = base + 'api/collab/collab_documents/';
+export const COLLAB_COLLAB_DOCUMENTS = base + 'api/collab/collab_documents/';
+export const COLLAB_TEXT_DOCUMENTS = base + 'api/collab/text_documents/';
 
 const CHECK_USER_ACTIVATION_API_URL = base + 'api/check_user_activation_link/';
 const ACTIVATE_USER_ACTIVATION_API_URL = base + 'api/activate_user_activation_link/';
@@ -209,4 +210,8 @@ export const GetFolderPermissionsForFolderApiUrl = (id: string) => {
 
 export const GetFolderPermissionApiUrl = (id: string) => {
     return `${FILES_PERMISSION_FOR_FOLDER_BASE_API_URL}${id}/`;
+};
+
+export const GetCollabTextDocumentApiUrl = (id: number) => {
+    return `${COLLAB_TEXT_DOCUMENTS}${id}/`;
 };

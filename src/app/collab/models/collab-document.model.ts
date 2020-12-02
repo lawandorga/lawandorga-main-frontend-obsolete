@@ -16,6 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
+import { RestrictedUser } from '../../core/models/user.model';
+
 export class NameCollabDocument {
     constructor(public id: number, public name: string, public children: NameCollabDocument[]) {
         this.id = id;
@@ -43,5 +45,40 @@ export class NameCollabDocument {
             documents.push(NameCollabDocument.getNameCollabDocumentFromJson(json));
         });
         return documents;
+    }
+}
+
+export class CollabDocument extends NameCollabDocument {
+    constructor(
+        id: number,
+        name: string,
+        children: NameCollabDocument[],
+        public content: string,
+        public creator: RestrictedUser,
+        public created: Date,
+        public last_editor: RestrictedUser,
+        public last_edited: Date
+    ) {
+        super(id, name, children);
+        this.content = content;
+        this.creator = creator;
+        this.created = created;
+        this.last_editor = last_editor;
+        this.last_edited = last_edited;
+    }
+
+    static getCollabDocumentFromJson(json: any): CollabDocument {
+        return new CollabDocument(
+            Number(json.id),
+            json.name,
+            json.children
+                ? NameCollabDocument.getNameCollabDocumentsFromJsonArray(json.children)
+                : [],
+            json.content,
+            RestrictedUser.getRestrictedUserFromJson(json.creator),
+            new Date(json.created),
+            RestrictedUser.getRestrictedUserFromJson(json.last_editor),
+            new Date(json.last_edited)
+        );
     }
 }

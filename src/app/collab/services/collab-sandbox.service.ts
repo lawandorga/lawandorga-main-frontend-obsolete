@@ -25,6 +25,8 @@ import { HttpClient } from '@angular/common/http';
 import { SharedSandboxService } from '../../shared/services/shared-sandbox.service';
 import { NameCollabDocument } from '../models/collab-document.model';
 import { Observable } from 'rxjs';
+import { COLLAB_TEXT_DOCUMENTS, GetCollabTextDocumentApiUrl } from '../../statics/api_urls.statics';
+import { AppSandboxService } from '../../core/services/app-sandbox.service';
 
 @Injectable({
     providedIn: 'root'
@@ -69,5 +71,11 @@ export class CollabSandboxService {
                     state.collab.all_documents
             )
         );
+    }
+
+    fetchTextDocument(id: number): Observable<any> {
+        console.log('now fetching for document');
+        const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
+        return this.http.get(GetCollabTextDocumentApiUrl(id), privateKeyPlaceholder);
     }
 }

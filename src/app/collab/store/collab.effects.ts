@@ -27,7 +27,7 @@ import {
 } from './collab.actions';
 import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
 import { from } from 'rxjs';
-import { COLLAB_DOCUMENTS } from '../../statics/api_urls.statics';
+import { COLLAB_COLLAB_DOCUMENTS } from '../../statics/api_urls.statics';
 import { NameCollabDocument } from '../models/collab-document.model';
 
 @Injectable()
@@ -39,7 +39,7 @@ export class CollabEffects {
         ofType(START_LOADING_ALL_DOCUMENTS),
         switchMap(() => {
             return from(
-                this.http.get(COLLAB_DOCUMENTS).pipe(
+                this.http.get(COLLAB_COLLAB_DOCUMENTS).pipe(
                     catchError(err => {
                         console.log('error');
                         return [];
@@ -66,7 +66,7 @@ export class CollabEffects {
             console.log('start adding document effect');
             return from(
                 this.http
-                    .post(COLLAB_DOCUMENTS, {
+                    .post(COLLAB_COLLAB_DOCUMENTS, {
                         name: payload.name,
                         parent_id: payload.parent_id
                     })

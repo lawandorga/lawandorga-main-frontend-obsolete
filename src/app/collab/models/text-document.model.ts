@@ -16,28 +16,4 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
-import { CollabSandboxService } from '../../services/collab-sandbox.service';
-
-@Component({
-    selector: 'app-page-view',
-    templateUrl: './page-view.component.html',
-    styleUrls: ['./page-view.component.scss']
-})
-export class PageViewComponent implements OnInit {
-    id: number;
-
-    constructor(private route: ActivatedRoute, private collabSB: CollabSandboxService) {}
-
-    ngOnInit(): void {
-        this.route.params.subscribe((params: Params) => {
-            this.id = params['id'];
-            console.log('id changed in pageview');
-        });
-    }
-
-    onAddDocumentClick(): void {
-        this.collabSB.addNewCollabDocument(this.id);
-    }
-}
+export class NameTextDocument {}

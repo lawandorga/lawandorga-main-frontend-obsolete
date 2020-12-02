@@ -16,15 +16,41 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { CollabSandboxService } from '../../services/collab-sandbox.service';
+import { CollabDocument } from '../../models/collab-document.model';
 
 @Component({
     selector: 'app-collab-document-viewer',
     templateUrl: './collab-document-viewer.component.html',
     styleUrls: ['./collab-document-viewer.component.scss']
 })
-export class CollabDocumentViewerComponent implements OnInit {
-    constructor() {}
+export class CollabDocumentViewerComponent implements OnInit, OnChanges {
+    @Input()
+    document_id: number;
 
-    ngOnInit(): void {}
+    current_id: number;
+
+    text_;
+
+    constructor(private collabSB: CollabSandboxService) {
+        this.current_id = undefined;
+    }
+
+    ngOnInit(): void {
+        this.fetchIfNewDocumentId();
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        this.fetchIfNewDocumentId();
+    }
+
+    fetchIfNewDocumentId() {
+        if (this.document_id && this.current_id !== this.document_id) {
+            this.current_id = this.document_id;
+            this.collabSB.fetchTextDocument(this.document_id).subscribe(response => {
+                const collab_document = CollabDocument.getCollabDocumentFromJson(response);
+            });
+        }
+    }
 }
