@@ -54,7 +54,6 @@ export class DocumentTreeComponent implements OnInit {
             this.dataSource.data = documents;
 
             this.expandToSelected();
-            // this.treeControl.expandAll();
         });
     }
 
@@ -66,21 +65,20 @@ export class DocumentTreeComponent implements OnInit {
     }
 
     expandToSelected(): void {
-        const docs = this.dataSource.data;
-
-        for (const doc of docs) {
-            this.expandThis(doc, this.route_id);
+        for (const doc of this.dataSource.data) {
+            this.expandThis(doc);
         }
     }
 
-    expandThis(node: NameCollabDocument, id_to_expand: number): boolean {
+    expandThis(node: NameCollabDocument): boolean {
         for (const child of node.children) {
-            if (child.id === id_to_expand) {
+            if (child.id === this.route_id) {
                 this.treeControl.expand(node);
+                this.treeControl.expand(child);
                 return true;
             }
 
-            const result = this.expandThis(child, id_to_expand);
+            const result = this.expandThis(child);
             if (result) {
                 this.treeControl.expand(node);
                 return true;
