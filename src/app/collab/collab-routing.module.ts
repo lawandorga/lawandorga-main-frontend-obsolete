@@ -27,7 +27,7 @@ const collabRoutes: Routes = [
     {
         path: '',
         pathMatch: 'full',
-        component: CollabMainViewComponent
+        component: PageViewComponent
     },
     {
         path: ':id',

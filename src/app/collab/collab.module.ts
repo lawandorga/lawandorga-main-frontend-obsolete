@@ -29,6 +29,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { CollabEffects } from './store/collab.effects';
 import { DocumentTreeComponent } from './components/document-tree/document-tree.component';
 import { PageViewComponent } from './pages/page-view/page-view.component';
+import { CollabDocumentViewerComponent } from './components/collab-document-viewer/collab-document-viewer.component';
 
 @NgModule({
     imports: [
@@ -41,7 +42,7 @@ import { PageViewComponent } from './pages/page-view/page-view.component';
         StoreModule.forFeature('collab', collabReducer),
         EffectsModule.forFeature([CollabEffects])
     ],
-    declarations: [CollabMainViewComponent, DocumentTreeComponent, PageViewComponent],
+    declarations: [CollabMainViewComponent, DocumentTreeComponent, PageViewComponent, CollabDocumentViewerComponent],
     providers: []
 })
 export class CollabModule {}

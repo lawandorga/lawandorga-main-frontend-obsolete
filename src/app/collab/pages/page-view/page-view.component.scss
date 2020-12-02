@@ -16,3 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
+.page-view__tree-container {
+    max-width: 300px;
+}
+
+.page-view__container {
+    display: flex;
+    flex-direction: row;
+}

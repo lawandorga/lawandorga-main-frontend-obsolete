@@ -1,4 +1,4 @@
-/*!
+/*
  * law&orga - record and organization management software for refugee law clinics
  * Copyright (C) 2020  Dominik Walser
  *
@@ -16,24 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-@import "~src/styles/basic";
+import { Component, OnInit } from '@angular/core';
 
+@Component({
+    selector: 'app-collab-document-viewer',
+    templateUrl: './collab-document-viewer.component.html',
+    styleUrls: ['./collab-document-viewer.component.scss']
+})
+export class CollabDocumentViewerComponent implements OnInit {
+    constructor() {}
 
-.example-tree-invisible {
-    display: none;
-}
-
-.example-tree ul,
-.example-tree li {
-    margin-top: 0;
-    margin-bottom: 0;
-    list-style-type: none;
-}
-
-.selected-node {
-    color: $c-link-color;
-}
-
-.document-tree__overall-container {
-    width: 300px;
+    ngOnInit(): void {}
 }

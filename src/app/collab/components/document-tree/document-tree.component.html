@@ -16,8 +16,11 @@
   ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
   -->
 
-<p>document-tree works!</p>
-<mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
+<mat-tree
+    [dataSource]="dataSource"
+    [treeControl]="treeControl"
+    class="example-tree document-tree__overall-container"
+>
     <!-- This is the tree node template for leaf nodes -->
     <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
         <li
