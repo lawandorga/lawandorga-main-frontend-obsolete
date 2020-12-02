@@ -21,7 +21,8 @@ import { CollabSandboxService } from '../../services/collab-sandbox.service';
 import { NameCollabDocument } from '../../models/collab-document.model';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { testEventTargetIsSetCorrectlyOnLocal } from 'yjs/dist/tests/y-array.tests';
 
 @Component({
     selector: 'app-document-tree',
@@ -31,23 +32,60 @@ import { Router } from '@angular/router';
 export class DocumentTreeComponent implements OnInit {
     treeControl = new NestedTreeControl<NameCollabDocument>(node => node.children);
     dataSource = new MatTreeNestedDataSource<NameCollabDocument>();
+    route_id: number;
 
-    constructor(private collabSB: CollabSandboxService, private router: Router) {
+    constructor(
+        private collabSB: CollabSandboxService,
+        private router: Router,
+        private route: ActivatedRoute
+    ) {
         this.dataSource.data = [];
     }
 
     ngOnInit(): void {
+        this.route.params.subscribe((params: Params) => {
+            this.route_id = Number(params['id']);
+            console.log('tree route id: ', this.route_id);
+        });
+
         this.collabSB.startLoadingAllDocuments();
         this.collabSB.getAllDocuments().subscribe((documents: NameCollabDocument[]) => {
             console.log('subscribed documents: ', documents);
             this.dataSource.data = documents;
+
+            this.expandToSelected();
+            // this.treeControl.expandAll();
         });
     }
 
     hasChild = (_: number, node: NameCollabDocument) => !!node.children && node.children.length > 0;
 
-    onNodeClick(data): void {
+    onNodeClick(data: NameCollabDocument): void {
         console.log('click on node: ', data);
         this.router.navigateByUrl('collab/' + data.id);
+    }
+
+    expandToSelected(): void {
+        const docs = this.dataSource.data;
+
+        for (const doc of docs) {
+            this.expandThis(doc, this.route_id);
+        }
+    }
+
+    expandThis(node: NameCollabDocument, id_to_expand: number): boolean {
+        for (const child of node.children) {
+            if (child.id === id_to_expand) {
+                this.treeControl.expand(node);
+                return true;
+            }
+
+            const result = this.expandThis(child, id_to_expand);
+            if (result) {
+                this.treeControl.expand(node);
+                return true;
+            }
+        }
+        return false;
     }
 }

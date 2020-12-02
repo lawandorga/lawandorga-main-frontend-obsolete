@@ -28,18 +28,16 @@ export class NameCollabDocument {
             return null;
         }
 
-        return json.children
-            ? new NameCollabDocument(
-                  json.pk,
-                  json.name,
-                  NameCollabDocument.getNameCollabDocumentsFromJsonArray(json.children)
-              )
-            : new NameCollabDocument(json.id, json.name, []);
-        // return new NameCollabDocument(json.id, json.name);
+        return new NameCollabDocument(
+            Number(json.pk),
+            json.name,
+            json.children
+                ? NameCollabDocument.getNameCollabDocumentsFromJsonArray(json.children)
+                : []
+        );
     }
 
     static getNameCollabDocumentsFromJsonArray(jsonArray: any): NameCollabDocument[] {
-        console.log('json array: ', jsonArray);
         const documents: NameCollabDocument[] = [];
         Object.values(jsonArray).map(json => {
             documents.push(NameCollabDocument.getNameCollabDocumentFromJson(json));
