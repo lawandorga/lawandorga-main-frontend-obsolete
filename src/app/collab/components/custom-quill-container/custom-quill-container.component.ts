@@ -18,7 +18,6 @@
 
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { TextDocument } from '../../models/text-document.model';
-import RuntimeError = WebAssembly.RuntimeError;
 import Quill from 'quill';
 import { QuillEditorComponent } from 'ngx-quill';
 import { HasUnsaved } from '../../../core/services/can-have-unsaved.interface';
@@ -109,13 +108,12 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, HasUnsa
         console.log('text document: ', this.text_document);
         if ('text_document' in changes) {
             this.text_document = changes['text_document']['currentValue'];
-            console.log('');
         }
     }
 
     created(event: Quill): void {
         this.quillRef = event;
-        if (this.text_document) {
+        if (this.text_document && this.text_document.content && this.text_document.content !== '') {
             this.quillRef.setContents(JSON.parse(this.text_document.content));
         }
         if (!this.editingMode) {
