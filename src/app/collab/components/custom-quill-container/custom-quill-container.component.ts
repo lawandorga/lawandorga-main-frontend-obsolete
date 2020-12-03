@@ -35,6 +35,7 @@ import * as Y from 'yjs';
 import { WebrtcProvider } from 'y-webrtc';
 import { QuillBinding } from 'y-quill';
 import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
+import { RestrictedUser } from '../../../core/models/user.model';
 
 @Component({
     selector: 'app-custom-quill-container',
@@ -57,6 +58,7 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
     quillRef: Quill;
     provider: WebrtcProvider;
     binding: QuillBinding;
+    user: RestrictedUser;
 
     @ViewChild(QuillEditorComponent, { static: true }) editor: QuillEditorComponent;
     modules = {};
@@ -121,6 +123,9 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
                 ],
                 cursors: true
             };
+            this.coreSB.getUserRestricted().subscribe((user: RestrictedUser) => {
+                this.user = user;
+            });
         }
     }
 
@@ -156,8 +161,8 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
 
             this.provider.connect();
             this.provider.awareness.setLocalStateField('user', {
-                name: 'bruce wayne',
-                id: '11111111'
+                name: this.user.name,
+                id: this.user.id
             }); // showing correct name and id of user?
             this.binding = new QuillBinding(ydoc.getText('quill'), event, this.provider.awareness);
 
