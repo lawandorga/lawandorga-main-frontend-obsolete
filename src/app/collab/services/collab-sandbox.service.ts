@@ -25,8 +25,12 @@ import { HttpClient } from '@angular/common/http';
 import { SharedSandboxService } from '../../shared/services/shared-sandbox.service';
 import { NameCollabDocument } from '../models/collab-document.model';
 import { Observable } from 'rxjs';
-import { GetCollabTextDocumentApiUrl } from '../../statics/api_urls.statics';
+import {
+    GetCollabEditingApiUrl,
+    GetCollabTextDocumentApiUrl
+} from '../../statics/api_urls.statics';
 import { AppSandboxService } from '../../core/services/app-sandbox.service';
+import { EditingRoom } from '../models/editing-room.model';
 
 @Injectable({
     providedIn: 'root'
@@ -76,6 +80,11 @@ export class CollabSandboxService {
             .patch(GetCollabTextDocumentApiUrl(id), { content }, privateKeyPlaceholder)
             .subscribe(response => {
                 console.log('i got something back: ', response);
+                // TODO: do something here?
             });
+    }
+
+    connectToEditingRoom(id: number): Observable<any> {
+        return this.http.get(GetCollabEditingApiUrl(id));
     }
 }

@@ -22,6 +22,7 @@ import { TextDocument } from '../../models/text-document.model';
 import { CollabSandboxService } from '../../services/collab-sandbox.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { CustomQuillContainerComponent } from '../../components/custom-quill-container/custom-quill-container.component';
+import { EditingRoom } from '../../models/editing-room.model';
 
 @Component({
     selector: 'app-collab-edit',
@@ -30,6 +31,8 @@ import { CustomQuillContainerComponent } from '../../components/custom-quill-con
 })
 export class CollabEditComponent implements OnInit, HasUnsaved {
     text_document: TextDocument;
+    editing_room: EditingRoom;
+    editing_room_was_created: boolean;
 
     @ViewChild(CustomQuillContainerComponent) child: CustomQuillContainerComponent;
 
@@ -37,11 +40,14 @@ export class CollabEditComponent implements OnInit, HasUnsaved {
 
     ngOnInit(): void {
         this.route.params.subscribe((params: Params) => {
-            this.collabSB
-                .fetchTextDocument(params['id'])
-                .subscribe((text_document: TextDocument) => {
-                    this.text_document = text_document;
-                });
+            const id = Number(params['id']);
+            this.collabSB.fetchTextDocument(id).subscribe((text_document: TextDocument) => {
+                this.text_document = text_document;
+            });
+            this.collabSB.connectToEditingRoom(id).subscribe(response => {
+                this.editing_room = EditingRoom.getEditingRoomFromJson(response);
+                this.editing_room_was_created = response.did_create;
+            });
         });
     }
 

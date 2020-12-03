@@ -22,6 +22,10 @@ import Quill from 'quill';
 import { QuillEditorComponent } from 'ngx-quill';
 import { HasUnsaved } from '../../../core/services/can-have-unsaved.interface';
 import { CollabSandboxService } from '../../services/collab-sandbox.service';
+import { EditingRoom } from '../../models/editing-room.model';
+import * as Y from 'yjs';
+import { WebrtcProvider } from 'y-webrtc';
+import { QuillBinding } from 'y-quill';
 
 @Component({
     selector: 'app-custom-quill-container',
@@ -34,6 +38,12 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, HasUnsa
 
     @Input()
     editingMode: boolean;
+
+    @Input()
+    did_create: boolean;
+
+    @Input()
+    editing_room: EditingRoom;
 
     quillRef: Quill;
 
@@ -119,6 +129,17 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, HasUnsa
         if (!this.editingMode) {
             this.quillRef.enable(false);
             return;
+        }
+        if (this.editing_room) {
+            const ydoc = new Y.Doc();
+            // @ts-ignore
+            const provider = new WebrtcProvider(this.editing_room.room_id, ydoc, {
+                password: this.editing_room.password
+            });
+
+            provider.connect();
+            provider.awareness.setLocalStateField('user', { name: 'bruce wayne', id: '11111111' }); // showing correct name and id of user?
+            const binding = new QuillBinding(ydoc.getText('quill'), event, provider.awareness);
         }
     }
 
