@@ -33,6 +33,7 @@ import { CollabDocumentViewerComponent } from './components/collab-document-view
 import { QuillConfig, QuillModule } from 'ngx-quill';
 import Quill from 'quill';
 import QuillCursors from 'quill-cursors';
+import { CustomQuillContainerComponent } from './components/custom-quill-container/custom-quill-container.component';
 
 Quill.register('modules/cursors', QuillCursors);
 // Quill.register('modules/better-table', QuillBetterTable);
@@ -61,7 +62,8 @@ const quillConfig: QuillConfig = {
         CollabMainViewComponent,
         DocumentTreeComponent,
         PageViewComponent,
-        CollabDocumentViewerComponent
+        CollabDocumentViewerComponent,
+        CustomQuillContainerComponent
     ],
     providers: []
 })

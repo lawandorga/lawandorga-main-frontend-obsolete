@@ -17,11 +17,21 @@
   -->
 
 <div *ngIf="text_document">
-    <h1>{{ text_document.name }}</h1>
-    <p>last edited: {{ text_document.last_edited | date: 'HH:mm dd.MM.yy' }}</p>
-
-    <app-custom-quill-container
-        [editingMode]="false"
-        [text_document]="text_document"
-    ></app-custom-quill-container>
+    <div *ngIf="!editingMode; else editing">
+        <quill-editor
+            theme="bubble"
+            (onEditorCreated)="created($event)"
+            [modules]="modules"
+            placeholder=""
+        >
+        </quill-editor>
+        <div *ngIf="text_document.content === ''">
+            <h2>empty document</h2>
+        </div>
+    </div>
+    <ng-template #editing>
+        <div class="custom-quill-container__editable-container">
+            <quill-editor (onEditorCreated)="created($event)" [modules]="modules"></quill-editor>
+        </div>
+    </ng-template>
 </div>
