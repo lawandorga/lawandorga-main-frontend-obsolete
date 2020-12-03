@@ -16,7 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import {
+    Component,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    SimpleChanges,
+    ViewChild
+} from '@angular/core';
 import { TextDocument } from '../../models/text-document.model';
 import Quill from 'quill';
 import { QuillEditorComponent } from 'ngx-quill';
@@ -26,13 +34,14 @@ import { EditingRoom } from '../../models/editing-room.model';
 import * as Y from 'yjs';
 import { WebrtcProvider } from 'y-webrtc';
 import { QuillBinding } from 'y-quill';
+import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
 
 @Component({
     selector: 'app-custom-quill-container',
     templateUrl: './custom-quill-container.component.html',
     styleUrls: ['./custom-quill-container.component.scss']
 })
-export class CustomQuillContainerComponent implements OnInit, OnChanges, HasUnsaved {
+export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestroy, HasUnsaved {
     @Input()
     text_document: TextDocument;
 
@@ -46,11 +55,13 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, HasUnsa
     editing_room: EditingRoom;
 
     quillRef: Quill;
+    provider: WebrtcProvider;
+    binding: QuillBinding;
 
     @ViewChild(QuillEditorComponent, { static: true }) editor: QuillEditorComponent;
     modules = {};
 
-    constructor(private collabSB: CollabSandboxService) {}
+    constructor(private collabSB: CollabSandboxService, private coreSB: CoreSandboxService) {}
 
     ngOnInit(): void {
         if (this.editingMode === undefined) {
@@ -121,6 +132,12 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, HasUnsa
         }
     }
 
+    ngOnDestroy(): void {
+        if (this.editingMode && this.provider) {
+            this.provider.destroy();
+        }
+    }
+
     created(event: Quill): void {
         this.quillRef = event;
         if (this.text_document && this.text_document.content && this.text_document.content !== '') {
@@ -130,16 +147,32 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, HasUnsa
             this.quillRef.enable(false);
             return;
         }
-        if (this.editing_room) {
+        if (this.editing_room && this.editingMode) {
             const ydoc = new Y.Doc();
             // @ts-ignore
-            const provider = new WebrtcProvider(this.editing_room.room_id, ydoc, {
+            this.provider = new WebrtcProvider(this.editing_room.room_id, ydoc, {
                 password: this.editing_room.password
             });
 
-            provider.connect();
-            provider.awareness.setLocalStateField('user', { name: 'bruce wayne', id: '11111111' }); // showing correct name and id of user?
-            const binding = new QuillBinding(ydoc.getText('quill'), event, provider.awareness);
+            this.provider.connect();
+            this.provider.awareness.setLocalStateField('user', {
+                name: 'bruce wayne',
+                id: '11111111'
+            }); // showing correct name and id of user?
+            this.binding = new QuillBinding(ydoc.getText('quill'), event, this.provider.awareness);
+
+            // TODO: start timer here, if no update in 1 sec, take content from text_document
+
+            this.provider.awareness.once('update', () => {
+                const states = this.provider.awareness.states.size;
+                console.log('states: ', states);
+                if (states > 1) {
+                    console.log('im not alone in here');
+                } else {
+                    console.log('im alone here');
+                    this.quillRef.setContents(JSON.parse(this.text_document.content));
+                }
+            });
         }
     }
 
