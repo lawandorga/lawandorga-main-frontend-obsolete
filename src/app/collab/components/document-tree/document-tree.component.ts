@@ -23,6 +23,7 @@ import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { testEventTargetIsSetCorrectlyOnLocal } from 'yjs/dist/tests/y-array.tests';
+import { GetCollabViewFrontUrl } from '../../../statics/frontend_links.statics';
 
 @Component({
     selector: 'app-document-tree',
@@ -45,12 +46,10 @@ export class DocumentTreeComponent implements OnInit {
     ngOnInit(): void {
         this.route.params.subscribe((params: Params) => {
             this.route_id = Number(params['id']);
-            console.log('tree route id: ', this.route_id);
         });
 
         this.collabSB.startLoadingAllDocuments();
         this.collabSB.getAllDocuments().subscribe((documents: NameCollabDocument[]) => {
-            console.log('subscribed documents: ', documents);
             this.dataSource.data = documents;
 
             this.expandToSelected();
@@ -60,8 +59,7 @@ export class DocumentTreeComponent implements OnInit {
     hasChild = (_: number, node: NameCollabDocument) => !!node.children && node.children.length > 0;
 
     onNodeClick(data: NameCollabDocument): void {
-        console.log('click on node: ', data);
-        this.router.navigateByUrl('collab/' + data.id);
+        this.router.navigateByUrl(GetCollabViewFrontUrl(data.id));
     }
 
     expandToSelected(): void {

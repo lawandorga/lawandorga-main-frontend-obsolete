@@ -22,6 +22,7 @@ import { NgModule } from '@angular/core';
 import { AuthGuardService } from '../core/services/auth-guard.service';
 import { UnsavedGuardService } from '../core/services/unsaved-guard.service';
 import { PageViewComponent } from './pages/page-view/page-view.component';
+import { CollabEditComponent } from './pages/collab-edit/collab-edit.component';
 
 const collabRoutes: Routes = [
     {
@@ -35,7 +36,7 @@ const collabRoutes: Routes = [
     },
     {
         path: 'edit/:id',
-        component: null,
+        component: CollabEditComponent,
         canDeactivate: [UnsavedGuardService]
     }
 ];

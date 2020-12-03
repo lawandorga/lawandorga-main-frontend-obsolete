@@ -45,7 +45,6 @@ export class CollabEffects {
                         return [];
                     }),
                     mergeMap(response => {
-                        console.log('response from getting collab documents: ', response);
                         const documents = NameCollabDocument.getNameCollabDocumentsFromJsonArray(
                             response
                         );
@@ -63,7 +62,6 @@ export class CollabEffects {
             return action.payload;
         }),
         switchMap((payload: { name: string; parent_id: number }) => {
-            console.log('start adding document effect');
             return from(
                 this.http
                     .post(COLLAB_COLLAB_DOCUMENTS, {
@@ -76,7 +74,6 @@ export class CollabEffects {
                             return [];
                         }),
                         mergeMap(response => {
-                            console.log('response from creating collab document: ', response);
                             return [{ type: START_LOADING_ALL_DOCUMENTS }];
                         })
                     )

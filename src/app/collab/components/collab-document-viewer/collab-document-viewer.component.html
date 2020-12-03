@@ -19,6 +19,7 @@
 <div *ngIf="text_document">
     <h1>{{ text_document.name }}</h1>
     <p>last edited: {{ text_document.last_edited | date: 'HH:mm dd.MM.yy' }}</p>
+    <button mat-flat-button color="primary" (click)="onEditClick()">edit</button>
 
     <app-custom-quill-container
         [editingMode]="false"

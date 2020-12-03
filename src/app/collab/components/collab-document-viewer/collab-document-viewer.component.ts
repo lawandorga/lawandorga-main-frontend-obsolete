@@ -24,6 +24,8 @@ import { QuillEditorComponent } from 'ngx-quill';
 import * as Y from 'yjs';
 import { WebrtcProvider } from 'y-webrtc';
 import { QuillBinding } from 'y-quill';
+import { Router } from '@angular/router';
+import { GetCollabEditFrontUrl } from '../../../statics/frontend_links.statics';
 
 @Component({
     selector: 'app-collab-document-viewer',
@@ -43,7 +45,7 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges {
     @ViewChild(QuillEditorComponent, { static: true }) editor: QuillEditorComponent;
     modules = {};
 
-    constructor(private collabSB: CollabSandboxService) {
+    constructor(private collabSB: CollabSandboxService, private router: Router) {
         this.current_id = undefined;
         this.text_document = undefined;
     }
@@ -69,5 +71,9 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges {
     created(event: Quill) {
         this.quillRef = event;
         this.quillRef.enable(false);
+    }
+
+    onEditClick(): void {
+        this.router.navigateByUrl(GetCollabEditFrontUrl(this.current_id));
     }
 }

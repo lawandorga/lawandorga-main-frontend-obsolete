@@ -25,7 +25,7 @@ import { HttpClient } from '@angular/common/http';
 import { SharedSandboxService } from '../../shared/services/shared-sandbox.service';
 import { NameCollabDocument } from '../models/collab-document.model';
 import { Observable } from 'rxjs';
-import { COLLAB_TEXT_DOCUMENTS, GetCollabTextDocumentApiUrl } from '../../statics/api_urls.statics';
+import { GetCollabTextDocumentApiUrl } from '../../statics/api_urls.statics';
 import { AppSandboxService } from '../../core/services/app-sandbox.service';
 
 @Injectable({
@@ -40,7 +40,6 @@ export class CollabSandboxService {
     ) {}
 
     startLoadingAllDocuments(): void {
-        console.log('dispatch startLoadingAllDocuments');
         this.collabStore.dispatch(new StartLoadingAllDocuments());
     }
 
@@ -54,7 +53,6 @@ export class CollabSandboxService {
             },
             result => {
                 if (result) {
-                    // otherwise adding was cancelled
                     this.collabStore.dispatch(
                         new StartAddingDocument({ name: result, parent_id: id ? id : null })
                     );
@@ -64,17 +62,10 @@ export class CollabSandboxService {
     }
 
     getAllDocuments(): Observable<NameCollabDocument[]> {
-        return this.collabStore.pipe(
-            select(
-                (state: any) =>
-                    // Object.values(state.all_documents)
-                    state.collab.all_documents
-            )
-        );
+        return this.collabStore.pipe(select((state: any) => state.collab.all_documents));
     }
 
     fetchTextDocument(id: number): Observable<any> {
-        console.log('now fetching for document');
         const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
         return this.http.get(GetCollabTextDocumentApiUrl(id), privateKeyPlaceholder);
     }
