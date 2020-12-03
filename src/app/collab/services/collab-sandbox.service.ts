@@ -69,4 +69,13 @@ export class CollabSandboxService {
         const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
         return this.http.get(GetCollabTextDocumentApiUrl(id), privateKeyPlaceholder);
     }
+
+    saveTextDocument(id: number, content: string): void {
+        const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
+        this.http
+            .patch(GetCollabTextDocumentApiUrl(id), { content }, privateKeyPlaceholder)
+            .subscribe(response => {
+                console.log('i got something back: ', response);
+            });
+    }
 }

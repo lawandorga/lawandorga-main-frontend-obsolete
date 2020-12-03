@@ -21,13 +21,15 @@ import { TextDocument } from '../../models/text-document.model';
 import RuntimeError = WebAssembly.RuntimeError;
 import Quill from 'quill';
 import { QuillEditorComponent } from 'ngx-quill';
+import { HasUnsaved } from '../../../core/services/can-have-unsaved.interface';
+import { CollabSandboxService } from '../../services/collab-sandbox.service';
 
 @Component({
     selector: 'app-custom-quill-container',
     templateUrl: './custom-quill-container.component.html',
     styleUrls: ['./custom-quill-container.component.scss']
 })
-export class CustomQuillContainerComponent implements OnInit, OnChanges {
+export class CustomQuillContainerComponent implements OnInit, OnChanges, HasUnsaved {
     @Input()
     text_document: TextDocument;
 
@@ -39,7 +41,7 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges {
     @ViewChild(QuillEditorComponent, { static: true }) editor: QuillEditorComponent;
     modules = {};
 
-    constructor() {}
+    constructor(private collabSB: CollabSandboxService) {}
 
     ngOnInit(): void {
         if (this.editingMode === undefined) {
@@ -113,9 +115,23 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges {
 
     created(event: Quill): void {
         this.quillRef = event;
+        if (this.text_document) {
+            this.quillRef.setContents(JSON.parse(this.text_document.content));
+        }
         if (!this.editingMode) {
             this.quillRef.enable(false);
             return;
         }
+    }
+
+    hasUnsaved(): boolean {
+        // TODO: implement
+        return false;
+    }
+
+    onSaveClick(): void {
+        const stringified = JSON.stringify(this.quillRef.getContents());
+        console.log('on save click: ', stringified);
+        this.collabSB.saveTextDocument(this.text_document.id, stringified);
     }
 }
