@@ -16,14 +16,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import {
+    Component,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    SimpleChanges,
+    ViewChild
+} from '@angular/core';
 import { CollabSandboxService } from '../../services/collab-sandbox.service';
 import { TextDocument } from '../../models/text-document.model';
 import Quill from 'quill';
 import { QuillEditorComponent } from 'ngx-quill';
-import * as Y from 'yjs';
-import { WebrtcProvider } from 'y-webrtc';
-import { QuillBinding } from 'y-quill';
 import { Router } from '@angular/router';
 import { GetCollabEditFrontUrl } from '../../../statics/frontend_links.statics';
 
@@ -32,7 +37,7 @@ import { GetCollabEditFrontUrl } from '../../../statics/frontend_links.statics';
     templateUrl: './collab-document-viewer.component.html',
     styleUrls: ['./collab-document-viewer.component.scss']
 })
-export class CollabDocumentViewerComponent implements OnInit, OnChanges {
+export class CollabDocumentViewerComponent implements OnInit, OnChanges, OnDestroy {
     @Input()
     document_id: number;
 
@@ -41,6 +46,8 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges {
     text_document: TextDocument;
 
     quillRef: Quill;
+
+    loading = true;
 
     @ViewChild(QuillEditorComponent, { static: true }) editor: QuillEditorComponent;
     modules = {};
@@ -58,11 +65,20 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges {
         this.fetchIfNewDocumentId();
     }
 
+    ngOnDestroy(): void {
+        console.log('on destroy');
+        this.text_document = undefined;
+    }
+
     fetchIfNewDocumentId() {
         if (this.document_id && this.current_id !== this.document_id) {
             this.current_id = this.document_id;
+            this.loading = true;
             this.collabSB.fetchTextDocument(this.document_id).subscribe(response => {
+                console.log('received');
                 this.text_document = TextDocument.getTextDocumentFromJson(response);
+                console.log('from json finished');
+                this.loading = false;
                 // this.quillRef.setContents(JSON.parse(this.text_document.content));
             });
         }

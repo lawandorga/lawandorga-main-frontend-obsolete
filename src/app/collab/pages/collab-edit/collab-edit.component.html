@@ -16,12 +16,23 @@
   ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
   -->
 
-<div *ngIf="text_document">
-    <h1>{{ text_document.name }}</h1>
-    <app-custom-quill-container
-        [editingMode]="true"
-        [text_document]="text_document"
-        [did_create]="editing_room_was_created"
-        [editing_room]="editing_room"
-    ></app-custom-quill-container>
-</div>
+<mat-card>
+    <div *ngIf="text_document; else loading">
+        <mat-card-title>
+            <p>{{ text_document.name }}</p>
+        </mat-card-title>
+        <mat-card-content>
+            <div *ngIf="text_document">
+                <app-custom-quill-container
+                    [editingMode]="true"
+                    [text_document]="text_document"
+                    [did_create]="editing_room_was_created"
+                    [editing_room]="editing_room"
+                ></app-custom-quill-container>
+            </div>
+        </mat-card-content>
+    </div>
+    <ng-template #loading>
+        <mat-progress-spinner color="primary"> </mat-progress-spinner>
+    </ng-template>
+</mat-card>

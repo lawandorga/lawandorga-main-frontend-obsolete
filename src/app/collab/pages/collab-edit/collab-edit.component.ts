@@ -52,6 +52,7 @@ export class CollabEditComponent implements OnInit, HasUnsaved {
     }
 
     hasUnsaved(): boolean {
+        // console.log('hasUnsaved in CollabEditComponent');
         return this.child.hasUnsaved();
     }
 }
