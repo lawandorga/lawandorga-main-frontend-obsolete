@@ -17,7 +17,10 @@
   -->
 
 <div *ngIf="text_document">
-    <div *ngIf="!editingMode; else editing">
+    <div
+        *ngIf="!editingMode; else editing"
+        [className]="loading ? 'custom-quill-container__loading-quill' : ''"
+    >
         <quill-editor
             theme="bubble"
             (onEditorCreated)="created($event)"
@@ -35,4 +38,7 @@
         </div>
         <button mat-flat-button color="primary" (click)="onSaveClick()">save</button>
     </ng-template>
+    <div *ngIf="loading" class="custom-quill-container__spinner-container">
+        <mat-spinner></mat-spinner>
+    </div>
 </div>

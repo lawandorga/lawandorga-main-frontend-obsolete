@@ -17,7 +17,9 @@
  */
 
 import {
+    ChangeDetectorRef,
     Component,
+    HostListener,
     Input,
     OnChanges,
     OnDestroy,
@@ -26,13 +28,13 @@ import {
     ViewChild
 } from '@angular/core';
 import { TextDocument } from '../../models/text-document.model';
-import Quill from 'quill';
+import Quill, { Delta } from 'quill';
 import { QuillEditorComponent } from 'ngx-quill';
 import { HasUnsaved } from '../../../core/services/can-have-unsaved.interface';
 import { CollabSandboxService } from '../../services/collab-sandbox.service';
 import { EditingRoom } from '../../models/editing-room.model';
 import * as Y from 'yjs';
-import { WebrtcProvider } from 'y-webrtc';
+import { Room, WebrtcProvider } from 'y-webrtc';
 import { QuillBinding } from 'y-quill';
 import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
 import { RestrictedUser } from '../../../core/models/user.model';
@@ -60,10 +62,16 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
     binding: QuillBinding;
     user: RestrictedUser;
 
+    loading = false;
+
     @ViewChild(QuillEditorComponent, { static: true }) editor: QuillEditorComponent;
     modules = {};
 
-    constructor(private collabSB: CollabSandboxService, private coreSB: CoreSandboxService) {}
+    constructor(
+        private collabSB: CollabSandboxService,
+        private coreSB: CoreSandboxService,
+        private changeDetector: ChangeDetectorRef
+    ) {}
 
     ngOnInit(): void {
         if (this.editingMode === undefined) {
@@ -130,26 +138,66 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        console.log('changes: ', changes);
-        console.log('text document: ', this.text_document);
         if ('text_document' in changes) {
             this.text_document = changes['text_document']['currentValue'];
+            this.initQuill();
         }
     }
 
     ngOnDestroy(): void {
+        console.log('destroy');
+        this.closeConnection();
+    }
+
+    closeConnection(): void {
+        console.log('im connected to this many clients: ', this.provider.awareness.states.size);
+
         if (this.editingMode && this.provider) {
-            this.provider.destroy();
+            console.log('closeConnection called');
+            console.log(this.provider);
+
+            // this.provider.room.disconnect();
+            // this.provider.room.destroy();
+            this.provider.disconnect();
+            // this.provider.awareness.destroy();
+            // this.provider.destroy();
+            // this.provider.room = new Room();
+            this.provider.doc.destroy();
         }
+    }
+
+    @HostListener('window:beforeunload')
+    beforeUnload() {
+        console.log('unload');
+        this.closeConnection();
     }
 
     created(event: Quill): void {
         this.quillRef = event;
-        if (this.text_document && this.text_document.content && this.text_document.content !== '') {
-            this.quillRef.setContents(JSON.parse(this.text_document.content));
+        this.initQuill();
+    }
+
+    initQuill(): void {
+        console.log('loading true');
+        this.loading = true;
+        setTimeout(() => (this.loading = true), 0);
+        this.changeDetector.detectChanges();
+        if (this.quillRef && this.text_document && this.text_document.content !== undefined) {
+            if (this.text_document.content === '') {
+                // @ts-ignore
+                this.quillRef.setContents([]);
+            } else {
+                const json = JSON.parse(this.text_document.content);
+                this.quillRef.setContents(json);
+            }
+            this.loading = false;
+            setTimeout(() => (this.loading = false), 0);
+
+            console.log('loading false');
+            this.changeDetector.detectChanges();
         }
         if (!this.editingMode) {
-            this.quillRef.enable(false);
+            if (this.quillRef) this.quillRef.enable(false);
             return;
         }
         if (this.editing_room && this.editingMode) {
@@ -160,13 +208,20 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
             });
 
             this.provider.connect();
-            this.provider.awareness.setLocalStateField('user', {
-                name: this.user.name,
-                id: this.user.id
-            }); // showing correct name and id of user?
-            this.binding = new QuillBinding(ydoc.getText('quill'), event, this.provider.awareness);
+            if (this.user) {
+                this.provider.awareness.setLocalStateField('user', {
+                    name: this.user.name,
+                    id: this.user.id
+                });
+            }
 
-            // TODO: start timer here, if no update in 1 sec, take content from text_document
+            this.binding = new QuillBinding(
+                ydoc.getText('quill'),
+                this.quillRef,
+                this.provider.awareness
+            );
+
+            // TODO: start timer here, if no update in 1 sec, take content from text_document???
 
             this.provider.awareness.once('update', () => {
                 const states = this.provider.awareness.states.size;
@@ -183,7 +238,8 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
 
     hasUnsaved(): boolean {
         // TODO: implement
-        return false;
+        const ret_value = false;
+        return ret_value;
     }
 
     onSaveClick(): void {

@@ -20,3 +20,17 @@
     background-color: white;
     height: 80vh;
 }
+
+.custom-quill-container__spinner-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+
+.custom-quill-container__loading-quill {
+    height: 0;
+    overflow: hidden;
+}
