@@ -79,12 +79,18 @@ export class CollabSandboxService {
         this.http
             .patch(GetCollabTextDocumentApiUrl(id), { content }, privateKeyPlaceholder)
             .subscribe(response => {
-                console.log('i got something back: ', response);
-                // TODO: do something here?
+                // console.log('i got something back: ', response);
+                // TODO: do something here? show snackbar
             });
     }
 
     connectToEditingRoom(id: number): Observable<any> {
         return this.http.get(GetCollabEditingApiUrl(id));
+    }
+
+    closeEditingRoom(document_id: number): void {
+        this.http.delete(GetCollabEditingApiUrl(document_id)).subscribe(res => {
+            console.log('response from deleting editing room: ', res);
+        });
     }
 }

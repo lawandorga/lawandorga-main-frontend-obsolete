@@ -145,30 +145,22 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
     }
 
     ngOnDestroy(): void {
-        console.log('destroy');
         this.closeConnection();
     }
 
     closeConnection(): void {
-        console.log('im connected to this many clients: ', this.provider.awareness.states.size);
-
         if (this.editingMode && this.provider) {
-            console.log('closeConnection called');
-            console.log(this.provider);
+            this.provider.destroy();
 
-            // this.provider.room.disconnect();
-            // this.provider.room.destroy();
-            this.provider.disconnect();
-            // this.provider.awareness.destroy();
-            // this.provider.destroy();
-            // this.provider.room = new Room();
-            this.provider.doc.destroy();
+            console.log('states: ', this.provider.awareness.states.size);
+            if (this.provider.awareness.states.size === 1) {
+                this.collabSB.closeEditingRoom(this.text_document.id);
+            }
         }
     }
 
     @HostListener('window:beforeunload')
     beforeUnload() {
-        console.log('unload');
         this.closeConnection();
     }
 
@@ -201,6 +193,10 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
             return;
         }
         if (this.editing_room && this.editingMode) {
+            if (this.provider) {
+                this.provider.destroy();
+            }
+
             const ydoc = new Y.Doc();
             // @ts-ignore
             this.provider = new WebrtcProvider(this.editing_room.room_id, ydoc, {
