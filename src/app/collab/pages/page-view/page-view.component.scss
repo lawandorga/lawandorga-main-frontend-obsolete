@@ -27,10 +27,6 @@
     height: 100%;
 }
 
-//.page-view__card {
-//    height: calc(100vh - 130px);
-//}
-
 .page-view__show-container {
     margin-left: 16px;
     flex-grow: 1;
@@ -40,4 +36,13 @@
 
 .mat-card {
     margin-bottom: 32px;
+}
+
+.page-view__nav-container {
+    //display: ab;
+}
+
+.page-view__add-button {
+    position: absolute;
+    right: 10px;
 }

@@ -33,7 +33,7 @@ export class PageViewComponent implements OnInit {
     ngOnInit(): void {
         this.route.params.subscribe((params: Params) => {
             this.id = params['id'];
-            console.log('id changed in pageview');
+            console.log('id changed in pageview: ', this.id);
         });
     }
 

@@ -18,11 +18,24 @@
 
 <div class="page-view__container">
     <mat-card>
-        <button mat-flat-button (click)="onAddDocumentClick()" color="primary">+ add</button>
-        <app-document-tree class="page-view__tree-container"></app-document-tree>
+        <div class="page-view__nav-container">
+            <button
+                mat-flat-button
+                (click)="onAddDocumentClick()"
+                color="primary"
+                class="page-view__add-button"
+            >
+                + add
+            </button>
+            <app-document-tree class="page-view__tree-container"></app-document-tree>
+        </div>
     </mat-card>
 
     <mat-card class="page-view__show-container">
-        <app-collab-document-viewer [document_id]="id"></app-collab-document-viewer>
+        <app-collab-document-viewer
+            [document_id]="id"
+            *ngIf="id; else noneSelected"
+        ></app-collab-document-viewer>
+        <ng-template #noneSelected><p>no document selected</p></ng-template>
     </mat-card>
 </div>
