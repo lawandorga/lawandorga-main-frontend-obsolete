@@ -63,6 +63,7 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
     user: RestrictedUser;
 
     loading = false;
+    connectedToPeers = false;
 
     @ViewChild(QuillEditorComponent, { static: true }) editor: QuillEditorComponent;
     modules = {};
@@ -217,16 +218,37 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
                 this.provider.awareness
             );
 
-            // TODO: start timer here, if no update in 1 sec, take content from text_document???
+            // const states1 = this.provider.awareness.getStates().size;
+            // console.log('INIT: states: ', states1);
+            // this.loading = true;
+            // if (states1 === 1) {
+            //     console.log('im alone here');
+            //     // TODO start timer here
+            //     this.quillRef.setContents(JSON.parse(this.text_document.content));
+            //
+            // }
+            this.loading = true;
+            setTimeout(() => {
+                console.log('timer hitted');
+                if (!this.connectedToPeers && this.provider.awareness.getStates().size === 1) {
+                    console.log('no connection happened so settings contents');
+                    this.quillRef.setContents(JSON.parse(this.text_document.content));
+                    this.connectedToPeers = true;
+                    this.loading = false;
+                }
+            }, 1000);
 
             this.provider.awareness.once('update', () => {
                 const states = this.provider.awareness.states.size;
+                console.log('UPDATE');
                 console.log('states: ', states);
+                this.connectedToPeers = true;
                 if (states > 1) {
                     console.log('im not alone in here');
                 } else {
                     console.log('im alone here');
                     this.quillRef.setContents(JSON.parse(this.text_document.content));
+                    this.loading = false;
                 }
             });
         }
