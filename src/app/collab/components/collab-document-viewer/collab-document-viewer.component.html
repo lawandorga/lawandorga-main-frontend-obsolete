@@ -21,8 +21,10 @@
     <p>last edited: {{ text_document.last_edited | date: 'HH:mm dd.MM.yy' }}</p>
     <button mat-flat-button color="primary" (click)="onEditClick()">edit</button>
 
-    <app-custom-quill-container
-        [editingMode]="false"
-        [text_document]="text_document"
-    ></app-custom-quill-container>
+    <div class="collab-document-viewer__quill-container">
+        <app-custom-quill-container
+            [editingMode]="false"
+            [text_document]="text_document"
+        ></app-custom-quill-container>
+    </div>
 </div>

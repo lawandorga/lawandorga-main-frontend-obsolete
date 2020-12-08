@@ -66,7 +66,56 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
     connectedToPeers = false;
 
     @ViewChild(QuillEditorComponent, { static: true }) editor: QuillEditorComponent;
-    modules = {};
+    modules = {
+        mention: {
+            allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+            onSelect: (item, insertItem) => {
+                const editor = this.editor;
+                insertItem(item);
+                // necessary because quill-mention triggers changes as 'api' instead of 'user'
+                // editor.insertText(editor.getLength() - 1, '', 'user');
+            },
+            source: (searchTerm, renderList) => {
+                const values = [
+                    { id: 1, value: 'Fredrik Sundqvist' },
+                    { id: 2, value: 'Patrik Sjölin' }
+                ];
+
+                if (searchTerm.length === 0) {
+                    renderList(values, searchTerm);
+                } else {
+                    const matches = [];
+
+                    values.forEach(entry => {
+                        if (entry.value.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1) {
+                            matches.push(entry);
+                        }
+                    });
+                    renderList(matches, searchTerm);
+                }
+            }
+        },
+        toolbar: [
+            ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+            ['blockquote'],
+
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
+            [{ direction: 'rtl' }], // text direction
+
+            // [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
+            [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+            [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+            [{ font: [] }],
+            [{ align: [] }],
+
+            ['clean'], // remove formatting button
+
+            ['link', 'image', 'video'] // link and image, video
+        ],
+        cursors: true
+    };
 
     constructor(
         private collabSB: CollabSandboxService,
@@ -78,60 +127,63 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
         if (this.editingMode === undefined) {
             throw new Error('editingMode must be specified');
         }
+        if (!this.editingMode) {
+            // this.modules = {};
+        }
         if (this.editingMode) {
-            this.modules = {
-                mention: {
-                    allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
-                    onSelect: (item, insertItem) => {
-                        const editor = this.editor;
-                        insertItem(item);
-                        // necessary because quill-mention triggers changes as 'api' instead of 'user'
-                        // editor.insertText(editor.getLength() - 1, '', 'user');
-                    },
-                    source: (searchTerm, renderList) => {
-                        const values = [
-                            { id: 1, value: 'Fredrik Sundqvist' },
-                            { id: 2, value: 'Patrik Sjölin' }
-                        ];
-
-                        if (searchTerm.length === 0) {
-                            renderList(values, searchTerm);
-                        } else {
-                            const matches = [];
-
-                            values.forEach(entry => {
-                                if (
-                                    entry.value.toLowerCase().indexOf(searchTerm.toLowerCase()) !==
-                                    -1
-                                ) {
-                                    matches.push(entry);
-                                }
-                            });
-                            renderList(matches, searchTerm);
-                        }
-                    }
-                },
-                toolbar: [
-                    ['bold', 'italic', 'underline', 'strike'], // toggled buttons
-                    ['blockquote'],
-
-                    [{ list: 'ordered' }, { list: 'bullet' }],
-                    [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
-                    [{ direction: 'rtl' }], // text direction
-
-                    // [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
-                    [{ header: [1, 2, 3, 4, 5, 6, false] }],
-
-                    [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-                    [{ font: [] }],
-                    [{ align: [] }],
-
-                    ['clean'], // remove formatting button
-
-                    ['link', 'image', 'video'] // link and image, video
-                ],
-                cursors: true
-            };
+            // this.modules = {
+            //     mention: {
+            //         allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+            //         onSelect: (item, insertItem) => {
+            //             const editor = this.editor;
+            //             insertItem(item);
+            //             // necessary because quill-mention triggers changes as 'api' instead of 'user'
+            //             // editor.insertText(editor.getLength() - 1, '', 'user');
+            //         },
+            //         source: (searchTerm, renderList) => {
+            //             const values = [
+            //                 { id: 1, value: 'Fredrik Sundqvist' },
+            //                 { id: 2, value: 'Patrik Sjölin' }
+            //             ];
+            //
+            //             if (searchTerm.length === 0) {
+            //                 renderList(values, searchTerm);
+            //             } else {
+            //                 const matches = [];
+            //
+            //                 values.forEach(entry => {
+            //                     if (
+            //                         entry.value.toLowerCase().indexOf(searchTerm.toLowerCase()) !==
+            //                         -1
+            //                     ) {
+            //                         matches.push(entry);
+            //                     }
+            //                 });
+            //                 renderList(matches, searchTerm);
+            //             }
+            //         }
+            //     },
+            //     toolbar: [
+            //         ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+            //         ['blockquote'],
+            //
+            //         [{ list: 'ordered' }, { list: 'bullet' }],
+            //         [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
+            //         [{ direction: 'rtl' }], // text direction
+            //
+            //         // [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
+            //         [{ header: [1, 2, 3, 4, 5, 6, false] }],
+            //
+            //         [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+            //         [{ font: [] }],
+            //         [{ align: [] }],
+            //
+            //         ['clean'], // remove formatting button
+            //
+            //         ['link', 'image', 'video'] // link and image, video
+            //     ],
+            //     cursors: true
+            // };
             this.coreSB.getUserRestricted().subscribe((user: RestrictedUser) => {
                 this.user = user;
             });
@@ -210,6 +262,8 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
                     name: this.user.name,
                     id: this.user.id
                 });
+            } else {
+                console.log('user not ready to set');
             }
 
             this.binding = new QuillBinding(
@@ -236,7 +290,7 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
                     this.connectedToPeers = true;
                     this.loading = false;
                 }
-            }, 1000);
+            }, 1500);
 
             this.provider.awareness.once('update', () => {
                 const states = this.provider.awareness.states.size;

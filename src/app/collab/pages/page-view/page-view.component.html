@@ -17,11 +17,12 @@
   -->
 
 <div class="page-view__container">
-    <div>
-        <button mat-flat-button (click)="onAddDocumentClick()" color="primary">add document</button>
+    <mat-card>
+        <button mat-flat-button (click)="onAddDocumentClick()" color="primary">+ add</button>
         <app-document-tree class="page-view__tree-container"></app-document-tree>
-    </div>
-    <div class="page-view__show-container">
+    </mat-card>
+
+    <mat-card class="page-view__show-container">
         <app-collab-document-viewer [document_id]="id"></app-collab-document-viewer>
-    </div>
+    </mat-card>
 </div>

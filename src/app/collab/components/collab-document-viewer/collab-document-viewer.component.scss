@@ -16,3 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
+.collab-document-viewer__quill-container {
+    overflow-y: scroll;
+    max-height: 100%;
+}

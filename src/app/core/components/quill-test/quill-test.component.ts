@@ -104,7 +104,7 @@ export class QuillTestComponent implements OnInit, OnDestroy {
 
         console.log('local state: ', binding.awareness.getStates());
         if (binding.awareness.getStates().size <= 1) {
-            console.log('im alone? ');
+            // console.log('im alone? ');
             // event.setContents(JSON.parse(this.testModel));
             this.imalone = true;
             this.aloneTimer = setTimeout(() => {
@@ -118,12 +118,12 @@ export class QuillTestComponent implements OnInit, OnDestroy {
         binding.awareness.once('update', () => {
             const states = provider.awareness.states.size;
             // check initial users
-            console.log('states: ', states);
+            // console.log('states: ', states);
             if (states > 1) {
-                console.log('im not alone in here');
+                // console.log('im not alone in here');
                 this.imalone = false;
             } else {
-                console.log('im alone here');
+                // console.log('im alone here');
                 // event.setContents(JSON.parse(this.testModel));
                 // event.setText(this.testModel);
                 this.imalone = true;
@@ -137,18 +137,18 @@ export class QuillTestComponent implements OnInit, OnDestroy {
         // tslint:disable-next-line:no-console
         if (event.event !== 'selection-change') {
             // console.log('editor-change, only html', event.html);
-            console.log('editor-change, event', event);
-            console.log(JSON.stringify(event.content));
+            // console.log('editor-change, event', event);
+            // console.log(JSON.stringify(event.content));
         } else {
-            console.log('selection changed: ', event);
+            // console.log('selection changed: ', event);
             // editor.editor.delta.ops
         }
         // console.log('editor: ', this.editor);
     }
 
     onShowCommentClick() {
-        console.log('show something');
+        // console.log('show something');
         // first 5 chars, background color yellow/orange
-        console.log(this.quillRef.getContents(0, 5));
+        // console.log(this.quillRef.getContents(0, 5));
     }
 }

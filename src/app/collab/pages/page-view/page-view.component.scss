@@ -23,8 +23,21 @@
 .page-view__container {
     display: flex;
     flex-direction: row;
+    //background-color: white;
+    height: 100%;
 }
 
+//.page-view__card {
+//    height: calc(100vh - 130px);
+//}
+
 .page-view__show-container {
+    margin-left: 16px;
     flex-grow: 1;
+    //overflow: scroll;
+    //overflow-y: scroll;
+}
+
+.mat-card {
+    margin-bottom: 32px;
 }
