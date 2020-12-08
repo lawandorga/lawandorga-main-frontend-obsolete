@@ -186,6 +186,10 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
             // };
             this.coreSB.getUserRestricted().subscribe((user: RestrictedUser) => {
                 this.user = user;
+                if (this.provider && this.editingMode) {
+                    console.log('user set afterwards');
+                    this.setUser();
+                }
             });
         }
     }
@@ -258,12 +262,9 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
 
             this.provider.connect();
             if (this.user) {
-                this.provider.awareness.setLocalStateField('user', {
-                    name: this.user.name,
-                    id: this.user.id
-                });
+                this.setUser();
             } else {
-                console.log('user not ready to set');
+                console.error('user not ready to set');
             }
 
             this.binding = new QuillBinding(
@@ -306,6 +307,13 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
                 }
             });
         }
+    }
+
+    setUser(): void {
+        this.provider.awareness.setLocalStateField('user', {
+            name: this.user.name,
+            id: this.user.id
+        });
     }
 
     hasUnsaved(): boolean {

@@ -17,9 +17,20 @@
   -->
 
 <div *ngIf="text_document">
-    <h1>{{ text_document.name }}</h1>
-    <p>last edited: {{ text_document.last_edited | date: 'HH:mm dd.MM.yy' }}</p>
-    <button mat-flat-button color="primary" (click)="onEditClick()">edit</button>
+    <div class="collab-document-viewer__header">
+        <div>
+            <h1>{{ text_document.name }}</h1>
+            <p>last edited: {{ text_document.last_edited | date: 'HH:mm dd.MM.yy' }}</p>
+        </div>
+        <button
+            mat-flat-button
+            color="primary"
+            (click)="onEditClick()"
+            class="collab-document-viewer__edit"
+        >
+            edit
+        </button>
+    </div>
 
     <div class="collab-document-viewer__quill-container">
         <app-custom-quill-container

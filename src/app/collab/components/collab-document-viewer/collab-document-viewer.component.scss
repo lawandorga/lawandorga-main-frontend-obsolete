@@ -17,6 +17,16 @@
  */
 
 .collab-document-viewer__quill-container {
-    overflow-y: scroll;
-    max-height: 100%;
+    //overflow-y: scroll;
+    //max-height: 100%;
+}
+
+.collab-document-viewer__header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.collab-document-viewer__edit {
+    max-height: 32px;
 }
