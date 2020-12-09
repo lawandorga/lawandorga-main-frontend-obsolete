@@ -77,7 +77,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
         permissions: false,
         accept_new_user: false,
         activate_inactive_users: false,
-        process_deletion_requests: false,
+        process_deletion_requests: {
+            record_documents: false,
+            records: false
+        },
         show_files: false,
         record_pool: false
     };
@@ -259,8 +262,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this.coreSB.hasPermissionFromStringForOwnRlc(
             PERMISSION_PROCESS_RECORD_DELETION_REQUESTS,
             hasPermission => {
-                if (this.show_tab_permissions.process_deletion_requests !== hasPermission) {
-                    this.show_tab_permissions.process_deletion_requests = hasPermission;
+                if (this.show_tab_permissions.process_deletion_requests.records !== hasPermission) {
+                    this.show_tab_permissions.process_deletion_requests.records = hasPermission;
                     this.recheckSidebarItems();
                 }
             }
@@ -269,8 +272,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this.coreSB.hasPermissionFromStringForOwnRlc(
             PERMISSION_PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS,
             hasPermission => {
-                if (this.show_tab_permissions.process_deletion_requests !== hasPermission) {
-                    this.show_tab_permissions.process_deletion_requests = hasPermission;
+                if (
+                    this.show_tab_permissions.process_deletion_requests.record_documents !==
+                    hasPermission
+                ) {
+                    this.show_tab_permissions.process_deletion_requests.record_documents = hasPermission;
                     this.recheckSidebarItems();
                 }
             }
@@ -345,7 +351,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
                 ACCEPT_NEW_USER_REQUESTS_FRONT_URL,
                 newSidebarItems
             ).newItems;
-        if (!this.show_tab_permissions.process_deletion_requests)
+        if (
+            !this.show_tab_permissions.process_deletion_requests.record_documents &&
+            !this.show_tab_permissions.process_deletion_requests.records
+        )
             newSidebarItems = SidebarComponent.removeLink(
                 DELETION_REQUESTS_FRONT_URL,
                 newSidebarItems
