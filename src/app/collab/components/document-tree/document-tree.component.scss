@@ -42,17 +42,19 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: clip;
-    max-width: 200px;
-    display: block;
+    //max-width: 200px;
+    display: inline-block;
+    //display: inherit;
 }
-//
-////.mat-tree-node {
-////    display: block;
-////}
-//
-//.document-tree__one-line {
-//    display: flex;
-//    flex-direction: row;
-//    flex-flow: nowrap;
-//    justify-content: flex-start;
-//}
+
+.document-tree__one-line {
+    display: inline-flex;
+    flex-direction: row;
+    flex-flow: nowrap;
+    justify-content: flex-start;
+}
+
+
+.document-tree__test {
+    display: inherit;
+}
