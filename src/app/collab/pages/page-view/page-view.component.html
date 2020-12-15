@@ -19,14 +19,18 @@
 <div class="page-view__container">
     <mat-card>
         <div class="page-view__nav-container">
-            <button
-                mat-flat-button
-                (click)="onAddDocumentClick()"
-                color="primary"
-                class="page-view__add-button"
-            >
-                + add
-            </button>
+            <div class="page-view__nav-header-container">
+                <h1>collab</h1>
+                <button
+                    mat-flat-button
+                    (click)="onAddDocumentClick()"
+                    color="primary"
+                    class="page-view__add-button"
+                >
+                    + add
+                </button>
+            </div>
+
             <app-document-tree class="page-view__tree-container"></app-document-tree>
         </div>
     </mat-card>

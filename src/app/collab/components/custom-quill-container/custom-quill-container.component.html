@@ -17,28 +17,37 @@
   -->
 
 <div *ngIf="text_document">
-    <div
-        *ngIf="!editingMode; else editing"
-        [className]="loading ? 'custom-quill-container__loading-quill' : ''"
-    >
-        <quill-editor
-            theme="bubble"
-            (onEditorCreated)="created($event)"
-            [modules]="modules"
-            placeholder=""
-        >
-        </quill-editor>
-        <div *ngIf="text_document.content === ''">
-            <h2>empty document</h2>
+    <div *ngIf="loading">
+        <div class="custom-quill-container__spinner-container">
+            <mat-spinner></mat-spinner>
         </div>
     </div>
-    <ng-template #editing>
-        <div class="custom-quill-container__editable-container">
-            <quill-editor (onEditorCreated)="created($event)" [modules]="modules"></quill-editor>
+    <div>
+        <div
+            *ngIf="!editingMode; else editing"
+            [className]="loading ? 'custom-quill-container__loading-quill' : ''"
+        >
+            <quill-editor
+                theme="bubble"
+                (onEditorCreated)="created($event)"
+                [modules]="modules"
+                placeholder=""
+            >
+            </quill-editor>
+            <div *ngIf="text_document.content === ''">
+                <h2>empty document</h2>
+            </div>
         </div>
-        <button mat-flat-button color="primary" (click)="onSaveClick()">save</button>
-    </ng-template>
-    <div *ngIf="loading" class="custom-quill-container__spinner-container">
-        <mat-spinner></mat-spinner>
+        <ng-template #editing>
+            <div class="custom-quill-container__editable-container">
+                <quill-editor
+                    (onEditorCreated)="created($event)"
+                    [modules]="modules"
+                ></quill-editor>
+            </div>
+            <button mat-flat-button color="primary" (click)="onSaveClick()">save</button>
+        </ng-template>
+
+        <!--    (show)="editingMode"-->
     </div>
 </div>

@@ -21,6 +21,7 @@ import {
     Component,
     HostListener,
     Input,
+    NgZone,
     OnChanges,
     OnDestroy,
     OnInit,
@@ -120,7 +121,8 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
     constructor(
         private collabSB: CollabSandboxService,
         private coreSB: CoreSandboxService,
-        private changeDetector: ChangeDetectorRef
+        private changeDetector: ChangeDetectorRef,
+        private zone: NgZone
     ) {}
 
     ngOnInit(): void {
@@ -228,22 +230,34 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
 
     initQuill(): void {
         console.log('loading true');
+        this.zone.run(() => {
+            // <== added
+            this.loading = true;
+        });
         this.loading = true;
-        setTimeout(() => (this.loading = true), 0);
         this.changeDetector.detectChanges();
+        setTimeout(() => {
+            this.loading = true;
+            this.changeDetector.detectChanges();
+            // this.changeDetector.markForCheck();
+        }, 0);
         if (this.quillRef && this.text_document && this.text_document.content !== undefined) {
             if (this.text_document.content === '') {
                 // @ts-ignore
                 this.quillRef.setContents([]);
             } else {
-                const json = JSON.parse(this.text_document.content);
-                this.quillRef.setContents(json);
-            }
-            this.loading = false;
-            setTimeout(() => (this.loading = false), 0);
+                // this.loading = false;
+                // this.changeDetector.detectChanges();
 
-            console.log('loading false');
-            this.changeDetector.detectChanges();
+                setTimeout(() => {
+                    const json = JSON.parse(this.text_document.content);
+                    this.quillRef.setContents(json);
+                }, 0);
+            }
+            setTimeout(() => {
+                this.loading = false;
+                console.log('loading false');
+            }, 0);
         }
         if (!this.editingMode) {
             if (this.quillRef) this.quillRef.enable(false);
@@ -273,15 +287,6 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
                 this.provider.awareness
             );
 
-            // const states1 = this.provider.awareness.getStates().size;
-            // console.log('INIT: states: ', states1);
-            // this.loading = true;
-            // if (states1 === 1) {
-            //     console.log('im alone here');
-            //     // TODO start timer here
-            //     this.quillRef.setContents(JSON.parse(this.text_document.content));
-            //
-            // }
             this.loading = true;
             setTimeout(() => {
                 console.log('timer hitted');
@@ -293,19 +298,19 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
                 }
             }, 1500);
 
-            this.provider.awareness.once('update', () => {
-                const states = this.provider.awareness.states.size;
-                console.log('UPDATE');
-                console.log('states: ', states);
-                this.connectedToPeers = true;
-                if (states > 1) {
-                    console.log('im not alone in here');
-                } else {
-                    console.log('im alone here');
-                    this.quillRef.setContents(JSON.parse(this.text_document.content));
-                    this.loading = false;
-                }
-            });
+            // this.provider.awareness.once('update', () => {
+            //     const states = this.provider.awareness.states.size;
+            //     console.log('UPDATE');
+            //     console.log('states: ', states);
+            //     this.connectedToPeers = true;
+            //     if (states > 1) {
+            //         console.log('im not alone in here');
+            //     } else {
+            //         console.log('im alone here');
+            //         this.quillRef.setContents(JSON.parse(this.text_document.content));
+            //         this.loading = false;
+            //     }
+            // });
         }
     }
 
