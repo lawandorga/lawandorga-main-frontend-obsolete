@@ -29,7 +29,7 @@
         (click)="onNodeClick(node)"
     >
         <li class="temp mat-tree-node " [className]="route_id == node.id ? 'selected-node' : ''">
-            <div class="temp">
+            <div class="document-tree_line" [matTooltip]="node.name">
                 <button mat-icon-button disabled></button>
                 <span class="document-tree__name">{{ node.name }}</span>
             </div>
