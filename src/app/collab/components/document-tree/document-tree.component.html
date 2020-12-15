@@ -28,22 +28,18 @@
         class="is_clickable"
         (click)="onNodeClick(node)"
     >
-        <li
-            class="mat-tree-node document-tree__one-line document-tree__test"
-            [className]="route_id == node.id ? 'selected-node' : ''"
-        >
+        <li class="temp mat-tree-node " [className]="route_id == node.id ? 'selected-node' : ''">
+            <div class="temp">
+                <button mat-icon-button disabled></button>
+                <span class="document-tree__name">{{ node.name }}</span>
+            </div>
             <!-- use a disabled button to provide padding for tree leaf -->
-            <button mat-icon-button disabled></button>
-            <span class="document-tree__name">{{ node.name }}</span>
         </li>
     </mat-tree-node>
     <!-- This is the tree node template for expandable nodes -->
     <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
         <li class="is_clickable" (click)="onNodeClick(node)">
-            <div
-                class="mat-tree-node document-tree__one-line"
-                [className]="route_id == node.id ? 'selected-node' : ''"
-            >
+            <div class="mat-tree-node " [className]="route_id == node.id ? 'selected-node' : ''">
                 <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
                     <mat-icon class="mat-icon-rtl-mirror">
                         {{ treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
