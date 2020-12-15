@@ -133,59 +133,6 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
             // this.modules = {};
         }
         if (this.editingMode) {
-            // this.modules = {
-            //     mention: {
-            //         allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
-            //         onSelect: (item, insertItem) => {
-            //             const editor = this.editor;
-            //             insertItem(item);
-            //             // necessary because quill-mention triggers changes as 'api' instead of 'user'
-            //             // editor.insertText(editor.getLength() - 1, '', 'user');
-            //         },
-            //         source: (searchTerm, renderList) => {
-            //             const values = [
-            //                 { id: 1, value: 'Fredrik Sundqvist' },
-            //                 { id: 2, value: 'Patrik Sjölin' }
-            //             ];
-            //
-            //             if (searchTerm.length === 0) {
-            //                 renderList(values, searchTerm);
-            //             } else {
-            //                 const matches = [];
-            //
-            //                 values.forEach(entry => {
-            //                     if (
-            //                         entry.value.toLowerCase().indexOf(searchTerm.toLowerCase()) !==
-            //                         -1
-            //                     ) {
-            //                         matches.push(entry);
-            //                     }
-            //                 });
-            //                 renderList(matches, searchTerm);
-            //             }
-            //         }
-            //     },
-            //     toolbar: [
-            //         ['bold', 'italic', 'underline', 'strike'], // toggled buttons
-            //         ['blockquote'],
-            //
-            //         [{ list: 'ordered' }, { list: 'bullet' }],
-            //         [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
-            //         [{ direction: 'rtl' }], // text direction
-            //
-            //         // [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
-            //         [{ header: [1, 2, 3, 4, 5, 6, false] }],
-            //
-            //         [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-            //         [{ font: [] }],
-            //         [{ align: [] }],
-            //
-            //         ['clean'], // remove formatting button
-            //
-            //         ['link', 'image', 'video'] // link and image, video
-            //     ],
-            //     cursors: true
-            // };
             this.coreSB.getUserRestricted().subscribe((user: RestrictedUser) => {
                 this.user = user;
                 if (this.provider && this.editingMode) {
@@ -230,17 +177,7 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
 
     initQuill(): void {
         console.log('loading true');
-        this.zone.run(() => {
-            // <== added
-            this.loading = true;
-        });
         this.loading = true;
-        this.changeDetector.detectChanges();
-        setTimeout(() => {
-            this.loading = true;
-            this.changeDetector.detectChanges();
-            // this.changeDetector.markForCheck();
-        }, 0);
         if (this.quillRef && this.text_document && this.text_document.content !== undefined) {
             if (this.text_document.content === '') {
                 // @ts-ignore
