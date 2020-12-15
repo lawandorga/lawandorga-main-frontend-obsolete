@@ -50,4 +50,9 @@
 .page-view__nav-header-container {
     display: flex;
     flex-direction: row;
+    padding: 16px;
+}
+
+.page-view__nav-card {
+    padding: 0;
 }

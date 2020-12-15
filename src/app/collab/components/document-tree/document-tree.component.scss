@@ -36,6 +36,8 @@
 
 .document-tree__overall-container {
     width: 300px;
+    overflow: hidden;
+    padding-left: 16px;
 }
 
 .document-tree__name {

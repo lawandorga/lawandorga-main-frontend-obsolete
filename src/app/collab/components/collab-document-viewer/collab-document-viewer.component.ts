@@ -72,13 +72,13 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges, OnDestr
 
     fetchIfNewDocumentId() {
         if (this.document_id && this.current_id !== this.document_id) {
+            console.log('fetch in collab document viewer');
             this.current_id = this.document_id;
             this.loading = true;
             this.collabSB.fetchTextDocument(this.document_id).subscribe(response => {
-                console.log('received');
                 this.text_document = TextDocument.getTextDocumentFromJson(response);
-                console.log('from json finished');
                 this.loading = false;
+                console.log('fetch in collab document viewer finished', response);
                 // this.quillRef.setContents(JSON.parse(this.text_document.content));
             });
         }
