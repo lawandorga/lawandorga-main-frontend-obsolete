@@ -230,10 +230,9 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
                     console.log('no connection happened so settings contents');
                     this.quillRef.setContents(JSON.parse(this.text_document.content));
                     this.connectedToPeers = true;
-                    this.loading = false;
                 }
                 this.loading = false;
-            }, 1500);
+            }, 2000);
 
             this.provider.awareness.once('update', () => {
                 const states = this.provider.awareness.states.size;
