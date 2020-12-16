@@ -17,11 +17,9 @@
  */
 
 import {
-    ChangeDetectorRef,
     Component,
     HostListener,
     Input,
-    NgZone,
     OnChanges,
     OnDestroy,
     OnInit,
@@ -35,7 +33,7 @@ import { HasUnsaved } from '../../../core/services/can-have-unsaved.interface';
 import { CollabSandboxService } from '../../services/collab-sandbox.service';
 import { EditingRoom } from '../../models/editing-room.model';
 import * as Y from 'yjs';
-import { Room, WebrtcProvider } from 'y-webrtc';
+import { WebrtcProvider } from 'y-webrtc';
 import { QuillBinding } from 'y-quill';
 import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
 import { RestrictedUser } from '../../../core/models/user.model';
@@ -118,12 +116,7 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
         cursors: true
     };
 
-    constructor(
-        private collabSB: CollabSandboxService,
-        private coreSB: CoreSandboxService,
-        private changeDetector: ChangeDetectorRef,
-        private zone: NgZone
-    ) {}
+    constructor(private collabSB: CollabSandboxService, private coreSB: CoreSandboxService) {}
 
     ngOnInit(): void {
         console.log('init custom-quill-container');
@@ -180,13 +173,16 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
         console.log('loading true');
         this.loading = true;
 
-        if (this.quillRef && this.text_document && this.text_document.content !== undefined) {
+        if (
+            !this.editingMode &&
+            this.quillRef &&
+            this.text_document &&
+            this.text_document.content !== undefined
+        ) {
             if (this.text_document.content === '') {
                 // @ts-ignore
                 this.quillRef.setContents([]);
             } else {
-                // this.loading = false;
-                // this.changeDetector.detectChanges();
                 setTimeout(() => {
                     console.log('set content in timeout');
                     const json = JSON.parse(this.text_document.content);
@@ -236,6 +232,7 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
                     this.connectedToPeers = true;
                     this.loading = false;
                 }
+                this.loading = false;
             }, 1500);
 
             this.provider.awareness.once('update', () => {
@@ -247,7 +244,7 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
                     console.log('im not alone in here');
                 } else {
                     console.log('im alone here');
-                    // this.quillRef.setContents(JSON.parse(this.text_document.content));
+                    this.quillRef.setContents(JSON.parse(this.text_document.content));
                     this.loading = false;
                 }
             });
