@@ -126,6 +126,7 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
     ) {}
 
     ngOnInit(): void {
+        console.log('init custom-quill-container');
         if (this.editingMode === undefined) {
             throw new Error('editingMode must be specified');
         }
@@ -178,6 +179,7 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
     initQuill(): void {
         console.log('loading true');
         this.loading = true;
+
         if (this.quillRef && this.text_document && this.text_document.content !== undefined) {
             if (this.text_document.content === '') {
                 // @ts-ignore
@@ -185,8 +187,8 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
             } else {
                 // this.loading = false;
                 // this.changeDetector.detectChanges();
-
                 setTimeout(() => {
+                    console.log('set content in timeout');
                     const json = JSON.parse(this.text_document.content);
                     this.quillRef.setContents(json);
                 }, 0);
@@ -206,6 +208,7 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
             }
 
             const ydoc = new Y.Doc();
+            console.log('connecting to room: ', this.editing_room.room_id);
             // @ts-ignore
             this.provider = new WebrtcProvider(this.editing_room.room_id, ydoc, {
                 password: this.editing_room.password
@@ -235,19 +238,19 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
                 }
             }, 1500);
 
-            // this.provider.awareness.once('update', () => {
-            //     const states = this.provider.awareness.states.size;
-            //     console.log('UPDATE');
-            //     console.log('states: ', states);
-            //     this.connectedToPeers = true;
-            //     if (states > 1) {
-            //         console.log('im not alone in here');
-            //     } else {
-            //         console.log('im alone here');
-            //         this.quillRef.setContents(JSON.parse(this.text_document.content));
-            //         this.loading = false;
-            //     }
-            // });
+            this.provider.awareness.once('update', () => {
+                const states = this.provider.awareness.states.size;
+                console.log('UPDATE');
+                console.log('states: ', states);
+                this.connectedToPeers = true;
+                if (states > 1) {
+                    console.log('im not alone in here');
+                } else {
+                    console.log('im alone here');
+                    // this.quillRef.setContents(JSON.parse(this.text_document.content));
+                    this.loading = false;
+                }
+            });
         }
     }
 

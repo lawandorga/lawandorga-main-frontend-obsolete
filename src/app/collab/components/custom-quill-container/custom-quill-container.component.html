@@ -28,6 +28,8 @@
             [className]="loading ? 'custom-quill-container__loading-quill' : ''"
         >
             <quill-editor
+                [hidden]="text_document.content === ''"
+                class="custom-quill-container__uneditable"
                 theme="bubble"
                 (onEditorCreated)="created($event)"
                 [modules]="modules"

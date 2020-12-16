@@ -35,3 +35,12 @@
     overflow: hidden;
 }
 
+.custom-quill-container__uneditable .ql-container .ql-snow {
+    //display: none !important;
+    color: red !important;
+    background-color: red !important;
+}
+
+.custom-quill-container__uneditable > div {
+    display: none !important;
+}
