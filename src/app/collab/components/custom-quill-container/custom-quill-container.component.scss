@@ -18,8 +18,8 @@
 
 .custom-quill-container__editable-container {
     background-color: white;
-    height: 80vh;
-    overflow: hidden;
+    height: calc(100vh - 290px);
+    //overflow: hidden;
 }
 
 .custom-quill-container__editable {
@@ -43,7 +43,7 @@
 
 .custom-quill-container__loading-quill {
     height: 0;
-    overflow: hidden;
+    //overflow: hidden;
 }
 
 .custom-quill-container__uneditable .ql-container .ql-snow {
