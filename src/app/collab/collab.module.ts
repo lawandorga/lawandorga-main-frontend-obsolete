@@ -39,6 +39,10 @@ import { CollabEditComponent } from './pages/collab-edit/collab-edit.component';
 Quill.register('modules/cursors', QuillCursors);
 // Quill.register('modules/better-table', QuillBetterTable);
 // Quill.register('modules/table');
+const bold = Quill.import('formats/bold');
+bold.tagName = 'b'; // Quill uses <strong> by default
+Quill.register(bold, true);
+
 const quillConfig: QuillConfig = {
     modules: {
         cursors: true,

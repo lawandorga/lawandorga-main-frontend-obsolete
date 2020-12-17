@@ -41,13 +41,17 @@
             </div>
         </div>
         <ng-template #editing>
-            <div class="custom-quill-container__editable-container">
-                <quill-editor
-                    (onEditorCreated)="created($event)"
-                    [modules]="modules"
-                ></quill-editor>
+            <div class="custom-quill-container__editable">
+                <div class="custom-quill-container__editable-container">
+                    <quill-editor
+                        (onEditorCreated)="created($event)"
+                        [modules]="modules"
+                    ></quill-editor>
+                </div>
+                <div class="custom-quill-container__editable-control">
+                    <button mat-flat-button color="primary" (click)="onSaveClick()">save</button>
+                </div>
             </div>
-            <button mat-flat-button color="primary" (click)="onSaveClick()">save</button>
         </ng-template>
 
         <!--    (show)="editingMode"-->

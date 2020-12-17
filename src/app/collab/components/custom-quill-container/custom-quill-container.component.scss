@@ -19,6 +19,17 @@
 .custom-quill-container__editable-container {
     background-color: white;
     height: 80vh;
+    overflow: hidden;
+}
+
+.custom-quill-container__editable {
+
+}
+
+.custom-quill-container__editable-control {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: row-reverse;
 }
 
 .custom-quill-container__spinner-container {

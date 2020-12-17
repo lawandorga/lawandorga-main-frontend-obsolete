@@ -207,7 +207,8 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
             console.log('connecting to room: ', this.editing_room.room_id);
             // @ts-ignore
             this.provider = new WebrtcProvider(this.editing_room.room_id, ydoc, {
-                password: this.editing_room.password
+                password: this.editing_room.password,
+                signaling: ['wss://y-webrtc-signaling-eu.herokuapp.com/']
             });
 
             this.provider.connect();
@@ -224,6 +225,7 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
             );
 
             this.loading = true;
+            console.log('content length: ', this.text_document.content.length);
             setTimeout(() => {
                 console.log('timer hitted');
                 if (!this.connectedToPeers && this.provider.awareness.getStates().size === 1) {
@@ -232,7 +234,7 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
                     this.connectedToPeers = true;
                 }
                 this.loading = false;
-            }, 2000);
+            }, this.text_document.content.length * 0.5);
 
             this.provider.awareness.once('update', () => {
                 const states = this.provider.awareness.states.size;
@@ -244,8 +246,8 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
                 } else {
                     console.log('im alone here');
                     this.quillRef.setContents(JSON.parse(this.text_document.content));
-                    this.loading = false;
                 }
+                this.loading = false;
             });
         }
     }
