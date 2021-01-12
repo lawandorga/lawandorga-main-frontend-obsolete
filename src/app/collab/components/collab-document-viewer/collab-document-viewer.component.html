@@ -22,14 +22,26 @@
             <h1>{{ text_document.name }}</h1>
             <p>last edited: {{ text_document.last_edited | date: 'HH:mm dd.MM.yy' }}</p>
         </div>
-        <button
-            mat-flat-button
-            color="primary"
-            (click)="onEditClick()"
-            class="collab-document-viewer__edit"
-        >
-            edit
-        </button>
+        <div>
+            <button
+                mat-flat-button
+                color="primary"
+                (click)="onEditClick()"
+                class="collab-document-viewer__edit"
+            >
+                edit
+            </button>
+
+            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="menu for more options">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item class="button-normal">
+                    <mat-icon>history</mat-icon>
+                    <span>versions</span>
+                </button>
+            </mat-menu>
+        </div>
     </div>
 
     <div class="collab-document-viewer__quill-container">
