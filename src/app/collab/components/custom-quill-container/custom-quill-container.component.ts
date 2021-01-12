@@ -175,15 +175,16 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
             !this.editingMode &&
             this.quillRef &&
             this.text_document &&
-            this.text_document.content !== undefined
+            this.text_document.versions[0].content !== undefined
         ) {
-            if (this.text_document.content === '') {
+            if (this.text_document.versions[0].content === '') {
                 // @ts-ignore
                 this.quillRef.setContents([]);
             } else {
                 setTimeout(() => {
                     console.log('set content in timeout');
-                    const json = JSON.parse(this.text_document.content);
+                    // this.setContents();
+                    const json = JSON.parse(this.text_document.versions[0].content);
                     this.quillRef.setContents(json);
                 }, 0);
             }
@@ -196,6 +197,7 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
             if (this.quillRef) this.quillRef.enable(false);
             return;
         }
+
         if (this.editing_room && this.editingMode) {
             if (this.provider) {
                 this.provider.destroy();
@@ -223,16 +225,16 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
             );
 
             this.loading = true;
-            console.log('content length: ', this.text_document.content.length);
+            console.log('content length: ', this.text_document.versions[0].content.length);
             setTimeout(() => {
                 console.log('timer hitted');
                 if (!this.connectedToPeers && this.provider.awareness.getStates().size === 1) {
                     console.log('no connection happened so settings contents');
-                    this.quillRef.setContents(JSON.parse(this.text_document.content));
+                    this.setContents();
                     this.connectedToPeers = true;
                 }
                 this.loading = false;
-            }, this.text_document.content.length * 0.5);
+            }, this.text_document.versions[0].content.length * 0.5);
 
             this.provider.awareness.once('update', () => {
                 const states = this.provider.awareness.states.size;
@@ -243,7 +245,7 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
                     console.log('im not alone in here');
                 } else {
                     console.log('im alone here');
-                    this.quillRef.setContents(JSON.parse(this.text_document.content));
+                    this.setContents();
                 }
                 this.loading = false;
             });
@@ -261,6 +263,11 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
         // TODO: implement
         const ret_value = false;
         return ret_value;
+    }
+
+    setContents(): void {
+        if (this.text_document.versions[0].content !== '')
+            this.quillRef.setContents(JSON.parse(this.text_document.versions[0].content));
     }
 
     onSaveClick(): void {

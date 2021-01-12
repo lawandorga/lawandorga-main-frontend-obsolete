@@ -28,7 +28,7 @@
             [className]="loading ? 'custom-quill-container__loading-quill' : ''"
         >
             <quill-editor
-                [hidden]="text_document.content === ''"
+                [hidden]="text_document.versions[0].content === ''"
                 class="custom-quill-container__uneditable"
                 theme="bubble"
                 (onEditorCreated)="created($event)"
@@ -36,7 +36,7 @@
                 placeholder=""
             >
             </quill-editor>
-            <div *ngIf="text_document.content === ''">
+            <div *ngIf="text_document.versions[0].content === ''">
                 <h2>empty document</h2>
             </div>
         </div>

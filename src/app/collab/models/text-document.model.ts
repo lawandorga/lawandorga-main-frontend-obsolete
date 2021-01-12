@@ -18,6 +18,7 @@
 
 import { RestrictedUser } from '../../core/models/user.model';
 import { NameCollabDocument } from './collab-document.model';
+import { TextDocumentVersion } from './text-document-version.model';
 
 export interface NameTextDocument {
     id: number;
@@ -25,39 +26,35 @@ export interface NameTextDocument {
 }
 
 export class TextDocument implements NameTextDocument {
-    // content: string;
-    // creator: RestrictedUser;
-    // created: Date;
-    // last_editor: RestrictedUser;
-    // last_edited: Date;
-
     constructor(
         public id: number,
         public name: string,
-        public content: string,
         public creator: RestrictedUser,
         public created: Date,
         public last_editor: RestrictedUser,
-        public last_edited: Date
+        public last_edited: Date,
+        public versions: TextDocumentVersion[]
     ) {
         this.id = id;
         this.name = name;
-        this.content = content;
         this.creator = creator;
         this.created = created;
         this.last_editor = last_editor;
         this.last_edited = last_edited;
+        this.versions = versions;
     }
 
     static getTextDocumentFromJson(json: any): TextDocument {
+        const versions = TextDocumentVersion.getTextDocumentVersionsFromJsonArray(json.versions);
+
         return new TextDocument(
             Number(json.id),
             json.name,
-            json.content,
             RestrictedUser.getRestrictedUserFromJson(json.creator),
             new Date(json.created),
             RestrictedUser.getRestrictedUserFromJson(json.last_editor),
-            new Date(json.last_edited)
+            new Date(json.last_edited),
+            versions
         );
     }
 }
