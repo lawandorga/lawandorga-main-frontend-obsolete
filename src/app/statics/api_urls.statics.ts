@@ -63,6 +63,7 @@ export const PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS =
 export const COLLAB_COLLAB_DOCUMENTS = base + 'api/collab/collab_documents/';
 export const COLLAB_TEXT_DOCUMENTS = base + 'api/collab/text_documents/';
 export const COLLAB_EDITING = base + 'api/collab/editing/';
+const COLLAB_TEXT_DOCUMENT_VERSIONS = base + 'api/collab/text_documents/';
 
 const CHECK_USER_ACTIVATION_API_URL = base + 'api/check_user_activation_link/';
 const ACTIVATE_USER_ACTIVATION_API_URL = base + 'api/activate_user_activation_link/';
@@ -219,4 +220,8 @@ export const GetCollabTextDocumentApiUrl = (id: number) => {
 
 export const GetCollabEditingApiUrl = (id: number) => {
     return `${COLLAB_EDITING}${id}/`;
+};
+
+export const GetCollabTextDocumentVersionsApiUrl = (text_document_id: number) => {
+    return `${COLLAB_TEXT_DOCUMENT_VERSIONS}${text_document_id}/versions/`;
 };

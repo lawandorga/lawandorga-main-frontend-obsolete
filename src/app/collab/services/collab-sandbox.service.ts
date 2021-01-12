@@ -27,7 +27,8 @@ import { NameCollabDocument } from '../models/collab-document.model';
 import { Observable } from 'rxjs';
 import {
     GetCollabEditingApiUrl,
-    GetCollabTextDocumentApiUrl
+    GetCollabTextDocumentApiUrl,
+    GetCollabTextDocumentVersionsApiUrl
 } from '../../statics/api_urls.statics';
 import { AppSandboxService } from '../../core/services/app-sandbox.service';
 import { EditingRoom } from '../models/editing-room.model';
@@ -77,7 +78,11 @@ export class CollabSandboxService {
     saveTextDocument(id: number, content: string): void {
         const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
         this.http
-            .patch(GetCollabTextDocumentApiUrl(id), { content }, privateKeyPlaceholder)
+            .post(
+                GetCollabTextDocumentVersionsApiUrl(id),
+                { content, is_draft: false },
+                privateKeyPlaceholder
+            )
             .subscribe(response => {
                 // console.log('i got something back: ', response);
                 // TODO: do something here? show snackbar
