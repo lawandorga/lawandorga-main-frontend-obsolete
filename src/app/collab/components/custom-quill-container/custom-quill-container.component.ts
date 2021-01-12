@@ -37,6 +37,7 @@ import { WebrtcProvider } from 'y-webrtc';
 import { QuillBinding } from 'y-quill';
 import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
 import { RestrictedUser } from '../../../core/models/user.model';
+import { AppSandboxService } from '../../../core/services/app-sandbox.service';
 
 @Component({
     selector: 'app-custom-quill-container',
@@ -114,9 +115,14 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
         cursors: true
     };
 
-    constructor(private collabSB: CollabSandboxService, private coreSB: CoreSandboxService) {}
+    constructor(
+        private collabSB: CollabSandboxService,
+        private coreSB: CoreSandboxService,
+        private appSB: AppSandboxService
+    ) {}
 
     ngOnInit(): void {
+        this.appSB.closeNavbar();
         console.log('init custom-quill-container');
         if (this.editingMode === undefined) {
             throw new Error('editingMode must be specified');

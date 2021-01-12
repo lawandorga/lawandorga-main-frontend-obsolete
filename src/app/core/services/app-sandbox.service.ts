@@ -35,10 +35,13 @@ import { AuthState } from '../store/auth/auth.reducers';
 import { LOGIN_FRONT_URL } from '../../statics/frontend_links.statics';
 import { CookieService } from 'ngx-cookie-service';
 import { HttpHeaders } from '@angular/common/http';
+import { MediaMatcher } from '@angular/cdk/layout';
 
 @Injectable()
 export class AppSandboxService {
     savedLocation = '';
+    toggleNav: Function;
+    navbar;
 
     static getPrivateKeyPlaceholder(): any {
         let headers = new HttpHeaders();
@@ -49,7 +52,8 @@ export class AppSandboxService {
     constructor(
         private store: Store<AppState>,
         private router: Router,
-        private cookieService: CookieService
+        private cookieService: CookieService,
+        private media: MediaMatcher
     ) {}
 
     isAuthenticated(): boolean {
@@ -130,5 +134,26 @@ export class AppSandboxService {
         // this.cookieService.delete('token');
         // this.cookieService.delete('users_private_key');
         localStorage.clear();
+    }
+
+    setNavbar(navbar) {
+        this.navbar = navbar;
+        console.log('this navbar set: ', navbar);
+    }
+
+    closeNavbar(): void {
+        this.navbar.close();
+    }
+
+    openNavbar(): void {
+        this.navbar.open();
+    }
+
+    toggleNavbar(): void {
+        this.navbar.toggle();
+    }
+
+    isOnMobile(): boolean {
+        return this.media.matchMedia('(max-width: 600px)').matches;
     }
 }
