@@ -142,15 +142,15 @@ export class AppSandboxService {
     }
 
     closeNavbar(): void {
-        this.navbar.close();
+        if (this.navbar) this.navbar.close();
     }
 
     openNavbar(): void {
-        this.navbar.open();
+        if (this.navbar) this.navbar.open();
     }
 
     toggleNavbar(): void {
-        this.navbar.toggle();
+        if (this.navbar) this.navbar.toggle();
     }
 
     isOnMobile(): boolean {

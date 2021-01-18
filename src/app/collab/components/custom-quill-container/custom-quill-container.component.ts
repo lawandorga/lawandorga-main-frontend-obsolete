@@ -38,6 +38,7 @@ import { QuillBinding } from 'y-quill';
 import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
 import { RestrictedUser } from '../../../core/models/user.model';
 import { AppSandboxService } from '../../../core/services/app-sandbox.service';
+import { math } from 'lib0';
 
 @Component({
     selector: 'app-custom-quill-container',
@@ -232,28 +233,32 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
 
             this.loading = true;
             console.log('content length: ', this.text_document.versions[0].content.length);
+
+            const timeout = math.max(this.text_document.versions[0].content.length * 0.5, 400);
             setTimeout(() => {
                 console.log('timer hitted');
                 if (!this.connectedToPeers && this.provider.awareness.getStates().size === 1) {
-                    console.log('no connection happened so settings contents');
-                    this.setContents();
                     this.connectedToPeers = true;
+                    console.log('no connection happened, setContents');
+                    this.setContents();
                 }
                 this.loading = false;
-            }, this.text_document.versions[0].content.length * 0.5);
+            }, timeout);
 
             this.provider.awareness.once('update', () => {
                 const states = this.provider.awareness.states.size;
-                console.log('UPDATE');
-                console.log('states: ', states);
-                this.connectedToPeers = true;
-                if (states > 1) {
-                    console.log('im not alone in here');
-                } else {
-                    console.log('im alone here');
-                    this.setContents();
+                if (!this.connectedToPeers) {
+                    this.connectedToPeers = true;
+                    console.log('UPDATE');
+                    console.log('states: ', states);
+                    if (states > 1) {
+                        console.log('im not alone in here');
+                    } else {
+                        console.log('im alone here, setContents');
+                        this.setContents();
+                    }
+                    this.loading = false;
                 }
-                this.loading = false;
             });
         }
     }
