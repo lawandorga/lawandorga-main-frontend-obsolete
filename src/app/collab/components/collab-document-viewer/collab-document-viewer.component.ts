@@ -30,7 +30,10 @@ import { TextDocument } from '../../models/text-document.model';
 import Quill from 'quill';
 import { QuillEditorComponent } from 'ngx-quill';
 import { Router } from '@angular/router';
-import { GetCollabEditFrontUrl } from '../../../statics/frontend_links.statics';
+import {
+    GetCollabEditFrontUrl,
+    GetCollabVersionsFrontUrl
+} from '../../../statics/frontend_links.statics';
 
 @Component({
     selector: 'app-collab-document-viewer',
@@ -93,5 +96,9 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges, OnDestr
 
     onEditClick(): void {
         this.router.navigateByUrl(GetCollabEditFrontUrl(this.current_id));
+    }
+
+    onMenuHistoryClick(): void {
+        this.router.navigateByUrl(GetCollabVersionsFrontUrl(this.current_id));
     }
 }

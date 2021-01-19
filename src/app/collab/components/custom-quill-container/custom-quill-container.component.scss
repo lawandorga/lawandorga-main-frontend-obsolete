@@ -30,6 +30,11 @@
     margin-top: 16px;
     display: flex;
     flex-direction: row-reverse;
+
+}
+
+.custom-quill-container__editable-control > button {
+    margin-left: 8px;
 }
 
 .custom-quill-container__spinner-container {

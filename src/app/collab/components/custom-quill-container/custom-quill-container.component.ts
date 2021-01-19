@@ -39,6 +39,11 @@ import { CoreSandboxService } from '../../../core/services/core-sandbox.service'
 import { RestrictedUser } from '../../../core/models/user.model';
 import { AppSandboxService } from '../../../core/services/app-sandbox.service';
 import { math } from 'lib0';
+import { Router } from '@angular/router';
+import {
+    GetCollabEditFrontUrl,
+    GetCollabViewFrontUrl
+} from '../../../statics/frontend_links.statics';
 
 @Component({
     selector: 'app-custom-quill-container',
@@ -119,7 +124,8 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
     constructor(
         private collabSB: CollabSandboxService,
         private coreSB: CoreSandboxService,
-        private appSB: AppSandboxService
+        private appSB: AppSandboxService,
+        private router: Router
     ) {}
 
     ngOnInit(): void {
@@ -151,6 +157,7 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
 
     ngOnDestroy(): void {
         this.closeConnection();
+        this.appSB.openNavbar();
     }
 
     closeConnection(): void {
@@ -182,16 +189,21 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
             !this.editingMode &&
             this.quillRef &&
             this.text_document &&
-            this.text_document.versions[0].content !== undefined
+            this.text_document.versions[this.text_document.versions.length - 1].content !==
+                undefined
         ) {
-            if (this.text_document.versions[0].content === '') {
+            if (
+                this.text_document.versions[this.text_document.versions.length - 1].content === ''
+            ) {
                 // @ts-ignore
                 this.quillRef.setContents([]);
             } else {
                 setTimeout(() => {
                     console.log('set content in timeout');
                     // this.setContents();
-                    const json = JSON.parse(this.text_document.versions[0].content);
+                    const json = JSON.parse(
+                        this.text_document.versions[this.text_document.versions.length - 1].content
+                    );
                     this.quillRef.setContents(json);
                 }, 0);
             }
@@ -283,7 +295,17 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
 
     onSaveClick(): void {
         const stringified = JSON.stringify(this.quillRef.getContents());
-        console.log('on save click: ', stringified);
         this.collabSB.saveTextDocument(this.text_document.id, stringified);
+    }
+
+    onSaveDraftClick(): void {
+        const stringified = JSON.stringify(this.quillRef.getContents());
+        this.collabSB.saveTextDocument(this.text_document.id, stringified, true);
+    }
+
+    onCloseClick(): void {
+        // TODO: check if unsaved
+        console.log('on close click');
+        this.router.navigateByUrl(GetCollabViewFrontUrl(this.text_document.id));
     }
 }

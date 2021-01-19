@@ -20,7 +20,10 @@
     <div class="collab-document-viewer__header">
         <div>
             <h1>{{ text_document.name }}</h1>
-            <p>last edited: {{ text_document.last_edited | date: 'HH:mm dd.MM.yy' }}</p>
+            <p>
+                last edited: {{ text_document.last_edited | date: 'HH:mm dd.MM.yy' }}
+                {{ text_document.versions.length > 1 ? '| draft' : '' }}
+            </p>
         </div>
         <div>
             <button
@@ -36,7 +39,7 @@
                 <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-                <button mat-menu-item class="button-normal">
+                <button mat-menu-item class="button-normal" (click)="onMenuHistoryClick()">
                     <mat-icon>history</mat-icon>
                     <span>versions</span>
                 </button>

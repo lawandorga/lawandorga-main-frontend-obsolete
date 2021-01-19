@@ -32,6 +32,7 @@ import {
 } from '../../statics/api_urls.statics';
 import { AppSandboxService } from '../../core/services/app-sandbox.service';
 import { EditingRoom } from '../models/editing-room.model';
+import { SnackbarService } from '../../shared/services/snackbar.service';
 
 @Injectable({
     providedIn: 'root'
@@ -41,7 +42,8 @@ export class CollabSandboxService {
         private router: Router,
         private collabStore: Store<CollabState>,
         private http: HttpClient,
-        private sharedSB: SharedSandboxService
+        private sharedSB: SharedSandboxService,
+        private snackbackService: SnackbarService
     ) {}
 
     startLoadingAllDocuments(): void {
@@ -75,17 +77,22 @@ export class CollabSandboxService {
         return this.http.get(GetCollabTextDocumentApiUrl(id), privateKeyPlaceholder);
     }
 
-    saveTextDocument(id: number, content: string): void {
+    saveTextDocument(id: number, content: string, is_draft: boolean = false): void {
         const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
         this.http
             .post(
                 GetCollabTextDocumentVersionsApiUrl(id),
-                { content, is_draft: false },
+                { content, is_draft },
                 privateKeyPlaceholder
             )
             .subscribe(response => {
                 // console.log('i got something back: ', response);
                 // TODO: do something here? show snackbar
+                if (is_draft) {
+                    this.snackbackService.showSuccessSnackBar('document draft saved');
+                } else {
+                    this.snackbackService.showSuccessSnackBar('document saved');
+                }
             });
     }
 
