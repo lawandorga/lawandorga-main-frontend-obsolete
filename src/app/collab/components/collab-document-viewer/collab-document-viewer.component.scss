@@ -30,3 +30,17 @@
 .collab-document-viewer__edit {
     max-height: 32px;
 }
+
+.collab-document-viewer__versions-drawer {
+    min-width: 300px;
+    background-color: white;
+}
+
+.collab-document-viewer__versions-drawer-container {
+    background-color: white;
+    height: calc(100% - 110px);
+}
+
+.collab-document-viewer__main-container {
+    height: 100%;
+}

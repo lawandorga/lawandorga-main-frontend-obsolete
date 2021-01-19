@@ -16,7 +16,7 @@
   ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
   -->
 
-<div *ngIf="text_document">
+<div *ngIf="text_document" class="collab-document-viewer__main-container">
     <div class="collab-document-viewer__header">
         <div>
             <h1>{{ text_document.name }}</h1>
@@ -47,10 +47,21 @@
         </div>
     </div>
 
-    <div class="collab-document-viewer__quill-container">
-        <app-custom-quill-container
-            [editingMode]="false"
-            [text_document]="text_document"
-        ></app-custom-quill-container>
-    </div>
+    <mat-drawer-container class="collab-document-viewer__versions-drawer-container">
+        <mat-drawer-content>
+            <app-custom-quill-container
+                [editingMode]="false"
+                [text_document]="text_document"
+            ></app-custom-quill-container>
+        </mat-drawer-content>
+        <mat-drawer
+            [(opened)]="versionsOpened"
+            disableClose
+            mode="side"
+            position="end"
+            class="collab-document-viewer__versions-drawer"
+        >
+            <app-text-version></app-text-version>
+        </mat-drawer>
+    </mat-drawer-container>
 </div>

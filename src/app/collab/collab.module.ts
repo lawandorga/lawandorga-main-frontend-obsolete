@@ -35,7 +35,7 @@ import Quill from 'quill';
 import QuillCursors from 'quill-cursors';
 import { CustomQuillContainerComponent } from './components/custom-quill-container/custom-quill-container.component';
 import { CollabEditComponent } from './pages/collab-edit/collab-edit.component';
-import { TextVersionComponent } from './pages/text-version/text-version.component';
+import { TextVersionComponent } from './components/text-version/text-version.component';
 
 Quill.register('modules/cursors', QuillCursors);
 // Quill.register('modules/better-table', QuillBetterTable);

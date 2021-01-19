@@ -17,8 +17,11 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { Location } from '@angular/common';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { CollabSandboxService } from '../../services/collab-sandbox.service';
+import { AppSandboxService } from '../../../core/services/app-sandbox.service';
+import { SharedSandboxService } from '../../../shared/services/shared-sandbox.service';
 
 @Component({
     selector: 'app-page-view',
@@ -28,13 +31,36 @@ import { CollabSandboxService } from '../../services/collab-sandbox.service';
 export class PageViewComponent implements OnInit {
     id: number;
 
-    constructor(private route: ActivatedRoute, private collabSB: CollabSandboxService) {}
+    constructor(
+        private route: ActivatedRoute,
+        private collabSB: CollabSandboxService,
+        private appSB: AppSandboxService,
+        private sharedSB: SharedSandboxService,
+        private location: Location
+    ) {}
 
     ngOnInit(): void {
         this.route.params.subscribe((params: Params) => {
             this.id = params['id'];
             console.log('id changed in pageview: ', this.id);
         });
+        if (this.appSB.isOnMobile()) {
+            this.sharedSB.openConfirmDialog(
+                {
+                    cancelLabel: 'back',
+                    confirmColor: 'warn',
+                    confirmLabel: 'go on',
+                    description: "Opening this on a smartphone doesn't make any sense",
+                    title: 'are you sure you want to do this?'
+                },
+                result => {
+                    console.log('result from confirm dialog: ', result);
+                    if (!result) {
+                        this.location.back();
+                    }
+                }
+            );
+        }
     }
 
     onAddDocumentClick(): void {

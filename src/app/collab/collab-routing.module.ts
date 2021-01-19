@@ -23,7 +23,7 @@ import { AuthGuardService } from '../core/services/auth-guard.service';
 import { UnsavedGuardService } from '../core/services/unsaved-guard.service';
 import { PageViewComponent } from './pages/page-view/page-view.component';
 import { CollabEditComponent } from './pages/collab-edit/collab-edit.component';
-import { TextVersionComponent } from './pages/text-version/text-version.component';
+import { TextVersionComponent } from './components/text-version/text-version.component';
 
 const collabRoutes: Routes = [
     {
@@ -39,10 +39,6 @@ const collabRoutes: Routes = [
         path: 'edit/:id',
         component: CollabEditComponent,
         canDeactivate: [UnsavedGuardService]
-    },
-    {
-        path: 'versions/:id',
-        component: TextVersionComponent
     }
 ];
 
