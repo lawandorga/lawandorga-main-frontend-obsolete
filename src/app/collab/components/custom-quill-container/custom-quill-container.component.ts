@@ -234,7 +234,7 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
             this.loading = true;
             console.log('content length: ', this.text_document.versions[0].content.length);
 
-            const timeout = math.max(this.text_document.versions[0].content.length * 0.5, 400);
+            const timeout = math.max(this.text_document.versions[0].content.length * 0.5, 600);
             setTimeout(() => {
                 console.log('timer hitted');
                 if (!this.connectedToPeers && this.provider.awareness.getStates().size === 1) {
