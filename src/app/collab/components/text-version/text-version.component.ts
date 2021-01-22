@@ -47,7 +47,6 @@ export class TextVersionComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        // console.log('changes: ', changes);
         if (changes.document) {
             if (changes.document.currentValue.id !== changes.document.previousValue.id) {
                 this.fetchDocumentVersions();
@@ -66,10 +65,7 @@ export class TextVersionComponent implements OnInit, OnChanges {
     onVersionClick(version: TextDocumentVersion): void {
         this.collabSB.fetchTextDocumentVersion(version.id).subscribe(response => {
             const full_version = TextDocumentVersion.getTextDocumentVersionFromJson(response);
-            // this.document.versions[0] = this.document.versions[1] = full_version;
-            // this.document = this.document;
             this.changedVersion.emit(full_version);
-            // console.log('document after version click: ', this.document);
         });
     }
 }

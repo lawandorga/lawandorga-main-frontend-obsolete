@@ -53,9 +53,6 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges, OnDestr
 
     versionsOpened = false;
 
-    // @ViewChild(QuillEditorComponent, { static: true }) editor: QuillEditorComponent;
-    // modules = {};
-
     @ViewChild(CustomQuillContainerComponent) quillEditor: CustomQuillContainerComponent;
 
     constructor(private collabSB: CollabSandboxService, private router: Router) {
@@ -103,15 +100,11 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges, OnDestr
     }
 
     onMenuHistoryClick(): void {
-        // this.router.navigateByUrl(GetCollabVersionsFrontUrl(this.current_id));
         this.versionsOpened = !this.versionsOpened;
-        // console.log('versionsOpened switched');
     }
 
     onChangedVersion(text_document_version: TextDocumentVersion): void {
-        // this.text_document.versions[0] = this.text_document.versions[1] = text_document_version;
         this.text_document.content = text_document_version.content;
-        // this.text_document = this.text_document;
         this.quillEditor.initQuill();
     }
 }

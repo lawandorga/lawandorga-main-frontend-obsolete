@@ -311,7 +311,7 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
 
     onCloseClick(): void {
         // TODO: check if unsaved
-        console.log('on close click');
+        // console.log('on close click');
         if (this.provider.awareness) {
             this.provider.awareness.destroy();
         }
