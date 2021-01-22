@@ -81,11 +81,8 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges, OnDestr
                 received_document.content = received_document.versions[0].is_draft
                     ? received_document.versions[1].content
                     : received_document.versions[0].content;
-                // this.text_document = TextDocument.getTextDocumentFromJson(response);
                 this.text_document = received_document;
-
                 this.loading = false;
-                // this.quillRef.setContents(JSON.parse(this.text_document.content));
             });
         }
     }

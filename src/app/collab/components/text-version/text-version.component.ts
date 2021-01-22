@@ -48,7 +48,10 @@ export class TextVersionComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.document) {
-            if (changes.document.currentValue.id !== changes.document.previousValue.id) {
+            if (
+                changes.document.previousValue === undefined ||
+                changes.document.currentValue.id !== changes.document.previousValue.id
+            ) {
                 this.fetchDocumentVersions();
             }
         }

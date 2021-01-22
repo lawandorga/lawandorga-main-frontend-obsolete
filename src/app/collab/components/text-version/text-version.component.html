@@ -16,8 +16,8 @@
   ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
   -->
 
-<div>
-    <h3>Versions</h3>
+<div class="text-version__container">
+    <h2>Versions</h2>
     <h4>
         {{ document.versions.length }} versions in
         {{
@@ -31,11 +31,17 @@
     </h4>
     <div
         *ngFor="let version of document.versions"
-        class="text-version__item"
+        class="text-version__item-container"
         (click)="onVersionClick(version)"
     >
-        <mat-divider></mat-divider>
-        <p>{{ version.created | date: 'HH:mm dd.MM.yy' }} {{ version.is_draft ? 'draft' : '' }}</p>
-        <p>{{ version.creator.name }}</p>
+        <div class="text-version__item">
+            <h3>
+                <b>
+                    {{ version.created | date: 'HH:mm dd.MM.yy' }}
+                    {{ version.is_draft ? 'draft' : '' }}
+                </b>
+            </h3>
+            <p>{{ version.creator.name }}</p>
+        </div>
     </div>
 </div>

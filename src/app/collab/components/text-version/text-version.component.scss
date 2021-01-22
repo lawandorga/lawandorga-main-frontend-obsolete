@@ -16,11 +16,28 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-.text-version__item {
-    margin: 24px 8px;
+@import "~src/styles/basic";
 
+.text-version__item {
+    padding: 24px 8px;
+
+    h3 {
+        margin: 0;
+    }
+
+    p {
+        margin: 0;
+    }
 }
 
 .text-version__item:hover {
-    background-color: beige;
+    background-color: $c-background;
+}
+
+.text-version__item-container {
+    border-top: 1px solid lightgrey;
+}
+
+.text-version__container {
+    margin-left: 8px;
 }
