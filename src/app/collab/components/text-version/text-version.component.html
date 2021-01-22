@@ -16,4 +16,26 @@
   ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
   -->
 
-<p>text-version works!</p>
+<div>
+    <h3>Versions</h3>
+    <h4>
+        {{ document.versions.length }} versions in
+        {{
+            (
+                (document.versions[0].created -
+                    document.versions[document.versions.length - 1].created) /
+                86400000
+            ).toFixed(0)
+        }}
+        days
+    </h4>
+    <div
+        *ngFor="let version of document.versions"
+        class="text-version__item"
+        (click)="onVersionClick(version)"
+    >
+        <mat-divider></mat-divider>
+        <p>{{ version.created | date: 'HH:mm dd.MM.yy' }} {{ version.is_draft ? 'draft' : '' }}</p>
+        <p>{{ version.creator.name }}</p>
+    </div>
+</div>

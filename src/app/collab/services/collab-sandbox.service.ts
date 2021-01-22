@@ -28,7 +28,8 @@ import { Observable } from 'rxjs';
 import {
     GetCollabEditingApiUrl,
     GetCollabTextDocumentApiUrl,
-    GetCollabTextDocumentVersionsApiUrl
+    GetCollabTextDocumentVersionsApiUrl,
+    GetCollabTextDocumentVersionsModelApiUrl
 } from '../../statics/api_urls.statics';
 import { AppSandboxService } from '../../core/services/app-sandbox.service';
 import { EditingRoom } from '../models/editing-room.model';
@@ -75,6 +76,19 @@ export class CollabSandboxService {
     fetchTextDocument(id: number): Observable<any> {
         const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
         return this.http.get(GetCollabTextDocumentApiUrl(id), privateKeyPlaceholder);
+    }
+
+    fetchTextDocumentVersions(id: number): Observable<any> {
+        const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
+        return this.http.get(GetCollabTextDocumentVersionsApiUrl(id), privateKeyPlaceholder);
+    }
+
+    fetchTextDocumentVersion(version_id: number): Observable<any> {
+        const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
+        return this.http.get(
+            GetCollabTextDocumentVersionsModelApiUrl(version_id),
+            privateKeyPlaceholder
+        );
     }
 
     saveTextDocument(id: number, content: string, is_draft: boolean = false): void {

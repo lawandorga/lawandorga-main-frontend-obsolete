@@ -16,7 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { CollabSandboxService } from '../../services/collab-sandbox.service';
+import { TextDocument } from '../../models/text-document.model';
+import { TextDocumentVersion } from '../../models/text-document-version.model';
 
 @Component({
     selector: 'app-text-version',
@@ -24,7 +27,29 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./text-version.component.scss']
 })
 export class TextVersionComponent implements OnInit {
-    constructor() {}
+    @Input()
+    document: TextDocument;
 
-    ngOnInit(): void {}
+    @Output() changedVersion: EventEmitter<TextDocumentVersion> = new EventEmitter();
+
+    constructor(private collabSB: CollabSandboxService) {}
+
+    ngOnInit(): void {
+        this.collabSB.fetchTextDocumentVersions(this.document.id).subscribe(response => {
+            console.log('response from fetching text document versions: ', response);
+            const versions = TextDocumentVersion.getTextDocumentVersionsFromJsonArray(response);
+            // TODO: don't replace, (quill contents?)
+            this.document.versions = versions;
+        });
+    }
+
+    onVersionClick(version: TextDocumentVersion): void {
+        this.collabSB.fetchTextDocumentVersion(version.id).subscribe(response => {
+            const full_version = TextDocumentVersion.getTextDocumentVersionFromJson(response);
+            this.document.versions[0] = this.document.versions[1] = full_version;
+            // this.document = this.document;
+            this.changedVersion.emit(full_version);
+            // console.log('document after version click: ', this.document);
+        });
+    }
 }

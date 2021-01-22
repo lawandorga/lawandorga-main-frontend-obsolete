@@ -49,7 +49,7 @@ export class PageViewComponent implements OnInit {
                 {
                     cancelLabel: 'back',
                     confirmColor: 'warn',
-                    confirmLabel: 'go on',
+                    confirmLabel: 'I want to suffer',
                     description: "Opening this on a smartphone doesn't make any sense",
                     title: 'are you sure you want to do this?'
                 },

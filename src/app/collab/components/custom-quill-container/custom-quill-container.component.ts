@@ -149,13 +149,18 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
     }
 
     ngOnChanges(changes: SimpleChanges): void {
+        console.log('changes');
         if ('text_document' in changes) {
+            console.log('text document changes');
             this.text_document = changes['text_document']['currentValue'];
             this.initQuill();
         }
     }
 
     ngOnDestroy(): void {
+        if (this.provider) {
+            this.provider.destroy();
+        }
         this.closeConnection();
         this.appSB.openNavbar();
     }
@@ -173,6 +178,9 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
 
     @HostListener('window:beforeunload')
     beforeUnload() {
+        if (this.provider) {
+            this.provider.destroy();
+        }
         this.closeConnection();
     }
 
@@ -185,25 +193,24 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
         console.log('loading true');
         this.loading = true;
 
+        const last_published_content: string = this.text_document.versions[0].is_draft
+            ? this.text_document.versions[1].content
+            : this.text_document.versions[0].content;
+
         if (
             !this.editingMode &&
             this.quillRef &&
             this.text_document &&
-            this.text_document.versions[this.text_document.versions.length - 1].content !==
-                undefined
+            last_published_content !== undefined
         ) {
-            if (
-                this.text_document.versions[this.text_document.versions.length - 1].content === ''
-            ) {
+            if (last_published_content === '') {
                 // @ts-ignore
                 this.quillRef.setContents([]);
             } else {
                 setTimeout(() => {
                     console.log('set content in timeout');
                     // this.setContents();
-                    const json = JSON.parse(
-                        this.text_document.versions[this.text_document.versions.length - 1].content
-                    );
+                    const json = JSON.parse(last_published_content);
                     this.quillRef.setContents(json);
                 }, 0);
             }
@@ -217,6 +224,7 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
             return;
         }
 
+        const last_content: string = this.text_document.versions[0].content;
         if (this.editing_room && this.editingMode) {
             if (this.provider) {
                 this.provider.destroy();
@@ -244,9 +252,9 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
             );
 
             this.loading = true;
-            console.log('content length: ', this.text_document.versions[0].content.length);
+            console.log('content length: ', last_content.length);
 
-            const timeout = math.max(this.text_document.versions[0].content.length * 0.5, 600);
+            const timeout = math.max(last_content.length * 0.5, 600);
             setTimeout(() => {
                 console.log('timer hitted');
                 if (!this.connectedToPeers && this.provider.awareness.getStates().size === 1) {
@@ -289,8 +297,8 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
     }
 
     setContents(): void {
-        if (this.text_document.versions[0].content !== '')
-            this.quillRef.setContents(JSON.parse(this.text_document.versions[0].content));
+        const last_content: string = this.text_document.versions[0].content;
+        if (last_content !== '') this.quillRef.setContents(JSON.parse(last_content));
     }
 
     onSaveClick(): void {
@@ -306,6 +314,12 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
     onCloseClick(): void {
         // TODO: check if unsaved
         console.log('on close click');
+        if (this.provider.awareness) {
+            this.provider.awareness.destroy();
+        }
+        if (this.provider) {
+            this.provider.destroy();
+        }
         this.router.navigateByUrl(GetCollabViewFrontUrl(this.text_document.id));
     }
 }

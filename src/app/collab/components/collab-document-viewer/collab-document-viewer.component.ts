@@ -30,10 +30,9 @@ import { TextDocument } from '../../models/text-document.model';
 import Quill from 'quill';
 import { QuillEditorComponent } from 'ngx-quill';
 import { Router } from '@angular/router';
-import {
-    GetCollabEditFrontUrl,
-    GetCollabVersionsFrontUrl
-} from '../../../statics/frontend_links.statics';
+import { GetCollabEditFrontUrl } from '../../../statics/frontend_links.statics';
+import { TextDocumentVersion } from '../../models/text-document-version.model';
+import { CustomQuillContainerComponent } from '../custom-quill-container/custom-quill-container.component';
 
 @Component({
     selector: 'app-collab-document-viewer',
@@ -54,8 +53,10 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges, OnDestr
 
     versionsOpened = false;
 
-    @ViewChild(QuillEditorComponent, { static: true }) editor: QuillEditorComponent;
-    modules = {};
+    // @ViewChild(QuillEditorComponent, { static: true }) editor: QuillEditorComponent;
+    // modules = {};
+
+    @ViewChild(CustomQuillContainerComponent) quillEditor: CustomQuillContainerComponent;
 
     constructor(private collabSB: CollabSandboxService, private router: Router) {
         this.current_id = undefined;
@@ -71,20 +72,15 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges, OnDestr
     }
 
     ngOnDestroy(): void {
-        console.log('on destroy');
         this.text_document = undefined;
     }
 
     fetchIfNewDocumentId() {
         if (this.document_id && this.current_id !== this.document_id) {
-            console.log('fetch in collab document viewer');
             this.current_id = this.document_id;
             this.loading = true;
             this.collabSB.fetchTextDocument(this.document_id).subscribe(response => {
-                console.log('fetch in collab document viewer finished', response);
-
                 this.text_document = TextDocument.getTextDocumentFromJson(response);
-                console.log('text document from json: ', this.text_document);
                 this.loading = false;
                 // this.quillRef.setContents(JSON.parse(this.text_document.content));
             });
@@ -104,5 +100,11 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges, OnDestr
         // this.router.navigateByUrl(GetCollabVersionsFrontUrl(this.current_id));
         this.versionsOpened = !this.versionsOpened;
         console.log('versionsOpened switched');
+    }
+
+    onChangedVersion(text_document_version: TextDocumentVersion): void {
+        this.text_document.versions[0] = this.text_document.versions[1] = text_document_version;
+        this.text_document = this.text_document;
+        this.quillEditor.initQuill();
     }
 }

@@ -24,13 +24,15 @@ export class TextDocumentVersion {
         public created: Date,
         public creator: RestrictedUser,
         public content: string,
-        public is_draft: boolean
+        public is_draft: boolean,
+        public anonymous: boolean
     ) {
         this.id = id;
         this.created = created;
         this.creator = creator;
         this.content = content;
         this.is_draft = is_draft;
+        this.anonymous = anonymous;
     }
 
     static getTextDocumentVersionFromJson(json: any): TextDocumentVersion {
@@ -38,8 +40,9 @@ export class TextDocumentVersion {
             Number(json.id),
             new Date(json.created),
             RestrictedUser.getRestrictedUserFromJson(json.creator),
-            json.content,
-            json.is_draft
+            json.content ? json.content : '',
+            json.is_draft,
+            !json.content
         );
     }
 

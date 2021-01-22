@@ -61,7 +61,10 @@
             position="end"
             class="collab-document-viewer__versions-drawer"
         >
-            <app-text-version></app-text-version>
+            <app-text-version
+                [document]="text_document"
+                (changedVersion)="onChangedVersion($event)"
+            ></app-text-version>
         </mat-drawer>
     </mat-drawer-container>
 </div>
