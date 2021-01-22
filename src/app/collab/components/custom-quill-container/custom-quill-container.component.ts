@@ -190,12 +190,12 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
     }
 
     initQuill(): void {
-        console.log('loading true');
         this.loading = true;
 
-        const last_published_content: string = this.text_document.versions[0].is_draft
-            ? this.text_document.versions[1].content
-            : this.text_document.versions[0].content;
+        // const last_published_content: string = this.text_document.versions[0].is_draft
+        //     ? this.text_document.versions[1].content
+        //     : this.text_document.versions[0].content;
+        const last_published_content = this.text_document.content;
 
         if (
             !this.editingMode &&
@@ -208,8 +208,6 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
                 this.quillRef.setContents([]);
             } else {
                 setTimeout(() => {
-                    console.log('set content in timeout');
-                    // this.setContents();
                     const json = JSON.parse(last_published_content);
                     this.quillRef.setContents(json);
                 }, 0);
@@ -252,14 +250,14 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
             );
 
             this.loading = true;
-            console.log('content length: ', last_content.length);
+            // console.log('content length: ', last_content.length);
 
             const timeout = math.max(last_content.length * 0.5, 600);
             setTimeout(() => {
-                console.log('timer hitted');
+                // console.log('timer hitted');
                 if (!this.connectedToPeers && this.provider.awareness.getStates().size === 1) {
                     this.connectedToPeers = true;
-                    console.log('no connection happened, setContents');
+                    // console.log('no connection happened, setContents');
                     this.setContents();
                 }
                 this.loading = false;
@@ -269,12 +267,12 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
                 const states = this.provider.awareness.states.size;
                 if (!this.connectedToPeers) {
                     this.connectedToPeers = true;
-                    console.log('UPDATE');
-                    console.log('states: ', states);
+                    // console.log('UPDATE');
+                    // console.log('states: ', states);
                     if (states > 1) {
-                        console.log('im not alone in here');
+                        // console.log('im not alone in here');
                     } else {
-                        console.log('im alone here, setContents');
+                        // console.log('im alone here, setContents');
                         this.setContents();
                     }
                     this.loading = false;

@@ -16,7 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnInit,
+    Output,
+    SimpleChanges
+} from '@angular/core';
 import { CollabSandboxService } from '../../services/collab-sandbox.service';
 import { TextDocument } from '../../models/text-document.model';
 import { TextDocumentVersion } from '../../models/text-document-version.model';
@@ -26,7 +34,7 @@ import { TextDocumentVersion } from '../../models/text-document-version.model';
     templateUrl: './text-version.component.html',
     styleUrls: ['./text-version.component.scss']
 })
-export class TextVersionComponent implements OnInit {
+export class TextVersionComponent implements OnInit, OnChanges {
     @Input()
     document: TextDocument;
 
@@ -35,18 +43,30 @@ export class TextVersionComponent implements OnInit {
     constructor(private collabSB: CollabSandboxService) {}
 
     ngOnInit(): void {
+        this.fetchDocumentVersions();
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        // console.log('changes: ', changes);
+        if (changes.document) {
+            if (changes.document.currentValue.id !== changes.document.previousValue.id) {
+                this.fetchDocumentVersions();
+            }
+        }
+    }
+
+    fetchDocumentVersions(): void {
         this.collabSB.fetchTextDocumentVersions(this.document.id).subscribe(response => {
-            console.log('response from fetching text document versions: ', response);
-            const versions = TextDocumentVersion.getTextDocumentVersionsFromJsonArray(response);
-            // TODO: don't replace, (quill contents?)
-            this.document.versions = versions;
+            this.document.versions = TextDocumentVersion.getTextDocumentVersionsFromJsonArray(
+                response
+            );
         });
     }
 
     onVersionClick(version: TextDocumentVersion): void {
         this.collabSB.fetchTextDocumentVersion(version.id).subscribe(response => {
             const full_version = TextDocumentVersion.getTextDocumentVersionFromJson(response);
-            this.document.versions[0] = this.document.versions[1] = full_version;
+            // this.document.versions[0] = this.document.versions[1] = full_version;
             // this.document = this.document;
             this.changedVersion.emit(full_version);
             // console.log('document after version click: ', this.document);
