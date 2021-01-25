@@ -310,14 +310,6 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
     }
 
     onCloseClick(): void {
-        // TODO: check if unsaved
-        // console.log('on close click');
-        if (this.provider.awareness) {
-            this.provider.awareness.destroy();
-        }
-        if (this.provider) {
-            this.provider.destroy();
-        }
         this.router.navigateByUrl(GetCollabViewFrontUrl(this.text_document.id));
     }
 }
