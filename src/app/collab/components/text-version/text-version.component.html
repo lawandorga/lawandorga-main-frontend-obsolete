@@ -18,17 +18,7 @@
 
 <div class="text-version__container">
     <h2>Versions</h2>
-    <h3>
-        {{ document.versions.length }} versions in
-        {{
-            (
-                (document.versions[0].created -
-                    document.versions[document.versions.length - 1].created) /
-                86400000
-            ).toFixed(0)
-        }}
-        days
-    </h3>
+    <h3>{{ document.versions.length }} versions</h3>
     <div
         *ngFor="let version of document.versions"
         class="text-version__item-container"

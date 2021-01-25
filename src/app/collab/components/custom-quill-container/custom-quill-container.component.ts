@@ -44,6 +44,7 @@ import {
     GetCollabEditFrontUrl,
     GetCollabViewFrontUrl
 } from '../../../statics/frontend_links.statics';
+import { testEventTargetIsSetCorrectlyOnLocal } from 'yjs/dist/tests/y-array.tests';
 
 @Component({
     selector: 'app-custom-quill-container',
@@ -155,6 +156,10 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
             this.text_document = changes['text_document']['currentValue'];
             this.initQuill();
         }
+        if ('editing_room' in changes) {
+            console.log('editing room updated');
+            this.initQuill();
+        }
     }
 
     ngOnDestroy(): void {
@@ -223,6 +228,8 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
         }
 
         const last_content: string = this.text_document.versions[0].content;
+        console.log('editing room: ', this.editing_room);
+        console.log('editing mode: ', this.editingMode);
         if (this.editing_room && this.editingMode) {
             if (this.provider) {
                 this.provider.destroy();
@@ -235,7 +242,6 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
                 password: this.editing_room.password,
                 signaling: ['wss://y-webrtc-signaling-eu.herokuapp.com/']
             });
-
             this.provider.connect();
             if (this.user) {
                 this.setUser();
