@@ -64,6 +64,8 @@ import { NotificationGroupsListComponent } from './pages/notification-groups-lis
 import { NotificationListComponent } from './components/notification-list/notification-list.component';
 
 import { BaseRequestProcessedPipe, BaseRequestRequestedPipe } from './pipes/request.pipe';
+import { StatisticsPageComponent } from './pages/statistics-page/statistics-page.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
     imports: [
@@ -111,7 +113,8 @@ import { BaseRequestProcessedPipe, BaseRequestRequestedPipe } from './pipes/requ
         NotificationGroupsListComponent,
         NotificationListComponent,
         BaseRequestRequestedPipe,
-        BaseRequestProcessedPipe
+        BaseRequestProcessedPipe,
+        StatisticsPageComponent
     ],
     providers: [],
     exports: [SidebarComponent, BaseRequestRequestedPipe, BaseRequestProcessedPipe]

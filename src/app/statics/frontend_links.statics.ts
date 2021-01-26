@@ -32,6 +32,7 @@ export const OWN_PROFILE_FRONT_URL = 'profile';
 export const RECORDS_FRONT_URL = 'records';
 export const RECORDS_ADD_FRONT_URL = 'records/add';
 export const RECORDS_PERMIT_REQUEST_FRONT_URL = 'records/permit_requests';
+export const STATISTICS_FRONT_URL = 'statistics';
 export const GROUPS_FRONT_URL = 'groups';
 export const PERMISSIONS_FRONT_URL = 'permissions';
 export const ACCEPT_NEW_USER_REQUESTS_FRONT_URL = 'new_user_requests';

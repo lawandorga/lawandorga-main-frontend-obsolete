@@ -38,6 +38,8 @@ import { InactiveUsersComponent } from './pages/inactive-users/inactive-users.co
 import { PrivacyStatementComponent } from './pages/privacy-statement/privacy-statement.component';
 import { NotificationGroupsListComponent } from './pages/notification-groups-list/notification-groups-list.component';
 import { UnsavedGuardService } from './services/unsaved-guard.service';
+import { StatisticsPageComponent } from './pages/statistics-page/statistics-page.component';
+import { STATISTICS_FRONT_URL } from '../statics/frontend_links.statics';
 
 const apiRoutes: Routes = [
     {
@@ -97,6 +99,11 @@ const apiRoutes: Routes = [
     {
         path: 'notifications',
         component: NotificationGroupsListComponent,
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: STATISTICS_FRONT_URL,
+        component: StatisticsPageComponent,
         canActivate: [AuthGuardService]
     },
     // without access control
