@@ -21,19 +21,21 @@
         <h1>Statistics</h1>
         <p>some statistics</p>
 
+        <div></div>
         <ngx-charts-bar-vertical
-            [view]="view"
-            [scheme]="colorScheme"
+            [view]="[900, 800]"
             [results]="single"
-            [gradient]="gradient"
-            [xAxis]="showXAxis"
-            [yAxis]="showYAxis"
-            [legend]="showLegend"
-            [showXAxisLabel]="showXAxisLabel"
-            [showYAxisLabel]="showYAxisLabel"
-            [xAxisLabel]="xAxisLabel"
-            [yAxisLabel]="yAxisLabel"
+            [scheme]="colorScheme"
+            [gradient]="false"
+            [xAxis]="true"
+            [yAxis]="true"
+            [legend]="true"
+            [showXAxisLabel]="true"
+            [showYAxisLabel]="false"
+            xAxisLabel="tag"
+            yAxisLabel="amount"
             (select)="onSelect($event)"
+            [noBarWhenZero]="true"
         >
         </ngx-charts-bar-vertical>
     </mat-card-content>

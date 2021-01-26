@@ -26,16 +26,6 @@ import { StatisticsSandboxService } from '../../services/statistics-sandbox.serv
     styleUrls: ['./statistics-page.component.scss']
 })
 export class StatisticsPageComponent implements OnInit {
-    // options
-    showXAxis = true;
-    showYAxis = true;
-    gradient = false;
-    showLegend = true;
-    showXAxisLabel = true;
-    xAxisLabel = 'Country';
-    showYAxisLabel = true;
-    yAxisLabel = 'Population';
-
     view: any[] = [700, 400];
     single: any[];
     colorScheme = {
@@ -43,21 +33,21 @@ export class StatisticsPageComponent implements OnInit {
     };
 
     constructor(private statisticsSB: StatisticsSandboxService) {
-        const single = [
-            {
-                name: 'Germany',
-                value: 8940000
-            },
-            {
-                name: 'USA',
-                value: 5000000
-            },
-            {
-                name: 'France',
-                value: 7200000
-            }
-        ];
-        Object.assign(this, { single });
+        // const single = [
+        //     {
+        //         name: 'Germany',
+        //         value: 8940000
+        //     },
+        //     {
+        //         name: 'USA',
+        //         value: 5000000
+        //     },
+        //     {
+        //         name: 'France',
+        //         value: 7200000
+        //     }
+        // ];
+        // Object.assign(this, { single });
     }
 
     ngOnInit(): void {
