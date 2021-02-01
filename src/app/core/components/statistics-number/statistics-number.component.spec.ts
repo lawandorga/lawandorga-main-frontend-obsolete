@@ -1,4 +1,4 @@
-/*!
+/*
  * law&orga - record and organization management software for refugee law clinics
  * Copyright (C) 2021  Dominik Walser
  *
@@ -16,22 +16,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-.statistics-page__mat-card {
-    margin: 0.5rem;
-}
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { StatisticsNumberComponent } from './statistics-number.component';
 
-.statistics-page__charts__record-tags {
-    height: 50em;
-    max-width: 50em;
-    width: 40em;
-}
+describe('StatisticsNumberComponent', () => {
+    let component: StatisticsNumberComponent;
+    let fixture: ComponentFixture<StatisticsNumberComponent>;
 
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            declarations: [StatisticsNumberComponent]
+        }).compileComponents();
+    });
 
-.statistics-page__container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: flex-start;
-}
+    beforeEach(() => {
+        fixture = TestBed.createComponent(StatisticsNumberComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
+});

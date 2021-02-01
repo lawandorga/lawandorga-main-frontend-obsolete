@@ -17,7 +17,6 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { StatisticsSandboxService } from '../../services/statistics-sandbox.service';
 
 @Component({
@@ -32,28 +31,39 @@ export class StatisticsPageComponent implements OnInit {
         domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
     };
 
-    constructor(private statisticsSB: StatisticsSandboxService) {
-        // const single = [
-        //     {
-        //         name: 'Germany',
-        //         value: 8940000
-        //     },
-        //     {
-        //         name: 'USA',
-        //         value: 5000000
-        //     },
-        //     {
-        //         name: 'France',
-        //         value: 7200000
-        //     }
-        // ];
-        // Object.assign(this, { single });
-    }
+    statistics = {
+        record_tags: {
+            values: [],
+            empty: []
+        },
+        records: {
+            total: {
+                overall: 0,
+                open: 0,
+                closed: 0,
+                waiting: 0,
+                working: 0
+            }
+        }
+    };
+
+    constructor(private statisticsSB: StatisticsSandboxService) {}
 
     ngOnInit(): void {
         this.statisticsSB.getRecordStatistics().subscribe(response => {
             console.log('response from statistics: ', response);
-            this.single = response;
+            // this.
+
+            this.statistics.record_tags.values = response.tags.filter(
+                (entry: any) => entry.value > 0
+            );
+            this.statistics.record_tags.empty = response.tags.filter(
+                (entry: any) => entry.value === 0
+            );
+
+            this.statistics.records = response.records;
+
+            console.log('statistics', this.statistics);
         });
     }
 

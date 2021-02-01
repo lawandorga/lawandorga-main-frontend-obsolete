@@ -15,28 +15,69 @@
   ~ You should have received a copy of the GNU Affero General Public License
   ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
   -->
+<h1>Statistics</h1>
+<div class="statistics-page__container">
+    <mat-card class="statistics-page__mat-card">
+        <mat-card-content>
+            <h2>Tags in all records (multiple possible)</h2>
+            <div class="statistics-page__charts__record-tags">
+                <ngx-charts-bar-horizontal
+                    [results]="statistics.record_tags.values"
+                    [gradient]="false"
+                    [xAxis]="true"
+                    [yAxis]="true"
+                    [legend]="true"
+                    [showXAxisLabel]="true"
+                    [showYAxisLabel]="false"
+                    [roundDomains]="true"
+                    xAxisLabel="tag"
+                    yAxisLabel="amount"
+                    (select)="onSelect($event)"
+                    [noBarWhenZero]="true"
+                >
+                </ngx-charts-bar-horizontal>
+            </div>
+        </mat-card-content>
+    </mat-card>
 
-<mat-card>
-    <mat-card-content>
-        <h1>Statistics</h1>
-        <p>some statistics</p>
-
-        <div></div>
-        <ngx-charts-bar-vertical
-            [view]="[900, 800]"
-            [results]="single"
-            [scheme]="colorScheme"
-            [gradient]="false"
-            [xAxis]="true"
-            [yAxis]="true"
-            [legend]="true"
-            [showXAxisLabel]="true"
-            [showYAxisLabel]="false"
-            xAxisLabel="tag"
-            yAxisLabel="amount"
-            (select)="onSelect($event)"
-            [noBarWhenZero]="true"
-        >
-        </ngx-charts-bar-vertical>
-    </mat-card-content>
-</mat-card>
+    <mat-card class="statistics-page__mat-card">
+        <mat-card-content>
+            <app-statistics-number
+                title="total records"
+                [value]="statistics.records.total.overall"
+            ></app-statistics-number>
+        </mat-card-content>
+    </mat-card>
+    <mat-card class="statistics-page__mat-card">
+        <mat-card-content>
+            <app-statistics-number
+                title="records waiting"
+                [value]="statistics.records.total.waiting"
+            ></app-statistics-number>
+        </mat-card-content>
+    </mat-card>
+    <mat-card class="statistics-page__mat-card">
+        <mat-card-content>
+            <app-statistics-number
+                title="records closed"
+                [value]="statistics.records.total.closed"
+            ></app-statistics-number>
+        </mat-card-content>
+    </mat-card>
+    <mat-card class="statistics-page__mat-card">
+        <mat-card-content>
+            <app-statistics-number
+                title="records open"
+                [value]="statistics.records.total.open"
+            ></app-statistics-number>
+        </mat-card-content>
+    </mat-card>
+    <mat-card class="statistics-page__mat-card">
+        <mat-card-content>
+            <app-statistics-number
+                title="records working"
+                [value]="statistics.records.total.working"
+            ></app-statistics-number>
+        </mat-card-content>
+    </mat-card>
+</div>
