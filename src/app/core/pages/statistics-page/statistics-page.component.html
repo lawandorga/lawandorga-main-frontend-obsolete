@@ -44,40 +44,22 @@
         <mat-card-content>
             <app-statistics-number
                 title="total records"
-                [value]="statistics.records.total.overall"
+                [value]="statistics.records.overall"
             ></app-statistics-number>
         </mat-card-content>
     </mat-card>
+
     <mat-card class="statistics-page__mat-card">
         <mat-card-content>
-            <app-statistics-number
-                title="records waiting"
-                [value]="statistics.records.total.waiting"
-            ></app-statistics-number>
-        </mat-card-content>
-    </mat-card>
-    <mat-card class="statistics-page__mat-card">
-        <mat-card-content>
-            <app-statistics-number
-                title="records closed"
-                [value]="statistics.records.total.closed"
-            ></app-statistics-number>
-        </mat-card-content>
-    </mat-card>
-    <mat-card class="statistics-page__mat-card">
-        <mat-card-content>
-            <app-statistics-number
-                title="records open"
-                [value]="statistics.records.total.open"
-            ></app-statistics-number>
-        </mat-card-content>
-    </mat-card>
-    <mat-card class="statistics-page__mat-card">
-        <mat-card-content>
-            <app-statistics-number
-                title="records working"
-                [value]="statistics.records.total.working"
-            ></app-statistics-number>
+            <div class="statistics-page__charts__record-states">
+                <ngx-charts-pie-chart
+                    [results]="statistics.records.states"
+                    [labels]="true"
+                    [legend]="true"
+                >
+                </ngx-charts-pie-chart>
+            </div>
+            <h2>total records: {{ statistics.records.overall }}</h2>
         </mat-card-content>
     </mat-card>
 </div>

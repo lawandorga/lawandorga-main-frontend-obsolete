@@ -37,13 +37,8 @@ export class StatisticsPageComponent implements OnInit {
             empty: []
         },
         records: {
-            total: {
-                overall: 0,
-                open: 0,
-                closed: 0,
-                waiting: 0,
-                working: 0
-            }
+            overall: 0,
+            states: []
         }
     };
 
