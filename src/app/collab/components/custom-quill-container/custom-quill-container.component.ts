@@ -44,7 +44,6 @@ import {
     GetCollabEditFrontUrl,
     GetCollabViewFrontUrl
 } from '../../../statics/frontend_links.statics';
-import { testEventTargetIsSetCorrectlyOnLocal } from 'yjs/dist/tests/y-array.tests';
 
 @Component({
     selector: 'app-custom-quill-container',

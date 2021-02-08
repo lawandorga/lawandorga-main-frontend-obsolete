@@ -22,7 +22,6 @@ import { NameCollabDocument } from '../../models/collab-document.model';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { testEventTargetIsSetCorrectlyOnLocal } from 'yjs/dist/tests/y-array.tests';
 import { GetCollabViewFrontUrl } from '../../../statics/frontend_links.statics';
 
 @Component({
