@@ -31,6 +31,102 @@ export class StatisticsPageComponent implements OnInit {
         domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
     };
 
+    last_edited_mock = [
+        {
+            name: 'today',
+            value: 3
+        },
+        {
+            name: 'last week',
+            value: 6
+        },
+        {
+            name: 'last month',
+            value: 3
+        }
+    ];
+    created_on_mock = [
+        {
+            name: 'today',
+            value: 1
+        },
+        {
+            name: 'last week',
+            value: 3
+        },
+        {
+            name: 'last month',
+            value: 5
+        },
+        {
+            name: 'last 6 months',
+            value: 3
+        }
+    ];
+
+    in_month_mocks = [
+        {
+            name: 'records closed in month',
+            series: [
+                {
+                    name: '9/20',
+                    value: 9
+                },
+                {
+                    name: '10/20',
+                    value: 5
+                },
+                {
+                    name: '11/20',
+                    value: 4
+                },
+                {
+                    name: '12/20',
+                    value: 6
+                },
+                {
+                    name: '01/21',
+                    value: 3
+                },
+
+                {
+                    name: '02/21',
+                    value: 1
+                }
+            ]
+        },
+        {
+            name: 'records created in month',
+            series: [
+                {
+                    name: '9/20',
+                    value: 0
+                },
+                {
+                    name: '10/20',
+                    value: 0
+                },
+                {
+                    name: '11/20',
+                    value: 1
+                },
+                {
+                    name: '12/20',
+                    value: 2
+                },
+                {
+                    name: '01/21',
+                    value: 5
+                },
+
+                {
+                    name: '02/21',
+                    value: 4
+                }
+            ]
+        }
+    ];
+
     statistics = {
         record_tags: {
             values: [],
@@ -38,7 +134,10 @@ export class StatisticsPageComponent implements OnInit {
         },
         records: {
             overall: 0,
-            states: []
+            states: [],
+            last_edited: [],
+            created_on: [],
+            in_month: []
         }
     };
 
@@ -57,6 +156,9 @@ export class StatisticsPageComponent implements OnInit {
             );
 
             this.statistics.records = response.records;
+            this.statistics.records.created_on = this.created_on_mock.reverse();
+            this.statistics.records.last_edited = this.last_edited_mock.reverse();
+            this.statistics.records.in_month = this.in_month_mocks;
 
             console.log('statistics', this.statistics);
         });
