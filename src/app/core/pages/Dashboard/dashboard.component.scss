@@ -46,12 +46,13 @@
 
 .dashboard__ptf-text {
     position: relative;
-    left: -50px;
+    left: -15px;
 }
 
 .dashboard__container {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: calc(100vh - 64px);
+    height: calc(100vh - 96px);
+    padding-bottom: 32px;
 }
