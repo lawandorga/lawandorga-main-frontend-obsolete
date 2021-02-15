@@ -44,6 +44,7 @@ import {
     GetCollabEditFrontUrl,
     GetCollabViewFrontUrl
 } from '../../../statics/frontend_links.statics';
+const hash = require('object-hash');
 
 @Component({
     selector: 'app-custom-quill-container',
@@ -70,6 +71,8 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
 
     loading = false;
     connectedToPeers = false;
+
+    savedHash = '';
 
     @ViewChild(QuillEditorComponent, { static: true }) editor: QuillEditorComponent;
     modules = {
@@ -196,9 +199,6 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
     initQuill(): void {
         this.loading = true;
 
-        // const last_published_content: string = this.text_document.versions[0].is_draft
-        //     ? this.text_document.versions[1].content
-        //     : this.text_document.versions[0].content;
         const last_published_content = this.text_document.content;
 
         if (
@@ -255,14 +255,11 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
             );
 
             this.loading = true;
-            // console.log('content length: ', last_content.length);
 
             const timeout = math.max(last_content.length * 0.5, 600);
             setTimeout(() => {
-                // console.log('timer hitted');
                 if (!this.connectedToPeers && this.provider.awareness.getStates().size === 1) {
                     this.connectedToPeers = true;
-                    // console.log('no connection happened, setContents');
                     this.setContents();
                 }
                 this.loading = false;
@@ -272,12 +269,9 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
                 const states = this.provider.awareness.states.size;
                 if (!this.connectedToPeers) {
                     this.connectedToPeers = true;
-                    // console.log('UPDATE');
-                    // console.log('states: ', states);
                     if (states > 1) {
-                        // console.log('im not alone in here');
+                        // show sth?
                     } else {
-                        // console.log('im alone here, setContents');
                         this.setContents();
                     }
                     this.loading = false;
@@ -294,14 +288,24 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
     }
 
     hasUnsaved(): boolean {
-        // TODO: implement
-        const ret_value = false;
-        return ret_value;
+        if (this.editingMode) {
+            return this.getHash() !== this.savedHash;
+        }
+        return false;
     }
 
     setContents(): void {
         const last_content: string = this.text_document.versions[0].content;
-        if (last_content !== '') this.quillRef.setContents(JSON.parse(last_content));
+        if (last_content !== '') {
+            this.quillRef.setContents(JSON.parse(last_content));
+            this.savedHash = this.getHash();
+        }
+    }
+
+    getHash(): string {
+        if (!this.text_document.content) return '';
+        console.log('content: ', this.text_document.content);
+        return hash(this.text_document.content);
     }
 
     onSaveClick(): void {

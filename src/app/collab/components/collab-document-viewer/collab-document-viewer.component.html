@@ -22,7 +22,7 @@
             <h1>{{ text_document.name }}</h1>
             <p>
                 last edited: {{ text_document.last_edited | date: 'HH:mm dd.MM.yy' }}
-                {{ text_document.versions.length > 1 ? '| draft' : '' }}
+                {{ text_document.versions[0].is_draft ? '| draft existing' : '' }}
             </p>
         </div>
         <div>
