@@ -28,6 +28,12 @@
     flex-wrap: wrap;
     //justify-content: start;
     align-items: center;
+
+    img {
+        margin: 8px;
+        max-width: 225px;
+        max-height: 225px;
+    }
 }
 
 .dashboard__ptf-container {
