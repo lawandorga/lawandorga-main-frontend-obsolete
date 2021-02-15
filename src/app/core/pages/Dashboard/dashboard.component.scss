@@ -21,3 +21,31 @@
 .dashboard__dashboard-card {
     max-width: 600px;
 }
+
+.dashboard__logo-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    //justify-content: start;
+    align-items: center;
+}
+
+.dashboard__ptf-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+
+}
+
+.dashboard__ptf-text {
+    position: relative;
+    left: -50px;
+}
+
+.dashboard__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: calc(100vh - 64px);
+}

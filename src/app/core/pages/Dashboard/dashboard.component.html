@@ -16,18 +16,35 @@
   ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
   -->
 
-<mat-card class="dashboard__dashboard-card">
-    <h1>Hello {{ name ? name: ''}}!</h1>
-    <mat-card-content>
-        <p>
-            Nice to see you back!
+<div class="dashboard__container">
+    <mat-card class="dashboard__dashboard-card">
+        <h1>Hello {{ name ? name : '' }}!</h1>
+        <mat-card-content>
+            <p>
+                Nice to see you back!
+            </p>
+            <p>
+                On the left side you will find all relevant navigation links.
+            </p>
+            <p>
+                Have fun and lots of success!
+            </p>
+        </mat-card-content>
+    </mat-card>
 
-        </p>
-        <p>
-            On the left side you will find all relevant navigation links.
-        </p>
-        <p>
-            Have fun and lots of success!
-        </p>
-    </mat-card-content>
-</mat-card>
+    <div>
+        <p>gefördert durch</p>
+        <div class="dashboard__logo-container">
+            <img src="/assets/img/RBS-logo.png" alt="Robert Bosch Stiftung Logo" />
+            <img
+                src="/assets/img/BMBF-logo.png"
+                alt="Bundesministerium für Bildung und Forschung Logo"
+            />
+
+            <div class="dashboard__ptf-container">
+                <img src="/assets/img/PTF-logo.png" alt="Prototypefund Logo" />
+                <h1 class="dashboard__ptf-text">rototypefund</h1>
+            </div>
+        </div>
+    </div>
+</div>
