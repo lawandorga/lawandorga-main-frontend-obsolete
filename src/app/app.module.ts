@@ -53,7 +53,6 @@ registerLocaleData(localeDE);
         BrowserAnimationsModule,
         HttpClientModule,
         CustomMaterialModule,
-        BrowserAnimationsModule,
         CoreModule,
         AppRoutingModule,
         StoreModule.forRoot(reducers),
