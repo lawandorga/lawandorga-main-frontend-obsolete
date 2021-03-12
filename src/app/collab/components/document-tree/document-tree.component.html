@@ -38,7 +38,7 @@
     </mat-tree-node>
     <!-- This is the tree node template for expandable nodes -->
     <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
-        <li class="is_clickable" (click)="onNodeClick(node)">
+        <li class="is_clickable">
             <div
                 [className]="route_id == node.id ? 'selected-node mat-tree-node' : 'mat-tree-node'"
                 [matTooltip]="node.name"
@@ -49,7 +49,7 @@
                         {{ treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
                     </mat-icon>
                 </button>
-                <span class="document-tree__name">{{ node.name }}</span>
+                <span class="document-tree__name" (click)="onNodeClick(node)">{{ node.name }}</span>
             </div>
             <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
                 <ng-container matTreeNodeOutlet></ng-container>
