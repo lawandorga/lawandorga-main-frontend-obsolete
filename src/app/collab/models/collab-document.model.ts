@@ -33,10 +33,10 @@ export class NameCollabDocument implements NameTextDocument {
         }
 
         return new NameCollabDocument(
-            Number(json.pk),
+            Number(json.id),
             json.name,
-            json.children
-                ? NameCollabDocument.getNameCollabDocumentsFromJsonArray(json.children)
+            json.child_pages
+                ? NameCollabDocument.getNameCollabDocumentsFromJsonArray(json.child_pages)
                 : []
         );
     }
@@ -77,8 +77,8 @@ export class CollabDocument extends NameCollabDocument implements TextDocument {
         return new CollabDocument(
             Number(json.id),
             json.name,
-            json.children
-                ? NameCollabDocument.getNameCollabDocumentsFromJsonArray(json.children)
+            json.child_pages
+                ? NameCollabDocument.getNameCollabDocumentsFromJsonArray(json.child_pages)
                 : [],
             json.content,
             RestrictedUser.getRestrictedUserFromJson(json.creator),
