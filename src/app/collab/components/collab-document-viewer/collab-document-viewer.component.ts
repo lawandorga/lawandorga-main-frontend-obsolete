@@ -52,6 +52,7 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges, OnDestr
     loading = true;
 
     versionsOpened = false;
+    infoOpened = false;
 
     @ViewChild(CustomQuillContainerComponent) quillEditor: CustomQuillContainerComponent;
 
@@ -98,6 +99,13 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges, OnDestr
 
     onMenuHistoryClick(): void {
         this.versionsOpened = !this.versionsOpened;
+        this.infoOpened = false;
+    }
+
+    onInfoClick(): void {
+        this.infoOpened = !this.infoOpened;
+        this.versionsOpened = false;
+        console.log('document: ', this.text_document);
     }
 
     onChangedVersion(text_document_version: TextDocumentVersion): void {

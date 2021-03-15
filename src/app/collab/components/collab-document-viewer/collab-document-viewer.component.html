@@ -44,6 +44,9 @@
                     <span>versions</span>
                 </button>
             </mat-menu>
+            <button mat-icon-button aria-label="more info" (click)="onInfoClick()">
+                <mat-icon>information</mat-icon>
+            </button>
         </div>
     </div>
 
@@ -55,16 +58,31 @@
             ></app-custom-quill-container>
         </mat-drawer-content>
         <mat-drawer
-            [(opened)]="versionsOpened"
+            [(opened)]="versionsOpened || infoOpened"
             disableClose
             mode="side"
             position="end"
-            class="collab-document-viewer__versions-drawer"
+            class="collab-document-viewer__drawer"
         >
-            <app-text-version
-                [document]="text_document"
-                (changedVersion)="onChangedVersion($event)"
-            ></app-text-version>
+            <div *ngIf="versionsOpened">
+                <app-text-version
+                    [document]="text_document"
+                    (changedVersion)="onChangedVersion($event)"
+                ></app-text-version>
+            </div>
+            <div *ngIf="infoOpened">
+                <div class="collab-document-viewer__info">
+                    <h1>{{ text_document.name }}</h1>
+                    <h4>
+                        {{ text_document.created | date: 'HH:mm dd.MM.yy' }} created by
+                        {{ text_document.creator.name }}
+                    </h4>
+                    <h4>
+                        {{ text_document.last_edited | date: 'HH:mm dd.MM.yy' }} last edit of
+                        {{ text_document.last_editor.name }}
+                    </h4>
+                </div>
+            </div>
         </mat-drawer>
     </mat-drawer-container>
 </div>
