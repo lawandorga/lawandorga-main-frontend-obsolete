@@ -20,12 +20,12 @@ import { environment } from '../../environments/environment';
 
 export const base = environment.apiUrl;
 export const LOGIN_API_URL = base + 'api/login/';
-export const RECORDS_API_URL = base + 'api/records/e_records/';
+export const RECORDS_API_URL = base + 'api/records/records/';
 export const CLIENTS_BY_BIRTHDAY_API_URL = base + 'api/records/e_clients_by_birthday/';
 export const RECORDS_STATICS_API_URL = base + 'api/records/statics/';
 export const PROFILES_API_URL = base + 'api/profiles/';
 export const CREATE_PROFILE_API_URL = base + 'api/create_profile/';
-export const CREATE_RECORD_API_URL = base + 'api/records/create_record/';
+export const CREATE_RECORD_API_URL = base + 'api/records/records/';
 export const RLCS_API_URL = base + 'api/get_rlcs/';
 export const UPLOAD_SIGNING_BASE_API_URL = base + 'api/storage_up/';
 export const RECORD_PERMISSIONS_LIST_API_URL = base + 'api/records/e_record_permission_requests/';
@@ -63,7 +63,7 @@ export const PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS =
 const CHECK_USER_ACTIVATION_API_URL = base + 'api/check_user_activation_link/';
 const ACTIVATE_USER_ACTIVATION_API_URL = base + 'api/activate_user_activation_link/';
 const RESET_PASSWORD_API_URL = base + 'api/reset_password/';
-const SPECIAL_RECORD_BASE_API_URL = base + 'api/records/e_record/'; // deprecated??? is it?
+const SPECIAL_RECORD_BASE_API_URL = base + 'api/records/records/'; // deprecated??? is it?
 const DOWNLOAD_SIGNING_BASE_API_URL = base + 'api/storage_down/'; // deprecated
 const RECORD_DOCUMENT_BASE_API_URL = base + 'api/records/documents/';
 const PERMISSION_FOR_GROUP_BASE_API_URL = base + 'api/permissions_for_group/';
@@ -145,7 +145,7 @@ export const GetCreateRecordDocumentApiUrl = (record_id: string) => {
 };
 
 export const GetAddRecordMessageApiUrl = (record_id: string) => {
-    return `${SPECIAL_RECORD_BASE_API_URL}${record_id}/messages`;
+    return `${SPECIAL_RECORD_BASE_API_URL}${record_id}/add_message/`;
 };
 
 export const GetRecordDocumentApiUrl = (document_id: string) => {
