@@ -31,7 +31,6 @@ export const UPLOAD_SIGNING_BASE_API_URL = base + 'api/storage_up/';
 export const RECORD_PERMISSIONS_LIST_API_URL = base + 'api/records/e_record_permission_requests/';
 export const FORGOT_PASSWORD_API_URL = base + 'api/forgot_password/';
 export const GROUPS_API_URL = base + 'api/groups/';
-export const GROUP_MEMBER_API_URL = base + 'api/group_members/';
 export const PERMISSION_API_URL = base + 'api/permissions/';
 export const HAS_PERMISSION_API_URL = base + 'api/has_permission/';
 export const HAS_PERMISSIONS_STATICS_API_URL = base + 'api/has_permission_statics/';
@@ -163,6 +162,10 @@ export const GetResetPasswordApiUrl = (link_id: string) => {
 export const GetSpecialGroupApiURL = (id: string | number) => {
     return `${GROUPS_API_URL}${id}/`;
 };
+
+export const GetSpecialGroupMemberApiURL = (id: string) => {
+    return `${GetSpecialGroupApiURL(id)}member/`
+}
 
 export const GetSpecialPermissionApiURL = (id: string | number) => {
     return `${PERMISSION_API_URL}${id}/`;

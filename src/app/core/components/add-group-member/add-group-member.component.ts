@@ -77,10 +77,9 @@ export class AddGroupMemberComponent implements OnInit {
     }
 
     onAddUsersClick() {
-        this.coreSB.addGroupMembers(
-            this.selectedUsers.map((restrictedUser: RestrictedUser) => restrictedUser.id),
-            this.group_id
-        );
+        this.selectedUsers.map((restrictedUser: RestrictedUser) => {
+            this.coreSB.addGroupMembers([restrictedUser.id], this.group_id)
+        });
         this.dialogRef.close();
     }
 

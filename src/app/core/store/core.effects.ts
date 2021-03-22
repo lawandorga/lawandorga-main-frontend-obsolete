@@ -94,7 +94,6 @@ import {
     GetSpecialHasPermissionApiURL,
     GetSpecialPermissionApiURL,
     GetSpecialProfileApiURL,
-    GROUP_MEMBER_API_URL,
     GROUPS_API_URL,
     HAS_PERMISSION_API_URL,
     HAS_PERMISSIONS_STATICS_API_URL,
@@ -106,7 +105,8 @@ import {
     RLC_SETTINGS_API_URL,
     RLCS_API_URL,
     UNREAD_NOTIFICATIONS_API_URL,
-    USER_HAS_PERMISSIONS_API_URL
+    USER_HAS_PERMISSIONS_API_URL,
+    GetSpecialGroupMemberApiURL
 } from '../../statics/api_urls.statics';
 import { CoreSandboxService } from '../services/core-sandbox.service';
 import { ForeignUser, FullUser, RestrictedUser } from '../models/user.model';
@@ -304,11 +304,9 @@ export class CoreEffects {
             return from(
                 this.http
                     .post(
-                        GROUP_MEMBER_API_URL,
+                        GetSpecialGroupMemberApiURL(toAdd.group_id),
                         {
-                            action: 'add',
-                            user_ids: toAdd.user_ids,
-                            group_id: toAdd.group_id
+                            member: toAdd.user_ids[0]
                         },
                         privateKeyPlaceholder
                     )
@@ -333,6 +331,7 @@ export class CoreEffects {
         })
     );
 
+    
     @Effect()
     startRemovingGroupMember = this.actions.pipe(
         ofType(START_REMOVING_GROUP_MEMBER),
@@ -340,13 +339,15 @@ export class CoreEffects {
             return action.payload;
         }),
         switchMap((toRemove: { user_id: string; group_id: string }) => {
+            const options = {
+                headers: {},
+                body: {
+                  member: toRemove.user_id,
+                },
+              };
             return from(
                 this.http
-                    .post(GROUP_MEMBER_API_URL, {
-                        action: 'remove',
-                        user_ids: [toRemove.user_id],
-                        group_id: toRemove.group_id
-                    })
+                    .delete(GetSpecialGroupMemberApiURL(toRemove.group_id), options)
                     .pipe(
                         catchError(error => {
                             this.snackbar.showErrorSnackBar(
