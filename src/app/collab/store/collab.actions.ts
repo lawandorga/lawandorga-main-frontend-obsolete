@@ -22,6 +22,7 @@ import { NameCollabDocument } from '../models/collab-document.model';
 export const SET_ALL_DOCUMENTS = 'SET_ALL_DOCUMENTS';
 export const START_LOADING_ALL_DOCUMENTS = 'START_LOADING_ALL_DOCUMENTS';
 export const START_ADDING_DOCUMENT = 'START_ADDING_DOCUMENT';
+export const START_DELETING_COLLAB_DOCUMENT = 'START_DELETING_COLLAB_DOCUMENT';
 
 export class SetAllDocuments implements Action {
     readonly type = SET_ALL_DOCUMENTS;
@@ -39,4 +40,14 @@ export class StartAddingDocument implements Action {
     constructor(public payload: { path: string }) {}
 }
 
-export type CollabActions = SetAllDocuments | StartLoadingAllDocuments | StartAddingDocument;
+export class StartDeletingCollabDocument implements Action {
+    readonly type = START_DELETING_COLLAB_DOCUMENT;
+
+    constructor(public payload: { id: number }) {}
+}
+
+export type CollabActions =
+    | SetAllDocuments
+    | StartLoadingAllDocuments
+    | StartAddingDocument
+    | StartDeletingCollabDocument;

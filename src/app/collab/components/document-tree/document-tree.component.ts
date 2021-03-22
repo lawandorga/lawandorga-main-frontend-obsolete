@@ -23,6 +23,7 @@ import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { GetCollabViewFrontUrl } from '../../../statics/frontend_links.statics';
+import { alphabeticalSorterByField } from '../../../shared/other/sorter-helper';
 
 @Component({
     selector: 'app-document-tree',
@@ -49,8 +50,8 @@ export class DocumentTreeComponent implements OnInit {
 
         this.collabSB.startLoadingAllDocuments();
         this.collabSB.getAllDocuments().subscribe((documents: NameCollabDocument[]) => {
+            alphabeticalSorterByField(documents, 'path');
             this.dataSource.data = documents;
-
             this.expandToSelected();
         });
     }

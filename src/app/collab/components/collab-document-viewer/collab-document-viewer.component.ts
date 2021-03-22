@@ -28,11 +28,11 @@ import {
 import { CollabSandboxService } from '../../services/collab-sandbox.service';
 import { TextDocument } from '../../models/text-document.model';
 import Quill from 'quill';
-import { QuillEditorComponent } from 'ngx-quill';
 import { Router } from '@angular/router';
-import { GetCollabEditFrontUrl } from '../../../statics/frontend_links.statics';
+import { COLLAB_BASE, GetCollabEditFrontUrl } from '../../../statics/frontend_links.statics';
 import { TextDocumentVersion } from '../../models/text-document-version.model';
 import { CustomQuillContainerComponent } from '../custom-quill-container/custom-quill-container.component';
+import { SharedSandboxService } from '../../../shared/services/shared-sandbox.service';
 
 @Component({
     selector: 'app-collab-document-viewer',
@@ -56,7 +56,11 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges, OnDestr
 
     @ViewChild(CustomQuillContainerComponent) quillEditor: CustomQuillContainerComponent;
 
-    constructor(private collabSB: CollabSandboxService, private router: Router) {
+    constructor(
+        private collabSB: CollabSandboxService,
+        private router: Router,
+        public sharedSB: SharedSandboxService
+    ) {
         this.current_id = undefined;
         this.text_document = undefined;
     }
@@ -100,6 +104,22 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges, OnDestr
     onMenuHistoryClick(): void {
         this.versionsOpened = !this.versionsOpened;
         this.infoOpened = false;
+    }
+
+    onDeleteClick(): void {
+        this.sharedSB.openConfirmDialog(
+            {
+                description: 'are you sure you want to delete this document?',
+                confirmLabel: 'remove',
+                confirmColor: 'warn'
+            },
+            (remove: boolean) => {
+                if (remove) {
+                    this.collabSB.startDeletingCollabDocument(this.current_id);
+                    this.router.navigateByUrl(COLLAB_BASE);
+                }
+            }
+        );
     }
 
     onInfoClick(): void {

@@ -20,7 +20,11 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { CollabState } from '../store/collab.reducers';
-import { StartAddingDocument, StartLoadingAllDocuments } from '../store/collab.actions';
+import {
+    StartAddingDocument,
+    StartDeletingCollabDocument,
+    StartLoadingAllDocuments
+} from '../store/collab.actions';
 import { HttpClient } from '@angular/common/http';
 import { SharedSandboxService } from '../../shared/services/shared-sandbox.service';
 import { NameCollabDocument } from '../models/collab-document.model';
@@ -61,14 +65,17 @@ export class CollabSandboxService {
             },
             result => {
                 if (result) {
+                    if (result.includes('/')) {
+                        this.snackbackService.showErrorSnackBar("document name can't contain /");
+                        return;
+                    }
                     if (id) {
                         this.collabStore
                             .pipe(select((state: any) => state.collab.all_documents[id]))
                             .subscribe((parent: NameCollabDocument) => {
-                                result += parent.path;
+                                result = `${parent.path}/${result}`;
                                 console.log('result: ', result);
                                 this.collabStore.dispatch(
-                                    // new StartAddingDocument({ path: result, parent_id: id ? id : null })
                                     new StartAddingDocument({ path: result })
                                 );
                             });
@@ -105,6 +112,10 @@ export class CollabSandboxService {
             GetCollabTextDocumentVersionsModelApiUrl(version_id),
             privateKeyPlaceholder
         );
+    }
+
+    startDeletingCollabDocument(id: number): void {
+        this.collabStore.dispatch(new StartDeletingCollabDocument({ id }));
     }
 
     saveTextDocument(id: number, content: string, is_draft: boolean = false): void {

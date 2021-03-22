@@ -22,12 +22,18 @@ import { HttpClient } from '@angular/common/http';
 import {
     SET_ALL_DOCUMENTS,
     START_ADDING_DOCUMENT,
+    START_DELETING_COLLAB_DOCUMENT,
     START_LOADING_ALL_DOCUMENTS,
-    StartAddingDocument
+    StartAddingDocument,
+    StartDeletingCollabDocument
 } from './collab.actions';
 import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
 import { from, Observable } from 'rxjs';
-import { COLLAB_COLLAB_DOCUMENTS } from '../../statics/api_urls.statics';
+import {
+    COLLAB_COLLAB_DOCUMENTS,
+    GetCollabEditingApiUrl,
+    GetSpecialCollabDocumentApiUrl
+} from '../../statics/api_urls.statics';
 import { NameCollabDocument } from '../models/collab-document.model';
 
 @Injectable()
@@ -65,22 +71,46 @@ export class CollabEffects {
         }),
         switchMap((payload: { path: string }) => {
             console.log('path to add: ', payload.path);
-            return new Observable();
-            // return from(
-            //     this.http
-            //         .post(COLLAB_COLLAB_DOCUMENTS, {
-            //             path: payload.path
-            //         })
-            //         .pipe(
-            //             catchError(err => {
-            //                 console.log('error at adding document', err);
-            //                 return [];
-            //             }),
-            //             mergeMap(response => {
-            //                 return [{ type: START_LOADING_ALL_DOCUMENTS }];
-            //             })
-            //         )
-            // );
+            // return new Observable();
+            return from(
+                this.http
+                    .post(COLLAB_COLLAB_DOCUMENTS, {
+                        path: payload.path
+                    })
+                    .pipe(
+                        catchError(err => {
+                            console.log('error at adding document', err);
+                            return [];
+                        }),
+                        mergeMap(response => {
+                            return [{ type: START_LOADING_ALL_DOCUMENTS }];
+                        })
+                    )
+            );
+        })
+    );
+
+    @Effect()
+    startDeletingDocument = this.actions.pipe(
+        ofType(START_DELETING_COLLAB_DOCUMENT),
+        map((action: StartDeletingCollabDocument) => {
+            return action.payload;
+        }),
+        switchMap((payload: { id: number }) => {
+            // return new Observable();
+
+            return from(
+                this.http.delete(GetSpecialCollabDocumentApiUrl(payload.id)).pipe(
+                    catchError(err => {
+                        console.log('error at adding document', err);
+                        return [];
+                    }),
+                    mergeMap(response => {
+                        console.log('response from deleting document: ', response);
+                        return [{ type: START_LOADING_ALL_DOCUMENTS }];
+                    })
+                )
+            );
         })
     );
 }
