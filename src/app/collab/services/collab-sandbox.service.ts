@@ -61,16 +61,32 @@ export class CollabSandboxService {
             },
             result => {
                 if (result) {
-                    this.collabStore.dispatch(
-                        new StartAddingDocument({ name: result, parent_id: id ? id : null })
-                    );
+                    if (id) {
+                        this.collabStore
+                            .pipe(select((state: any) => state.collab.all_documents[id]))
+                            .subscribe((parent: NameCollabDocument) => {
+                                result += parent.path;
+                                console.log('result: ', result);
+                                this.collabStore.dispatch(
+                                    // new StartAddingDocument({ path: result, parent_id: id ? id : null })
+                                    new StartAddingDocument({ path: result })
+                                );
+                            });
+                    } else {
+                        this.collabStore.dispatch(
+                            // new StartAddingDocument({ path: result, parent_id: id ? id : null })
+                            new StartAddingDocument({ path: result })
+                        );
+                    }
                 }
             }
         );
     }
 
     getAllDocuments(): Observable<NameCollabDocument[]> {
-        return this.collabStore.pipe(select((state: any) => state.collab.all_documents));
+        return this.collabStore.pipe(
+            select((state: any) => Object.values(state.collab.all_documents))
+        );
     }
 
     fetchTextDocument(id: number): Observable<any> {

@@ -21,9 +21,15 @@ import { NameTextDocument, TextDocument } from './text-document.model';
 import { TextDocumentVersion } from './text-document-version.model';
 
 export class NameCollabDocument implements NameTextDocument {
-    constructor(public id: number, public name: string, public children: NameCollabDocument[]) {
+    constructor(
+        public id: number,
+        public name: string,
+        public path: string,
+        public children: NameCollabDocument[]
+    ) {
         this.id = id;
         this.name = name;
+        this.path = path;
         this.children = children;
     }
 
@@ -31,10 +37,12 @@ export class NameCollabDocument implements NameTextDocument {
         if (!json) {
             return null;
         }
+        const parts = json.path.split('/');
 
         return new NameCollabDocument(
-            Number(json.id),
-            json.name,
+            json.pk ? Number(json.pk) : Number(json.id),
+            parts[parts.length - 1],
+            json.path,
             json.child_pages
                 ? NameCollabDocument.getNameCollabDocumentsFromJsonArray(json.child_pages)
                 : []
@@ -54,6 +62,7 @@ export class CollabDocument extends NameCollabDocument implements TextDocument {
     constructor(
         id: number,
         name: string,
+        path: string,
         children: NameCollabDocument[],
         public content: string,
         public creator: RestrictedUser,
@@ -62,7 +71,7 @@ export class CollabDocument extends NameCollabDocument implements TextDocument {
         public last_edited: Date,
         public versions: TextDocumentVersion[]
     ) {
-        super(id, name, children);
+        super(id, name, path, children);
         this.content = content;
         this.creator = creator;
         this.created = created;
@@ -75,8 +84,9 @@ export class CollabDocument extends NameCollabDocument implements TextDocument {
         const versions = TextDocumentVersion.getTextDocumentVersionsFromJsonArray(json.versions);
 
         return new CollabDocument(
-            Number(json.id),
+            json.pk ? Number(json.pk) : Number(json.id),
             json.name,
+            json.path,
             json.child_pages
                 ? NameCollabDocument.getNameCollabDocumentsFromJsonArray(json.child_pages)
                 : [],

@@ -36,7 +36,7 @@ export class StartLoadingAllDocuments implements Action {
 export class StartAddingDocument implements Action {
     readonly type = START_ADDING_DOCUMENT;
 
-    constructor(public payload: { name: string; parent_id: number }) {}
+    constructor(public payload: { path: string }) {}
 }
 
 export type CollabActions = SetAllDocuments | StartLoadingAllDocuments | StartAddingDocument;

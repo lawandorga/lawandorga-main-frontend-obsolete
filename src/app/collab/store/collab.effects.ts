@@ -26,7 +26,7 @@ import {
     StartAddingDocument
 } from './collab.actions';
 import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
-import { from } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { COLLAB_COLLAB_DOCUMENTS } from '../../statics/api_urls.statics';
 import { NameCollabDocument } from '../models/collab-document.model';
 
@@ -45,9 +45,11 @@ export class CollabEffects {
                         return [];
                     }),
                     mergeMap(response => {
+                        console.log('response from loading collab documents: ', response);
                         const documents = NameCollabDocument.getNameCollabDocumentsFromJsonArray(
                             response
                         );
+                        console.log('documents from response:', documents);
                         return [{ type: SET_ALL_DOCUMENTS, payload: documents }];
                     })
                 )
@@ -61,23 +63,24 @@ export class CollabEffects {
         map((action: StartAddingDocument) => {
             return action.payload;
         }),
-        switchMap((payload: { name: string; parent_id: number }) => {
-            return from(
-                this.http
-                    .post(COLLAB_COLLAB_DOCUMENTS, {
-                        name: payload.name,
-                        parent_id: payload.parent_id
-                    })
-                    .pipe(
-                        catchError(err => {
-                            console.log('error');
-                            return [];
-                        }),
-                        mergeMap(response => {
-                            return [{ type: START_LOADING_ALL_DOCUMENTS }];
-                        })
-                    )
-            );
+        switchMap((payload: { path: string }) => {
+            console.log('path to add: ', payload.path);
+            return new Observable();
+            // return from(
+            //     this.http
+            //         .post(COLLAB_COLLAB_DOCUMENTS, {
+            //             path: payload.path
+            //         })
+            //         .pipe(
+            //             catchError(err => {
+            //                 console.log('error at adding document', err);
+            //                 return [];
+            //             }),
+            //             mergeMap(response => {
+            //                 return [{ type: START_LOADING_ALL_DOCUMENTS }];
+            //             })
+            //         )
+            // );
         })
     );
 }

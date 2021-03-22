@@ -18,6 +18,7 @@
 
 import { NameCollabDocument } from '../models/collab-document.model';
 import { CollabActions, SET_ALL_DOCUMENTS } from './collab.actions';
+import { getIdObjects } from '../../shared/other/reducer-helper';
 
 export interface CollabState {
     all_documents: NameCollabDocument[];
@@ -32,7 +33,7 @@ export function collabReducer(state = initialState, action: CollabActions) {
         case SET_ALL_DOCUMENTS:
             return {
                 ...state,
-                all_documents: action.payload
+                all_documents: getIdObjects(action.payload)
             };
         default:
             return state;
