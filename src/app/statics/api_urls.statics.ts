@@ -26,7 +26,7 @@ export const RECORDS_STATICS_API_URL = base + 'api/records/statics/';
 export const PROFILES_API_URL = base + 'api/profiles/';
 export const CREATE_PROFILE_API_URL = base + 'api/create_profile/';
 export const CREATE_RECORD_API_URL = base + 'api/records/records/';
-export const RLCS_API_URL = base + 'api/get_rlcs/';
+export const RLCS_API_URL = base + 'api/rlcs/';
 export const UPLOAD_SIGNING_BASE_API_URL = base + 'api/storage_up/';
 export const RECORD_PERMISSIONS_LIST_API_URL = base + 'api/records/e_record_permission_requests/';
 export const FORGOT_PASSWORD_API_URL = base + 'api/forgot_password/';
@@ -54,7 +54,7 @@ export const POOL_CONSULTANT_API_URL = base + 'api/records/pool_consultants/';
 export const RLC_SETTINGS_API_URL = base + 'api/my_rlc_settings/';
 export const NOTIFICATIONS_API_URL = base + 'api/notifications/';
 export const NOTIFICATION_GROUPS_API_URL = base + 'api/notification_groups/';
-export const UNREAD_NOTIFICATIONS_API_URL = base + 'api/unread_notifications/';
+export const UNREAD_NOTIFICATIONS_API_URL = base + 'api/notifications/unread/';
 export const RECORD_DOCUMENT_DELETIONS_API_URL =
     base + 'api/records/record_document_deletion_requests/';
 export const PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS =
