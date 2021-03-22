@@ -55,7 +55,9 @@ registerLocaleData(localeDE);
         CustomMaterialModule,
         CoreModule,
         AppRoutingModule,
-        StoreModule.forRoot(reducers),
+        StoreModule.forRoot(reducers, {
+            runtimeChecks: { strictStateImmutability: false, strictActionImmutability: false }
+        }),
         EffectsModule.forRoot([AuthEffects]),
         !environment.production ? StoreDevtoolsModule.instrument() : []
     ],
