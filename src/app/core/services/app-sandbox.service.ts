@@ -138,7 +138,6 @@ export class AppSandboxService {
 
     setNavbar(navbar) {
         this.navbar = navbar;
-        console.log('this navbar set: ', navbar);
     }
 
     closeNavbar(): void {

@@ -56,6 +56,8 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges, OnDestr
     versionsOpened = false;
     infoOpened = false;
 
+    numberOfChildren = 0;
+
     @ViewChild(CustomQuillContainerComponent) quillEditor: CustomQuillContainerComponent;
 
     constructor(
@@ -95,6 +97,7 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges, OnDestr
                 .getSingleDocumentById(this.document_id)
                 .subscribe((document: NameCollabDocument) => {
                     this.collab_document = document;
+                    if (document) this.numberOfChildren = document.getTotalCountOfChildren();
                 });
         }
     }

@@ -51,11 +51,9 @@ export class CollabEffects {
                         return [];
                     }),
                     mergeMap(response => {
-                        console.log('response from loading collab documents: ', response);
                         const documents = NameCollabDocument.getNameCollabDocumentsFromJsonArray(
                             response
                         );
-                        console.log('documents from response:', documents);
                         return [{ type: SET_ALL_DOCUMENTS, payload: documents }];
                     })
                 )
@@ -102,11 +100,9 @@ export class CollabEffects {
             return from(
                 this.http.delete(GetSpecialCollabDocumentApiUrl(payload.id)).pipe(
                     catchError(err => {
-                        console.log('error at adding document', err);
                         return [];
                     }),
                     mergeMap(response => {
-                        console.log('response from deleting document: ', response);
                         return [{ type: START_LOADING_ALL_DOCUMENTS }];
                     })
                 )

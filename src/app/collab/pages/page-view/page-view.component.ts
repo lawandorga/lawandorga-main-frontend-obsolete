@@ -42,7 +42,6 @@ export class PageViewComponent implements OnInit {
     ngOnInit(): void {
         this.route.params.subscribe((params: Params) => {
             this.id = params['id'];
-            console.log('id changed in pageview: ', this.id);
         });
         if (this.appSB.isOnMobile()) {
             this.sharedSB.openConfirmDialog(
@@ -54,7 +53,6 @@ export class PageViewComponent implements OnInit {
                     title: 'are you sure you want to do this?'
                 },
                 result => {
-                    console.log('result from confirm dialog: ', result);
                     if (!result) {
                         this.location.back();
                     }

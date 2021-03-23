@@ -56,6 +56,14 @@ export class NameCollabDocument implements NameTextDocument {
         });
         return documents;
     }
+
+    getTotalCountOfChildren(): number {
+        let counter = 0;
+        for (const child of this.children) {
+            counter += 1 + child.getTotalCountOfChildren();
+        }
+        return counter;
+    }
 }
 
 export class CollabDocument extends NameCollabDocument implements TextDocument {

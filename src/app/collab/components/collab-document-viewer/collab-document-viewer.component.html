@@ -19,7 +19,7 @@
 <div *ngIf="text_document" class="collab-document-viewer__main-container">
     <div class="collab-document-viewer__header">
         <div>
-            <h1>{{ collab_document.name }}</h1>
+            <h1>{{ collab_document ? collab_document.name : '' }}</h1>
             <p>
                 last edited: {{ text_document.last_edited | date: 'HH:mm dd.MM.yy' }}
                 {{ text_document.versions[0].is_draft ? '| draft existing' : '' }}
@@ -76,7 +76,7 @@
             </div>
             <div *ngIf="infoOpened">
                 <div class="collab-document-viewer__info">
-                    <h1>{{ text_document.name }}</h1>
+                    <h1>{{ collab_document ? collab_document.name : '' }}</h1>
                     <h4>
                         {{ text_document.created | date: 'HH:mm dd.MM.yy' }} created by
                         {{ text_document.creator.name }}
@@ -84,6 +84,10 @@
                     <h4>
                         {{ text_document.last_edited | date: 'HH:mm dd.MM.yy' }} last edit of
                         {{ text_document.last_editor.name }}
+                    </h4>
+                    <h4>
+                        {{ numberOfChildren }} children in total,
+                        {{ collab_document.children.length }} direct
                     </h4>
                 </div>
             </div>

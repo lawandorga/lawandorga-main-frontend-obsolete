@@ -85,6 +85,7 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
                 // editor.insertText(editor.getLength() - 1, '', 'user');
             },
             source: (searchTerm, renderList) => {
+                // TODO: deactivate for now
                 const values = [
                     { id: 1, value: 'Fredrik Sundqvist' },
                     { id: 2, value: 'Patrik Sjölin' }
