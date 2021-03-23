@@ -33,6 +33,7 @@ import { COLLAB_BASE, GetCollabEditFrontUrl } from '../../../statics/frontend_li
 import { TextDocumentVersion } from '../../models/text-document-version.model';
 import { CustomQuillContainerComponent } from '../custom-quill-container/custom-quill-container.component';
 import { SharedSandboxService } from '../../../shared/services/shared-sandbox.service';
+import { NameCollabDocument } from '../../models/collab-document.model';
 
 @Component({
     selector: 'app-collab-document-viewer',
@@ -46,6 +47,7 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges, OnDestr
     current_id: number;
 
     text_document: TextDocument;
+    collab_document: NameCollabDocument;
 
     quillRef: Quill;
 
@@ -89,6 +91,11 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges, OnDestr
                 this.text_document = received_document;
                 this.loading = false;
             });
+            this.collabSB
+                .getSingleDocumentById(this.document_id)
+                .subscribe((document: NameCollabDocument) => {
+                    this.collab_document = document;
+                });
         }
     }
 

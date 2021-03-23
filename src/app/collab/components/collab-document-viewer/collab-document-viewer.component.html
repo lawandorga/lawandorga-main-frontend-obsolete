@@ -19,7 +19,7 @@
 <div *ngIf="text_document" class="collab-document-viewer__main-container">
     <div class="collab-document-viewer__header">
         <div>
-            <h1>{{ text_document.name }}</h1>
+            <h1>{{ collab_document.name }}</h1>
             <p>
                 last edited: {{ text_document.last_edited | date: 'HH:mm dd.MM.yy' }}
                 {{ text_document.versions[0].is_draft ? '| draft existing' : '' }}

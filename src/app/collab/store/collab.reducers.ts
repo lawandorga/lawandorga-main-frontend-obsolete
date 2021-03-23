@@ -19,23 +19,38 @@
 import { NameCollabDocument } from '../models/collab-document.model';
 import { CollabActions, SET_ALL_DOCUMENTS } from './collab.actions';
 import { getIdObjects } from '../../shared/other/reducer-helper';
+import { tree } from 'lib0';
 
 export interface CollabState {
     all_documents: NameCollabDocument[];
+    all_documents_tree: NameCollabDocument[];
 }
 
 export const initialState: CollabState = {
-    all_documents: []
+    all_documents: [],
+    all_documents_tree: []
 };
 
 export function collabReducer(state = initialState, action: CollabActions) {
     switch (action.type) {
         case SET_ALL_DOCUMENTS:
+            const all_docs = getAllDocsFromTree(action.payload);
+
             return {
                 ...state,
-                all_documents: getIdObjects(action.payload)
+                all_documents_tree: getIdObjects(action.payload),
+                all_documents: getIdObjects(all_docs)
             };
         default:
             return state;
     }
 }
+
+const getAllDocsFromTree = (tree_docs: NameCollabDocument[]): NameCollabDocument[] => {
+    const all_docs: NameCollabDocument[] = [];
+    for (const doc of tree_docs) {
+        all_docs.push(doc);
+        all_docs.push(...getAllDocsFromTree(doc.children));
+    }
+    return all_docs;
+};

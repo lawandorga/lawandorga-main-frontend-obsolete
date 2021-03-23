@@ -70,29 +70,35 @@ export class CollabSandboxService {
                         return;
                     }
                     if (id) {
-                        this.collabStore
-                            .pipe(select((state: any) => state.collab.all_documents[id]))
+                        this.getSingleDocumentById(id)
                             .subscribe((parent: NameCollabDocument) => {
                                 result = `${parent.path}/${result}`;
-                                console.log('result: ', result);
                                 this.collabStore.dispatch(
                                     new StartAddingDocument({ path: result })
                                 );
-                            });
+                            })
+                            .unsubscribe();
                     } else {
-                        this.collabStore.dispatch(
-                            // new StartAddingDocument({ path: result, parent_id: id ? id : null })
-                            new StartAddingDocument({ path: result })
-                        );
+                        this.collabStore.dispatch(new StartAddingDocument({ path: result }));
                     }
                 }
             }
         );
     }
 
+    getSingleDocumentById(id: number): Observable<NameCollabDocument> {
+        return this.collabStore.pipe(select((state: any) => state.collab.all_documents[id]));
+    }
+
     getAllDocuments(): Observable<NameCollabDocument[]> {
         return this.collabStore.pipe(
             select((state: any) => Object.values(state.collab.all_documents))
+        );
+    }
+
+    getAllTreeDocuments(): Observable<NameCollabDocument[]> {
+        return this.collabStore.pipe(
+            select((state: any) => Object.values(state.collab.all_documents_tree))
         );
     }
 
@@ -127,8 +133,7 @@ export class CollabSandboxService {
                 privateKeyPlaceholder
             )
             .subscribe(response => {
-                // console.log('i got something back: ', response);
-                // TODO: do something here? show snackbar
+                // check response?
                 if (is_draft) {
                     this.snackbackService.showSuccessSnackBar('document draft saved');
                 } else {

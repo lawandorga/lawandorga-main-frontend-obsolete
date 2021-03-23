@@ -133,7 +133,6 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
 
     ngOnInit(): void {
         this.appSB.closeNavbar();
-        console.log('init custom-quill-container');
         if (this.editingMode === undefined) {
             throw new Error('editingMode must be specified');
         }
@@ -144,7 +143,6 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
             this.coreSB.getUserRestricted().subscribe((user: RestrictedUser) => {
                 this.user = user;
                 if (this.provider && this.editingMode) {
-                    console.log('user set afterwards');
                     this.setUser();
                 }
             });
@@ -152,14 +150,11 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        console.log('changes');
         if ('text_document' in changes) {
-            console.log('text document changes');
             this.text_document = changes['text_document']['currentValue'];
             this.initQuill();
         }
         if ('editing_room' in changes) {
-            console.log('editing room updated');
             this.initQuill();
         }
     }
@@ -175,8 +170,6 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
     closeConnection(): void {
         if (this.editingMode && this.provider) {
             this.provider.destroy();
-
-            console.log('states: ', this.provider.awareness.states.size);
             if (this.provider.awareness.states.size === 1) {
                 this.collabSB.closeEditingRoom(this.text_document.id);
             }
@@ -218,7 +211,6 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
             }
             setTimeout(() => {
                 this.loading = false;
-                console.log('loading false');
             }, 0);
         }
         if (!this.editingMode) {
@@ -227,15 +219,12 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
         }
 
         const last_content: string = this.text_document.versions[0].content;
-        console.log('editing room: ', this.editing_room);
-        console.log('editing mode: ', this.editingMode);
         if (this.editing_room && this.editingMode) {
             if (this.provider) {
                 this.provider.destroy();
             }
 
             const ydoc = new Y.Doc();
-            console.log('connecting to room: ', this.editing_room.room_id);
             // @ts-ignore
             this.provider = new WebrtcProvider(this.editing_room.room_id, ydoc, {
                 password: this.editing_room.password,
@@ -304,7 +293,6 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
 
     getHash(): string {
         if (!this.text_document.content) return '';
-        console.log('content: ', this.text_document.content);
         return hash(this.text_document.content);
     }
 

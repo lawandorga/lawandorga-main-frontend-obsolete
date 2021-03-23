@@ -49,7 +49,7 @@ export class DocumentTreeComponent implements OnInit {
         });
 
         this.collabSB.startLoadingAllDocuments();
-        this.collabSB.getAllDocuments().subscribe((documents: NameCollabDocument[]) => {
+        this.collabSB.getAllTreeDocuments().subscribe((documents: NameCollabDocument[]) => {
             alphabeticalSorterByField(documents, 'path');
             this.dataSource.data = documents;
             this.expandToSelected();
