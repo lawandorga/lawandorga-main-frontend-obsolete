@@ -59,7 +59,7 @@ export const RECORD_DOCUMENT_DELETIONS_API_URL =
 export const PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS =
     base + 'api/records/process_record_document_deletion_request/';
 
-const CHECK_USER_ACTIVATION_API_URL = base + 'api/check_user_activation_link/';
+const CHECK_USER_ACTIVATION_API_URL = base + 'api/profiles/';
 const ACTIVATE_USER_ACTIVATION_API_URL = base + 'api/activate_user_activation_link/';
 const RESET_PASSWORD_API_URL = base + 'api/reset_password/';
 const SPECIAL_RECORD_BASE_API_URL = base + 'api/records/records/'; // deprecated??? is it?
@@ -179,8 +179,8 @@ export const GetPermissionsForGroupApiURL = (id: string | number) => {
     return `${PERMISSION_FOR_GROUP_BASE_API_URL}${id}/`;
 };
 
-export const GetCheckUserActivationApiUrl = (link: string) => {
-    return `${CHECK_USER_ACTIVATION_API_URL}${link}/`;
+export const GetCheckUserActivationApiUrl = (userId: number, token: string) => {
+    return `${CHECK_USER_ACTIVATION_API_URL}${userId}/activate/${token}/`;
 };
 
 export const GetActivateUserApiUrl = (link: string) => {

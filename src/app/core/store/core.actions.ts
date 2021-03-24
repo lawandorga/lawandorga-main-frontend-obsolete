@@ -242,12 +242,6 @@ export class StartAdmittingNewUserRequest implements Action {
     constructor(public payload: NewUserRequest) {}
 }
 
-export class StartCheckingUserActivationLink implements Action {
-    readonly type = START_CHECKING_USER_ACTIVATION_LINK;
-
-    constructor(public payload: string) {}
-}
-
 export class StartCreateUser implements Action {
     readonly type = START_CREATE_USER;
 
@@ -423,7 +417,6 @@ export type CoreActions =
     | StartAddingHasPermission
     | StartAdmittingNewUserRequest
     | StartActivatingInactiveUser
-    | StartCheckingUserActivationLink
     | StartCreateUser
     | StartDecliningNewUserRequest
     | StartLoadingGroups

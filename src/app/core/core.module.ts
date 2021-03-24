@@ -55,7 +55,6 @@ import {
     NewUserRequestProcessedPipe,
     NewUserRequestRequestedPipe
 } from '../recordmanagement/pipes/new_user_request.pipe';
-import { ActivateUserComponent } from './pages/auth/activate-user/activate-user.component';
 import { LegalNoticeComponent } from './pages/legal-notice/legal-notice.component';
 import { GroupDetailsComponent } from './components/group-details/group-details.component';
 import { InactiveUsersComponent } from './pages/inactive-users/inactive-users.component';
@@ -103,7 +102,6 @@ import { BaseRequestProcessedPipe, BaseRequestRequestedPipe } from './pipes/requ
         NewUserRequestsComponent,
         NewUserRequestRequestedPipe,
         NewUserRequestProcessedPipe,
-        ActivateUserComponent,
         LegalNoticeComponent,
         GroupDetailsComponent,
         InactiveUsersComponent,

@@ -66,9 +66,6 @@ import {
     StartDecliningNewUserRequest,
     UPDATE_NEW_USER_REQUEST,
     START_CHECKING_USER_ACTIVATION_LINK,
-    StartCheckingUserActivationLink,
-    START_ACCEPTING_USER,
-    StartAcceptingUser,
     START_SAVING_USER,
     StartSavingUser,
     START_LOADING_INACTIVE_USERS,
@@ -690,54 +687,6 @@ export class CoreEffects {
                             ];
                         })
                     )
-            );
-        })
-    );
-
-    @Effect()
-    startCheckingUserActivationLink = this.actions.pipe(
-        ofType(START_CHECKING_USER_ACTIVATION_LINK),
-        map((action: StartCheckingUserActivationLink) => {
-            return action.payload;
-        }),
-        switchMap((link: string) => {
-            return from(
-                this.http.get(GetCheckUserActivationApiUrl(link)).pipe(
-                    catchError(error => {
-                        this.snackbar.showErrorSnackBar(
-                            'error at checking user activation link: ' + error.error.detail
-                        );
-                        return [];
-                    }),
-                    mergeMap((response: any) => {
-                        return [];
-                    })
-                )
-            );
-        })
-    );
-
-    @Effect()
-    startAcceptingUser = this.actions.pipe(
-        ofType(START_ACCEPTING_USER),
-        map((action: StartAcceptingUser) => {
-            return action.payload;
-        }),
-        switchMap((link: string) => {
-            return from(
-                this.http.post(GetActivateUserApiUrl(link), {}).pipe(
-                    catchError(error => {
-                        this.snackbar.showErrorSnackBar(
-                            'error at checking user activation link: ' + error.error.detail
-                        );
-                        return [];
-                    }),
-                    mergeMap((response: any) => {
-                        this.snackbar.showSuccessSnackBar('account successfully activated');
-                        this.router.navigate([LOGIN_FRONT_URL]);
-                        return [];
-                    })
-                )
             );
         })
     );
