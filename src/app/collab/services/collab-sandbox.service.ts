@@ -24,7 +24,8 @@ import {
     StartAddingDocument,
     StartDeletingCollabDocument,
     StartLoadingAllDocuments,
-    StartLoadingCollabDocumentPermissions
+    StartLoadingCollabDocumentPermissions,
+    StartLoadingCollabPermissions
 } from '../store/collab.actions';
 import { HttpClient } from '@angular/common/http';
 import { SharedSandboxService } from '../../shared/services/shared-sandbox.service';
@@ -159,7 +160,11 @@ export class CollabSandboxService {
 
     startAddingCollabDocumentPermission(
         document_id: number,
-        group_id: number,
+        grou_id: string,
         permission: string
     ): void {}
+
+    startLoadingCollabPermissions(): void {
+        this.collabStore.dispatch(new StartLoadingCollabPermissions());
+    }
 }

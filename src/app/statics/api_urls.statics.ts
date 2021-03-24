@@ -60,9 +60,10 @@ export const RECORD_DOCUMENT_DELETIONS_API_URL =
 export const PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS =
     base + 'api/records/process_record_document_deletion_request/';
 
-export const COLLAB_COLLAB_DOCUMENTS = base + 'api/collab/collab_documents/';
-export const COLLAB_TEXT_DOCUMENTS = base + 'api/collab/text_documents/';
-export const COLLAB_EDITING = base + 'api/collab/editing/';
+export const COLLAB_COLLAB_DOCUMENTS_API_URL = base + 'api/collab/collab_documents/';
+export const COLLAB_TEXT_DOCUMENTS_API_URL = base + 'api/collab/text_documents/';
+export const COLLAB_EDITING_API_URL = base + 'api/collab/editing/';
+export const COLLAB_PERMISSIONS_API_URL = base + 'api/collab/collab_permission/';
 const COLLAB_TEXT_DOCUMENT_VERSIONS = base + 'api/collab/text_document_version/';
 
 const CHECK_USER_ACTIVATION_API_URL = base + 'api/check_user_activation_link/';
@@ -215,15 +216,15 @@ export const GetFolderPermissionApiUrl = (id: string) => {
 };
 
 export const GetCollabTextDocumentApiUrl = (id: number) => {
-    return `${COLLAB_TEXT_DOCUMENTS}${id}/`;
+    return `${COLLAB_TEXT_DOCUMENTS_API_URL}${id}/`;
 };
 
 export const GetCollabEditingApiUrl = (id: number) => {
-    return `${COLLAB_EDITING}${id}/`;
+    return `${COLLAB_EDITING_API_URL}${id}/`;
 };
 
 export const GetCollabTextDocumentVersionsApiUrl = (text_document_id: number) => {
-    return `${COLLAB_TEXT_DOCUMENTS}${text_document_id}/versions/`;
+    return `${COLLAB_TEXT_DOCUMENTS_API_URL}${text_document_id}/versions/`;
 };
 
 export const GetCollabTextDocumentVersionsModelApiUrl = (text_version_id: number) => {
@@ -231,7 +232,7 @@ export const GetCollabTextDocumentVersionsModelApiUrl = (text_version_id: number
 };
 
 export const GetSpecialCollabDocumentApiUrl = (id: number) => {
-    return `${COLLAB_COLLAB_DOCUMENTS}${id}/`;
+    return `${COLLAB_COLLAB_DOCUMENTS_API_URL}${id}/`;
 };
 
 export const GetCollabDocumentPermissionApiUrl = (id: number) => {

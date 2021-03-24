@@ -17,29 +17,36 @@
  */
 
 import { NameCollabDocument } from '../models/collab-document.model';
-import { CollabActions, SET_ALL_DOCUMENTS } from './collab.actions';
+import { CollabActions, SET_ALL_DOCUMENTS, SET_COLLAB_PERMISSIONS } from './collab.actions';
 import { getIdObjects } from '../../shared/other/reducer-helper';
 import { tree } from 'lib0';
+import { Permission } from '../../core/models/permission.model';
 
 export interface CollabState {
-    all_documents: NameCollabDocument[];
-    all_documents_tree: NameCollabDocument[];
+    all_documents: { [id: number]: NameCollabDocument };
+    all_documents_tree: { [id: number]: NameCollabDocument };
+    collab_permissions: { [id: number]: Permission };
 }
 
 export const initialState: CollabState = {
     all_documents: [],
-    all_documents_tree: []
+    all_documents_tree: [],
+    collab_permissions: {}
 };
 
 export function collabReducer(state = initialState, action: CollabActions) {
     switch (action.type) {
         case SET_ALL_DOCUMENTS:
             const all_docs = getAllDocsFromTree(action.payload);
-
             return {
                 ...state,
                 all_documents_tree: getIdObjects(action.payload),
                 all_documents: getIdObjects(all_docs)
+            };
+        case SET_COLLAB_PERMISSIONS:
+            return {
+                ...state,
+                collab_permissions: getIdObjects(action.payload)
             };
         default:
             return state;

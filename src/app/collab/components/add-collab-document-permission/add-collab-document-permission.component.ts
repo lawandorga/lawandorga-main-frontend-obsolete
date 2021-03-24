@@ -1,9 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { alphabeticalSorterByField } from '../../../shared/other/sorter-helper';
 import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
-import { Observable } from 'rxjs';
 import { RestrictedGroup } from '../../../core/models/group.model';
 import { CollabSandboxService } from '../../services/collab-sandbox.service';
 
@@ -19,10 +19,10 @@ export class AddCollabDocumentPermissionComponent implements OnInit {
     selectedPermission: string;
 
     constructor(
-        @Inject(MAT_DIALOG_DATA) public data: number,
         private coreSB: CoreSandboxService,
+        private collabSB: CollabSandboxService,
         public dialogRef: MatDialogRef<AddCollabDocumentPermissionComponent>,
-        private collabSB: CollabSandboxService
+        @Inject(MAT_DIALOG_DATA) public data: number
     ) {}
 
     ngOnInit(): void {

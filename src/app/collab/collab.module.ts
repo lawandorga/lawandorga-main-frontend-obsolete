@@ -38,6 +38,7 @@ import { CollabEditComponent } from './pages/collab-edit/collab-edit.component';
 import { TextVersionComponent } from './components/text-version/text-version.component';
 import { CollabDocumentPermissionsComponent } from './components/collab-document-permissions/collab-document-permissions.component';
 import { AddCollabDocumentPermissionComponent } from './components/add-collab-document-permission/add-collab-document-permission.component';
+import { CollabSandboxService } from './services/collab-sandbox.service';
 
 Quill.register('modules/cursors', QuillCursors);
 // Quill.register('modules/better-table', QuillBetterTable);
@@ -79,4 +80,8 @@ const quillConfig: QuillConfig = {
     ],
     providers: []
 })
-export class CollabModule {}
+export class CollabModule {
+    constructor(private collabSB: CollabSandboxService) {
+        this.collabSB.startLoadingCollabPermissions();
+    }
+}

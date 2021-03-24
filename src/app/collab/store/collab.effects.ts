@@ -21,10 +21,14 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { HttpClient } from '@angular/common/http';
 import {
     SET_ALL_DOCUMENTS,
+    SET_COLLAB_PERMISSIONS,
+    START_ADDING_COLLAB_DOCUMENT_PERMISSION,
     START_ADDING_DOCUMENT,
     START_DELETING_COLLAB_DOCUMENT,
     START_LOADING_ALL_DOCUMENTS,
     START_LOADING_COLLAB_DOCUMENT_PERMISSIONS,
+    START_LOADING_COLLAB_PERMISSIONS,
+    StartAddingCollabDocumentPermission,
     StartAddingDocument,
     StartDeletingCollabDocument,
     StartLoadingCollabDocumentPermissions
@@ -32,13 +36,15 @@ import {
 import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
 import { from, Observable } from 'rxjs';
 import {
-    COLLAB_COLLAB_DOCUMENTS,
+    COLLAB_COLLAB_DOCUMENTS_API_URL,
+    COLLAB_PERMISSIONS_API_URL,
     GetCollabDocumentPermissionApiUrl,
     GetCollabEditingApiUrl,
     GetSpecialCollabDocumentApiUrl
 } from '../../statics/api_urls.statics';
 import { NameCollabDocument } from '../models/collab-document.model';
 import { CollabPermission } from '../models/collab_permission.model';
+import { Permission } from '../../core/models/permission.model';
 
 @Injectable()
 export class CollabEffects {
@@ -49,7 +55,7 @@ export class CollabEffects {
         ofType(START_LOADING_ALL_DOCUMENTS),
         switchMap(() => {
             return from(
-                this.http.get(COLLAB_COLLAB_DOCUMENTS).pipe(
+                this.http.get(COLLAB_COLLAB_DOCUMENTS_API_URL).pipe(
                     catchError(err => {
                         console.log('error');
                         return [];
@@ -76,7 +82,7 @@ export class CollabEffects {
             // return new Observable();
             return from(
                 this.http
-                    .post(COLLAB_COLLAB_DOCUMENTS, {
+                    .post(COLLAB_COLLAB_DOCUMENTS_API_URL, {
                         path: payload.path
                     })
                     .pipe(
@@ -135,6 +141,55 @@ export class CollabEffects {
                         return [];
                     })
                 )
+            );
+        })
+    );
+
+    @Effect()
+    startLoadingCollabPermissions = this.actions.pipe(
+        ofType(START_LOADING_COLLAB_PERMISSIONS),
+        switchMap(() => {
+            return from(
+                this.http.get(COLLAB_PERMISSIONS_API_URL).pipe(
+                    catchError(err => {
+                        console.log('error at loading collab permissions');
+                        return [];
+                    }),
+                    mergeMap(response => {
+                        const collab_permissions = Permission.getPermissionsFromJsonArray(response);
+                        return [
+                            {
+                                type: SET_COLLAB_PERMISSIONS,
+                                payload: collab_permissions
+                            }
+                        ];
+                    })
+                )
+            );
+        })
+    );
+
+    @Effect()
+    startAddingCollabDocumentPermission = this.actions.pipe(
+        ofType(START_ADDING_COLLAB_DOCUMENT_PERMISSION),
+        map((action: StartAddingCollabDocumentPermission) => {
+            return action.payload;
+        }),
+        switchMap((payload: { document_id: number; group_id: string; permission: string }) => {
+            return from(
+                this.http
+                    .post(GetCollabDocumentPermissionApiUrl(payload.document_id), {
+                        path: 'ad'
+                    })
+                    .pipe(
+                        catchError(err => {
+                            console.log('error at adding document', err);
+                            return [];
+                        }),
+                        mergeMap(response => {
+                            return [];
+                        })
+                    )
             );
         })
     );

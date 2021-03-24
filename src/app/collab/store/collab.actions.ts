@@ -18,6 +18,7 @@
 
 import { Action } from '@ngrx/store';
 import { NameCollabDocument } from '../models/collab-document.model';
+import { Permission } from '../../core/models/permission.model';
 
 export const SET_ALL_DOCUMENTS = 'SET_ALL_DOCUMENTS';
 export const START_LOADING_ALL_DOCUMENTS = 'START_LOADING_ALL_DOCUMENTS';
@@ -25,6 +26,9 @@ export const START_ADDING_DOCUMENT = 'START_ADDING_DOCUMENT';
 export const START_DELETING_COLLAB_DOCUMENT = 'START_DELETING_COLLAB_DOCUMENT';
 export const START_LOADING_COLLAB_DOCUMENT_PERMISSIONS =
     'START_LOADING_COLLAB_DOCUMENT_PERMISSIONS';
+export const START_ADDING_COLLAB_DOCUMENT_PERMISSION = 'START_ADDING_COLLAB_DOCUMENT_PERMISSION';
+export const START_LOADING_COLLAB_PERMISSIONS = 'START_LOADING_COLLAB_PERMISSIONS';
+export const SET_COLLAB_PERMISSIONS = 'SET_COLLAB_PERMISSIONS';
 
 export class SetAllDocuments implements Action {
     readonly type = SET_ALL_DOCUMENTS;
@@ -54,9 +58,28 @@ export class StartLoadingCollabDocumentPermissions implements Action {
     constructor(public payload: { id: number }) {}
 }
 
+export class StartLoadingCollabPermissions implements Action {
+    readonly type = START_LOADING_COLLAB_PERMISSIONS;
+}
+
+export class StartAddingCollabDocumentPermission implements Action {
+    readonly type = START_ADDING_COLLAB_DOCUMENT_PERMISSION;
+
+    constructor(public payload: { document_id: number; group_id: string; permission: string }) {}
+}
+
+export class SetCollabPermissions implements Action {
+    readonly type = SET_COLLAB_PERMISSIONS;
+
+    constructor(public payload: Permission[]) {}
+}
+
 export type CollabActions =
     | SetAllDocuments
     | StartLoadingAllDocuments
     | StartAddingDocument
     | StartDeletingCollabDocument
-    | StartLoadingCollabDocumentPermissions;
+    | StartLoadingCollabDocumentPermissions
+    | StartAddingCollabDocumentPermission
+    | StartLoadingCollabPermissions
+    | SetCollabPermissions;
