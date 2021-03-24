@@ -78,7 +78,7 @@ export class AppSandboxService {
         if (loginInformation.token !== null && loginInformation.token !== '') {
             this.store.dispatch(new SetToken(loginInformation.token));
             this.store.dispatch(new SetUsersPrivateKey(loginInformation.users_private_key));
-            this.store.dispatch(new ReloadStaticInformation());
+            this.store.dispatch(new ReloadStaticInformation({token: loginInformation.token}));
         }
         return this.store.pipe(select('auth'));
     }

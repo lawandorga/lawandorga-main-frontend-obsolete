@@ -19,7 +19,7 @@
 import { environment } from '../../environments/environment';
 
 export const base = environment.apiUrl;
-export const LOGIN_API_URL = base + 'api/login/';
+export const LOGIN_API_URL = base + 'api/profiles/login/';
 export const RECORDS_API_URL = base + 'api/records/records/';
 export const CLIENTS_BY_BIRTHDAY_API_URL = base + 'api/records/e_clients_by_birthday/';
 export const RECORDS_STATICS_API_URL = base + 'api/records/statics/';
@@ -211,3 +211,7 @@ export const GetFolderPermissionsForFolderApiUrl = (id: string) => {
 export const GetFolderPermissionApiUrl = (id: string) => {
     return `${FILES_PERMISSION_FOR_FOLDER_BASE_API_URL}${id}/`;
 };
+
+export const GetStaticsApiUrl = (token: string) => {
+    return `${PROFILES_API_URL}statics/${token}/`;
+}

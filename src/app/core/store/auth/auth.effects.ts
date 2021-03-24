@@ -35,11 +35,13 @@ import {
     ResetPassword,
     START_LOGGING_OUT,
     LOGOUT,
-    SET_USERS_PRIVATE_KEY
+    SET_USERS_PRIVATE_KEY,
+    ReloadStaticInformation
 } from './auth.actions';
 import {
     FORGOT_PASSWORD_API_URL,
     GetResetPasswordApiUrl,
+    GetStaticsApiUrl,
     LOGIN_API_URL,
     LOGOUT_API_URL
 } from '../../../statics/api_urls.statics';
@@ -87,25 +89,13 @@ export class AuthEffects {
                 this.http.post(LOGIN_API_URL, authData).pipe(
                     catchError(error => {
                         console.log('error: ', error);
-                        this.coreSB.showErrorSnackBar(
-                            `Login not successful: ${error.error.detail}`
-                        );
-
+                        this.coreSB.showErrorSnackBar(error.error.non_field_errors, 5000);
                         return [];
                     }),
                     mergeMap(
                         (response: {
                             token: string;
                             users_private_key: string;
-                            user: any;
-                            all_permissions: any;
-                            permissions: any;
-                            rlc: any;
-                            error: string;
-                            error_message: string;
-                            user_states: any;
-                            user_record_states: any;
-                            notifications: any;
                         }) => {
                             this.appSB.saveTokenAndUsersPrivateKey(
                                 response.token,
@@ -123,7 +113,10 @@ export class AuthEffects {
                                     type: SET_USERS_PRIVATE_KEY,
                                     payload: response.users_private_key
                                 },
-                                ...AuthEffects.getStaticInformation(response)
+                                {
+                                    type: TRY_RELOAD_STATIC_INFORMATION,
+                                    payload: {token: response.token}
+                                }
                             ];
                         }
                     )
@@ -144,8 +137,11 @@ export class AuthEffects {
     @Effect()
     reload = this.actions.pipe(
         ofType(TRY_RELOAD_STATIC_INFORMATION),
-        switchMap(() => {
-            return from(this.http.get(LOGIN_API_URL));
+        map((action: ReloadStaticInformation) => {
+            return action.payload;
+        }),
+        switchMap((payload: {token: string}) => {
+            return from(this.http.get(GetStaticsApiUrl(payload.token)));
         }),
         mergeMap((response: any) => {
             return [...AuthEffects.getStaticInformation(response)];

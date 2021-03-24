@@ -215,12 +215,12 @@ export class CoreSandboxService {
         );
     }
 
-    showSuccessSnackBar(message: string) {
-        this.snackbarService.showSuccessSnackBar(message);
+    showSuccessSnackBar(message: string, duration: number = 3000) {
+        this.snackbarService.showSuccessSnackBar(message, duration);
     }
 
-    showErrorSnackBar(message: string) {
-        this.snackbarService.showErrorSnackBar(message);
+    showErrorSnackBar(message: string, duration: number = 3000) {
+        this.snackbarService.showErrorSnackBar(message, duration);
     }
 
     relogUser() {
