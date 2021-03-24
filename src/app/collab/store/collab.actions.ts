@@ -23,6 +23,8 @@ export const SET_ALL_DOCUMENTS = 'SET_ALL_DOCUMENTS';
 export const START_LOADING_ALL_DOCUMENTS = 'START_LOADING_ALL_DOCUMENTS';
 export const START_ADDING_DOCUMENT = 'START_ADDING_DOCUMENT';
 export const START_DELETING_COLLAB_DOCUMENT = 'START_DELETING_COLLAB_DOCUMENT';
+export const START_LOADING_COLLAB_DOCUMENT_PERMISSIONS =
+    'START_LOADING_COLLAB_DOCUMENT_PERMISSIONS';
 
 export class SetAllDocuments implements Action {
     readonly type = SET_ALL_DOCUMENTS;
@@ -46,8 +48,15 @@ export class StartDeletingCollabDocument implements Action {
     constructor(public payload: { id: number }) {}
 }
 
+export class StartLoadingCollabDocumentPermissions implements Action {
+    readonly type = START_LOADING_COLLAB_DOCUMENT_PERMISSIONS;
+
+    constructor(public payload: { id: number }) {}
+}
+
 export type CollabActions =
     | SetAllDocuments
     | StartLoadingAllDocuments
     | StartAddingDocument
-    | StartDeletingCollabDocument;
+    | StartDeletingCollabDocument
+    | StartLoadingCollabDocumentPermissions;

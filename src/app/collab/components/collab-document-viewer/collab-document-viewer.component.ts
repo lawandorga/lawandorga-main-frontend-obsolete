@@ -99,6 +99,7 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges, OnDestr
                     this.collab_document = document;
                     if (document) this.numberOfChildren = document.getTotalCountOfChildren();
                 });
+            this.collabSB.startLoadingCollabDocumentPermission(this.document_id);
         }
     }
 

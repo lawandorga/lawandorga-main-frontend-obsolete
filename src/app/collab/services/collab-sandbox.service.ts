@@ -23,7 +23,8 @@ import { CollabState } from '../store/collab.reducers';
 import {
     StartAddingDocument,
     StartDeletingCollabDocument,
-    StartLoadingAllDocuments
+    StartLoadingAllDocuments,
+    StartLoadingCollabDocumentPermissions
 } from '../store/collab.actions';
 import { HttpClient } from '@angular/common/http';
 import { SharedSandboxService } from '../../shared/services/shared-sandbox.service';
@@ -151,4 +152,14 @@ export class CollabSandboxService {
             console.log('response from deleting editing room: ', res);
         });
     }
+
+    startLoadingCollabDocumentPermission(document_id: number): void {
+        this.collabStore.dispatch(new StartLoadingCollabDocumentPermissions({ id: document_id }));
+    }
+
+    startAddingCollabDocumentPermission(
+        document_id: number,
+        group_id: number,
+        permission: string
+    ): void {}
 }

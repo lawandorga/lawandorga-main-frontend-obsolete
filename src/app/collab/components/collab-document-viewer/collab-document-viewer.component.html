@@ -89,6 +89,9 @@
                         {{ numberOfChildren }} children in total,
                         {{ collab_document.children.length }} direct
                     </h4>
+                    <app-collab-document-permissions
+                        [collab_document]="collab_document"
+                    ></app-collab-document-permissions>
                 </div>
             </div>
         </mat-drawer>

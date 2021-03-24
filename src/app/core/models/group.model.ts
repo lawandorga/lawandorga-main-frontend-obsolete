@@ -20,7 +20,7 @@ import { Filterable } from '../../shared/models/filterable.model';
 import { RestrictedUser } from './user.model';
 
 export class RestrictedGroup implements Filterable {
-    constructor(public id: string, public name: string) {
+    constructor(public id: number, public name: string) {
         this.id = id;
         this.name = name;
     }
@@ -45,7 +45,7 @@ export class RestrictedGroup implements Filterable {
 
 export class FullGroup extends RestrictedGroup {
     constructor(
-        id: string,
+        id: number,
         name: string,
         public creator_id: string,
         public members: RestrictedUser[],

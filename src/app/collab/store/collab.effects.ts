@@ -24,17 +24,21 @@ import {
     START_ADDING_DOCUMENT,
     START_DELETING_COLLAB_DOCUMENT,
     START_LOADING_ALL_DOCUMENTS,
+    START_LOADING_COLLAB_DOCUMENT_PERMISSIONS,
     StartAddingDocument,
-    StartDeletingCollabDocument
+    StartDeletingCollabDocument,
+    StartLoadingCollabDocumentPermissions
 } from './collab.actions';
 import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
 import { from, Observable } from 'rxjs';
 import {
     COLLAB_COLLAB_DOCUMENTS,
+    GetCollabDocumentPermissionApiUrl,
     GetCollabEditingApiUrl,
     GetSpecialCollabDocumentApiUrl
 } from '../../statics/api_urls.statics';
 import { NameCollabDocument } from '../models/collab-document.model';
+import { CollabPermission } from '../models/collab_permission.model';
 
 @Injectable()
 export class CollabEffects {
@@ -104,6 +108,31 @@ export class CollabEffects {
                     }),
                     mergeMap(response => {
                         return [{ type: START_LOADING_ALL_DOCUMENTS }];
+                    })
+                )
+            );
+        })
+    );
+
+    @Effect()
+    startLoadingCollabDocumentPermissions = this.actions.pipe(
+        ofType(START_LOADING_COLLAB_DOCUMENT_PERMISSIONS),
+        map((action: StartLoadingCollabDocumentPermissions) => {
+            return action.payload;
+        }),
+        switchMap((payload: { id: number }) => {
+            return from(
+                this.http.get(GetCollabDocumentPermissionApiUrl(payload.id)).pipe(
+                    catchError(err => {
+                        console.log('error at loading document permissions');
+                        return [];
+                    }),
+                    mergeMap(response => {
+                        console.log('response from loading permissions: ', response);
+                        // const permissions = CollabPermission.getCollabPermissionFromJsonArray(
+                        //     response.data
+                        // );
+                        return [];
                     })
                 )
             );

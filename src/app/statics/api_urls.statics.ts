@@ -233,3 +233,7 @@ export const GetCollabTextDocumentVersionsModelApiUrl = (text_version_id: number
 export const GetSpecialCollabDocumentApiUrl = (id: number) => {
     return `${COLLAB_COLLAB_DOCUMENTS}${id}/`;
 };
+
+export const GetCollabDocumentPermissionApiUrl = (id: number) => {
+    return `${GetSpecialCollabDocumentApiUrl(id)}permissions/`;
+};

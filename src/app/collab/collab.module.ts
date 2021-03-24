@@ -36,6 +36,8 @@ import QuillCursors from 'quill-cursors';
 import { CustomQuillContainerComponent } from './components/custom-quill-container/custom-quill-container.component';
 import { CollabEditComponent } from './pages/collab-edit/collab-edit.component';
 import { TextVersionComponent } from './components/text-version/text-version.component';
+import { CollabDocumentPermissionsComponent } from './components/collab-document-permissions/collab-document-permissions.component';
+import { AddCollabDocumentPermissionComponent } from './components/add-collab-document-permission/add-collab-document-permission.component';
 
 Quill.register('modules/cursors', QuillCursors);
 // Quill.register('modules/better-table', QuillBetterTable);
@@ -71,7 +73,9 @@ const quillConfig: QuillConfig = {
         CollabDocumentViewerComponent,
         CustomQuillContainerComponent,
         CollabEditComponent,
-        TextVersionComponent
+        TextVersionComponent,
+        CollabDocumentPermissionsComponent,
+        AddCollabDocumentPermissionComponent
     ],
     providers: []
 })
