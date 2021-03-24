@@ -35,7 +35,7 @@ export const PERMISSION_API_URL = base + 'api/permissions/';
 export const HAS_PERMISSION_API_URL = base + 'api/has_permission/';
 export const HAS_PERMISSIONS_STATICS_API_URL = base + 'api/has_permission_statics/';
 export const NEW_USER_REQUEST_API_URL = base + 'api/new_user_request/';
-export const NEW_USER_REQUEST_ADMIT_API_URL = base + 'api/new_user_request_admit/';
+export const NEW_USER_REQUEST_ADMIT_API_URL = base + 'api/new_user_request/';
 export const LOGOUT_API_URL = base + 'api/profiles/logout/';
 export const INACTIVE_USERS_API_URL = base + 'api/profiles/inactive/';
 export const USER_HAS_PERMISSIONS_API_URL = base + 'api/user_has_permissions/';
@@ -214,4 +214,8 @@ export const GetFolderPermissionApiUrl = (id: string) => {
 
 export const GetStaticsApiUrl = (token: string) => {
     return `${PROFILES_API_URL}statics/${token}/`;
+}
+
+export const GetNewUserRequestApiUrl = (id: number) => {
+    return `${NEW_USER_REQUEST_ADMIT_API_URL}${id}/`
 }

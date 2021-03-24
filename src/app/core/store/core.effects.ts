@@ -96,6 +96,7 @@ import {
     HAS_PERMISSIONS_STATICS_API_URL,
     INACTIVE_USERS_API_URL,
     LOGIN_API_URL,
+    GetNewUserRequestApiUrl,
     NEW_USER_REQUEST_ADMIT_API_URL,
     NEW_USER_REQUEST_API_URL,
     PROFILES_API_URL,
@@ -628,11 +629,10 @@ export class CoreEffects {
             const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
             return from(
                 this.http
-                    .post(
-                        NEW_USER_REQUEST_ADMIT_API_URL,
+                    .put(
+                        GetNewUserRequestApiUrl(Number(newUserRequest.id)),
                         {
-                            id: newUserRequest.id,
-                            action: 'accept'
+                            state: 'gr'
                         },
                         privateKeyPlaceholder
                     )
@@ -666,9 +666,9 @@ export class CoreEffects {
         switchMap((newUserRequest: NewUserRequest) => {
             return from(
                 this.http
-                    .post(NEW_USER_REQUEST_ADMIT_API_URL, {
+                    .put(GetNewUserRequestApiUrl(Number(newUserRequest.id)), {
                         id: newUserRequest.id,
-                        action: 'decline'
+                        state: 'de'
                     })
                     .pipe(
                         catchError(error => {
