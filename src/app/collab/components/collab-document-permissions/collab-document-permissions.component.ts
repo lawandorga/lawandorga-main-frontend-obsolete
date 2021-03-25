@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddCollabDocumentPermissionComponent } from '../add-collab-document-permission/add-collab-document-permission.component';
 import { NameCollabDocument } from '../../models/collab-document.model';
+import { CollabSandboxService } from '../../services/collab-sandbox.service';
 
 @Component({
     selector: 'app-collab-document-permissions',
@@ -12,13 +13,16 @@ export class CollabDocumentPermissionsComponent implements OnInit {
     @Input()
     collab_document: NameCollabDocument;
 
-    constructor(public dialog: MatDialog) {}
+    constructor(private collabSB: CollabSandboxService, public dialog: MatDialog) {}
 
     ngOnInit(): void {
         console.log('collabdocument permission component received doc: ', this.collab_document);
         // TODO: split into 2 parts
         // show folder permissions if user has permission manage_folder_permissions
         // show general permissions if user has permission manage_permissions
+        this.collabSB.getDocumentPermissions().subscribe(document_permissions => {
+            console.log('document permissions', document_permissions);
+        });
     }
 
     onAddPermission(): void {

@@ -22,6 +22,7 @@ import { HttpClient } from '@angular/common/http';
 import {
     SET_ALL_DOCUMENTS,
     SET_COLLAB_PERMISSIONS,
+    SET_DOCUMENT_PERMISSIONS,
     START_ADDING_COLLAB_DOCUMENT_PERMISSION,
     START_ADDING_DOCUMENT,
     START_DELETING_COLLAB_DOCUMENT,
@@ -34,17 +35,16 @@ import {
     StartLoadingCollabDocumentPermissions
 } from './collab.actions';
 import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
-import { from, Observable } from 'rxjs';
+import { from } from 'rxjs';
 import {
     COLLAB_COLLAB_DOCUMENTS_API_URL,
     COLLAB_PERMISSIONS_API_URL,
     GetCollabDocumentPermissionApiUrl,
-    GetCollabEditingApiUrl,
     GetSpecialCollabDocumentApiUrl
 } from '../../statics/api_urls.statics';
 import { NameCollabDocument } from '../models/collab-document.model';
-import { CollabPermission } from '../models/collab_permission.model';
-import { Permission } from '../../core/models/permission.model';
+import { CollabPermission, CollabPermissionFrom } from '../models/collab_permission.model';
+import { HasPermission, Permission } from '../../core/models/permission.model';
 
 @Injectable()
 export class CollabEffects {
@@ -134,11 +134,31 @@ export class CollabEffects {
                         return [];
                     }),
                     mergeMap(response => {
-                        console.log('response from loading permissions: ', response);
-                        // const permissions = CollabPermission.getCollabPermissionFromJsonArray(
-                        //     response.data
-                        // );
-                        return [];
+                        const collab_permissions = CollabPermission.getCollabPermissionFromJsonArray(
+                            response.direct,
+                            CollabPermissionFrom.Direct
+                        ).concat(
+                            ...CollabPermission.getCollabPermissionFromJsonArray(
+                                response.from_above,
+                                CollabPermissionFrom.Parent
+                            ),
+                            ...CollabPermission.getCollabPermissionFromJsonArray(
+                                response.from_below,
+                                CollabPermissionFrom.Children
+                            )
+                        );
+                        console.log('collab_permissions permissions: ', collab_permissions);
+                        return [
+                            {
+                                type: SET_DOCUMENT_PERMISSIONS,
+                                payload: {
+                                    collab_permissions,
+                                    general_permissions: HasPermission.getPermissionsFromJsonArray(
+                                        response.general
+                                    )
+                                }
+                            }
+                        ];
                     })
                 )
             );
@@ -175,11 +195,12 @@ export class CollabEffects {
         map((action: StartAddingCollabDocumentPermission) => {
             return action.payload;
         }),
-        switchMap((payload: { document_id: number; group_id: string; permission: string }) => {
+        switchMap((payload: { document_id: number; group_id: string; permission_id: string }) => {
             return from(
                 this.http
                     .post(GetCollabDocumentPermissionApiUrl(payload.document_id), {
-                        path: 'ad'
+                        group_id: payload.group_id,
+                        permission_id: payload.permission_id
                     })
                     .pipe(
                         catchError(err => {
@@ -187,7 +208,14 @@ export class CollabEffects {
                             return [];
                         }),
                         mergeMap(response => {
-                            return [];
+                            console.log('response from adding collab permission: ', response);
+                            console.log('id of doc', response.document);
+                            return [
+                                {
+                                    type: START_LOADING_COLLAB_DOCUMENT_PERMISSIONS,
+                                    payload: { id: response.document }
+                                }
+                            ];
                         })
                     )
             );

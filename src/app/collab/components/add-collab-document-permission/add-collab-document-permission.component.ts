@@ -6,6 +6,7 @@ import { alphabeticalSorterByField } from '../../../shared/other/sorter-helper';
 import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
 import { RestrictedGroup } from '../../../core/models/group.model';
 import { CollabSandboxService } from '../../services/collab-sandbox.service';
+import { Permission } from '../../../core/models/permission.model';
 
 @Component({
     selector: 'app-add-collab-document-permission',
@@ -15,6 +16,7 @@ import { CollabSandboxService } from '../../services/collab-sandbox.service';
 export class AddCollabDocumentPermissionComponent implements OnInit {
     groups: Observable<RestrictedGroup[]>;
     selectedGroup: RestrictedGroup = null;
+    collabPermissions: Permission[] = [];
 
     selectedPermission: string;
 
@@ -32,6 +34,10 @@ export class AddCollabDocumentPermissionComponent implements OnInit {
                 alphabeticalSorterByField(results, 'name');
             })
         );
+        // this.collabSB.getCollab
+        this.collabSB.getCollabPermissions().subscribe((permissions: Permission[]) => {
+            this.collabPermissions = permissions;
+        });
     }
 
     selectedGroupChanged(selectedGroup: RestrictedGroup): void {
@@ -44,19 +50,15 @@ export class AddCollabDocumentPermissionComponent implements OnInit {
 
     onAddClick() {
         if (this.selectedPermission) {
-            // TODO: this
-            // this.fileSB.startCreatingFolderPermission(
-            //     this.data,
-            //     this.selectedGroup,
-            //     this.selectedPermission
-            // );
-            console.log('data: ', this.data);
-            console.log('group: ', this.selectedGroup);
-            console.log('permission: ', this.selectedPermission);
+            const collab_permission_id = this.collabPermissions.filter((perm: Permission) =>
+                perm.name.toUpperCase().includes(this.selectedPermission.toUpperCase())
+            )[0].id;
+            console.log('permission id: ', collab_permission_id);
+
             this.collabSB.startAddingCollabDocumentPermission(
                 this.data,
                 this.selectedGroup.id,
-                this.selectedPermission
+                collab_permission_id
             );
             this.dialogRef.close();
         } else {

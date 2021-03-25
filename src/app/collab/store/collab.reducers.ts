@@ -17,21 +17,35 @@
  */
 
 import { NameCollabDocument } from '../models/collab-document.model';
-import { CollabActions, SET_ALL_DOCUMENTS, SET_COLLAB_PERMISSIONS } from './collab.actions';
+import {
+    CollabActions,
+    SET_ALL_DOCUMENTS,
+    SET_COLLAB_PERMISSIONS,
+    SET_DOCUMENT_PERMISSIONS
+} from './collab.actions';
 import { getIdObjects } from '../../shared/other/reducer-helper';
 import { tree } from 'lib0';
-import { Permission } from '../../core/models/permission.model';
+import { HasPermission, Permission } from '../../core/models/permission.model';
+import { CollabPermission } from '../models/collab_permission.model';
 
 export interface CollabState {
     all_documents: { [id: number]: NameCollabDocument };
     all_documents_tree: { [id: number]: NameCollabDocument };
     collab_permissions: { [id: number]: Permission };
+    document_permissions: {
+        collab_permissions: CollabPermission[];
+        general_permissions: HasPermission[];
+    };
 }
 
 export const initialState: CollabState = {
     all_documents: [],
     all_documents_tree: [],
-    collab_permissions: {}
+    collab_permissions: {},
+    document_permissions: {
+        collab_permissions: [],
+        general_permissions: []
+    }
 };
 
 export function collabReducer(state = initialState, action: CollabActions) {
@@ -47,6 +61,14 @@ export function collabReducer(state = initialState, action: CollabActions) {
             return {
                 ...state,
                 collab_permissions: getIdObjects(action.payload)
+            };
+        case SET_DOCUMENT_PERMISSIONS:
+            return {
+                ...state,
+                document_permissions: {
+                    collab_permissions: action.payload.collab_permissions,
+                    general_permissions: action.payload.general_permissions
+                }
             };
         default:
             return state;

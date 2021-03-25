@@ -17,9 +17,11 @@
  */
 
 import { RestrictedGroup } from '../../core/models/group.model';
+import { NameCollabDocument } from './collab-document.model';
 
 export enum CollabPermissionFrom {
     Parent,
+    Direct,
     Children
 }
 
@@ -28,33 +30,32 @@ export class CollabPermission {
         public id: number,
         public group: RestrictedGroup,
         public permission: string,
-        public document_name: string,
-        public document_id: string,
+        public document: NameCollabDocument,
         public from: CollabPermissionFrom
     ) {
         this.id = id;
         this.group = group;
         this.permission = permission;
-        this.document_name = document_name;
-        this.document_id = document_id;
+        this.document = document;
         this.from = from;
     }
 
-    static getCollabPermissionFromJson(json: any): CollabPermission {
-        console.log('CollabPermission json: ', json);
+    static getCollabPermissionFromJson(json: any, from: CollabPermissionFrom): CollabPermission {
         return new CollabPermission(
             json.id,
             new RestrictedGroup(json.group_id, json.grou_name),
-            json.permission.name,
-            json.document_name,
-            json.document_id,
-            json.from
+            json.permission,
+            NameCollabDocument.getNameCollabDocumentFromJson(json.document),
+            from
         );
     }
 
-    static getCollabPermissionFromJsonArray(jsonArray: any): CollabPermission[] {
+    static getCollabPermissionFromJsonArray(
+        jsonArray: any,
+        from: CollabPermissionFrom
+    ): CollabPermission[] {
         return Object.values(jsonArray).map(json => {
-            return CollabPermission.getCollabPermissionFromJson(json);
+            return CollabPermission.getCollabPermissionFromJson(json, from);
         });
     }
 }

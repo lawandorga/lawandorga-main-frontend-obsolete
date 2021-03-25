@@ -21,6 +21,7 @@ import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { CollabState } from '../store/collab.reducers';
 import {
+    StartAddingCollabDocumentPermission,
     StartAddingDocument,
     StartDeletingCollabDocument,
     StartLoadingAllDocuments,
@@ -40,6 +41,8 @@ import {
 import { AppSandboxService } from '../../core/services/app-sandbox.service';
 import { EditingRoom } from '../models/editing-room.model';
 import { SnackbarService } from '../../shared/services/snackbar.service';
+import { HasPermission, Permission } from '../../core/models/permission.model';
+import { CollabPermission } from '../models/collab_permission.model';
 
 @Injectable({
     providedIn: 'root'
@@ -160,11 +163,28 @@ export class CollabSandboxService {
 
     startAddingCollabDocumentPermission(
         document_id: number,
-        grou_id: string,
-        permission: string
-    ): void {}
+        group_id: string,
+        permission_id: string
+    ): void {
+        this.collabStore.dispatch(
+            new StartAddingCollabDocumentPermission({ document_id, group_id, permission_id })
+        );
+    }
 
     startLoadingCollabPermissions(): void {
         this.collabStore.dispatch(new StartLoadingCollabPermissions());
+    }
+
+    getCollabPermissions(): Observable<Permission[]> {
+        return this.collabStore.pipe(
+            select((state: any) => Object.values(state.collab.collab_permissions))
+        );
+    }
+
+    getDocumentPermissions(): Observable<{
+        general_permissions: HasPermission[];
+        document_permissions: CollabPermission[];
+    }> {
+        return this.collabStore.pipe(select((state: any) => state.collab.document_permissions));
     }
 }

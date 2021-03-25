@@ -18,7 +18,8 @@
 
 import { Action } from '@ngrx/store';
 import { NameCollabDocument } from '../models/collab-document.model';
-import { Permission } from '../../core/models/permission.model';
+import { HasPermission, Permission } from '../../core/models/permission.model';
+import { CollabPermission } from '../models/collab_permission.model';
 
 export const SET_ALL_DOCUMENTS = 'SET_ALL_DOCUMENTS';
 export const START_LOADING_ALL_DOCUMENTS = 'START_LOADING_ALL_DOCUMENTS';
@@ -29,6 +30,7 @@ export const START_LOADING_COLLAB_DOCUMENT_PERMISSIONS =
 export const START_ADDING_COLLAB_DOCUMENT_PERMISSION = 'START_ADDING_COLLAB_DOCUMENT_PERMISSION';
 export const START_LOADING_COLLAB_PERMISSIONS = 'START_LOADING_COLLAB_PERMISSIONS';
 export const SET_COLLAB_PERMISSIONS = 'SET_COLLAB_PERMISSIONS';
+export const SET_DOCUMENT_PERMISSIONS = 'SET_DOCUMENT_PERMISSIONS';
 
 export class SetAllDocuments implements Action {
     readonly type = SET_ALL_DOCUMENTS;
@@ -65,13 +67,24 @@ export class StartLoadingCollabPermissions implements Action {
 export class StartAddingCollabDocumentPermission implements Action {
     readonly type = START_ADDING_COLLAB_DOCUMENT_PERMISSION;
 
-    constructor(public payload: { document_id: number; group_id: string; permission: string }) {}
+    constructor(public payload: { document_id: number; group_id: string; permission_id: string }) {}
 }
 
 export class SetCollabPermissions implements Action {
     readonly type = SET_COLLAB_PERMISSIONS;
 
     constructor(public payload: Permission[]) {}
+}
+
+export class SetDocumentPermissions implements Action {
+    readonly type = SET_DOCUMENT_PERMISSIONS;
+
+    constructor(
+        public payload: {
+            general_permissions: HasPermission[];
+            collab_permissions: CollabPermission[];
+        }
+    ) {}
 }
 
 export type CollabActions =
@@ -82,4 +95,5 @@ export type CollabActions =
     | StartLoadingCollabDocumentPermissions
     | StartAddingCollabDocumentPermission
     | StartLoadingCollabPermissions
-    | SetCollabPermissions;
+    | SetCollabPermissions
+    | SetDocumentPermissions;
