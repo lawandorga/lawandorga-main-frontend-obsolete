@@ -8,7 +8,16 @@ import { CollabPermission, CollabPermissionFrom } from '../../models/collab_perm
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { GetSpecialCollabDocumentApiUrl } from '../../../statics/api_urls.statics';
-import { GetCollabViewFrontUrl } from '../../../statics/frontend_links.statics';
+import { GetCollabViewFrontUrl, GetGroupFrontUrl } from '../../../statics/frontend_links.statics';
+import {
+    PERMISSION_MANAGE_COLLAB_DOCUMENT_PERMISSIONS_RLC,
+    PERMISSION_MANAGE_FOLDER_PERMISSIONS_RLC,
+    PERMISSION_READ_ALL_COLLAB_DOCUMENTS_RLC,
+    PERMISSION_READ_ALL_FOLDERS_RLC,
+    PERMISSION_WRITE_ALL_COLLAB_DOCUMENTS_RLC,
+    PERMISSION_WRITE_ALL_FOLDERS_RLC
+} from '../../../statics/permissions.statics';
+import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
 
 @Component({
     selector: 'app-collab-document-permissions',
@@ -23,15 +32,22 @@ export class CollabDocumentPermissionsComponent implements OnInit {
     collab_document_permissions: Observable<CollabPermission[]>;
 
     document_columns = ['permission', 'group', 'action'];
+    general_columns = ['permission', 'group'];
 
-    collab_permission_write: Permission;
-    collab_permission_read: Permission;
+    COLLAB_PERMISSION_WRITE: Permission;
+    COLLAB_PERMISSION_READ: Permission;
+    PERMISSION_READ_ALL_ID: string;
+    PERMISSION_WRITE_ALL_ID: string;
+    PERMISSION_MANAGE_PERMISSIONS_ID: string;
 
     from_children = CollabPermissionFrom.Children;
+
+    groups: any;
 
     constructor(
         private collabSB: CollabSandboxService,
         private router: Router,
+        private coreSB: CoreSandboxService,
         public dialog: MatDialog
     ) {}
 
@@ -42,11 +58,28 @@ export class CollabDocumentPermissionsComponent implements OnInit {
         this.collabSB.getCollabPermissions().subscribe((permissions: Permission[]) => {
             for (const perm of permissions) {
                 if (perm.name.toUpperCase().includes('WRITE')) {
-                    this.collab_permission_write = perm;
+                    this.COLLAB_PERMISSION_WRITE = perm;
                 } else if (perm.name.toUpperCase().includes('READ')) {
-                    this.collab_permission_read = perm;
+                    this.COLLAB_PERMISSION_READ = perm;
                 }
             }
+        });
+
+        this.coreSB.getAllPermissions().subscribe((permissions: Permission[]) => {
+            for (const permission of permissions) {
+                if (permission.name === PERMISSION_WRITE_ALL_COLLAB_DOCUMENTS_RLC) {
+                    this.PERMISSION_WRITE_ALL_ID = permission.id;
+                } else if (permission.name === PERMISSION_READ_ALL_COLLAB_DOCUMENTS_RLC) {
+                    this.PERMISSION_READ_ALL_ID = permission.id;
+                } else if (permission.name === PERMISSION_MANAGE_COLLAB_DOCUMENT_PERMISSIONS_RLC) {
+                    this.PERMISSION_MANAGE_PERMISSIONS_ID = permission.id;
+                }
+            }
+        });
+        this.coreSB.startLoadingGroups();
+        this.coreSB.getGroups(false).subscribe((groups: any) => {
+            this.groups = groups;
+            console.log('groups: ', groups);
         });
     }
 
@@ -61,5 +94,9 @@ export class CollabDocumentPermissionsComponent implements OnInit {
 
     onCollabPermissionGoToClick(permission: CollabPermission): void {
         this.router.navigateByUrl(GetCollabViewFrontUrl(permission.document.id));
+    }
+
+    onGroupClick(hasPermission: HasPermission) {
+        this.router.navigateByUrl(GetGroupFrontUrl(hasPermission.groupHas));
     }
 }
