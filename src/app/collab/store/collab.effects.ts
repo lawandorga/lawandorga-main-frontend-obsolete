@@ -26,12 +26,14 @@ import {
     START_ADDING_COLLAB_DOCUMENT_PERMISSION,
     START_ADDING_DOCUMENT,
     START_DELETING_COLLAB_DOCUMENT,
+    START_DELETING_COLLAB_DOCUMENT_PERMISSION,
     START_LOADING_ALL_DOCUMENTS,
     START_LOADING_COLLAB_DOCUMENT_PERMISSIONS,
     START_LOADING_COLLAB_PERMISSIONS,
     StartAddingCollabDocumentPermission,
     StartAddingDocument,
     StartDeletingCollabDocument,
+    StartDeletingCollabDocumentPermission,
     StartLoadingCollabDocumentPermissions
 } from './collab.actions';
 import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
@@ -40,6 +42,7 @@ import {
     COLLAB_COLLAB_DOCUMENTS_API_URL,
     COLLAB_PERMISSIONS_API_URL,
     GetCollabDocumentPermissionApiUrl,
+    GetCollabDocumentPermissionForDocumentApiUrl,
     GetSpecialCollabDocumentApiUrl
 } from '../../statics/api_urls.statics';
 import { NameCollabDocument } from '../models/collab-document.model';
@@ -134,6 +137,7 @@ export class CollabEffects {
                         return [];
                     }),
                     mergeMap(response => {
+                        console.log('response from loading collab permissions: ', response);
                         const collab_permissions = CollabPermission.getCollabPermissionFromJsonArray(
                             response.direct,
                             CollabPermissionFrom.Direct
@@ -216,6 +220,33 @@ export class CollabEffects {
                                     payload: { id: response.document }
                                 }
                             ];
+                        })
+                    )
+            );
+        })
+    );
+
+    @Effect()
+    startDeletingCollabDocumentPermission = this.actions.pipe(
+        ofType(START_DELETING_COLLAB_DOCUMENT_PERMISSION),
+        map((action: StartDeletingCollabDocumentPermission) => {
+            return action.payload;
+        }),
+        switchMap((payload: { collab_document_permission_id: number }) => {
+            return from(
+                this.http
+                    .delete(
+                        GetCollabDocumentPermissionForDocumentApiUrl(
+                            payload.collab_document_permission_id
+                        )
+                    )
+                    .pipe(
+                        catchError(err => {
+                            console.log('error at adding document', err);
+                            return [];
+                        }),
+                        mergeMap(response => {
+                            return [];
                         })
                     )
             );

@@ -72,8 +72,6 @@ export class AppComponent implements OnDestroy, OnInit {
         // allow controlling snav in AppSandboxService
         setTimeout(() => {
             this.appSB.setNavbar(this.snav);
-
-            console.log('mobile: ', this.mobileQuery.matches);
         }, 5);
     }
 

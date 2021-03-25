@@ -43,7 +43,7 @@ export class CollabPermission {
     static getCollabPermissionFromJson(json: any, from: CollabPermissionFrom): CollabPermission {
         return new CollabPermission(
             json.id,
-            new RestrictedGroup(json.group_id, json.grou_name),
+            new RestrictedGroup(json.group_has_permission.id, json.group_has_permission.name),
             json.permission,
             NameCollabDocument.getNameCollabDocumentFromJson(json.document),
             from

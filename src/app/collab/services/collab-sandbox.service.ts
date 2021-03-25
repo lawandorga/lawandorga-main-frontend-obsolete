@@ -24,6 +24,7 @@ import {
     StartAddingCollabDocumentPermission,
     StartAddingDocument,
     StartDeletingCollabDocument,
+    StartDeletingCollabDocumentPermission,
     StartLoadingAllDocuments,
     StartLoadingCollabDocumentPermissions,
     StartLoadingCollabPermissions
@@ -186,5 +187,23 @@ export class CollabSandboxService {
         document_permissions: CollabPermission[];
     }> {
         return this.collabStore.pipe(select((state: any) => state.collab.document_permissions));
+    }
+
+    getDocumentPermissionsCollab(): Observable<CollabPermission[]> {
+        return this.collabStore.pipe(
+            select((state: any) => state.collab.document_permissions.collab_permissions)
+        );
+    }
+
+    getDocumentPermissionsGeneral(): Observable<HasPermission[]> {
+        return this.collabStore.pipe(
+            select((state: any) => state.collab.document_permissions.general_permissions)
+        );
+    }
+
+    startDeletingDocumentPermission(collab_document_permission_id: number): void {
+        this.collabStore.dispatch(
+            new StartDeletingCollabDocumentPermission({ collab_document_permission_id })
+        );
     }
 }

@@ -64,6 +64,8 @@ export const COLLAB_COLLAB_DOCUMENTS_API_URL = base + 'api/collab/collab_documen
 export const COLLAB_TEXT_DOCUMENTS_API_URL = base + 'api/collab/text_documents/';
 export const COLLAB_EDITING_API_URL = base + 'api/collab/editing/';
 export const COLLAB_PERMISSIONS_API_URL = base + 'api/collab/collab_permission/';
+export const COLLAB_PERMISSION_FOR_DOCUMENT_API_URL =
+    base + 'api/collab/permission_for_collab_document/';
 const COLLAB_TEXT_DOCUMENT_VERSIONS = base + 'api/collab/text_document_version/';
 
 const CHECK_USER_ACTIVATION_API_URL = base + 'api/check_user_activation_link/';
@@ -237,4 +239,8 @@ export const GetSpecialCollabDocumentApiUrl = (id: number) => {
 
 export const GetCollabDocumentPermissionApiUrl = (id: number) => {
     return `${GetSpecialCollabDocumentApiUrl(id)}permissions/`;
+};
+
+export const GetCollabDocumentPermissionForDocumentApiUrl = (id: number) => {
+    return `${COLLAB_PERMISSION_FOR_DOCUMENT_API_URL}${id}/`;
 };
