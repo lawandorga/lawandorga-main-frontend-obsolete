@@ -19,7 +19,11 @@
     <h2>direct permissions:</h2>
     <div *ngIf="folderPermissions | async as catalog; else loading">
         <ng-container *ngIf="catalog.length; else noItems">
-            <table mat-table [dataSource]="catalog">
+            <table
+                mat-table
+                [dataSource]="catalog"
+                class="table-entry-information-folder-permission__table"
+            >
                 <ng-container
                     matColumnDef="permission"
                     class="table-entry-information-folder-permission__table__icon"

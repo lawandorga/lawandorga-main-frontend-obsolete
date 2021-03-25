@@ -4,3 +4,14 @@
     background: $c-primary-l;
     color: $c-primary-variant;
 }
+
+.collab-document-permissions__button-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 32px;
+}
+
+.collab-document-permissions__table {
+    width: 100%;
+}

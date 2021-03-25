@@ -136,7 +136,6 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges, OnDestr
     onInfoClick(): void {
         this.infoOpened = !this.infoOpened;
         this.versionsOpened = false;
-        console.log('document: ', this.text_document);
     }
 
     onChangedVersion(text_document_version: TextDocumentVersion): void {

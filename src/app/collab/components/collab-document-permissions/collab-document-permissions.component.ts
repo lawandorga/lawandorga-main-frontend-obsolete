@@ -19,7 +19,7 @@ export class CollabDocumentPermissionsComponent implements OnInit {
     @Input()
     collab_document: NameCollabDocument;
 
-    general_permissions: HasPermission[];
+    general_permissions: Observable<HasPermission[]>;
     collab_document_permissions: Observable<CollabPermission[]>;
 
     document_columns = ['permission', 'group', 'action'];
@@ -36,13 +36,7 @@ export class CollabDocumentPermissionsComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        console.log('collabdocument permission component received doc: ', this.collab_document);
-
-        this.collabSB.getDocumentPermissions().subscribe(document_permissions => {
-            console.log('document permissions', document_permissions);
-            this.general_permissions = document_permissions.general_permissions;
-        });
-
+        this.general_permissions = this.collabSB.getDocumentPermissionsGeneral();
         this.collab_document_permissions = this.collabSB.getDocumentPermissionsCollab();
 
         this.collabSB.getCollabPermissions().subscribe((permissions: Permission[]) => {

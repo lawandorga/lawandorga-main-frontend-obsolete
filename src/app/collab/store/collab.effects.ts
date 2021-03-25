@@ -81,8 +81,6 @@ export class CollabEffects {
             return action.payload;
         }),
         switchMap((payload: { path: string }) => {
-            console.log('path to add: ', payload.path);
-            // return new Observable();
             return from(
                 this.http
                     .post(COLLAB_COLLAB_DOCUMENTS_API_URL, {
@@ -151,7 +149,6 @@ export class CollabEffects {
                                 CollabPermissionFrom.Children
                             )
                         );
-                        console.log('collab_permissions permissions: ', collab_permissions);
                         return [
                             {
                                 type: SET_DOCUMENT_PERMISSIONS,
@@ -212,8 +209,6 @@ export class CollabEffects {
                             return [];
                         }),
                         mergeMap(response => {
-                            console.log('response from adding collab permission: ', response);
-                            console.log('id of doc', response.document);
                             return [
                                 {
                                     type: START_LOADING_COLLAB_DOCUMENT_PERMISSIONS,

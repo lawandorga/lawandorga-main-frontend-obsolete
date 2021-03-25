@@ -18,32 +18,36 @@
 <div>
     <div *ngIf="collab_document_permissions | async as catalog">
         <ng-container *ngIf="catalog.length; else noItems">
-            <table mat-table [dataSource]="catalog">
+            <table mat-table [dataSource]="catalog" class="collab-document-permissions__table">
                 <ng-container matColumnDef="permission">
                     <th mat-header-cell *matHeaderCellDef></th>
                     <td mat-cell *matCellDef="let collabPermission">
                         <div
                             *ngIf="
-                                collabPermission.permission === collab_permission_read &&
+                                collabPermission.permission === collab_permission_read.id &&
                                     collabPermission.from !== from_children;
                                 else write_folder
                             "
                         >
-                            <mat-icon matTooltip="can read folder">library_books</mat-icon>
+                            <mat-icon matTooltip="can read document and subdocuments"
+                                >library_books</mat-icon
+                            >
                         </div>
                         <ng-template #write_folder>
                             <div
                                 *ngIf="
-                                    collabPermission.permission === collab_permission_write &&
+                                    collabPermission.permission === collab_permission_write.id &&
                                         collabPermission.from !== from_children;
                                     else visible
                                 "
                             >
-                                <mat-icon matTooltip="can write folder">library_add</mat-icon>
+                                <mat-icon matTooltip="can edit document and subdocuments"
+                                    >library_add</mat-icon
+                                >
                             </div>
                         </ng-template>
                         <ng-template #visible>
-                            <mat-icon matTooltip="can see folder, but not contents"
+                            <mat-icon matTooltip="can see document, but not all subdocuments"
                                 >visibility</mat-icon
                             >
                         </ng-template>
@@ -59,12 +63,12 @@
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="action">
-                    <th mat-header-cell *matHeaderCellDef>action</th>
+                    <th mat-header-cell *matHeaderCellDef></th>
                     <td mat-cell *matCellDef="let collabPermission">
                         <div>
                             <div *ngIf="collabPermission.from === from_children; else up">
                                 <mat-icon
-                                    matTooltip="from folder {{ collabPermission.document.name }}"
+                                    matTooltip="from document {{ collabPermission.document.name }}"
                                     class="is_clickable"
                                     (click)="onCollabPermissionGoToClick(collabPermission)"
                                     >arrow_downward
@@ -78,7 +82,7 @@
                                     "
                                 >
                                     <mat-icon
-                                        matTooltip="from folder {{
+                                        matTooltip="from document {{
                                             collabPermission.document.name
                                         }}"
                                         class="is_clickable"
@@ -104,12 +108,13 @@
         </ng-container>
         <ng-template #noItems>there are no collab document permissions</ng-template>
     </div>
-
-    <button
-        mat-icon-button
-        class="collab-document-permissions__button-add"
-        (click)="onAddPermission()"
-    >
-        <mat-icon>add</mat-icon>
-    </button>
+    <div class="collab-document-permissions__button-container">
+        <button
+            mat-icon-button
+            class="collab-document-permissions__button-add"
+            (click)="onAddPermission()"
+        >
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
 </div>
