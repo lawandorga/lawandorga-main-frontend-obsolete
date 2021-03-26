@@ -29,7 +29,7 @@ export const CREATE_RECORD_API_URL = base + 'api/records/records/';
 export const RLCS_API_URL = base + 'api/rlcs/';
 export const UPLOAD_SIGNING_BASE_API_URL = base + 'api/storage_up/';
 export const RECORD_PERMISSIONS_LIST_API_URL = base + 'api/records/e_record_permission_requests/';
-export const FORGOT_PASSWORD_API_URL = base + 'api/forgot_password/';
+export const FORGOT_PASSWORD_API_URL = base + 'api/profiles/password_reset/';
 export const GROUPS_API_URL = base + 'api/groups/';
 export const PERMISSION_API_URL = base + 'api/permissions/';
 export const HAS_PERMISSION_API_URL = base + 'api/has_permission/';
@@ -61,7 +61,7 @@ export const PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS =
 
 const CHECK_USER_ACTIVATION_API_URL = base + 'api/profiles/';
 const ACTIVATE_USER_ACTIVATION_API_URL = base + 'api/activate_user_activation_link/';
-const RESET_PASSWORD_API_URL = base + 'api/reset_password/';
+const RESET_PASSWORD_API_URL = base + 'api/profiles/';
 const SPECIAL_RECORD_BASE_API_URL = base + 'api/records/records/'; // deprecated??? is it?
 const DOWNLOAD_SIGNING_BASE_API_URL = base + 'api/storage_down/'; // deprecated
 const RECORD_DOCUMENT_BASE_API_URL = base + 'api/records/documents/';
@@ -155,8 +155,8 @@ export const GetRecordPermissionRequestApiUrl = (record_id: string) => {
     return `${SPECIAL_RECORD_BASE_API_URL}${record_id}/request_permission`;
 };
 
-export const GetResetPasswordApiUrl = (link_id: string) => {
-    return `${RESET_PASSWORD_API_URL}${link_id}/`;
+export const GetResetPasswordApiUrl = (userId: number) => {
+    return `${RESET_PASSWORD_API_URL}${userId}/password_reset_confirm/`;
 };
 
 export const GetSpecialGroupApiURL = (id: string | number) => {

@@ -179,11 +179,12 @@ export class AuthEffects {
         map((action: ResetPassword) => {
             return action.payload;
         }),
-        mergeMap((payload: { new_password: string; link_id: string }) => {
+        mergeMap((payload: { newPassword: string, userId: number, token: string  }) => {
             return from(
                 this.http
-                    .post(GetResetPasswordApiUrl(payload.link_id), {
-                        new_password: payload.new_password
+                    .post(GetResetPasswordApiUrl(payload.userId), {
+                        new_password: payload.newPassword,
+                        token: payload.token
                     })
                     .pipe(
                         catchError(error => {
@@ -191,7 +192,7 @@ export class AuthEffects {
                             return [];
                         }),
                         mergeMap(response => {
-                            this.coreSB.showSuccessSnackBar('password resetted');
+                            this.coreSB.showSuccessSnackBar('Your password was successfully reset. An admin needs to admit you back into the team, now.');
                             this.router.navigate([LOGIN_FRONT_URL]);
                             return [];
                         })

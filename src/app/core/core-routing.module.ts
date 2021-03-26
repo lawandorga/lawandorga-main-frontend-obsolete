@@ -102,7 +102,7 @@ const apiRoutes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'forgot-password', component: ForgotPasswordComponent },
-    { path: 'reset-password/:id', component: ResetPasswordComponent },
+    { path: 'reset-password/:userid/:token', component: ResetPasswordComponent },
     { path: 'activate-account/:userid/:token', component: LoginComponent },
     { path: 'legal_notice', component: LegalNoticeComponent },
     { path: 'privacy_statement', component: PrivacyStatementComponent }

@@ -64,7 +64,7 @@ export class ForgotPassword implements Action {
 export class ResetPassword implements Action {
     readonly type = RESET_PASSWORD;
 
-    constructor(public payload: { new_password: string; link_id: string }) {}
+    constructor(public payload: { newPassword: string; userId: number, token: string }) {}
 }
 
 export class StartLoggingOut implements Action {

@@ -91,8 +91,8 @@ export class AppSandboxService {
         this.store.dispatch(new ForgotPassword({ email }));
     }
 
-    resetPassword(new_password: string, link_id: string): void {
-        this.store.dispatch(new ResetPassword({ new_password, link_id }));
+    resetPassword(new_password: string, userId: number, token: string): void {
+        this.store.dispatch(new ResetPassword({ newPassword: new_password, userId: userId, token: token }));
     }
 
     saveTokenAndUsersPrivateKey(token: string, users_private_key: string): void {
