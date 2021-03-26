@@ -152,7 +152,7 @@ export const GetRecordDocumentApiUrl = (document_id: string) => {
 };
 
 export const GetRecordPermissionRequestApiUrl = (record_id: string) => {
-    return `${SPECIAL_RECORD_BASE_API_URL}${record_id}/request_permission`;
+    return `${SPECIAL_RECORD_BASE_API_URL}${record_id}/request_permission/`;
 };
 
 export const GetResetPasswordApiUrl = (userId: number) => {
