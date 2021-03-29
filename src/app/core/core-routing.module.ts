@@ -38,6 +38,7 @@ import { InactiveUsersComponent } from './pages/inactive-users/inactive-users.co
 import { PrivacyStatementComponent } from './pages/privacy-statement/privacy-statement.component';
 import { NotificationGroupsListComponent } from './pages/notification-groups-list/notification-groups-list.component';
 import { UnsavedGuardService } from './services/unsaved-guard.service';
+import { QuillTestComponent } from './components/quill-test/quill-test.component';
 import { StatisticsPageComponent } from './pages/statistics-page/statistics-page.component';
 import { STATISTICS_FRONT_URL } from '../statics/frontend_links.statics';
 

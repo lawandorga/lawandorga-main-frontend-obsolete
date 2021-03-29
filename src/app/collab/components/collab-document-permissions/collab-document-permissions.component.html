@@ -1,0 +1,175 @@
+<!--
+  ~ law&orga - record and organization management software for refugee law clinics
+  ~ Copyright (C) 2021  Dominik Walser
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, either version 3 of the
+  ~ License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
+  -->
+<div class="collab-document-permissions__container">
+    <h3>Permissions for single documents</h3>
+    <div *ngIf="collab_document_permissions | async as catalog">
+        <ng-container *ngIf="catalog.length; else noItems">
+            <table mat-table [dataSource]="catalog" class="collab-document-permissions__table">
+                <ng-container matColumnDef="permission">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let collabPermission">
+                        <div
+                            *ngIf="
+                                collabPermission.permission === COLLAB_PERMISSION_READ.id &&
+                                    collabPermission.from !== from_children;
+                                else write_folder
+                            "
+                        >
+                            <mat-icon matTooltip="can read document and subdocuments"
+                                >library_books</mat-icon
+                            >
+                        </div>
+                        <ng-template #write_folder>
+                            <div
+                                *ngIf="
+                                    collabPermission.permission === COLLAB_PERMISSION_WRITE.id &&
+                                        collabPermission.from !== from_children;
+                                    else visible
+                                "
+                            >
+                                <mat-icon matTooltip="can edit document and subdocuments"
+                                    >library_add</mat-icon
+                                >
+                            </div>
+                        </ng-template>
+                        <ng-template #visible>
+                            <mat-icon matTooltip="can see document, but not all subdocuments"
+                                >visibility</mat-icon
+                            >
+                        </ng-template>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="group">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let collabPermission">
+                        <div *ngIf="collabPermission.id != -1; else general_permission">
+                            {{ collabPermission.group.name }}
+                        </div>
+                        <ng-template #general_permission>general</ng-template>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let collabPermission">
+                        <div>
+                            <div *ngIf="collabPermission.from === from_children; else up">
+                                <mat-icon
+                                    matTooltip="from document {{ collabPermission.document.name }}"
+                                    class="is_clickable"
+                                    (click)="onCollabPermissionGoToClick(collabPermission)"
+                                    >arrow_downward
+                                </mat-icon>
+                            </div>
+                            <ng-template #up>
+                                <div
+                                    *ngIf="
+                                        collabPermission.document.id !== collab_document.id;
+                                        else delete
+                                    "
+                                >
+                                    <mat-icon
+                                        matTooltip="from document {{
+                                            collabPermission.document.name
+                                        }}"
+                                        class="is_clickable"
+                                        (click)="onCollabPermissionGoToClick(collabPermission)"
+                                        >arrow_upward
+                                    </mat-icon>
+                                </div>
+                            </ng-template>
+                            <ng-template #delete>
+                                <button
+                                    mat-icon-button
+                                    (click)="removeCollabPermission(collabPermission)"
+                                >
+                                    <mat-icon matTooltip="delete permission">delete</mat-icon>
+                                </button>
+                            </ng-template>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <tr mat-row *matRowDef="let row; columns: document_columns"></tr>
+            </table>
+        </ng-container>
+        <ng-template #noItems>there are no collab document permissions</ng-template>
+    </div>
+    <h3>General Permissions</h3>
+    <div *ngIf="general_permissions | async as catalog">
+        <ng-container *ngIf="catalog.length; else noItems">
+            <table mat-table [dataSource]="catalog" class="collab-document-permissions__table">
+                <ng-container matColumnDef="permission">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let hasPermission">
+                        <div
+                            *ngIf="
+                                hasPermission.permission_id === PERMISSION_READ_ALL_ID;
+                                else write_folder
+                            "
+                        >
+                            <mat-icon matTooltip="can read all folders">library_books</mat-icon>
+                        </div>
+                        <ng-template #write_folder>
+                            <div
+                                *ngIf="
+                                    hasPermission.permission_id === PERMISSION_WRITE_ALL_ID;
+                                    else visible
+                                "
+                            >
+                                <mat-icon matTooltip="can write in all folders"
+                                    >library_add</mat-icon
+                                >
+                            </div>
+                        </ng-template>
+                        <ng-template #visible>
+                            <mat-icon matTooltip="can see all folders, but not contents"
+                                >visibility</mat-icon
+                            >
+                        </ng-template>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="group">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let hasPermission">
+                        <div (click)="onGroupClick(hasPermission)" class="is_clickable">
+                            {{ hasPermission.group_has_permission }}
+                            {{
+                                groups && groups[hasPermission.groupHas]
+                                    ? groups[hasPermission.groupHas].name
+                                    : ''
+                            }}
+                        </div>
+                    </td>
+                </ng-container>
+                <tr mat-row *matRowDef="let row; columns: general_columns"></tr>
+            </table>
+        </ng-container>
+        <ng-template #noItems>
+            there are not general permissions applying
+        </ng-template>
+    </div>
+    <div class="collab-document-permissions__button-container">
+        <button
+            mat-icon-button
+            class="collab-document-permissions__button-add"
+            (click)="onAddPermission()"
+        >
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+</div>

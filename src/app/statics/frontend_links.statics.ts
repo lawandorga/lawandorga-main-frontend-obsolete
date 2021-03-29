@@ -42,6 +42,9 @@ export const INACTIVE_USERS_FRONT_URL = 'inactive_users';
 export const DELETION_REQUESTS_FRONT_URL = 'records/deletion_requests';
 export const FILES_FRONT_URL = 'files';
 export const RECORD_POOL_FRONT_URL = 'records/record_pool';
+export const COLLAB_EDIT = 'collab/edit/';
+export const COLLAB_VERSIONS = 'collab/versions/';
+export const COLLAB_BASE = 'collab/';
 
 export const GetProfileFrontUrl = (profile: RestrictedUser | string): string => {
     if (profile instanceof RestrictedUser) return `${PROFILES_FRONT_URL}/${profile.id}`;
@@ -87,4 +90,16 @@ export const GetFolderFrontUrlAbsolute = (path: string) => {
         return `${FILES_FRONT_URL}`;
     }
     return `${FILES_FRONT_URL}?path=${path}`;
+};
+
+export const GetCollabEditFrontUrl = (id: number) => {
+    return `${COLLAB_EDIT}${id}`;
+};
+
+export const GetCollabVersionsFrontUrl = (id: number) => {
+    return `${COLLAB_VERSIONS}${id}`;
+};
+
+export const GetCollabViewFrontUrl = (id: number) => {
+    return `${COLLAB_BASE}${id}`;
 };

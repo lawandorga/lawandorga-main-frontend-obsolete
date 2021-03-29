@@ -89,6 +89,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     sidebarItemsOrg = [
         {
             label: 'Records',
+            // label: '',
             icon: 'folder',
             link: RECORDS_FRONT_URL
         },
@@ -116,6 +117,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
             label: 'Files',
             icon: 'folder_open',
             link: FILES_FRONT_URL
+        },
+        {
+            label: 'Collab',
+            icon: 'article',
+            link: 'collab'
         },
         {
             label: 'Admin',
