@@ -234,9 +234,8 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
             });
             this.provider.connect();
             if (this.user) {
+                // set user if already possible, if not, set in subscription in constructor
                 this.setUser();
-            } else {
-                console.error('user not ready to set');
             }
 
             this.binding = new QuillBinding(
@@ -244,7 +243,6 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
                 this.quillRef,
                 this.provider.awareness
             );
-
             this.loading = true;
 
             const timeout = math.max(last_content.length * 0.5, 600);

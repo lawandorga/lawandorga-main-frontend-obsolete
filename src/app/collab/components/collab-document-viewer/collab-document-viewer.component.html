@@ -27,6 +27,7 @@
         </div>
         <div>
             <button
+                *ngIf="text_document.write"
                 mat-flat-button
                 color="primary"
                 (click)="onEditClick()"
@@ -43,7 +44,12 @@
                     <mat-icon>history</mat-icon>
                     <span>versions</span>
                 </button>
-                <button mat-menu-item class="button-normal" (click)="onDeleteClick()">
+                <button
+                    *ngIf="text_document.write"
+                    mat-menu-item
+                    class="button-normal"
+                    (click)="onDeleteClick()"
+                >
                     <mat-icon>delete</mat-icon>
                     <span>delete</span>
                 </button>
@@ -90,6 +96,7 @@
                         {{ collab_document.children.length }} direct
                     </h4>
                     <app-collab-document-permissions
+                        *ngIf="showPermissions"
                         [collab_document]="collab_document"
                     ></app-collab-document-permissions>
                 </div>

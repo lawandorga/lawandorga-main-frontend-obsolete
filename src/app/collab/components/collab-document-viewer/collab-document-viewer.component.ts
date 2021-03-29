@@ -34,6 +34,11 @@ import { TextDocumentVersion } from '../../models/text-document-version.model';
 import { CustomQuillContainerComponent } from '../custom-quill-container/custom-quill-container.component';
 import { SharedSandboxService } from '../../../shared/services/shared-sandbox.service';
 import { NameCollabDocument } from '../../models/collab-document.model';
+import {
+    PERMISSION_MANAGE_COLLAB_DOCUMENT_PERMISSIONS_RLC,
+    PERMISSION_MANAGE_FOLDER_PERMISSIONS_RLC
+} from '../../../statics/permissions.statics';
+import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
 
 @Component({
     selector: 'app-collab-document-viewer',
@@ -58,10 +63,13 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges, OnDestr
 
     numberOfChildren = 0;
 
+    showPermissions = false;
+
     @ViewChild(CustomQuillContainerComponent) quillEditor: CustomQuillContainerComponent;
 
     constructor(
         private collabSB: CollabSandboxService,
+        private coreSB: CoreSandboxService,
         private router: Router,
         public sharedSB: SharedSandboxService
     ) {
@@ -82,6 +90,9 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges, OnDestr
     }
 
     fetchIfNewDocumentId() {
+        if (this.document_id && this.showPermissions) {
+            this.collabSB.startLoadingCollabDocumentPermission(this.document_id);
+        }
         if (this.document_id && this.current_id !== this.document_id) {
             this.current_id = this.document_id;
             this.loading = true;
@@ -99,8 +110,15 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges, OnDestr
                     this.collab_document = document;
                     if (document) this.numberOfChildren = document.getTotalCountOfChildren();
                 });
-            this.collabSB.startLoadingCollabDocumentPermission(this.document_id);
         }
+        this.coreSB.hasPermissionFromStringForOwnRlc(
+            PERMISSION_MANAGE_COLLAB_DOCUMENT_PERMISSIONS_RLC,
+            hasPermission => {
+                if (this.showPermissions !== hasPermission) {
+                    this.showPermissions = hasPermission;
+                }
+            }
+        );
     }
 
     created(event: Quill) {

@@ -135,7 +135,6 @@ export class CollabEffects {
                         return [];
                     }),
                     mergeMap(response => {
-                        console.log('response from loading collab permissions: ', response);
                         const collab_permissions = CollabPermission.getCollabPermissionFromJsonArray(
                             response.direct,
                             CollabPermissionFrom.Direct
@@ -149,6 +148,7 @@ export class CollabEffects {
                                 CollabPermissionFrom.Children
                             )
                         );
+                        console.log('all collab permissions: ', collab_permissions);
                         return [
                             {
                                 type: SET_DOCUMENT_PERMISSIONS,

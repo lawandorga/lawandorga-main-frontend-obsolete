@@ -18,20 +18,25 @@
 
 <div class="text-version__container">
     <h2>Versions</h2>
-    <h3>{{ document.versions.length }} versions</h3>
+    <h3>{{ onlyCreated ? '0' : document.versions.length }} versions</h3>
     <div
         *ngFor="let version of document.versions"
         class="text-version__item-container"
         (click)="onVersionClick(version)"
     >
-        <div class="text-version__item">
-            <h3>
-                <b>
-                    {{ version.created | date: 'HH:mm dd.MM.yy' }}
-                    {{ version.is_draft ? 'draft' : '' }}
-                </b>
-            </h3>
-            <p>{{ version.creator.name }}</p>
+        <div *ngIf="onlyCreated; else allVersions">
+            <h3>document was only created</h3>
         </div>
+        <ng-template #allVersions>
+            <div class="text-version__item">
+                <h3>
+                    <b>
+                        {{ version.created | date: 'HH:mm dd.MM.yy' }}
+                        {{ version.is_draft ? 'draft' : '' }}
+                    </b>
+                </h3>
+                <p>{{ version.creator.name }}</p>
+            </div>
+        </ng-template>
     </div>
 </div>

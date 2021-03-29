@@ -34,7 +34,9 @@ export class TextDocument implements NameTextDocument {
         public last_editor: RestrictedUser,
         public last_edited: Date,
         public versions: TextDocumentVersion[],
-        public content: string
+        public content: string,
+        public read: boolean,
+        public write: boolean
     ) {
         this.id = id;
         this.name = name;
@@ -44,6 +46,8 @@ export class TextDocument implements NameTextDocument {
         this.last_edited = last_edited;
         this.versions = versions;
         this.content = content;
+        this.read = read;
+        this.write = write;
     }
 
     static getTextDocumentFromJson(json: any): TextDocument {
@@ -57,7 +61,9 @@ export class TextDocument implements NameTextDocument {
             RestrictedUser.getRestrictedUserFromJson(json.last_editor),
             new Date(json.last_edited),
             versions,
-            ''
+            '',
+            json.read,
+            json.write
         );
     }
 }

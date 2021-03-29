@@ -37,6 +37,7 @@ import { TextDocumentVersion } from '../../models/text-document-version.model';
 export class TextVersionComponent implements OnInit, OnChanges {
     @Input()
     document: TextDocument;
+    onlyCreated = false;
 
     @Output() changedVersion: EventEmitter<TextDocumentVersion> = new EventEmitter();
 
@@ -59,6 +60,11 @@ export class TextVersionComponent implements OnInit, OnChanges {
 
     fetchDocumentVersions(): void {
         this.collabSB.fetchTextDocumentVersions(this.document.id).subscribe(response => {
+            if (response.length === 1 && !response[0].content) {
+                this.onlyCreated = true;
+            } else {
+                this.onlyCreated = false;
+            }
             this.document.versions = TextDocumentVersion.getTextDocumentVersionsFromJsonArray(
                 response
             );
