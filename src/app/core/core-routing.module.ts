@@ -38,6 +38,7 @@ import { InactiveUsersComponent } from './pages/inactive-users/inactive-users.co
 import { PrivacyStatementComponent } from './pages/privacy-statement/privacy-statement.component';
 import { NotificationGroupsListComponent } from './pages/notification-groups-list/notification-groups-list.component';
 import { UnsavedGuardService } from './services/unsaved-guard.service';
+import { QuillTestComponent } from './components/quill-test/quill-test.component';
 
 const apiRoutes: Routes = [
     {
@@ -97,6 +98,11 @@ const apiRoutes: Routes = [
     {
         path: 'notifications',
         component: NotificationGroupsListComponent,
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'test',
+        component: QuillTestComponent,
         canActivate: [AuthGuardService]
     },
     // without access control

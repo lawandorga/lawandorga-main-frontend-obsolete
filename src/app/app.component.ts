@@ -69,6 +69,10 @@ export class AppComponent implements OnDestroy, OnInit {
                 window.location.href = location.href.replace('http', 'https');
             }
         }
+        // allow controlling snav in AppSandboxService
+        setTimeout(() => {
+            this.appSB.setNavbar(this.snav);
+        }, 5);
     }
 
     ngOnDestroy(): void {

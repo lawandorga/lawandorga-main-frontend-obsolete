@@ -89,6 +89,8 @@ export class ProfileComponent implements OnInit {
     }
 
     loadValuesToUser(): void {
+        this.user.phone_number = 'asdfasdf';
+
         this.user.phone_number = this.userForm.value['phone_number'];
         this.user.street = this.userForm.value['street'];
         this.user.postal_code = this.userForm.value['postal_code'];

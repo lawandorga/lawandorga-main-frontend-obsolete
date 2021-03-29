@@ -1,0 +1,106 @@
+<!--
+  ~ law&orga - record and organization management software for refugee law clinics
+  ~ Copyright (C) 2020  Dominik Walser
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, either version 3 of the
+  ~ License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
+  -->
+
+<div *ngIf="text_document" class="collab-document-viewer__main-container">
+    <div class="collab-document-viewer__header">
+        <div>
+            <h1>{{ collab_document ? collab_document.name : '' }}</h1>
+            <p>
+                last edited: {{ text_document.last_edited | date: 'HH:mm dd.MM.yy' }}
+                {{ text_document.versions[0].is_draft ? '| draft existing' : '' }}
+            </p>
+        </div>
+        <div>
+            <button
+                *ngIf="text_document.write"
+                mat-flat-button
+                color="primary"
+                (click)="onEditClick()"
+                class="collab-document-viewer__edit"
+            >
+                edit
+            </button>
+
+            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="menu for more options">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item class="button-normal" (click)="onMenuHistoryClick()">
+                    <mat-icon>history</mat-icon>
+                    <span>versions</span>
+                </button>
+                <button
+                    *ngIf="text_document.write"
+                    mat-menu-item
+                    class="button-normal"
+                    (click)="onDeleteClick()"
+                >
+                    <mat-icon>delete</mat-icon>
+                    <span>delete</span>
+                </button>
+            </mat-menu>
+            <button mat-icon-button aria-label="more info" (click)="onInfoClick()">
+                <mat-icon>information</mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <mat-drawer-container class="collab-document-viewer__versions-drawer-container">
+        <mat-drawer-content>
+            <app-custom-quill-container
+                [editingMode]="false"
+                [text_document]="text_document"
+            ></app-custom-quill-container>
+        </mat-drawer-content>
+        <mat-drawer
+            [(opened)]="versionsOpened || infoOpened"
+            disableClose
+            mode="side"
+            position="end"
+            class="collab-document-viewer__drawer"
+        >
+            <div *ngIf="versionsOpened">
+                <app-text-version
+                    [document]="text_document"
+                    (changedVersion)="onChangedVersion($event)"
+                ></app-text-version>
+            </div>
+            <div *ngIf="infoOpened">
+                <div class="collab-document-viewer__info">
+                    <h1>{{ collab_document ? collab_document.name : '' }}</h1>
+                    <h4>
+                        {{ text_document.created | date: 'HH:mm dd.MM.yy' }} created by
+                        {{ text_document.creator.name }}
+                    </h4>
+                    <h4>
+                        {{ text_document.last_edited | date: 'HH:mm dd.MM.yy' }} last edit of
+                        {{ text_document.last_editor.name }}
+                    </h4>
+                    <h4>
+                        {{ numberOfChildren }} children in total,
+                        {{ collab_document.children.length }} direct
+                    </h4>
+                    <app-collab-document-permissions
+                        *ngIf="showPermissions"
+                        [collab_document]="collab_document"
+                    ></app-collab-document-permissions>
+                </div>
+            </div>
+        </mat-drawer>
+    </mat-drawer-container>
+</div>

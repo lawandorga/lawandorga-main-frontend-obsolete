@@ -1,0 +1,42 @@
+<!--
+  ~ law&orga - record and organization management software for refugee law clinics
+  ~ Copyright (C) 2021  Dominik Walser
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, either version 3 of the
+  ~ License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
+  -->
+
+<div class="text-version__container">
+    <h2>Versions</h2>
+    <h3>{{ onlyCreated ? '0' : document.versions.length }} versions</h3>
+    <div
+        *ngFor="let version of document.versions"
+        class="text-version__item-container"
+        (click)="onVersionClick(version)"
+    >
+        <div *ngIf="onlyCreated; else allVersions">
+            <h3>document was only created</h3>
+        </div>
+        <ng-template #allVersions>
+            <div class="text-version__item">
+                <h3>
+                    <b>
+                        {{ version.created | date: 'HH:mm dd.MM.yy' }}
+                        {{ version.is_draft ? 'draft' : '' }}
+                    </b>
+                </h3>
+                <p>{{ version.creator.name }}</p>
+            </div>
+        </ng-template>
+    </div>
+</div>

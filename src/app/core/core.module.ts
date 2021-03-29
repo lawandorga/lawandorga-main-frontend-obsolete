@@ -24,6 +24,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { NgModule } from '@angular/core';
 import { NgMaterialMultilevelMenuModule } from 'ng-material-multilevel-menu';
 import { CdkTableModule } from '@angular/cdk/table';
+import { QuillTestComponent } from './components/quill-test/quill-test.component';
+import { QuillModule } from 'ngx-quill';
 
 import { CoreRoutingModule } from './core-routing.module';
 import { ProfileComponent } from './pages/profile/profile.component';
@@ -62,7 +64,6 @@ import { InactiveUsersComponent } from './pages/inactive-users/inactive-users.co
 import { PrivacyStatementComponent } from './pages/privacy-statement/privacy-statement.component';
 import { NotificationGroupsListComponent } from './pages/notification-groups-list/notification-groups-list.component';
 import { NotificationListComponent } from './components/notification-list/notification-list.component';
-
 import { BaseRequestProcessedPipe, BaseRequestRequestedPipe } from './pipes/request.pipe';
 
 @NgModule({
@@ -76,7 +77,8 @@ import { BaseRequestProcessedPipe, BaseRequestRequestedPipe } from './pipes/requ
         MatTabsModule,
         MatProgressSpinnerModule,
         NgMaterialMultilevelMenuModule,
-        CdkTableModule
+        CdkTableModule,
+        QuillModule
     ],
     declarations: [
         ProfileComponent,
@@ -110,6 +112,7 @@ import { BaseRequestProcessedPipe, BaseRequestRequestedPipe } from './pipes/requ
         PrivacyStatementComponent,
         NotificationGroupsListComponent,
         NotificationListComponent,
+        QuillTestComponent,
         BaseRequestRequestedPipe,
         BaseRequestProcessedPipe
     ],

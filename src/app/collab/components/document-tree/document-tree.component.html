@@ -1,0 +1,59 @@
+<!--
+  ~ law&orga - record and organization management software for refugee law clinics
+  ~ Copyright (C) 2020  Dominik Walser
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, either version 3 of the
+  ~ License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
+  -->
+
+<mat-tree
+    [dataSource]="dataSource"
+    [treeControl]="treeControl"
+    class="example-tree document-tree__overall-container"
+>
+    <!-- This is the tree node template for leaf nodes -->
+    <mat-tree-node
+        *matTreeNodeDef="let node"
+        matTreeNodeToggle
+        class="is_clickable"
+        (click)="onNodeClick(node)"
+    >
+        <li class="temp mat-tree-node " [className]="route_id == node.id ? 'selected-node' : ''">
+            <div class="document-tree_line" [matTooltip]="node.name" [matTooltipShowDelay]="800">
+                <button mat-icon-button disabled></button>
+                <span class="document-tree__name">{{ node.name }}</span>
+            </div>
+            <!-- use a disabled button to provide padding for tree leaf -->
+        </li>
+    </mat-tree-node>
+    <!-- This is the tree node template for expandable nodes -->
+    <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+        <li class="is_clickable">
+            <div
+                [className]="route_id == node.id ? 'selected-node mat-tree-node' : 'mat-tree-node'"
+                [matTooltip]="node.name"
+                [matTooltipShowDelay]="800"
+            >
+                <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
+                    <mat-icon class="mat-icon-rtl-mirror">
+                        {{ treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
+                    </mat-icon>
+                </button>
+                <span class="document-tree__name" (click)="onNodeClick(node)">{{ node.name }}</span>
+            </div>
+            <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+                <ng-container matTreeNodeOutlet></ng-container>
+            </ul>
+        </li>
+    </mat-nested-tree-node>
+</mat-tree>

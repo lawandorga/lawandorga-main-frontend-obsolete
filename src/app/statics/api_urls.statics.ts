@@ -18,6 +18,7 @@
 
 import { environment } from '../../environments/environment';
 
+// TODO: check if really needed as export
 export const base = environment.apiUrl;
 export const LOGIN_API_URL = base + 'api/login/';
 export const RECORDS_API_URL = base + 'api/records/e_records/';
@@ -59,6 +60,13 @@ export const RECORD_DOCUMENT_DELETIONS_API_URL =
     base + 'api/records/record_document_deletion_requests/';
 export const PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS =
     base + 'api/records/process_record_document_deletion_request/';
+
+export const COLLAB_COLLAB_DOCUMENTS_API_URL = base + 'api/collab/collab_documents/';
+const COLLAB_TEXT_DOCUMENTS_API_URL = base + 'api/collab/text_documents/';
+const COLLAB_EDITING_API_URL = base + 'api/collab/editing/';
+export const COLLAB_PERMISSIONS_API_URL = base + 'api/collab/collab_permission/';
+const COLLAB_PERMISSION_FOR_DOCUMENT_API_URL = base + 'api/collab/permission_for_collab_document/';
+const COLLAB_TEXT_DOCUMENT_VERSIONS = base + 'api/collab/text_document_version/';
 
 const CHECK_USER_ACTIVATION_API_URL = base + 'api/check_user_activation_link/';
 const ACTIVATE_USER_ACTIVATION_API_URL = base + 'api/activate_user_activation_link/';
@@ -207,4 +215,33 @@ export const GetFolderPermissionsForFolderApiUrl = (id: string) => {
 
 export const GetFolderPermissionApiUrl = (id: string) => {
     return `${FILES_PERMISSION_FOR_FOLDER_BASE_API_URL}${id}/`;
+};
+
+export const GetCollabTextDocumentApiUrl = (id: number) => {
+    return `${COLLAB_TEXT_DOCUMENTS_API_URL}${id}/`;
+};
+
+export const GetCollabEditingApiUrl = (id: number) => {
+    return `${GetCollabTextDocumentApiUrl(id)}editing/`;
+    // return `${COLLAB_EDITING_API_URL}${id}/`;
+};
+
+export const GetCollabTextDocumentVersionsApiUrl = (text_document_id: number) => {
+    return `${COLLAB_TEXT_DOCUMENTS_API_URL}${text_document_id}/versions/`;
+};
+
+export const GetCollabTextDocumentVersionsModelApiUrl = (text_version_id: number) => {
+    return `${COLLAB_TEXT_DOCUMENT_VERSIONS}${text_version_id}/`;
+};
+
+export const GetSpecialCollabDocumentApiUrl = (id: number) => {
+    return `${COLLAB_COLLAB_DOCUMENTS_API_URL}${id}/`;
+};
+
+export const GetCollabDocumentPermissionApiUrl = (id: number) => {
+    return `${GetSpecialCollabDocumentApiUrl(id)}permissions/`;
+};
+
+export const GetCollabDocumentPermissionForDocumentApiUrl = (id: number) => {
+    return `${COLLAB_PERMISSION_FOR_DOCUMENT_API_URL}${id}/`;
 };

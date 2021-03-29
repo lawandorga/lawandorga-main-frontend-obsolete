@@ -1,0 +1,67 @@
+<!--
+  ~ law&orga - record and organization management software for refugee law clinics
+  ~ Copyright (C) 2020  Dominik Walser
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, either version 3 of the
+  ~ License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
+  -->
+
+<div *ngIf="text_document">
+    <div *ngIf="loading">
+        <div class="custom-quill-container__spinner-container">
+            <mat-spinner></mat-spinner>
+        </div>
+    </div>
+    <div>
+        <div
+            *ngIf="!editingMode; else editing"
+            [className]="loading ? 'custom-quill-container__loading-quill' : ''"
+        >
+            <quill-editor
+                [hidden]="text_document.versions[0].content === ''"
+                class="custom-quill-container__uneditable"
+                theme="bubble"
+                (onEditorCreated)="created($event)"
+                [modules]="modules"
+                placeholder=""
+            >
+            </quill-editor>
+            <div *ngIf="text_document.versions[0].content === ''">
+                <h2>empty document</h2>
+            </div>
+        </div>
+        <ng-template #editing>
+            <div class="custom-quill-container__editable">
+                <div class="custom-quill-container__editable-container">
+                    <quill-editor
+                        (onEditorCreated)="created($event)"
+                        [modules]="modules"
+                    ></quill-editor>
+                </div>
+                <div class="custom-quill-container__editable-control">
+                    <button mat-flat-button color="primary" (click)="onSaveClick()">
+                        save & publish
+                    </button>
+                    <button mat-flat-button color="primary" (click)="onSaveDraftClick()">
+                        save as draft
+                    </button>
+                    <button mat-stroked-button (click)="onCloseClick()">
+                        close
+                    </button>
+                </div>
+            </div>
+        </ng-template>
+
+        <!--    (show)="editingMode"-->
+    </div>
+</div>
