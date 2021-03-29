@@ -22,4 +22,10 @@
 
 #profiles-list-table {
     width: 100%;
+
+    .right-align {
+        text-align: right;
+        justify-content: flex-end;
+    }
 }
+

@@ -221,7 +221,8 @@ export class CoreEffects {
                         return [];
                     }),
                     mergeMap((response: any) => {
-                        const users = RestrictedUser.getRestrictedUsersFromJsonArray(response);
+                        console.log('response from loading other useres', response);
+                        const users = FullUser.getFullUsersFromJsonArray(response);
                         return [{ type: SET_OTHER_USERS, payload: users }];
                     })
                 )
@@ -329,7 +330,6 @@ export class CoreEffects {
         })
     );
 
-    
     @Effect()
     startRemovingGroupMember = this.actions.pipe(
         ofType(START_REMOVING_GROUP_MEMBER),
@@ -340,29 +340,27 @@ export class CoreEffects {
             const options = {
                 headers: {},
                 body: {
-                  member: toRemove.user_id,
-                },
-              };
+                    member: toRemove.user_id
+                }
+            };
             return from(
-                this.http
-                    .delete(GetSpecialGroupMemberApiURL(toRemove.group_id), options)
-                    .pipe(
-                        catchError(error => {
-                            this.snackbar.showErrorSnackBar(
-                                'error at removing group member: ' + error.error.detail
-                            );
-                            return [];
-                        }),
-                        mergeMap((response: any) => {
-                            const group = FullGroup.getFullGroupFromJson(response);
-                            return [
-                                {
-                                    type: SET_SPECIAL_GROUP,
-                                    payload: group
-                                }
-                            ];
-                        })
-                    )
+                this.http.delete(GetSpecialGroupMemberApiURL(toRemove.group_id), options).pipe(
+                    catchError(error => {
+                        this.snackbar.showErrorSnackBar(
+                            'error at removing group member: ' + error.error.detail
+                        );
+                        return [];
+                    }),
+                    mergeMap((response: any) => {
+                        const group = FullGroup.getFullGroupFromJson(response);
+                        return [
+                            {
+                                type: SET_SPECIAL_GROUP,
+                                payload: group
+                            }
+                        ];
+                    })
+                )
             );
         })
     );

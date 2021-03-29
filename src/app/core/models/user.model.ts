@@ -66,19 +66,6 @@ export class ForeignUser extends RestrictedUser {
 }
 
 export class FullUser extends RestrictedUser {
-    /**
-     * FullUser represents the user itself with FULL information
-     * @param id
-     * @param email
-     * @param name
-     * @param birthday
-     * @param phone_number
-     * @param street
-     * @param city
-     * @param postal_code
-     * @param user_state
-     * @param user_record_state
-     */
     constructor(
         id: string = '',
         public email: string = '',
@@ -89,7 +76,11 @@ export class FullUser extends RestrictedUser {
         public city: string = '',
         public postal_code: string = '',
         public user_state: string = '',
-        public user_record_state: string = ''
+        public user_record_state: string = '',
+        public locked: boolean = false,
+        public email_confirmed: boolean = true,
+        public is_active: boolean = true,
+        public accepted: boolean = true
     ) {
         super(id, name);
         this.email = email;
@@ -100,6 +91,10 @@ export class FullUser extends RestrictedUser {
         this.postal_code = postal_code;
         this.user_state = user_state;
         this.user_record_state = user_record_state;
+        this.locked = locked;
+        this.email_confirmed = email_confirmed;
+        this.is_active = is_active;
+        this.accepted = accepted;
     }
 
     static getFullUserFromJson(json): FullUser {
@@ -114,7 +109,11 @@ export class FullUser extends RestrictedUser {
                 json.city,
                 json.postal_code,
                 json.user_state,
-                json.user_record_state
+                json.user_record_state,
+                json.locked,
+                json.email_confirmed,
+                json.is_active,
+                json.accepted
             );
         return null;
     }
