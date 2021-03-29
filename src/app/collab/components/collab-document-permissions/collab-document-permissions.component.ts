@@ -7,15 +7,11 @@ import { HasPermission, Permission } from '../../../core/models/permission.model
 import { CollabPermission, CollabPermissionFrom } from '../../models/collab_permission.model';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { GetSpecialCollabDocumentApiUrl } from '../../../statics/api_urls.statics';
 import { GetCollabViewFrontUrl, GetGroupFrontUrl } from '../../../statics/frontend_links.statics';
 import {
     PERMISSION_MANAGE_COLLAB_DOCUMENT_PERMISSIONS_RLC,
-    PERMISSION_MANAGE_FOLDER_PERMISSIONS_RLC,
     PERMISSION_READ_ALL_COLLAB_DOCUMENTS_RLC,
-    PERMISSION_READ_ALL_FOLDERS_RLC,
-    PERMISSION_WRITE_ALL_COLLAB_DOCUMENTS_RLC,
-    PERMISSION_WRITE_ALL_FOLDERS_RLC
+    PERMISSION_WRITE_ALL_COLLAB_DOCUMENTS_RLC
 } from '../../../statics/permissions.statics';
 import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
 
@@ -52,6 +48,9 @@ export class CollabDocumentPermissionsComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        this.collabSB.startLoadingCollabPermissions();
+        this.coreSB.startLoadingGroups();
+
         this.general_permissions = this.collabSB.getDocumentPermissionsGeneral();
         this.collab_document_permissions = this.collabSB.getDocumentPermissionsCollab();
 
@@ -76,10 +75,8 @@ export class CollabDocumentPermissionsComponent implements OnInit {
                 }
             }
         });
-        this.coreSB.startLoadingGroups();
         this.coreSB.getGroups(false).subscribe((groups: any) => {
             this.groups = groups;
-            console.log('groups: ', groups);
         });
     }
 

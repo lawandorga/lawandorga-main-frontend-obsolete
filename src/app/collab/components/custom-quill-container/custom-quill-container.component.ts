@@ -171,6 +171,7 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
     closeConnection(): void {
         if (this.editingMode && this.provider) {
             this.provider.destroy();
+            // if alone on document, delete editing room in backend
             if (this.provider.awareness.states.size === 1) {
                 this.collabSB.closeEditingRoom(this.text_document.id);
             }
