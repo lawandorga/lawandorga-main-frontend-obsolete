@@ -57,8 +57,8 @@ const quillConfig: QuillConfig = {
 
 @NgModule({
     imports: [
-        CommonModule,
         CollabRoutingModule,
+        CommonModule,
         SharedModule,
         FormsModule,
         ReactiveFormsModule,
