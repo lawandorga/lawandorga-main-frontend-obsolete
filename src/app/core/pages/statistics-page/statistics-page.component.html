@@ -39,16 +39,6 @@
             </div>
         </mat-card-content>
     </mat-card>
-
-    <!--    <mat-card class="statistics-page__mat-card">-->
-    <!--        <mat-card-content>-->
-    <!--            <app-statistics-number-->
-    <!--                title="total records"-->
-    <!--                [value]="statistics.records.overall"-->
-    <!--            ></app-statistics-number>-->
-    <!--        </mat-card-content>-->
-    <!--    </mat-card>-->
-
     <mat-card class="statistics-page__mat-card">
         <mat-card-content>
             <h2>Record states</h2>
@@ -61,73 +51,6 @@
                 </ngx-charts-pie-chart>
             </div>
             <h2>total records: {{ statistics.records.overall }}</h2>
-        </mat-card-content>
-    </mat-card>
-
-    <mat-card class="statistics-page__mat-card">
-        <mat-card-content>
-            <h2>Records last edited</h2>
-            <div class="statistics-page__charts__records-last-edited">
-                <ngx-charts-bar-vertical
-                    [results]="statistics.records.last_edited"
-                    [gradient]="false"
-                    [xAxis]="true"
-                    [yAxis]="true"
-                    [legend]="false"
-                    [showXAxisLabel]="true"
-                    [showYAxisLabel]="false"
-                    [roundDomains]="true"
-                    xAxisLabel="tag"
-                    yAxisLabel="amount"
-                    (select)="onSelect($event)"
-                    [noBarWhenZero]="true"
-                >
-                </ngx-charts-bar-vertical>
-            </div>
-        </mat-card-content>
-    </mat-card>
-    <mat-card class="statistics-page__mat-card">
-        <mat-card-content>
-            <h2>Records created</h2>
-            <div class="statistics-page__charts__records-created-on">
-                <ngx-charts-bar-vertical
-                    [results]="statistics.records.created_on"
-                    [gradient]="false"
-                    [xAxis]="true"
-                    [yAxis]="true"
-                    [legend]="false"
-                    [showXAxisLabel]="true"
-                    [showYAxisLabel]="false"
-                    [roundDomains]="true"
-                    xAxisLabel=""
-                    yAxisLabel="amount"
-                    (select)="onSelect($event)"
-                    [noBarWhenZero]="true"
-                >
-                </ngx-charts-bar-vertical>
-            </div>
-        </mat-card-content>
-    </mat-card>
-
-    <mat-card class="statistics-page__mat-card">
-        <mat-card-content>
-            <h2>Records in months</h2>
-            <div class="">
-                <ngx-charts-line-chart
-                    [view]="view"
-                    [scheme]="colorScheme"
-                    [legend]="true"
-                    [showXAxisLabel]="false"
-                    [showYAxisLabel]="false"
-                    [xAxis]="true"
-                    [yAxis]="true"
-                    xAxisLabel="month"
-                    yAxisLabel="no of records"
-                    [timeline]="true"
-                    [results]="statistics.records.in_month"
-                >
-                </ngx-charts-line-chart>
-            </div>
         </mat-card-content>
     </mat-card>
 </div>
