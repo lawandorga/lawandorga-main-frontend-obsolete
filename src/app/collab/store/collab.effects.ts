@@ -106,8 +106,6 @@ export class CollabEffects {
             return action.payload;
         }),
         switchMap((payload: { id: number }) => {
-            // return new Observable();
-
             return from(
                 this.http.delete(GetSpecialCollabDocumentApiUrl(payload.id)).pipe(
                     catchError(err => {
@@ -148,7 +146,6 @@ export class CollabEffects {
                                 CollabPermissionFrom.Children
                             )
                         );
-                        console.log('all collab permissions: ', collab_permissions);
                         return [
                             {
                                 type: SET_DOCUMENT_PERMISSIONS,

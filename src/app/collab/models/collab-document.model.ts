@@ -77,7 +77,9 @@ export class CollabDocument extends NameCollabDocument implements TextDocument {
         public created: Date,
         public last_editor: RestrictedUser,
         public last_edited: Date,
-        public versions: TextDocumentVersion[]
+        public versions: TextDocumentVersion[],
+        public read: boolean,
+        public write: boolean
     ) {
         super(id, name, path, children);
         this.content = content;
@@ -103,7 +105,9 @@ export class CollabDocument extends NameCollabDocument implements TextDocument {
             new Date(json.created),
             RestrictedUser.getRestrictedUserFromJson(json.last_editor),
             new Date(json.last_edited),
-            versions
+            versions,
+            json.read ? json.read : true,
+            json.write ? json.write : true
         );
     }
 }
