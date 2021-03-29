@@ -292,18 +292,19 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
     }
 
     getHash(): string {
-        if (!this.text_document.content) return '';
-        return hash(this.text_document.content);
+        return hash(JSON.stringify(this.quillRef.getContents()));
     }
 
     onSaveClick(): void {
         const stringified = JSON.stringify(this.quillRef.getContents());
         this.collabSB.saveTextDocument(this.text_document.id, stringified);
+        this.savedHash = hash(stringified);
     }
 
     onSaveDraftClick(): void {
         const stringified = JSON.stringify(this.quillRef.getContents());
         this.collabSB.saveTextDocument(this.text_document.id, stringified, true);
+        this.savedHash = hash(stringified);
     }
 
     onCloseClick(): void {
