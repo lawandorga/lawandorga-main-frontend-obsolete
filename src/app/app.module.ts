@@ -96,10 +96,11 @@ registerLocaleData(localeDE);
         BrowserAnimationsModule,
         HttpClientModule,
         CustomMaterialModule,
-        BrowserAnimationsModule,
         CoreModule,
         AppRoutingModule,
-        StoreModule.forRoot(reducers),
+        StoreModule.forRoot(reducers, {
+            runtimeChecks: { strictStateImmutability: false, strictActionImmutability: false }
+        }),
         EffectsModule.forRoot([AuthEffects]),
         !environment.production ? StoreDevtoolsModule.instrument() : [],
         QuillModule.forRoot(quillConfig)
