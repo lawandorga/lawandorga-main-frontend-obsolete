@@ -20,11 +20,32 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/internal/operators/tap';
-
 import { RestrictedUser } from '../../models/user.model';
 import { CoreSandboxService } from '../../services/core-sandbox.service';
 import { GetProfileFrontUrl } from '../../../statics/frontend_links.statics';
 import { alphabeticalSorterByField } from '../../../shared/other/sorter-helper';
+
+
+export interface PeriodicElement {
+    name: string;
+    position: number;
+    weight: number;
+    symbol: string;
+}
+  
+const ELEMENT_DATA: PeriodicElement[] = [
+    {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
+    {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
+    {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
+    {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
+    {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
+    {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
+    {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
+    {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
+    {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
+    {position: 10, name: 'Neon', weight: 20.1797, symbol: 'hier soll ein button hin'},
+];
+
 
 @Component({
     selector: 'app-profiles-list',
@@ -33,6 +54,8 @@ import { alphabeticalSorterByField } from '../../../shared/other/sorter-helper';
 })
 export class ProfilesListComponent implements OnInit {
     otherUsers: Observable<RestrictedUser[]>;
+    displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+    dataSource = ELEMENT_DATA;
 
     constructor(private coreSB: CoreSandboxService, private router: Router) {}
 
