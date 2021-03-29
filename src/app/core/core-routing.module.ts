@@ -39,6 +39,8 @@ import { PrivacyStatementComponent } from './pages/privacy-statement/privacy-sta
 import { NotificationGroupsListComponent } from './pages/notification-groups-list/notification-groups-list.component';
 import { UnsavedGuardService } from './services/unsaved-guard.service';
 import { QuillTestComponent } from './components/quill-test/quill-test.component';
+import { StatisticsPageComponent } from './pages/statistics-page/statistics-page.component';
+import { STATISTICS_FRONT_URL } from '../statics/frontend_links.statics';
 
 const apiRoutes: Routes = [
     {
@@ -101,8 +103,8 @@ const apiRoutes: Routes = [
         canActivate: [AuthGuardService]
     },
     {
-        path: 'test',
-        component: QuillTestComponent,
+        path: STATISTICS_FRONT_URL,
+        component: StatisticsPageComponent,
         canActivate: [AuthGuardService]
     },
     // without access control

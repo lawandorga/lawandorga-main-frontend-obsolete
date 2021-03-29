@@ -60,6 +60,7 @@ export const RECORD_DOCUMENT_DELETIONS_API_URL =
     base + 'api/records/record_document_deletion_requests/';
 export const PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS =
     base + 'api/records/process_record_document_deletion_request/';
+export const STATISTICS_RECORDS_API_URL = base + 'api/records/statistics/';
 
 export const COLLAB_COLLAB_DOCUMENTS_API_URL = base + 'api/collab/collab_documents/';
 const COLLAB_TEXT_DOCUMENTS_API_URL = base + 'api/collab/text_documents/';

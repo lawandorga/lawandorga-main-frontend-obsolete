@@ -38,11 +38,13 @@ import { RecordsSandboxService } from './recordmanagement/services/records-sandb
 import { AuthInterceptor } from './core/services/auth.interceptor';
 import { environment } from '../environments/environment';
 import { AppSandboxService } from './core/services/app-sandbox.service';
+import { StatisticsSandboxService } from './core/services/statistics-sandbox.service';
 import { StorageService } from './shared/services/storage.service';
 import { SnackbarService } from './shared/services/snackbar.service';
 import { FilesSandboxService } from './filemanagement/services/files-sandbox.service';
 import { SharedSandboxService } from './shared/services/shared-sandbox.service';
 import { CookieService } from 'ngx-cookie-service';
+
 import { QuillConfig, QuillModule } from 'ngx-quill';
 import Quill from 'quill';
 import QuillCursors from 'quill-cursors';
@@ -96,6 +98,7 @@ registerLocaleData(localeDE);
         BrowserAnimationsModule,
         HttpClientModule,
         CustomMaterialModule,
+        BrowserAnimationsModule,
         CoreModule,
         AppRoutingModule,
         StoreModule.forRoot(reducers, {
@@ -112,6 +115,7 @@ registerLocaleData(localeDE);
         RecordsSandboxService,
         FilesSandboxService,
         CollabSandboxService,
+        StatisticsSandboxService,
         StorageService,
         SnackbarService,
         SharedSandboxService,

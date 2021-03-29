@@ -27,9 +27,16 @@ import { AutoExpandDirective } from './directives/auto-expand.directive';
 import { ExpandableButtonComponent } from './components/expandable-button/expandable-button.component';
 import { EditTextComponent } from './components/edit-text/edit-text.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
-    imports: [CommonModule, CustomMaterialModule, FormsModule, ReactiveFormsModule],
+    imports: [
+        CommonModule,
+        CustomMaterialModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NgxChartsModule
+    ],
     declarations: [
         ChipAutocompleteComponent,
         AutocompleteComponent,
@@ -44,6 +51,7 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
         CustomMaterialModule,
         FormsModule,
         ReactiveFormsModule,
+        NgxChartsModule,
         ChipAutocompleteComponent,
         AutocompleteComponent,
         GetColorOnHoverDirective,
@@ -52,6 +60,6 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
         ReactiveFormsModule,
         EditTextComponent,
         ConfirmationDialogComponent
-    ],
+    ]
 })
 export class SharedModule {}

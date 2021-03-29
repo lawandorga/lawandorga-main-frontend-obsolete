@@ -46,7 +46,8 @@ import {
     RECORD_POOL_FRONT_URL,
     RECORDS_ADD_FRONT_URL,
     RECORDS_FRONT_URL,
-    RECORDS_PERMIT_REQUEST_FRONT_URL
+    RECORDS_PERMIT_REQUEST_FRONT_URL,
+    STATISTICS_FRONT_URL
 } from '../../../statics/frontend_links.statics';
 import { RlcSettings } from '../../models/rlc_settings.model';
 import { Subscription } from 'rxjs';
@@ -126,6 +127,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
             label: 'Admin',
             icon: 'lock',
             items: [
+                {
+                    label: 'Statistics',
+                    icon: 'analytics',
+                    link: STATISTICS_FRONT_URL
+                },
                 {
                     label: 'Permit Requests',
                     icon: 'offline_pin',
