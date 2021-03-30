@@ -70,6 +70,10 @@ const DOWNLOAD_ALL_RECORD_DOCUMENTS_BASE_API_URL = base + 'api/records/documents
 const DOWNLOAD_ENCRYPTED_RECORD_DOCUMENT_BASE_API_URL = base + 'api/records/e_record/documents/';
 const FILES_FOLDER_PERMISSIONS_BASE_API_URL = base + 'api/files/folder_permissions/';
 
+export const GetProfilesDetailApiUrl = (id: number) => {
+    return `${PROFILES_API_URL}${id}/`;
+}
+
 export const GetSpecialProfileApiURL = (id: string | number) => {
     return `${PROFILES_API_URL}${id}/`;
 };

@@ -15,35 +15,17 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
-
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/internal/operators/tap';
 import { FullUser, RestrictedUser } from '../../models/user.model';
 import { CoreSandboxService } from '../../services/core-sandbox.service';
-import { GetProfileFrontUrl } from '../../../statics/frontend_links.statics';
 import { alphabeticalSorterByField } from '../../../shared/other/sorter-helper';
-
-export interface PeriodicElement {
-    name: string;
-    position: number;
-    weight: number;
-    symbol: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-    { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-    { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
-    { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
-    { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
-    { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
-    { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
-    { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
-    { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
-    { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
-    { position: 10, name: 'Neon', weight: 20.1797, symbol: 'hier soll ein button hin' }
-];
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {GetProfilesDetailApiUrl} from '../../../statics/api_urls.statics';
+import { catchError } from 'rxjs/operators';
+import { handleError } from '../../../statics/error_handler'
 
 @Component({
     selector: 'app-profiles-list',
@@ -53,13 +35,11 @@ const ELEMENT_DATA: PeriodicElement[] = [
 export class ProfilesListComponent implements OnInit {
     allUsers: Observable<RestrictedUser[]>;
     displayedColumns: string[] = ['name', 'email', 'phone_number', 'actions'];
-    dataSource = ELEMENT_DATA;
 
-    constructor(private coreSB: CoreSandboxService, private router: Router) {}
+    constructor(private coreSB: CoreSandboxService, private router: Router, private http: HttpClient) {}
 
     ngOnInit() {
         this.coreSB.startLoadingOtherUsers();
-
         this.allUsers = this.coreSB.getOtherUsers().pipe(
             tap(results => {
                 alphabeticalSorterByField(results, 'name');
@@ -67,28 +47,29 @@ export class ProfilesListComponent implements OnInit {
         );
     }
 
-    onUserClick(user: RestrictedUser): void {
-        this.router.navigateByUrl(GetProfileFrontUrl(user));
-    }
-
     onUnlockClick(id: number): void {
-        console.log('id from click: ', id);
-        this.coreSB.showSuccessSnackBar('clicked! ');
+        // todo
+        this.coreSB.showSuccessSnackBar('Clicked!');
     }
-    // TODO: accept, active/inactive
 
     onDeActiveClick(user: FullUser): void {
+        // todo
+        this.coreSB.showSuccessSnackBar('Clicked!');
         if (user.is_active) {
-            //
         } else {
         }
     }
+    
 
     onDeleteClick(id: number): void {
-        console.log('delete: ', id);
+        this.http.delete(GetProfilesDetailApiUrl(id), {})
+            .pipe(catchError(handleError))
+            .subscribe(resp => console.log(resp))
+        this.coreSB.showSuccessSnackBar('Clicked!');
     }
 
     onAcceptClick(id: number): void {
-        console.log('accept: ', id);
+        // todo
+        this.coreSB.showSuccessSnackBar('Clicked!');
     }
 }
