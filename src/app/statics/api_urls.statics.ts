@@ -73,8 +73,9 @@ const CHECK_USER_ACTIVATION_API_URL = base + 'api/profiles/';
 const ACTIVATE_USER_ACTIVATION_API_URL = base + 'api/activate_user_activation_link/';
 const RESET_PASSWORD_API_URL = base + 'api/profiles/';
 const SPECIAL_RECORD_BASE_API_URL = base + 'api/records/records/'; // deprecated??? is it?
+const SPECIAL_E_RECORD_BASE_API_URL = base + 'api/records/e_record/'; // deprecated??? is it?
 const DOWNLOAD_SIGNING_BASE_API_URL = base + 'api/storage_down/'; // deprecated
-const RECORD_DOCUMENT_BASE_API_URL = base + 'api/records/documents/';
+const RECORD_DOCUMENT_BASE_API_URL = base + 'api/e_records/documents/';
 const PERMISSION_FOR_GROUP_BASE_API_URL = base + 'api/permissions_for_group/';
 const DOWNLOAD_ALL_RECORD_DOCUMENTS_BASE_API_URL = base + 'api/records/documents_download/';
 const DOWNLOAD_ENCRYPTED_RECORD_DOCUMENT_BASE_API_URL = base + 'api/records/e_record/documents/';
@@ -206,7 +207,7 @@ export const GetDownloadAllRecordDocumentsApiUrl = (record_id: string) => {
 };
 
 export const GetSpecialRecordUploadDocumentsApiUrl = (record_id: string) => {
-    return `${SPECIAL_RECORD_BASE_API_URL}${record_id}/documents/`;
+    return `${SPECIAL_E_RECORD_BASE_API_URL}${record_id}/documents/`;
 };
 
 export const GetDownloadEncryptedRecordDocumentApiUrl = (document_id: string) => {
