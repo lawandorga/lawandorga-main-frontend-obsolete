@@ -62,6 +62,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
         );
 
         this.coreSB.getActualHasPermissions().subscribe((hasPermissions: HasPermission[]) => {
+            console.log('actual has permissions', hasPermissions);
             this.groupHasPermissions = hasPermissions;
         });
     }

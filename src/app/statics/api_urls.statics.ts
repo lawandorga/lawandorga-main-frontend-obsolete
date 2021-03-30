@@ -18,9 +18,10 @@
 
 import { environment } from '../../environments/environment';
 
+// TODO: check
 export const base = environment.apiUrl;
-export const LOGIN_API_URL = base + 'api/login/';
-export const RECORDS_API_URL = base + 'api/records/e_records/';
+export const LOGIN_API_URL = base + 'api/profiles/login/';
+export const RECORDS_API_URL = base + 'api/records/records/';
 export const CLIENTS_BY_BIRTHDAY_API_URL = base + 'api/records/e_clients_by_birthday/';
 export const RECORDS_STATICS_API_URL = base + 'api/records/statics/';
 export const PROFILES_API_URL = base + 'api/profiles/';
@@ -81,7 +82,7 @@ const FILES_FOLDER_PERMISSIONS_BASE_API_URL = base + 'api/files/folder_permissio
 
 export const GetProfilesDetailApiUrl = (id: number) => {
     return `${PROFILES_API_URL}${id}/`;
-}
+};
 
 export const GetSpecialProfileApiURL = (id: string | number) => {
     return `${PROFILES_API_URL}${id}/`;
@@ -177,8 +178,8 @@ export const GetSpecialGroupApiURL = (id: string | number) => {
 };
 
 export const GetSpecialGroupMemberApiURL = (id: string) => {
-    return `${GetSpecialGroupApiURL(id)}member/`
-}
+    return `${GetSpecialGroupApiURL(id)}member/`;
+};
 
 export const GetSpecialPermissionApiURL = (id: string | number) => {
     return `${PERMISSION_API_URL}${id}/`;
@@ -255,8 +256,8 @@ export const GetCollabDocumentPermissionForDocumentApiUrl = (id: number) => {
 
 export const GetStaticsApiUrl = (token: string) => {
     return `${PROFILES_API_URL}statics/${token}/`;
-}
+};
 
 export const GetNewUserRequestApiUrl = (id: number) => {
-    return `${NEW_USER_REQUEST_ADMIT_API_URL}${id}/`
-}
+    return `${NEW_USER_REQUEST_ADMIT_API_URL}${id}/`;
+};

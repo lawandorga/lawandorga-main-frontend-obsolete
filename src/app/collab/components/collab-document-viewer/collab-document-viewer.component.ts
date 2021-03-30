@@ -34,10 +34,7 @@ import { TextDocumentVersion } from '../../models/text-document-version.model';
 import { CustomQuillContainerComponent } from '../custom-quill-container/custom-quill-container.component';
 import { SharedSandboxService } from '../../../shared/services/shared-sandbox.service';
 import { NameCollabDocument } from '../../models/collab-document.model';
-import {
-    PERMISSION_MANAGE_COLLAB_DOCUMENT_PERMISSIONS_RLC,
-    PERMISSION_MANAGE_FOLDER_PERMISSIONS_RLC
-} from '../../../statics/permissions.statics';
+import { PERMISSION_MANAGE_COLLAB_DOCUMENT_PERMISSIONS_RLC } from '../../../statics/permissions.statics';
 import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
 
 @Component({
@@ -97,6 +94,7 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges, OnDestr
             this.current_id = this.document_id;
             this.loading = true;
             this.collabSB.fetchTextDocument(this.document_id).subscribe(response => {
+                console.log('text doc received', response);
                 const received_document = TextDocument.getTextDocumentFromJson(response);
                 received_document.content = received_document.versions[0].is_draft
                     ? received_document.versions[1].content

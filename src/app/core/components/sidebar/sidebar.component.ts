@@ -323,7 +323,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
         this.subscriptions.push(
             this.coreSB.getNotifications().subscribe((number_of_notifications: number) => {
-                if (number_of_notifications !== null)
+                if (number_of_notifications !== null && number_of_notifications)
                     this.number_of_notifications = number_of_notifications.toString();
             })
         );
