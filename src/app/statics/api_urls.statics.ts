@@ -19,8 +19,8 @@
 import { environment } from '../../environments/environment';
 
 export const base = environment.apiUrl;
-export const LOGIN_API_URL = base + 'api/profiles/login/';
-export const RECORDS_API_URL = base + 'api/records/records/';
+export const LOGIN_API_URL = base + 'api/login/';
+export const RECORDS_API_URL = base + 'api/records/e_records/';
 export const CLIENTS_BY_BIRTHDAY_API_URL = base + 'api/records/e_clients_by_birthday/';
 export const RECORDS_STATICS_API_URL = base + 'api/records/statics/';
 export const PROFILES_API_URL = base + 'api/profiles/';
@@ -31,6 +31,7 @@ export const UPLOAD_SIGNING_BASE_API_URL = base + 'api/storage_up/';
 export const RECORD_PERMISSIONS_LIST_API_URL = base + 'api/records/e_record_permission_requests/';
 export const FORGOT_PASSWORD_API_URL = base + 'api/profiles/password_reset/';
 export const GROUPS_API_URL = base + 'api/groups/';
+export const GROUP_MEMBER_API_URL = base + 'api/group_members/';
 export const PERMISSION_API_URL = base + 'api/permissions/';
 export const HAS_PERMISSION_API_URL = base + 'api/has_permission/';
 export const HAS_PERMISSIONS_STATICS_API_URL = base + 'api/has_permission_statics/';
@@ -58,6 +59,14 @@ export const RECORD_DOCUMENT_DELETIONS_API_URL =
     base + 'api/records/record_document_deletion_requests/';
 export const PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS =
     base + 'api/records/process_record_document_deletion_request/';
+export const STATISTICS_RECORDS_API_URL = base + 'api/records/statistics/';
+
+export const COLLAB_COLLAB_DOCUMENTS_API_URL = base + 'api/collab/collab_documents/';
+const COLLAB_TEXT_DOCUMENTS_API_URL = base + 'api/collab/text_documents/';
+const COLLAB_EDITING_API_URL = base + 'api/collab/editing/';
+export const COLLAB_PERMISSIONS_API_URL = base + 'api/collab/collab_permission/';
+const COLLAB_PERMISSION_FOR_DOCUMENT_API_URL = base + 'api/collab/permission_for_collab_document/';
+const COLLAB_TEXT_DOCUMENT_VERSIONS = base + 'api/collab/text_document_version/';
 
 const CHECK_USER_ACTIVATION_API_URL = base + 'api/profiles/';
 const ACTIVATE_USER_ACTIVATION_API_URL = base + 'api/activate_user_activation_link/';
@@ -214,6 +223,34 @@ export const GetFolderPermissionsForFolderApiUrl = (id: string) => {
 
 export const GetFolderPermissionApiUrl = (id: string) => {
     return `${FILES_PERMISSION_FOR_FOLDER_BASE_API_URL}${id}/`;
+};
+export const GetCollabTextDocumentApiUrl = (id: number) => {
+    return `${COLLAB_TEXT_DOCUMENTS_API_URL}${id}/`;
+};
+
+export const GetCollabEditingApiUrl = (id: number) => {
+    return `${GetCollabTextDocumentApiUrl(id)}editing/`;
+    // return `${COLLAB_EDITING_API_URL}${id}/`;
+};
+
+export const GetCollabTextDocumentVersionsApiUrl = (text_document_id: number) => {
+    return `${COLLAB_TEXT_DOCUMENTS_API_URL}${text_document_id}/versions/`;
+};
+
+export const GetCollabTextDocumentVersionsModelApiUrl = (text_version_id: number) => {
+    return `${COLLAB_TEXT_DOCUMENT_VERSIONS}${text_version_id}/`;
+};
+
+export const GetSpecialCollabDocumentApiUrl = (id: number) => {
+    return `${COLLAB_COLLAB_DOCUMENTS_API_URL}${id}/`;
+};
+
+export const GetCollabDocumentPermissionApiUrl = (id: number) => {
+    return `${GetSpecialCollabDocumentApiUrl(id)}permissions/`;
+};
+
+export const GetCollabDocumentPermissionForDocumentApiUrl = (id: number) => {
+    return `${COLLAB_PERMISSION_FOR_DOCUMENT_API_URL}${id}/`;
 };
 
 export const GetStaticsApiUrl = (token: string) => {

@@ -46,7 +46,8 @@ import {
     RECORD_POOL_FRONT_URL,
     RECORDS_ADD_FRONT_URL,
     RECORDS_FRONT_URL,
-    RECORDS_PERMIT_REQUEST_FRONT_URL
+    RECORDS_PERMIT_REQUEST_FRONT_URL,
+    STATISTICS_FRONT_URL
 } from '../../../statics/frontend_links.statics';
 import { RlcSettings } from '../../models/rlc_settings.model';
 import { Subscription } from 'rxjs';
@@ -77,7 +78,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
         permissions: false,
         accept_new_user: false,
         activate_inactive_users: false,
-        process_deletion_requests: false,
+        process_deletion_requests: {
+            record_documents: false,
+            records: false
+        },
         show_files: false,
         record_pool: false
     };
@@ -85,6 +89,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     sidebarItemsOrg = [
         {
             label: 'Records',
+            // label: '',
             icon: 'folder',
             link: RECORDS_FRONT_URL
         },
@@ -114,9 +119,19 @@ export class SidebarComponent implements OnInit, OnDestroy {
             link: FILES_FRONT_URL
         },
         {
+            label: 'Collab',
+            icon: 'article',
+            link: 'collab'
+        },
+        {
             label: 'Admin',
             icon: 'lock',
             items: [
+                {
+                    label: 'Statistics',
+                    icon: 'analytics',
+                    link: STATISTICS_FRONT_URL
+                },
                 {
                     label: 'Permit Requests',
                     icon: 'offline_pin',
@@ -259,8 +274,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this.coreSB.hasPermissionFromStringForOwnRlc(
             PERMISSION_PROCESS_RECORD_DELETION_REQUESTS,
             hasPermission => {
-                if (this.show_tab_permissions.process_deletion_requests !== hasPermission) {
-                    this.show_tab_permissions.process_deletion_requests = hasPermission;
+                if (this.show_tab_permissions.process_deletion_requests.records !== hasPermission) {
+                    this.show_tab_permissions.process_deletion_requests.records = hasPermission;
                     this.recheckSidebarItems();
                 }
             }
@@ -269,8 +284,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this.coreSB.hasPermissionFromStringForOwnRlc(
             PERMISSION_PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS,
             hasPermission => {
-                if (this.show_tab_permissions.process_deletion_requests !== hasPermission) {
-                    this.show_tab_permissions.process_deletion_requests = hasPermission;
+                if (
+                    this.show_tab_permissions.process_deletion_requests.record_documents !==
+                    hasPermission
+                ) {
+                    this.show_tab_permissions.process_deletion_requests.record_documents = hasPermission;
                     this.recheckSidebarItems();
                 }
             }
@@ -346,7 +364,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
                 ACCEPT_NEW_USER_REQUESTS_FRONT_URL,
                 newSidebarItems
             ).newItems;
-        if (!this.show_tab_permissions.process_deletion_requests)
+        if (
+            !this.show_tab_permissions.process_deletion_requests.record_documents &&
+            !this.show_tab_permissions.process_deletion_requests.records
+        )
             newSidebarItems = SidebarComponent.removeLink(
                 DELETION_REQUESTS_FRONT_URL,
                 newSidebarItems

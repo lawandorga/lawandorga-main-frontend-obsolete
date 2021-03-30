@@ -21,17 +21,23 @@
         <mat-card-content>
             <div class="horizontal groups-list__header">
                 <h1>Groups</h1>
-                <button mat-flat-button color="primary" *ngIf="canAddGroup" (click)="onAddGroupClick()">add group</button>
+                <button
+                    mat-flat-button
+                    color="primary"
+                    *ngIf="canAddGroup"
+                    (click)="onAddGroupClick()"
+                >
+                    add group
+                </button>
             </div>
 
             <div *ngIf="groups | async as catalog; else loading">
                 <ng-container *ngIf="catalog.length; else noItems">
                     <mat-list>
-                        <div *ngFor="let group of (groups | async)">
+                        <div *ngFor="let group of groups | async">
                             <mat-list-item class="is_clickable" (click)="onGroupClick(group.id)">
                                 <mat-icon mat-list-icon>group</mat-icon>
-                                <p mat-line>{{group.name}}</p>
-
+                                <p mat-line>{{ group.name }}</p>
                             </mat-list-item>
                         </div>
                     </mat-list>
@@ -39,9 +45,6 @@
                 <ng-template #noItems>No Items!</ng-template>
             </div>
             <ng-template #loading>loading animation...</ng-template>
-
-
         </mat-card-content>
     </mat-card>
-
 </div>

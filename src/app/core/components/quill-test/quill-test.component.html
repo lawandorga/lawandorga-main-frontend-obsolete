@@ -1,0 +1,16 @@
+<div class="quill-test__container">
+    <p>asdfasdfasd <span style="background-color: rgb(255, 235, 204);">asdfsdf</span></p>
+    <button mat-flat-button color="primary" (click)="onShowCommentClick()">show comment</button>
+    <quill-editor
+        (onEditorChanged)="changedEditor($event)"
+        [(ngModel)]="model"
+        (onEditorCreated)="created($event)"
+        [modules]="modules"
+    ></quill-editor>
+</div>
+
+<!--    [styles]="{ height: '200px' }"-->
+<!--    (onFocus)="focus($event)"-->
+<!--    (onEditorChanged)="changedEditor($event)"-->
+<!--    (onBlur)="blur($event)"-->
+<!--    (onEditorCreated)="created($event)"-->

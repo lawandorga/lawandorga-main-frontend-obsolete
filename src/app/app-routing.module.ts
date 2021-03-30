@@ -29,7 +29,13 @@ const appRoutes: Routes = [
     },
     {
         path: 'files',
-        loadChildren: () => import('./filemanagement/filemanagement.module').then(m => m.FilemanagementModule),
+        loadChildren: () =>
+            import('./filemanagement/filemanagement.module').then(m => m.FilemanagementModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'collab',
+        loadChildren: () => import('./collab/collab.module').then(m => m.CollabModule),
         canActivate: [AuthGuardService]
     }
 ];
@@ -37,9 +43,9 @@ const appRoutes: Routes = [
 @NgModule({
     imports: [
         RouterModule.forRoot(appRoutes, {
-    preloadingStrategy: PreloadAllModules,
-    relativeLinkResolution: 'legacy'
-})
+            preloadingStrategy: PreloadAllModules,
+            relativeLinkResolution: 'legacy'
+        })
     ],
     exports: [RouterModule]
 })

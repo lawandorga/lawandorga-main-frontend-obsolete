@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { CoreSandboxService } from '../services/core-sandbox.service';
 import { Filterable } from '../../shared/models/filterable.model';
 
 export class RestrictedUser implements Filterable {

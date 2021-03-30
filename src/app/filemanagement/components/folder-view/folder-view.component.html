@@ -21,61 +21,126 @@
 
     <span class="spacer"></span>
     <div>
-        <button mat-icon-button (click)="onCreateFolderClick()"><mat-icon>create_new_folder</mat-icon></button>
-        <button mat-icon-button (click)="onCurrentFolderInformation()"><mat-icon>info</mat-icon></button>
+        <button mat-icon-button (click)="onCreateFolderClick()">
+            <mat-icon>create_new_folder</mat-icon>
+        </button>
+        <button mat-icon-button (click)="onCurrentFolderInformation()">
+            <mat-icon>info</mat-icon>
+        </button>
     </div>
-
 </mat-toolbar>
-<mat-card class="folder-view__mat-card"  (drop)="dropped($event)" (dragover)="dragover($event)">
+<mat-card class="folder-view__mat-card" (drop)="dropped($event)" (dragover)="dragover($event)">
     <mat-card-content class="folder-view__card-content">
         <mat-drawer-container class="folder-view__drawer-container">
             <mat-drawer-content>
                 <div *ngIf="entries.length; else nothingToShow">
                     <table mat-table [dataSource]="entries" class="folder-view__table">
                         <ng-container matColumnDef="type" class="folder-view__max-width">
-                            <th mat-header-cell *matHeaderCellDef class="folder-view__column-header"></th>
-                            <td mat-cell *matCellDef="let entry" class="folder-view__column-content folder-view__small-column">
-                                <div *ngIf="entry.type === 0"><mat-icon>folder</mat-icon></div>
-                                <div *ngIf="entry.type === 1"><mat-icon>attach_file</mat-icon></div>
+                            <th
+                                mat-header-cell
+                                *matHeaderCellDef
+                                class="folder-view__column-header"
+                            ></th>
+                            <td
+                                mat-cell
+                                *matCellDef="let entry"
+                                class="folder-view__column-content folder-view__small-column"
+                            >
+                                <div *ngIf="entry.type === 0">
+                                    <mat-icon>folder</mat-icon>
+                                </div>
+                                <div *ngIf="entry.type === 1">
+                                    <mat-icon>attach_file</mat-icon>
+                                </div>
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="name">
-                            <th mat-header-cell *matHeaderCellDef class="folder-view__column-header">
+                            <th
+                                mat-header-cell
+                                *matHeaderCellDef
+                                class="folder-view__column-header"
+                            >
                                 name
                             </th>
                             <td
-                                    mat-cell
-                                    *matCellDef="let entry"
-                                    class="folder-view__column-content"
-                                    [class.is_clickable]="entry.type === 0"
-                                    (click)="onEntryClick(entry)"
+                                mat-cell
+                                *matCellDef="let entry"
+                                class="folder-view__column-content"
+                                [class.is_clickable]="entry.type === 0"
+                                (click)="onEntryClick(entry)"
                             >
                                 {{ entry.name }}
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="size">
-                            <th mat-header-cell *matHeaderCellDef class="folder-view__column-header">
+                            <th
+                                mat-header-cell
+                                *matHeaderCellDef
+                                class="folder-view__column-header"
+                            >
                                 size
                             </th>
-                            <td mat-cell *matCellDef="let entry" class="folder-view__column-content folder-view__small-column">
-                                {{ entry.size | storageSize}}
+                            <td
+                                mat-cell
+                                *matCellDef="let entry"
+                                class="folder-view__column-content folder-view__small-column"
+                            >
+                                {{ entry.size | storageSize }}
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="last_edited">
-                            <th mat-header-cell *matHeaderCellDef class="folder-view__column-header">
+                            <th
+                                mat-header-cell
+                                *matHeaderCellDef
+                                class="folder-view__column-header"
+                            >
                                 last edited
                             </th>
-                            <td mat-cell *matCellDef="let entry" class="folder-view__column-content folder-view__small-column">
-                                {{ entry.last_edited | date:'short' }}
+                            <td
+                                mat-cell
+                                *matCellDef="let entry"
+                                class="folder-view__column-content folder-view__small-column"
+                            >
+                                {{ entry.last_edited | date: 'short' }}
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="more">
-                            <th mat-header-cell *matHeaderCellDef class="folder-view__column-header"></th>
-                            <td mat-cell *matCellDef="let entry" class="folder-view__column-content folder-view__small-column">
+                            <th
+                                mat-header-cell
+                                *matHeaderCellDef
+                                class="folder-view__column-header"
+                            ></th>
+                            <td
+                                mat-cell
+                                *matCellDef="let entry"
+                                class="folder-view__column-content folder-view__small-column"
+                            >
                                 <mat-menu #actionMenu="matMenu">
-                                    <button mat-menu-item class="button-normal" (click)="onDownloadClick(entry)"><mat-icon>cloud</mat-icon>download</button>
-                                    <button mat-menu-item class="button-normal" *ngIf="write_permission" (click)="onDeleteClick(entry)"><mat-icon>delete_forever</mat-icon>delete</button>
-                                    <button mat-menu-item class="button-normal" (click)="onFolderInformation(entry)"><mat-icon>info</mat-icon>information</button>
+                                    <button
+                                        mat-menu-item
+                                        class="button-normal"
+                                        (click)="onDownloadClick(entry)"
+                                    >
+                                        <mat-icon>cloud</mat-icon>
+                                        download
+                                    </button>
+                                    <button
+                                        mat-menu-item
+                                        class="button-normal"
+                                        *ngIf="write_permission"
+                                        (click)="onDeleteClick(entry)"
+                                    >
+                                        <mat-icon>delete_forever</mat-icon>
+                                        delete
+                                    </button>
+                                    <button
+                                        mat-menu-item
+                                        class="button-normal"
+                                        (click)="onFolderInformation(entry)"
+                                    >
+                                        <mat-icon>info</mat-icon>
+                                        information
+                                    </button>
                                 </mat-menu>
                                 <button mat-icon-button [matMenuTriggerFor]="actionMenu">
                                     <mat-icon>more_vert</mat-icon>
@@ -92,15 +157,31 @@
                     </div>
                 </ng-template>
                 <h2 class="folder-view__drop-zone">drop files and folders here</h2>
-
             </mat-drawer-content>
-            <mat-drawer [(opened)]="informationOpened" disableClose mode="side" position="end" class="folder-view__drawer">
-                <app-table-entry-information [entry]="informationEntry"></app-table-entry-information>
+            <mat-drawer
+                [(opened)]="informationOpened"
+                disableClose
+                mode="side"
+                position="end"
+                class="folder-view__drawer"
+            >
+                <app-table-entry-information
+                    [entry]="informationEntry"
+                ></app-table-entry-information>
             </mat-drawer>
         </mat-drawer-container>
         <div class="folder-view__upload-button-container">
-            <button mat-icon-button class="folder-view__upload-button" (click)="fileInput.click()"><mat-icon>add</mat-icon></button>
-            <input hidden type="file" id="your-files" #fileInput multiple (change)="filesSelected($event)">
+            <button mat-icon-button class="folder-view__upload-button" (click)="fileInput.click()">
+                <mat-icon>add</mat-icon>
+            </button>
+            <input
+                hidden
+                type="file"
+                id="your-files"
+                #fileInput
+                multiple
+                (change)="filesSelected($event)"
+            />
         </div>
     </mat-card-content>
 </mat-card>

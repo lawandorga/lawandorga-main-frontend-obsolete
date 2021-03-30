@@ -93,6 +93,10 @@ export class CoreSandboxService {
         return this.coreStateStore.pipe(select((state: any) => state.core.user));
     }
 
+    getUserRestricted(): Observable<RestrictedUser> {
+        return this.coreStateStore.pipe(select((state: any) => state.core.user));
+    }
+
     getRlc(): Observable<RestrictedRlc> {
         return this.coreStateStore.pipe(select((state: any) => state.core.rlc));
     }
