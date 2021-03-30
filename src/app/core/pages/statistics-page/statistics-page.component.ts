@@ -49,9 +49,6 @@ export class StatisticsPageComponent implements OnInit {
 
     ngOnInit(): void {
         this.statisticsSB.getRecordStatistics().subscribe(response => {
-            console.log('response from statistics: ', response);
-            // this.
-
             this.statistics.record_tags.values = response.tags.filter(
                 (entry: any) => entry.value > 0
             );
