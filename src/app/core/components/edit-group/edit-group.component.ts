@@ -23,7 +23,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddGroupMemberComponent } from '../add-group-member/add-group-member.component';
 import { PERMISSION_CAN_MANAGE_PERMISSIONS_RLC } from '../../../statics/permissions.statics';
 import { RestrictedRlc } from '../../models/rlc.model';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { HasPermission } from '../../models/permission.model';
 import { AddHasPermissionForComponent } from '../add-has-permission-for/add-has-permission-for.component';
 
@@ -40,12 +40,15 @@ export class EditGroupComponent implements OnInit, OnDestroy {
     groupPermissionsLoaded = false;
     memberColumns = ['member', 'remove'];
 
+    getGroupSubscription: Subscription;
+    getActualHasPermission: Subscription;
+
     constructor(private coreSB: CoreSandboxService, public dialog: MatDialog) {}
 
     ngOnInit() {
         this.coreSB.startLoadingPermissionStatics();
 
-        this.coreSB.getGroup().subscribe((group: FullGroup) => {
+        this.getGroupSubscription = this.coreSB.getGroup().subscribe((group: FullGroup) => {
             if (group) {
                 this.group = group;
                 if (this.group && this.canEditPermissions && !this.groupPermissionsLoaded) {
@@ -61,14 +64,17 @@ export class EditGroupComponent implements OnInit, OnDestroy {
             }
         );
 
-        this.coreSB.getActualHasPermissions().subscribe((hasPermissions: HasPermission[]) => {
-            console.log('actual has permissions', hasPermissions);
-            this.groupHasPermissions = hasPermissions;
-        });
+        this.getActualHasPermission = this.coreSB
+            .getActualHasPermissions()
+            .subscribe((hasPermissions: HasPermission[]) => {
+                this.groupHasPermissions = hasPermissions;
+            });
     }
 
     ngOnDestroy(): void {
         this.coreSB.resetSpecialGroup();
+        if (this.getActualHasPermission) this.getActualHasPermission.unsubscribe();
+        if (this.getGroupSubscription) this.getGroupSubscription.unsubscribe();
     }
 
     onAddGroupMemberClick() {
