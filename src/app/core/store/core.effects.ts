@@ -221,7 +221,6 @@ export class CoreEffects {
                         return [];
                     }),
                     mergeMap((response: any) => {
-                        console.log('response from loading other useres', response);
                         const users = FullUser.getFullUsersFromJsonArray(response);
                         return [{ type: SET_OTHER_USERS, payload: users }];
                     })
