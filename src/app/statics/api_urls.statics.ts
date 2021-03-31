@@ -44,7 +44,7 @@ export const USER_HAS_PERMISSIONS_API_URL = base + 'api/user_has_permissions/';
 export const RECORD_DELETIONS_API_URL = base + 'api/records/record_deletion_requests/';
 export const PROCESS_RECORD_DELETIONS_API_URL =
     base + 'api/records/process_record_deletion_request/';
-export const FOLDER_BASE_API_URL = base + 'api/files/folder';
+export const FOLDER_BASE_API_URL = base + 'api/files/folder/';
 export const FILES_UPLOAD_BASE_API_URL = base + 'api/files/upload';
 export const FILES_DELETE_BASE_API_URL = base + 'api/files/delete';
 export const FILES_DOWNLOAD_BASE_API_URL = base + 'api/files/download';
