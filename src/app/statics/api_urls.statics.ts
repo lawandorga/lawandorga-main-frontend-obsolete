@@ -85,6 +85,10 @@ export const GetProfilesDetailApiUrl = (id: number) => {
     return `${PROFILES_API_URL}${id}/`;
 };
 
+export const GetProfilesUnlockApiUrl = (id: number) => {
+    return `${PROFILES_API_URL}${id}/unlock/`
+}
+
 export const GetSpecialProfileApiURL = (id: string | number) => {
     return `${PROFILES_API_URL}${id}/`;
 };

@@ -23,7 +23,7 @@ import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 export class SnackbarService {
     constructor(private snackBar: MatSnackBar) {}
 
-    public showSuccessSnackBar(message: string, duration: number = 3000) {
+    public showSuccessSnackBar(message: string, duration: number = 10000) {
         const config = new MatSnackBarConfig();
         config.panelClass = ['snackbar__success'];
         config.duration = duration;
@@ -31,7 +31,7 @@ export class SnackbarService {
         this.snackBar.open(message, '', config);
     }
 
-    public showErrorSnackBar(message: string, duration: number = 3000) {
+    public showErrorSnackBar(message: string, duration: number = 10000) {
         const config = new MatSnackBarConfig();
         config.panelClass = ['snackbar__error'];
         config.duration = duration;

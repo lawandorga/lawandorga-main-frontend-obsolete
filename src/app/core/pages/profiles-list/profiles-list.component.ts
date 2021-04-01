@@ -23,9 +23,8 @@ import { FullUser, RestrictedUser } from '../../models/user.model';
 import { CoreSandboxService } from '../../services/core-sandbox.service';
 import { alphabeticalSorterByField } from '../../../shared/other/sorter-helper';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import {GetProfilesDetailApiUrl} from '../../../statics/api_urls.statics';
+import {GetProfilesDetailApiUrl, GetProfilesUnlockApiUrl} from '../../../statics/api_urls.statics';
 import { catchError } from 'rxjs/operators';
-import { handleError } from '../../../statics/error_handler'
 
 @Component({
     selector: 'app-profiles-list',
@@ -48,28 +47,27 @@ export class ProfilesListComponent implements OnInit {
     }
 
     onUnlockClick(id: number): void {
+        this.http.post(GetProfilesUnlockApiUrl(id), {})
+            .subscribe(resp => console.log(resp))
         // todo
         this.coreSB.showSuccessSnackBar('Clicked!');
     }
 
     onDeActiveClick(user: FullUser): void {
         // todo
+        this.http.patch(GetProfilesDetailApiUrl(parseInt(user.id)), {is_active: !user.is_active})
+            .subscribe(resp => console.log(resp))
         this.coreSB.showSuccessSnackBar('Clicked!');
-        if (user.is_active) {
-        } else {
-        }
     }
     
 
     onDeleteClick(id: number): void {
         this.http.delete(GetProfilesDetailApiUrl(id), {})
-            .pipe(catchError(handleError))
             .subscribe(resp => console.log(resp))
-        this.coreSB.showSuccessSnackBar('Clicked!');
     }
 
     onAcceptClick(id: number): void {
         // todo
-        this.coreSB.showSuccessSnackBar('Clicked!');
+        this.coreSB.showSuccessSnackBar('This is not implemented yet!');
     }
 }

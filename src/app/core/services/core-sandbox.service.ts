@@ -219,11 +219,11 @@ export class CoreSandboxService {
         );
     }
 
-    showSuccessSnackBar(message: string, duration: number = 3000) {
+    showSuccessSnackBar(message: string, duration: number = 10000) {
         this.snackbarService.showSuccessSnackBar(message, duration);
     }
 
-    showErrorSnackBar(message: string, duration: number = 3000) {
+    showErrorSnackBar(message: string, duration: number = 10000) {
         this.snackbarService.showErrorSnackBar(message, duration);
     }
 

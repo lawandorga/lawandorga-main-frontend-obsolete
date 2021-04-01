@@ -1,6 +1,5 @@
 {
     "compileOnSave": false,
-    "jsx": "react",
     "compilerOptions": {
         "baseUrl": "./",
     "downlevelIteration": true,
@@ -11,7 +10,6 @@
         "moduleResolution": "node",
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
-//        "esModuleInterop": true,
         "target": "es2015",
         "typeRoots": ["node_modules/@types"],
         "lib": ["es2017", "dom"],
@@ -20,8 +18,5 @@
             "core-js/es7/reflect": ["node_modules/core-js/proposals/reflect-metadata"],
             "core-js/es6/*": ["node_modules/core-js/es/*"]
         },
-        "types": [
-            "hammerjs"
-        ]
     }
 }
