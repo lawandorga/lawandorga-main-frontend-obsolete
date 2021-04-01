@@ -195,7 +195,9 @@ export class CoreEffects {
                         return [];
                     }),
                     mergeMap((response: any) => {
-                        const groups = RestrictedGroup.getRestrictedGroupsFromJsonArray(response);
+                        const groups = RestrictedGroup.getRestrictedGroupsFromJsonArray(
+                            response.results ? response.results : response
+                        );
                         return [
                             {
                                 type: SET_GROUPS,
@@ -221,7 +223,9 @@ export class CoreEffects {
                         return [];
                     }),
                     mergeMap((response: any) => {
-                        const users = FullUser.getFullUsersFromJsonArray(response);
+                        const users = FullUser.getFullUsersFromJsonArray(
+                            response.results ? response.results : response
+                        );
                         return [{ type: SET_OTHER_USERS, payload: users }];
                     })
                 )

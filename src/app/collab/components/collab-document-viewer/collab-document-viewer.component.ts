@@ -94,7 +94,6 @@ export class CollabDocumentViewerComponent implements OnInit, OnChanges, OnDestr
             this.current_id = this.document_id;
             this.loading = true;
             this.collabSB.fetchTextDocument(this.document_id).subscribe(response => {
-                console.log('text doc received', response);
                 const received_document = TextDocument.getTextDocumentFromJson(response);
                 received_document.content = received_document.versions[0].is_draft
                     ? received_document.versions[1].content

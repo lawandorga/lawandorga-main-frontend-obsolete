@@ -33,7 +33,10 @@ export class Permission implements Filterable {
     }
 
     static getPermissionFromJson(json: { id; name }): Permission {
-        return new Permission(json.id, json.name);
+        if (json) {
+            return new Permission(json.id, json.name);
+        }
+        return new Permission('-1', 'none');
     }
 
     getFilterableProperty(): string {
