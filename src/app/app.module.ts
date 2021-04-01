@@ -50,42 +50,14 @@ import Quill from 'quill';
 import QuillCursors from 'quill-cursors';
 import { CollabSandboxService } from './collab/services/collab-sandbox.service';
 
-// Quill.register(
-//     {
-//         'modules/better-table': QuillBetterTable
-//     },
-//     true
-// );
-
-// Quill.register('modules/tableUI', QuillTableUI.default);
-
 Quill.register('modules/cursors', QuillCursors);
-// Quill.register('modules/better-table', QuillBetterTable);
-// Quill.register('modules/table');
+Quill.register('modules/mention', QuillCursors);
+
 const quillConfig: QuillConfig = {
     modules: {
-        // table: false, // disable table module
-        // 'better-table': {
-        //     operationMenu: {
-        //         items: {
-        //             unmergeCells: {
-        //                 text: 'Another unmerge cells name'
-        //             }
-        //         },
-        //         color: {
-        //             colors: ['#fff', 'red', 'rgb(0, 0, 0)'], // colors in operationMenu
-        //             text: 'Background Colors' // subtitle
-        //         }
-        //     }
-        // },
-        // keyboard: {
-        //     bindings: QuillBetterTable.keyboardBindings
-        // },
-        // 'better-table': true,
         cursors: true,
         table: true,
         tableUI: true
-        // comment: true
     }
 };
 
