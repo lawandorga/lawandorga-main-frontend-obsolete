@@ -1,6 +1,8 @@
 import { throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { SnackbarService } from '../shared/services/snackbar.service';
 
+const snackbarService = new SnackbarService();
 
 export const handleError = (error: HttpErrorResponse) => {
   if (error.error instanceof ErrorEvent) {
@@ -12,6 +14,7 @@ export const handleError = (error: HttpErrorResponse) => {
     console.error(
       `Backend returned code ${error.status}, ` +
       `body was: ${error.error}`);
+    new SnackbarService().showSuccessSnackBar
   }
   // Return an observable with a user-facing error message.
   return throwError(
