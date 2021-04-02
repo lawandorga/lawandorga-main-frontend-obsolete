@@ -34,10 +34,7 @@ import { TextDocumentVersion } from '../../models/text-document-version.model';
 import { CustomQuillContainerComponent } from '../custom-quill-container/custom-quill-container.component';
 import { SharedSandboxService } from '../../../shared/services/shared-sandbox.service';
 import { NameCollabDocument } from '../../models/collab-document.model';
-import {
-    PERMISSION_MANAGE_COLLAB_DOCUMENT_PERMISSIONS_RLC,
-    PERMISSION_MANAGE_FOLDER_PERMISSIONS_RLC
-} from '../../../statics/permissions.statics';
+import { PERMISSION_MANAGE_COLLAB_DOCUMENT_PERMISSIONS_RLC } from '../../../statics/permissions.statics';
 import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
 
 @Component({

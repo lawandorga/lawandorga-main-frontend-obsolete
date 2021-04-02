@@ -60,7 +60,7 @@ import { RlcSettings } from '../models/rlc_settings.model';
 
 export interface CoreState {
     user: FullUser;
-    other_users: { [id: number]: RestrictedUser };
+    other_users: { [id: number]: FullUser };
     all_permissions: { [id: number]: Permission };
     user_permissions: { [id: number]: HasPermission };
     groups: { [id: number]: RestrictedGroup };

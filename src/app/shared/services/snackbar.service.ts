@@ -23,18 +23,18 @@ import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 export class SnackbarService {
     constructor(private snackBar: MatSnackBar) {}
 
-    public showSuccessSnackBar(message: string) {
+    public showSuccessSnackBar(message: string, duration: number = 10000) {
         const config = new MatSnackBarConfig();
         config.panelClass = ['snackbar__success'];
-        config.duration = 2500;
+        config.duration = duration;
         config.verticalPosition = 'top';
         this.snackBar.open(message, '', config);
     }
 
-    public showErrorSnackBar(message: string) {
+    public showErrorSnackBar(message: string, duration: number = 10000) {
         const config = new MatSnackBarConfig();
         config.panelClass = ['snackbar__error'];
-        config.duration = 3000;
+        config.duration = duration;
         config.verticalPosition = 'top';
         this.snackBar.open(message, '', config);
     }

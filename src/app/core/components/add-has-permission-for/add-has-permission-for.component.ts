@@ -37,14 +37,7 @@ export class AddHasPermissionForComponent implements OnInit {
     allPermissions: Observable<Permission[]>;
     selectedPermission: Permission = null;
 
-    allUsers: Observable<RestrictedUser[]>;
-    selectedForUser: RestrictedUser = null;
-
-    allGroups: Observable<RestrictedGroup[]>;
-    selectedForGroup: RestrictedGroup = null;
-
     ownRlc: RestrictedRlc;
-    forRlcChecked = true;
 
     constructor(
         private coreSB: CoreSandboxService,
@@ -53,16 +46,6 @@ export class AddHasPermissionForComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.allUsers = this.coreSB.getOtherUsers().pipe(
-            tap(results => {
-                alphabeticalSorterByField(results, 'name');
-            })
-        );
-        this.allGroups = this.coreSB.getGroups().pipe(
-            tap(results => {
-                alphabeticalSorterByField(results, 'name');
-            })
-        );
         this.allPermissions = this.coreSB.getAllPermissions().pipe(
             tap(results => {
                 alphabeticalSorterByField(results, 'name');
@@ -85,35 +68,14 @@ export class AddHasPermissionForComponent implements OnInit {
             null,
             group,
             null,
-            this.selectedForUser,
-            this.selectedForGroup,
-            this.forRlcChecked ? this.ownRlc : null
+            null,
+            null,
+            this.ownRlc
         );
         this.dialogRef.close();
     }
 
     onSelectedPermissionChanged(selectedPermission: Permission): void {
         this.selectedPermission = selectedPermission;
-    }
-
-    userForChanged(selectedUser: RestrictedUser): void {
-        this.selectedForUser = selectedUser;
-        if (selectedUser) {
-            this.selectedForGroup = null;
-            this.forRlcChecked = false;
-        }
-    }
-
-    groupForChanged(selectedGroup: RestrictedGroup): void {
-        this.selectedForGroup = selectedGroup;
-        if (selectedGroup) {
-            this.selectedForUser = null;
-            this.forRlcChecked = false;
-        }
-    }
-
-    forRlcChanged(): void {
-        this.selectedForUser = null;
-        this.selectedForGroup = null;
     }
 }

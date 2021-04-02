@@ -18,36 +18,36 @@
 
 import { environment } from '../../environments/environment';
 
-// TODO: check if really needed as export
+// TODO: check
 export const base = environment.apiUrl;
-export const LOGIN_API_URL = base + 'api/login/';
-export const RECORDS_API_URL = base + 'api/records/e_records/';
+export const LOGIN_API_URL = base + 'api/profiles/login/';
+export const RECORDS_API_URL = base + 'api/records/records/';
 export const CLIENTS_BY_BIRTHDAY_API_URL = base + 'api/records/e_clients_by_birthday/';
 export const RECORDS_STATICS_API_URL = base + 'api/records/statics/';
 export const PROFILES_API_URL = base + 'api/profiles/';
-export const CREATE_PROFILE_API_URL = base + 'api/create_profile/';
-export const CREATE_RECORD_API_URL = base + 'api/records/create_record/';
-export const RLCS_API_URL = base + 'api/get_rlcs/';
+export const CREATE_PROFILE_API_URL = base + 'api/profiles/';
+export const CREATE_RECORD_API_URL = base + 'api/records/records/';
+export const RLCS_API_URL = base + 'api/rlcs/';
 export const UPLOAD_SIGNING_BASE_API_URL = base + 'api/storage_up/';
 export const RECORD_PERMISSIONS_LIST_API_URL = base + 'api/records/e_record_permission_requests/';
-export const FORGOT_PASSWORD_API_URL = base + 'api/forgot_password/';
+export const FORGOT_PASSWORD_API_URL = base + 'api/profiles/password_reset/';
 export const GROUPS_API_URL = base + 'api/groups/';
 export const GROUP_MEMBER_API_URL = base + 'api/group_members/';
 export const PERMISSION_API_URL = base + 'api/permissions/';
 export const HAS_PERMISSION_API_URL = base + 'api/has_permission/';
 export const HAS_PERMISSIONS_STATICS_API_URL = base + 'api/has_permission_statics/';
 export const NEW_USER_REQUEST_API_URL = base + 'api/new_user_request/';
-export const NEW_USER_REQUEST_ADMIT_API_URL = base + 'api/new_user_request_admit/';
-export const LOGOUT_API_URL = base + 'api/logout/';
-export const INACTIVE_USERS_API_URL = base + 'api/inactive_users/';
+export const NEW_USER_REQUEST_ADMIT_API_URL = base + 'api/new_user_request/';
+export const LOGOUT_API_URL = base + 'api/profiles/logout/';
+export const INACTIVE_USERS_API_URL = base + 'api/profiles/inactive/';
 export const USER_HAS_PERMISSIONS_API_URL = base + 'api/user_has_permissions/';
 export const RECORD_DELETIONS_API_URL = base + 'api/records/record_deletion_requests/';
 export const PROCESS_RECORD_DELETIONS_API_URL =
     base + 'api/records/process_record_deletion_request/';
-export const FOLDER_BASE_API_URL = base + 'api/files/folder';
-export const FILES_UPLOAD_BASE_API_URL = base + 'api/files/upload';
-export const FILES_DELETE_BASE_API_URL = base + 'api/files/delete';
-export const FILES_DOWNLOAD_BASE_API_URL = base + 'api/files/download';
+export const FOLDER_BASE_API_URL = base + 'api/files/folder/';
+export const FILES_UPLOAD_BASE_API_URL = base + 'api/files/upload/';
+export const FILES_DELETE_BASE_API_URL = base + 'api/files/delete/';
+export const FILES_DOWNLOAD_BASE_API_URL = base + 'api/files/download/';
 export const FILES_PERMISSION_FOR_FOLDER_BASE_API_URL = base + 'api/files/permission_for_folder/';
 export const RECORD_POOL_API_URL = base + 'api/records/record_pool/';
 export const POOL_RECORD_API_URL = base + 'api/records/pool_records/';
@@ -55,7 +55,7 @@ export const POOL_CONSULTANT_API_URL = base + 'api/records/pool_consultants/';
 export const RLC_SETTINGS_API_URL = base + 'api/my_rlc_settings/';
 export const NOTIFICATIONS_API_URL = base + 'api/notifications/';
 export const NOTIFICATION_GROUPS_API_URL = base + 'api/notification_groups/';
-export const UNREAD_NOTIFICATIONS_API_URL = base + 'api/unread_notifications/';
+export const UNREAD_NOTIFICATIONS_API_URL = base + 'api/notifications/unread/';
 export const RECORD_DOCUMENT_DELETIONS_API_URL =
     base + 'api/records/record_document_deletion_requests/';
 export const PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS =
@@ -69,16 +69,25 @@ export const COLLAB_PERMISSIONS_API_URL = base + 'api/collab/collab_permission/'
 const COLLAB_PERMISSION_FOR_DOCUMENT_API_URL = base + 'api/collab/permission_for_collab_document/';
 const COLLAB_TEXT_DOCUMENT_VERSIONS = base + 'api/collab/text_document_version/';
 
-const CHECK_USER_ACTIVATION_API_URL = base + 'api/check_user_activation_link/';
+const CHECK_USER_ACTIVATION_API_URL = base + 'api/profiles/';
 const ACTIVATE_USER_ACTIVATION_API_URL = base + 'api/activate_user_activation_link/';
-const RESET_PASSWORD_API_URL = base + 'api/reset_password/';
-const SPECIAL_RECORD_BASE_API_URL = base + 'api/records/e_record/'; // deprecated??? is it?
+const RESET_PASSWORD_API_URL = base + 'api/profiles/';
+const SPECIAL_RECORD_BASE_API_URL = base + 'api/records/records/'; // deprecated??? is it?
+const SPECIAL_E_RECORD_BASE_API_URL = base + 'api/records/e_record/'; // deprecated??? is it?
 const DOWNLOAD_SIGNING_BASE_API_URL = base + 'api/storage_down/'; // deprecated
 const RECORD_DOCUMENT_BASE_API_URL = base + 'api/records/documents/';
 const PERMISSION_FOR_GROUP_BASE_API_URL = base + 'api/permissions_for_group/';
 const DOWNLOAD_ALL_RECORD_DOCUMENTS_BASE_API_URL = base + 'api/records/documents_download/';
 const DOWNLOAD_ENCRYPTED_RECORD_DOCUMENT_BASE_API_URL = base + 'api/records/e_record/documents/';
 const FILES_FOLDER_PERMISSIONS_BASE_API_URL = base + 'api/files/folder_permissions/';
+
+export const GetProfilesDetailApiUrl = (id: number) => {
+    return `${PROFILES_API_URL}${id}/`;
+};
+
+export const GetProfilesUnlockApiUrl = (id: number) => {
+    return `${PROFILES_API_URL}${id}/unlock/`
+}
 
 export const GetSpecialProfileApiURL = (id: string | number) => {
     return `${PROFILES_API_URL}${id}/`;
@@ -154,7 +163,7 @@ export const GetCreateRecordDocumentApiUrl = (record_id: string) => {
 };
 
 export const GetAddRecordMessageApiUrl = (record_id: string) => {
-    return `${SPECIAL_RECORD_BASE_API_URL}${record_id}/messages`;
+    return `${SPECIAL_RECORD_BASE_API_URL}${record_id}/add_message/`;
 };
 
 export const GetRecordDocumentApiUrl = (document_id: string) => {
@@ -162,15 +171,19 @@ export const GetRecordDocumentApiUrl = (document_id: string) => {
 };
 
 export const GetRecordPermissionRequestApiUrl = (record_id: string) => {
-    return `${SPECIAL_RECORD_BASE_API_URL}${record_id}/request_permission`;
+    return `${SPECIAL_RECORD_BASE_API_URL}${record_id}/request_permission/`;
 };
 
-export const GetResetPasswordApiUrl = (link_id: string) => {
-    return `${RESET_PASSWORD_API_URL}${link_id}/`;
+export const GetResetPasswordApiUrl = (userId: number) => {
+    return `${RESET_PASSWORD_API_URL}${userId}/password_reset_confirm/`;
 };
 
 export const GetSpecialGroupApiURL = (id: string | number) => {
     return `${GROUPS_API_URL}${id}/`;
+};
+
+export const GetSpecialGroupMemberApiURL = (id: string) => {
+    return `${GetSpecialGroupApiURL(id)}member/`;
 };
 
 export const GetSpecialPermissionApiURL = (id: string | number) => {
@@ -185,8 +198,8 @@ export const GetPermissionsForGroupApiURL = (id: string | number) => {
     return `${PERMISSION_FOR_GROUP_BASE_API_URL}${id}/`;
 };
 
-export const GetCheckUserActivationApiUrl = (link: string) => {
-    return `${CHECK_USER_ACTIVATION_API_URL}${link}/`;
+export const GetCheckUserActivationApiUrl = (userId: number, token: string) => {
+    return `${CHECK_USER_ACTIVATION_API_URL}${userId}/activate/${token}/`;
 };
 
 export const GetActivateUserApiUrl = (link: string) => {
@@ -198,7 +211,7 @@ export const GetDownloadAllRecordDocumentsApiUrl = (record_id: string) => {
 };
 
 export const GetSpecialRecordUploadDocumentsApiUrl = (record_id: string) => {
-    return `${SPECIAL_RECORD_BASE_API_URL}${record_id}/documents/`;
+    return `${SPECIAL_E_RECORD_BASE_API_URL}${record_id}/documents/`;
 };
 
 export const GetDownloadEncryptedRecordDocumentApiUrl = (document_id: string) => {
@@ -217,7 +230,6 @@ export const GetFolderPermissionsForFolderApiUrl = (id: string) => {
 export const GetFolderPermissionApiUrl = (id: string) => {
     return `${FILES_PERMISSION_FOR_FOLDER_BASE_API_URL}${id}/`;
 };
-
 export const GetCollabTextDocumentApiUrl = (id: number) => {
     return `${COLLAB_TEXT_DOCUMENTS_API_URL}${id}/`;
 };
@@ -245,4 +257,12 @@ export const GetCollabDocumentPermissionApiUrl = (id: number) => {
 
 export const GetCollabDocumentPermissionForDocumentApiUrl = (id: number) => {
     return `${COLLAB_PERMISSION_FOR_DOCUMENT_API_URL}${id}/`;
+};
+
+export const GetStaticsApiUrl = (token: string) => {
+    return `${PROFILES_API_URL}statics/${token}/`;
+};
+
+export const GetNewUserRequestApiUrl = (id: number) => {
+    return `${NEW_USER_REQUEST_ADMIT_API_URL}${id}/`;
 };

@@ -24,16 +24,22 @@
 
             <div *ngIf="canEditPermissions">
                 <div class="horizontal edit-group__headers">
-                    <h1>Permissions: </h1>
-                    <button mat-flat-button color="primary" *ngIf="canEditPermissions"
-                            (click)="onEditPermissionsClick()">
+                    <h1>Permissions:</h1>
+                    <button
+                        mat-flat-button
+                        color="primary"
+                        *ngIf="canEditPermissions"
+                        (click)="onAddPermissionsClick()"
+                    >
                         add permission
                     </button>
                 </div>
 
-                <app-has-permissions-list *ngIf="groupHasPermissions && groupHasPermissions.length > 0"
-                                          [hasPermissions]="groupHasPermissions"
-                                          [permissionHolder]="group"></app-has-permissions-list>
+                <app-has-permissions-list
+                    *ngIf="groupHasPermissions && groupHasPermissions.length > 0"
+                    [hasPermissions]="groupHasPermissions"
+                    [permissionHolder]="group"
+                ></app-has-permissions-list>
             </div>
         </mat-card-content>
     </div>

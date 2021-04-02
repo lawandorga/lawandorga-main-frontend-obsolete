@@ -17,7 +17,7 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { isDevMode } from '@angular/core';
 import { AppSandboxService } from '../../../services/app-sandbox.service';
@@ -26,6 +26,7 @@ import {
     MAIN_PAGE_FRONT_URL,
     REGISTER_FRONT_URL
 } from '../../../../statics/frontend_links.statics';
+import { CoreSandboxService } from '../../../services/core-sandbox.service';
 
 @Component({
     selector: 'app-login',
@@ -38,8 +39,11 @@ export class LoginComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private router: Router,
-        private appSB: AppSandboxService
-    ) {
+        private appSB: AppSandboxService,
+        private coreSB: CoreSandboxService,
+    ) {}
+
+    ngOnInit() {
         if (this.appSB.isAuthenticated()) {
             this.router.navigate([MAIN_PAGE_FRONT_URL]);
         }
@@ -52,9 +56,16 @@ export class LoginComponent implements OnInit {
             this.loginForm.controls['email'].setValue('dummy@rlcm.de');
             this.loginForm.controls['password'].setValue('qwe123');
         }
-    }
 
-    ngOnInit() {}
+        // if an activation link was used try to activate the user
+        // url: activate-user/:id/:token/
+        this.route.params.subscribe((params: Params) => {
+            const token: string = params['token'];
+            const userId: number = params['userid'];
+            if (token && userId)
+            this.coreSB.startCheckingUserActivationLink(userId, token);
+        });
+    }
 
     onLogInClick() {
         if (this.loginForm.valid)

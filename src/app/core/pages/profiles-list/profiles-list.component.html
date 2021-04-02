@@ -16,27 +16,54 @@
   ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
   -->
 
-<mat-card class="card-width">
-    <mat-card-header class="profiles-list__card-header">
-        <h1 matLine>Profiles list</h1>
-        <p matLine>list of all users which are registered in your rlc at the moment</p>
-    </mat-card-header>
-    <mat-card-content>
-        <div *ngIf="otherUsers | async as catalog; else loading">
-            <ng-container *ngIf="catalog.length; else noItems">
-                <mat-list>
-                    <mat-list-item
-                        *ngFor="let user of otherUsers | async"
-                        (click)="this.onUserClick(user)"
-                        class="is_clickable"
-                    >
-                        <mat-icon mat-list-icon>person</mat-icon>
-                        <h4 mat-line class="is_link">{{ user.name }}</h4>
-                    </mat-list-item>
-                </mat-list>
-            </ng-container>
-            <ng-template #noItems>No Items!</ng-template>
-        </div>
-        <ng-template #loading>loading...</ng-template>
-    </mat-card-content>
-</mat-card>
+<div>
+    <table
+        mat-table
+        [dataSource]="allUsersDirect"
+        class="mat-elevation-z8"
+        id="profiles-list-table"
+    >
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let user">{{ user.name }}</td>
+        </ng-container>
+        <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>Email</th>
+            <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+        </ng-container>
+        <ng-container matColumnDef="phone_number">
+            <th mat-header-cell *matHeaderCellDef>Phone Number</th>
+            <td mat-cell *matCellDef="let user">{{ user.phone_number }}</td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let user" class="right-align">
+                <button
+                    *ngIf="!user.accepted"
+                    mat-button
+                    (click)="onAcceptClick(user.id)"
+                    color="primary"
+                >
+                    Accept
+                </button>
+                <button
+                    *ngIf="user.locked"
+                    mat-button
+                    (click)="onUnlockClick(user.id)"
+                    color="primary"
+                >
+                    Unlock
+                </button>
+                <button mat-button (click)="onDeActiveClick(user)" color="primary">
+                    {{ user.is_active ? 'Deactivate' : 'Activate' }}
+                </button>
+
+                <button *ngIf="canDelete" mat-button (click)="onDeleteClick(user.id)" color="warn">
+                    Delete
+                </button>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+</div>

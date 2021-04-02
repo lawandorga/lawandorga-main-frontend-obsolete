@@ -66,9 +66,6 @@ import {
     StartDecliningNewUserRequest,
     UPDATE_NEW_USER_REQUEST,
     START_CHECKING_USER_ACTIVATION_LINK,
-    StartCheckingUserActivationLink,
-    START_ACCEPTING_USER,
-    StartAcceptingUser,
     START_SAVING_USER,
     StartSavingUser,
     START_LOADING_INACTIVE_USERS,
@@ -94,19 +91,20 @@ import {
     GetSpecialHasPermissionApiURL,
     GetSpecialPermissionApiURL,
     GetSpecialProfileApiURL,
-    GROUP_MEMBER_API_URL,
     GROUPS_API_URL,
     HAS_PERMISSION_API_URL,
     HAS_PERMISSIONS_STATICS_API_URL,
     INACTIVE_USERS_API_URL,
     LOGIN_API_URL,
+    GetNewUserRequestApiUrl,
     NEW_USER_REQUEST_ADMIT_API_URL,
     NEW_USER_REQUEST_API_URL,
     PROFILES_API_URL,
     RLC_SETTINGS_API_URL,
     RLCS_API_URL,
     UNREAD_NOTIFICATIONS_API_URL,
-    USER_HAS_PERMISSIONS_API_URL
+    USER_HAS_PERMISSIONS_API_URL,
+    GetSpecialGroupMemberApiURL
 } from '../../statics/api_urls.statics';
 import { CoreSandboxService } from '../services/core-sandbox.service';
 import { ForeignUser, FullUser, RestrictedUser } from '../models/user.model';
@@ -197,7 +195,9 @@ export class CoreEffects {
                         return [];
                     }),
                     mergeMap((response: any) => {
-                        const groups = RestrictedGroup.getRestrictedGroupsFromJsonArray(response);
+                        const groups = RestrictedGroup.getRestrictedGroupsFromJsonArray(
+                            response.results ? response.results : response
+                        );
                         return [
                             {
                                 type: SET_GROUPS,
@@ -223,7 +223,9 @@ export class CoreEffects {
                         return [];
                     }),
                     mergeMap((response: any) => {
-                        const users = RestrictedUser.getRestrictedUsersFromJsonArray(response);
+                        const users = FullUser.getFullUsersFromJsonArray(
+                            response.results ? response.results : response
+                        );
                         return [{ type: SET_OTHER_USERS, payload: users }];
                     })
                 )
@@ -304,11 +306,9 @@ export class CoreEffects {
             return from(
                 this.http
                     .post(
-                        GROUP_MEMBER_API_URL,
+                        GetSpecialGroupMemberApiURL(toAdd.group_id),
                         {
-                            action: 'add',
-                            user_ids: toAdd.user_ids,
-                            group_id: toAdd.group_id
+                            member: toAdd.user_ids[0]
                         },
                         privateKeyPlaceholder
                     )
@@ -340,30 +340,30 @@ export class CoreEffects {
             return action.payload;
         }),
         switchMap((toRemove: { user_id: string; group_id: string }) => {
+            const options = {
+                headers: {},
+                body: {
+                    member: toRemove.user_id
+                }
+            };
             return from(
-                this.http
-                    .post(GROUP_MEMBER_API_URL, {
-                        action: 'remove',
-                        user_ids: [toRemove.user_id],
-                        group_id: toRemove.group_id
+                this.http.delete(GetSpecialGroupMemberApiURL(toRemove.group_id), options).pipe(
+                    catchError(error => {
+                        this.snackbar.showErrorSnackBar(
+                            'error at removing group member: ' + error.error.detail
+                        );
+                        return [];
+                    }),
+                    mergeMap((response: any) => {
+                        const group = FullGroup.getFullGroupFromJson(response);
+                        return [
+                            {
+                                type: SET_SPECIAL_GROUP,
+                                payload: group
+                            }
+                        ];
                     })
-                    .pipe(
-                        catchError(error => {
-                            this.snackbar.showErrorSnackBar(
-                                'error at removing group member: ' + error.error.detail
-                            );
-                            return [];
-                        }),
-                        mergeMap((response: any) => {
-                            const group = FullGroup.getFullGroupFromJson(response);
-                            return [
-                                {
-                                    type: SET_SPECIAL_GROUP,
-                                    payload: group
-                                }
-                            ];
-                        })
-                    )
+                )
             );
         })
     );
@@ -630,11 +630,10 @@ export class CoreEffects {
             const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
             return from(
                 this.http
-                    .post(
-                        NEW_USER_REQUEST_ADMIT_API_URL,
+                    .put(
+                        GetNewUserRequestApiUrl(Number(newUserRequest.id)),
                         {
-                            id: newUserRequest.id,
-                            action: 'accept'
+                            state: 'gr'
                         },
                         privateKeyPlaceholder
                     )
@@ -668,9 +667,9 @@ export class CoreEffects {
         switchMap((newUserRequest: NewUserRequest) => {
             return from(
                 this.http
-                    .post(NEW_USER_REQUEST_ADMIT_API_URL, {
+                    .put(GetNewUserRequestApiUrl(Number(newUserRequest.id)), {
                         id: newUserRequest.id,
-                        action: 'decline'
+                        state: 'de'
                     })
                     .pipe(
                         catchError(error => {
@@ -689,54 +688,6 @@ export class CoreEffects {
                             ];
                         })
                     )
-            );
-        })
-    );
-
-    @Effect()
-    startCheckingUserActivationLink = this.actions.pipe(
-        ofType(START_CHECKING_USER_ACTIVATION_LINK),
-        map((action: StartCheckingUserActivationLink) => {
-            return action.payload;
-        }),
-        switchMap((link: string) => {
-            return from(
-                this.http.get(GetCheckUserActivationApiUrl(link)).pipe(
-                    catchError(error => {
-                        this.snackbar.showErrorSnackBar(
-                            'error at checking user activation link: ' + error.error.detail
-                        );
-                        return [];
-                    }),
-                    mergeMap((response: any) => {
-                        return [];
-                    })
-                )
-            );
-        })
-    );
-
-    @Effect()
-    startAcceptingUser = this.actions.pipe(
-        ofType(START_ACCEPTING_USER),
-        map((action: StartAcceptingUser) => {
-            return action.payload;
-        }),
-        switchMap((link: string) => {
-            return from(
-                this.http.post(GetActivateUserApiUrl(link), {}).pipe(
-                    catchError(error => {
-                        this.snackbar.showErrorSnackBar(
-                            'error at checking user activation link: ' + error.error.detail
-                        );
-                        return [];
-                    }),
-                    mergeMap((response: any) => {
-                        this.snackbar.showSuccessSnackBar('account successfully activated');
-                        this.router.navigate([LOGIN_FRONT_URL]);
-                        return [];
-                    })
-                )
             );
         })
     );

@@ -32,7 +32,6 @@ import { GroupComponent } from './pages/group/group.component';
 import { PermissionListComponent } from './pages/permission-list/permission-list.component';
 import { EditPermissionComponent } from './pages/edit-permission/edit-permission.component';
 import { NewUserRequestsComponent } from './pages/new-user-requests/new-user-requests.component';
-import { ActivateUserComponent } from './pages/auth/activate-user/activate-user.component';
 import { LegalNoticeComponent } from './pages/legal-notice/legal-notice.component';
 import { InactiveUsersComponent } from './pages/inactive-users/inactive-users.component';
 import { PrivacyStatementComponent } from './pages/privacy-statement/privacy-statement.component';
@@ -111,8 +110,8 @@ const apiRoutes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'forgot-password', component: ForgotPasswordComponent },
-    { path: 'reset-password/:id', component: ResetPasswordComponent },
-    { path: 'activate_account/:link', component: ActivateUserComponent },
+    { path: 'reset-password/:userid/:token', component: ResetPasswordComponent },
+    { path: 'activate-account/:userid/:token', component: LoginComponent },
     { path: 'legal_notice', component: LegalNoticeComponent },
     { path: 'privacy_statement', component: PrivacyStatementComponent }
 ];
