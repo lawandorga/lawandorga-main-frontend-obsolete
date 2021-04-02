@@ -43,7 +43,6 @@ import { StorageService } from './shared/services/storage.service';
 import { SnackbarService } from './shared/services/snackbar.service';
 import { FilesSandboxService } from './filemanagement/services/files-sandbox.service';
 import { SharedSandboxService } from './shared/services/shared-sandbox.service';
-import { CookieService } from 'ngx-cookie-service';
 
 import { QuillConfig, QuillModule } from 'ngx-quill';
 import Quill from 'quill';
@@ -91,7 +90,6 @@ registerLocaleData(localeDE);
         StorageService,
         SnackbarService,
         SharedSandboxService,
-        CookieService,
         { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
         { provide: LOCALE_ID, useValue: 'de' }
     ],

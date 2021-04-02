@@ -58,6 +58,7 @@ export class AuthInterceptor implements HttpInterceptor {
                     return next.handle(clonedRequest).pipe(
                         catchError((error: HttpErrorResponse, caught) => {
                             // there is an error with the client's connection
+
                             if (
                                 error.error instanceof ErrorEvent ||
                                 error.error instanceof ProgressEvent
