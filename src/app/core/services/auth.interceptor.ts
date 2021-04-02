@@ -17,7 +17,13 @@
  */
 
 import { Injectable } from '@angular/core';
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import {
+    HttpErrorResponse,
+    HttpEvent,
+    HttpHandler,
+    HttpInterceptor,
+    HttpRequest
+} from '@angular/common/http';
 import { AuthState } from '../store/auth/auth.reducers';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -30,7 +36,7 @@ export class AuthInterceptor implements HttpInterceptor {
     constructor(
         private store: Store<AuthState>,
         private appSB: AppSandboxService,
-        private coreSB: CoreSandboxService,
+        private coreSB: CoreSandboxService
     ) {}
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -49,26 +55,40 @@ export class AuthInterceptor implements HttpInterceptor {
                     }
                     const clonedRequest = req.clone({ headers: newHeaders });
 
-                    return next.handle(clonedRequest).pipe(catchError((error: HttpErrorResponse, caught) => {                        
-                        // there is an error with the client's connection    
-                        if (error.error instanceof ErrorEvent || error.error instanceof ProgressEvent) {
-                            this.coreSB.showErrorSnackBar("There seems to be an error with your connection. Please make sure you're connected to the internet.")
-                        } 
-                        // the backend returned an unsuccessful response code
-                        else {
-                            // if the key is not valid anymore log the user out
-                            if (error.status === 401) {
-                                this.appSB.saveLocation();
-                                this.appSB.logout();
-                                this.coreSB.showErrorSnackBar('You were logged out, please login again.');
-                            } 
-                            // if the backend returned a message show that message
-                            else {                                
-                                this.coreSB.showErrorSnackBar(error.error.message)
+                    return next.handle(clonedRequest).pipe(
+                        catchError((error: HttpErrorResponse, caught) => {
+                            // there is an error with the client's connection
+                            if (
+                                error.error instanceof ErrorEvent ||
+                                error.error instanceof ProgressEvent
+                            ) {
+                                this.coreSB.showErrorSnackBar(
+                                    "There seems to be an error with your connection. Please make sure you're connected to the internet."
+                                );
                             }
-                        }
-                        throw error
-                    }))
+                            // the backend returned an unsuccessful response code
+                            else {
+                                // if the key is not valid anymore log the user out
+                                if (error.status === 401) {
+                                    this.appSB.saveLocation();
+                                    this.appSB.logout();
+                                    this.coreSB.showErrorSnackBar(
+                                        'You were logged out, please login again.'
+                                    );
+                                }
+                                // if the backend returned a message show that message
+                                else {
+                                    console.log('error: ', error);
+                                    if (error.error.message) {
+                                        this.coreSB.showErrorSnackBar(error.error.message);
+                                    } else if (error.error.detail) {
+                                        this.coreSB.showErrorSnackBar(error.error.detail);
+                                    }
+                                }
+                            }
+                            throw error;
+                        })
+                    );
                 })
             );
     }

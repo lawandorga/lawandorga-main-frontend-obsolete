@@ -18,28 +18,25 @@
 
 <h1 mat-dialog-title>add new permission</h1>
 <div mat-dialog-content class="add-has-permission__dialog-content">
-    <mat-divider></mat-divider>
-    <p>permit holder</p>
-    <app-autocomplete [allValuesObservable]="allUsers" placeholder="user has permission"
-        (selectedValueChanged)="userHasChanged($event)" [setSelectedValue]="selectedHasUser">
+    <app-autocomplete
+        [allValuesObservable]="allUsers"
+        placeholder="user has permission"
+        (selectedValueChanged)="userHasChanged($event)"
+        [setSelectedValue]="selectedHasUser"
+    >
     </app-autocomplete>
 
-    <app-autocomplete [allValuesObservable]="allGroups" placeholder="group has permission"
-                      (selectedValueChanged)="groupHasChanged($event)" [setSelectedValue]="selectedHasGroup">
+    <app-autocomplete
+        [allValuesObservable]="allGroups"
+        placeholder="group has permission"
+        (selectedValueChanged)="groupHasChanged($event)"
+        [setSelectedValue]="selectedHasGroup"
+    >
     </app-autocomplete>
 
-    <mat-checkbox [(ngModel)]="hasRlcChecked" (change)="hasRlcChanged()">whole rlc has permission</mat-checkbox>
-    <mat-divider></mat-divider>
-    <p>permission is for</p>
-    <app-autocomplete [allValuesObservable]="allUsers" placeholder="permission for user"
-                      (selectedValueChanged)="userForChanged($event)" [setSelectedValue]="selectedForUser">
-    </app-autocomplete>
-
-    <app-autocomplete [allValuesObservable]="allGroups" placeholder="permission for group"
-                      (selectedValueChanged)="groupForChanged($event)" [setSelectedValue]="selectedForGroup">
-    </app-autocomplete>
-
-    <mat-checkbox [(ngModel)]="forRlcChecked" (change)="forRlcChanged()">permission applies to whole rlc</mat-checkbox>
+    <mat-checkbox [(ngModel)]="hasRlcChecked" (change)="hasRlcChanged()"
+        >whole rlc has permission</mat-checkbox
+    >
 </div>
 
 <div mat-dialog-actions>

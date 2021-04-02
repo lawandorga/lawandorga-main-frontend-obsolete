@@ -85,7 +85,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
         this.coreSB.removeGroupMember(user_id, this.group.id);
     }
 
-    onEditPermissionsClick(): void {
+    onAddPermissionsClick(): void {
         if (this.canEditPermissions)
             this.dialog.open(AddHasPermissionForComponent, { data: this.group });
     }
