@@ -31,6 +31,7 @@
     "@ngrx/effects": "^10.0.1",
     "@ngrx/store": "^10.0.1",
     "@swimlane/ngx-charts": "^17.0.0",
+    "aws-sdk": "^2.739.0",
     "core-js": "^3.6.5",
     "env-cmd": "^10.1.0",
     "file-saver": "^2.0.1",
