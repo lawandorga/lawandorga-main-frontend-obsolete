@@ -32,13 +32,14 @@ import {
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthState } from '../store/auth/auth.reducers';
-import { LOGIN_FRONT_URL } from '../../statics/frontend_links.statics';
-import { CookieService } from 'ngx-cookie-service';
 import { HttpHeaders } from '@angular/common/http';
+import { MediaMatcher } from '@angular/cdk/layout';
 
 @Injectable()
 export class AppSandboxService {
     savedLocation = '';
+    toggleNav: Function;
+    navbar;
 
     static getPrivateKeyPlaceholder(): any {
         let headers = new HttpHeaders();
@@ -49,7 +50,7 @@ export class AppSandboxService {
     constructor(
         private store: Store<AppState>,
         private router: Router,
-        private cookieService: CookieService
+        private media: MediaMatcher
     ) {}
 
     isAuthenticated(): boolean {
@@ -78,7 +79,7 @@ export class AppSandboxService {
         if (loginInformation.token !== null && loginInformation.token !== '') {
             this.store.dispatch(new SetToken(loginInformation.token));
             this.store.dispatch(new SetUsersPrivateKey(loginInformation.users_private_key));
-            this.store.dispatch(new ReloadStaticInformation());
+            this.store.dispatch(new ReloadStaticInformation({ token: loginInformation.token }));
         }
         return this.store.pipe(select('auth'));
     }
@@ -91,35 +92,18 @@ export class AppSandboxService {
         this.store.dispatch(new ForgotPassword({ email }));
     }
 
-    resetPassword(new_password: string, link_id: string): void {
-        this.store.dispatch(new ResetPassword({ new_password, link_id }));
+    resetPassword(new_password: string, userId: number, token: string): void {
+        this.store.dispatch(
+            new ResetPassword({ newPassword: new_password, userId: userId, token: token })
+        );
     }
 
     saveTokenAndUsersPrivateKey(token: string, users_private_key: string): void {
         localStorage.setItem('token', token);
         localStorage.setItem('users_private_key', users_private_key);
-        // if (
-        //     window.navigator.userAgent.toLowerCase().indexOf('chrome') > -1 &&
-        //     !!(<any>window).chrome
-        // ) {
-        //     document.cookie = `token=${token}`;
-        //     console.log('chrome want to set private key: ', users_private_key);
-        //     document.cookie = `users_private_key=${users_private_key}`;
-        //     console.log('cookies set "manually"');
-        // } else {
-        //     this.cookieService.set('token', token);
-        //     this.cookieService.set('users_private_key', users_private_key);
-        // }
     }
 
     loadTokenAndUsersPrivateKey(): any {
-        // console.log('read private key: ', this.cookieService.get('users_private_key'));
-        //
-        // return {
-        //     token: this.cookieService.get('token'),
-        //     users_private_key: this.cookieService.get('users_private_key')
-        // };
-
         return {
             token: localStorage.getItem('token'),
             users_private_key: localStorage.getItem('users_private_key')
@@ -127,8 +111,26 @@ export class AppSandboxService {
     }
 
     resetTokenAndUsersPrivateKey(): void {
-        // this.cookieService.delete('token');
-        // this.cookieService.delete('users_private_key');
         localStorage.clear();
+    }
+
+    setNavbar(navbar) {
+        this.navbar = navbar;
+    }
+
+    closeNavbar(): void {
+        if (this.navbar) this.navbar.close();
+    }
+
+    openNavbar(): void {
+        if (this.navbar) this.navbar.open();
+    }
+
+    toggleNavbar(): void {
+        if (this.navbar) this.navbar.toggle();
+    }
+
+    isOnMobile(): boolean {
+        return this.media.matchMedia('(max-width: 600px)').matches;
     }
 }

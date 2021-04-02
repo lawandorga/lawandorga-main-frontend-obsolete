@@ -35,3 +35,8 @@ export const PERMISSION_MANAGE_FOLDER_PERMISSIONS_RLC = 'manage_folder_permissio
 export const PERMISSION_WRITE_ALL_FOLDERS_RLC = 'write_all_folders_rlc';
 export const PERMISSION_READ_ALL_FOLDERS_RLC = 'read_all_folders_rlc';
 export const PERMISSION_ACCESS_TO_FILES_RLC = 'access_to_files_rlc';
+export const PERMISSION_READ_ALL_COLLAB_DOCUMENTS_RLC = 'read_all_collab_documents_rlc';
+export const PERMISSION_WRITE_ALL_COLLAB_DOCUMENTS_RLC = 'write_all_collab_documents_rlc';
+export const PERMISSION_MANAGE_COLLAB_DOCUMENT_PERMISSIONS_RLC =
+    'manage_collab_document_permissions_rlc';
+export const PERMISSION_MANAGE_USERS = 'manage_users';

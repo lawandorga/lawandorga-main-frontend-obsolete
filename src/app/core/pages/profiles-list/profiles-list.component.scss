@@ -16,7 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-.profiles-list__card-header{
+.profiles-list__card-header {
     flex-direction: column;
+}
+
+#profiles-list-table {
+    width: 100%;
+
+    .right-align {
+        text-align: right;
+        justify-content: flex-end;
+    }
 }
 

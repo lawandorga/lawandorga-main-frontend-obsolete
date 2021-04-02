@@ -19,7 +19,7 @@
 import moment from 'moment';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { take } from 'rxjs/operators';
+import { catchError, mergeMap, take } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/app.reducers';
 import { CoreState } from '../store/core.reducers';
@@ -31,14 +31,13 @@ import {
     ResetSpecialForeignUser,
     ResetSpecialGroup,
     ResetSpecialPermission,
+    SET_OTHER_USERS,
     SetSpecialForeignUser,
-    StartAcceptingUser,
     StartActivatingInactiveUser,
     StartAddingGroup,
     StartAddingGroupMembers,
     StartAddingHasPermission,
     StartAdmittingNewUserRequest,
-    StartCheckingUserActivationLink,
     StartCheckingUserHasPermissions,
     StartCreateUser,
     StartDecliningNewUserRequest,
@@ -66,6 +65,8 @@ import { RestrictedRlc } from '../models/rlc.model';
 import { NewUserRequest } from '../models/new_user_request.model';
 import { State } from '../models/state.model';
 import { RlcSettings } from '../models/rlc_settings.model';
+import { HttpClient } from '@angular/common/http';
+import { GetCheckUserActivationApiUrl, PROFILES_API_URL } from '../../statics/api_urls.statics';
 
 @Injectable()
 export class CoreSandboxService {
@@ -75,7 +76,8 @@ export class CoreSandboxService {
         public router: Router,
         private snackbarService: SnackbarService,
         private appStateStore: Store<AppState>,
-        private coreStateStore: Store<CoreState>
+        private coreStateStore: Store<CoreState>,
+        private http: HttpClient
     ) {}
 
     static transformDateToString(date: Date | string): string {
@@ -89,6 +91,10 @@ export class CoreSandboxService {
     }
 
     getUser(): Observable<FullUser> {
+        return this.coreStateStore.pipe(select((state: any) => state.core.user));
+    }
+
+    getUserRestricted(): Observable<RestrictedUser> {
         return this.coreStateStore.pipe(select((state: any) => state.core.user));
     }
 
@@ -214,12 +220,12 @@ export class CoreSandboxService {
         );
     }
 
-    showSuccessSnackBar(message: string) {
-        this.snackbarService.showSuccessSnackBar(message);
+    showSuccessSnackBar(message: string, duration: number = 10000) {
+        this.snackbarService.showSuccessSnackBar(message, duration);
     }
 
-    showErrorSnackBar(message: string) {
-        this.snackbarService.showErrorSnackBar(message);
+    showErrorSnackBar(message: string, duration: number = 10000) {
+        this.snackbarService.showErrorSnackBar(message, duration);
     }
 
     relogUser() {
@@ -388,12 +394,19 @@ export class CoreSandboxService {
         this.coreStateStore.dispatch(new StartDecliningNewUserRequest(newUserRequest));
     }
 
-    startCheckingUserActivationLink(link: string): void {
-        this.coreStateStore.dispatch(new StartCheckingUserActivationLink(link));
-    }
-
-    startAcceptingUser(link: string): void {
-        this.coreStateStore.dispatch(new StartAcceptingUser(link));
+    startCheckingUserActivationLink(userId: number, token: string): void {
+        this.http.get(GetCheckUserActivationApiUrl(userId, token)).subscribe(
+            result => {
+                this.snackbarService.showSuccessSnackBar('Your email was confirmed.');
+            },
+            error => {
+                if (error.status === 400) {
+                    this.snackbarService.showErrorSnackBar(error.error.message);
+                } else {
+                    this.snackbarService.showErrorSnackBar('Your activation link is invalid.');
+                }
+            }
+        );
     }
 
     getUserStates(asArray: boolean = true): Observable<State[]> {
@@ -473,5 +486,23 @@ export class CoreSandboxService {
 
     incrementNotificationCounter(): void {
         this.coreStateStore.dispatch(new IncrementNotificationCounter());
+    }
+
+    getOtherUserDirect(): Observable<any> {
+        // this.http.get(PROFILES_API_URL).subscribe(
+        //     catchError(error => {
+        //         this.showErrorSnackBar(
+        //             'error at loading profiles: ' + error.error.detail
+        //         );
+        //         return [];
+        //     }),
+        //     mergeMap((response: any) => {
+        //         const users = FullUser.getFullUsersFromJsonArray(
+        //             response.results ? response.results : response
+        //         );
+        //
+        //     })
+        // )
+        return this.http.get(PROFILES_API_URL);
     }
 }

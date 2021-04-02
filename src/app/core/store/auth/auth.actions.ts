@@ -35,6 +35,8 @@ export class TryLogin implements Action {
 
 export class ReloadStaticInformation implements Action {
     readonly type = TRY_RELOAD_STATIC_INFORMATION;
+
+    constructor(public payload: {token: string}) {}
 }
 
 export class SetToken implements Action {
@@ -62,7 +64,7 @@ export class ForgotPassword implements Action {
 export class ResetPassword implements Action {
     readonly type = RESET_PASSWORD;
 
-    constructor(public payload: { new_password: string; link_id: string }) {}
+    constructor(public payload: { newPassword: string; userId: number, token: string }) {}
 }
 
 export class StartLoggingOut implements Action {

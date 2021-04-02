@@ -1,6 +1,6 @@
 /*
  * law&orga - record and organization management software for refugee law clinics
- * Copyright (C) 2019  Dominik Walser
+ * Copyright (C) 2020  Dominik Walser
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -17,28 +17,22 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
-import { CoreSandboxService } from '../../../services/core-sandbox.service';
+import { CollabSandboxService } from '../../services/collab-sandbox.service';
 
 @Component({
-    selector: 'app-activate-user',
-    templateUrl: './activate-user.component.html',
-    styleUrls: ['./activate-user.component.scss']
+    selector: 'app-collab-main-view',
+    templateUrl: './collab-main-view.component.html',
+    styleUrls: ['./collab-main-view.component.scss']
 })
-export class ActivateUserComponent implements OnInit {
-    activationLink: string;
+export class CollabMainViewComponent implements OnInit {
+    constructor(public collabSB: CollabSandboxService) {}
 
-    constructor(private coreSB: CoreSandboxService, public route: ActivatedRoute) {}
-
-    ngOnInit() {
-        this.route.params.subscribe((params: Params) => {
-            this.activationLink = params['link'];
-
-            this.coreSB.startCheckingUserActivationLink(this.activationLink);
-        });
+    ngOnInit(): void {
+        this.collabSB.startLoadingAllDocuments();
     }
 
-    onActivateClick() {
-        this.coreSB.startAcceptingUser(this.activationLink);
+    onAddNewClick() {
+        console.log('add new collab document');
+        this.collabSB.addNewCollabDocument();
     }
 }

@@ -1,6 +1,6 @@
-/*!
+/*
  * law&orga - record and organization management software for refugee law clinics
- * Copyright (C) 2019  Dominik Walser
+ * Copyright (C) 2021  Dominik Walser
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -16,18 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-.activate-user__card {
-    margin-top: 50px;
-    max-width: 800px;
-}
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { STATISTICS_RECORDS_API_URL } from '../../statics/api_urls.statics';
+import { Observable } from 'rxjs';
 
-.activate-user__container {
-    display: flex;
-    justify-content: center;
-}
+@Injectable()
+export class StatisticsSandboxService {
+    constructor(private http: HttpClient) {}
 
-.activate-user__button-container {
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
+    getRecordStatistics(): Observable<any> {
+        return this.http.get<any>(STATISTICS_RECORDS_API_URL);
+    }
 }

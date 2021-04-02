@@ -30,7 +30,8 @@ import { CustomErrorStateMatcher } from '../../../../statics/errror_state_matche
 })
 export class ResetPasswordComponent implements OnInit {
     resetPasswordForm: FormGroup;
-    link_id: string;
+    userId: number;
+    token: string;
     errorStateMatcher = new CustomErrorStateMatcher();
 
     constructor(private appSB: AppSandboxService, private route: ActivatedRoute) {
@@ -45,14 +46,15 @@ export class ResetPasswordComponent implements OnInit {
 
     ngOnInit() {
         this.route.params.subscribe((params: Params) => {
-            this.link_id = params['id'];
+            this.userId = params['userid'];
+            this.token = params['token'];
         });
     }
 
     onSendClick() {
         if (this.resetPasswordForm.valid) {
             const new_pw = this.resetPasswordForm.controls['new_password'].value;
-            this.appSB.resetPassword(new_pw, this.link_id);
+            this.appSB.resetPassword(new_pw, this.userId, this.token);
         }
     }
 }

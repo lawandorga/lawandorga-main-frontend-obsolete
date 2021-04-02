@@ -36,15 +36,12 @@ export class AddHasPermissionComponent implements OnInit {
 
     allUsers: Observable<RestrictedUser[]>;
     selectedHasUser: RestrictedUser = null;
-    selectedForUser: RestrictedUser = null;
 
     allGroups: Observable<RestrictedGroup[]>;
     selectedHasGroup: RestrictedGroup = null;
-    selectedForGroup: RestrictedGroup = null;
 
     ownRlc: RestrictedRlc;
     hasRlcChecked = false;
-    forRlcChecked = true;
 
     constructor(
         private coreSB: CoreSandboxService,
@@ -81,9 +78,9 @@ export class AddHasPermissionComponent implements OnInit {
             this.selectedHasUser,
             this.selectedHasGroup,
             this.hasRlcChecked ? this.ownRlc : null,
-            this.selectedForUser,
-            this.selectedForGroup,
-            this.forRlcChecked ? this.ownRlc : null
+            null,
+            null,
+            this.ownRlc
         );
         this.dialogRef.close();
     }
@@ -108,29 +105,8 @@ export class AddHasPermissionComponent implements OnInit {
         }
     }
 
-    userForChanged(selectedUser: RestrictedUser): void {
-        this.selectedForUser = selectedUser;
-        if (selectedUser) {
-            this.selectedForGroup = null;
-            this.forRlcChecked = false;
-        }
-    }
-
-    groupForChanged(selectedGroup: RestrictedGroup): void {
-        this.selectedForGroup = selectedGroup;
-        if (selectedGroup) {
-            this.selectedForUser = null;
-            this.forRlcChecked = false;
-        }
-    }
-
     hasRlcChanged(): void {
         this.selectedHasUser = null;
         this.selectedHasGroup = null;
-    }
-
-    forRlcChanged(): void {
-        this.selectedForUser = null;
-        this.selectedForGroup = null;
     }
 }

@@ -35,10 +35,8 @@ import { Observable } from 'rxjs';
 import { TableEntry } from '../models/table-entry.model';
 import { StorageService } from '../../shared/services/storage.service';
 import { FolderPermission } from '../models/folder_permission.model';
-import { Table } from 'aws-sdk/clients/glue';
 import { RestrictedGroup } from '../../core/models/group.model';
 import { HasPermission } from '../../core/models/permission.model';
-import { GetFolderFrontUrlAbsolute } from '../../statics/frontend_links.statics';
 
 @Injectable({
     providedIn: 'root'

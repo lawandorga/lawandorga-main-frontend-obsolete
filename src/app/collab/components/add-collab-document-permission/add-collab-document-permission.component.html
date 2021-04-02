@@ -1,0 +1,23 @@
+<h3>add permission for document</h3>
+<div mat-dialog-content class="add-collab-document__dialog-content">
+    <mat-radio-group [(ngModel)]="selectedPermission">
+        <mat-radio-button value="read" class="add-collab-document__radio-button"
+            >read</mat-radio-button
+        >
+        <mat-radio-button value="write" class="add-collab-document__radio-button"
+            >write</mat-radio-button
+        >
+    </mat-radio-group>
+    <app-autocomplete
+        [allValuesObservable]="groups"
+        placeholder="permission for group"
+        (selectedValueChanged)="selectedGroupChanged($event)"
+        [setSelectedValue]="selectedGroup"
+    >
+    </app-autocomplete>
+</div>
+<div mat-dialog-actions>
+    <div class="spacer"></div>
+    <button mat-flat-button (click)="onCloseClick()">close</button>
+    <button mat-flat-button (click)="onAddClick()" color="primary">add</button>
+</div>

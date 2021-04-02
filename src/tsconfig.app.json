@@ -2,7 +2,11 @@
     "extends": "../tsconfig.json",
     "compilerOptions": {
         "outDir": "../out-tsc/app",
-        "types": ["node"]
+        "types": ["node"],
+        "jsx": "react",
+        "experimentalDecorators": true,
+        "moduleResolution": "node"
+//        "esModuleInterop": true
     },
     "exclude": [
         "test.ts",

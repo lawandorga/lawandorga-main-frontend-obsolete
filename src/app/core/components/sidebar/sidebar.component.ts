@@ -23,7 +23,6 @@ import { FullUser } from '../../models/user.model';
 import { CoreSandboxService } from '../../services/core-sandbox.service';
 import {
     PERMISSION_ACCEPT_NEW_USERS_RLC,
-    PERMISSION_ACCESS_TO_FILES_RLC,
     PERMISSION_ACTIVATE_INACTIVE_USERS,
     PERMISSION_CAN_ADD_RECORD_RLC,
     PERMISSION_CAN_CONSULT,
@@ -46,7 +45,8 @@ import {
     RECORD_POOL_FRONT_URL,
     RECORDS_ADD_FRONT_URL,
     RECORDS_FRONT_URL,
-    RECORDS_PERMIT_REQUEST_FRONT_URL
+    RECORDS_PERMIT_REQUEST_FRONT_URL,
+    STATISTICS_FRONT_URL
 } from '../../../statics/frontend_links.statics';
 import { RlcSettings } from '../../models/rlc_settings.model';
 import { Subscription } from 'rxjs';
@@ -81,13 +81,13 @@ export class SidebarComponent implements OnInit, OnDestroy {
             record_documents: false,
             records: false
         },
-        show_files: false,
         record_pool: false
     };
 
     sidebarItemsOrg = [
         {
             label: 'Records',
+            // label: '',
             icon: 'folder',
             link: RECORDS_FRONT_URL
         },
@@ -117,9 +117,19 @@ export class SidebarComponent implements OnInit, OnDestroy {
             link: FILES_FRONT_URL
         },
         {
+            label: 'Collab',
+            icon: 'article',
+            link: 'collab'
+        },
+        {
             label: 'Admin',
             icon: 'lock',
             items: [
+                {
+                    label: 'Statistics',
+                    icon: 'analytics',
+                    link: STATISTICS_FRONT_URL
+                },
                 {
                     label: 'Permit Requests',
                     icon: 'offline_pin',
@@ -282,16 +292,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
             }
         );
 
-        this.coreSB.hasPermissionFromStringForOwnRlc(
-            PERMISSION_ACCESS_TO_FILES_RLC,
-            hasPermission => {
-                if (this.show_tab_permissions.show_files !== hasPermission) {
-                    this.show_tab_permissions.show_files = hasPermission;
-                    this.recheckSidebarItems();
-                }
-            }
-        );
-
         this.coreSB.hasPermissionFromStringForOwnRlc(PERMISSION_CAN_CONSULT, hasPermission => {
             this.coreSB.getRlcSettings().subscribe((settings: RlcSettings) => {
                 if (settings && settings.recordPoolEnabled && hasPermission) {
@@ -311,7 +311,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
         this.subscriptions.push(
             this.coreSB.getNotifications().subscribe((number_of_notifications: number) => {
-                this.number_of_notifications = number_of_notifications.toString();
+                if (number_of_notifications !== null && number_of_notifications)
+                    this.number_of_notifications = number_of_notifications.toString();
             })
         );
 
@@ -359,9 +360,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
                 DELETION_REQUESTS_FRONT_URL,
                 newSidebarItems
             ).newItems;
-        if (!this.show_tab_permissions.show_files)
-            newSidebarItems = SidebarComponent.removeLink(FILES_FRONT_URL, newSidebarItems)
-                .newItems;
         if (!this.show_tab_permissions.record_pool)
             newSidebarItems = SidebarComponent.removeLink(RECORD_POOL_FRONT_URL, newSidebarItems)
                 .newItems;

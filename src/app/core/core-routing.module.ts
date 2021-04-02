@@ -32,12 +32,14 @@ import { GroupComponent } from './pages/group/group.component';
 import { PermissionListComponent } from './pages/permission-list/permission-list.component';
 import { EditPermissionComponent } from './pages/edit-permission/edit-permission.component';
 import { NewUserRequestsComponent } from './pages/new-user-requests/new-user-requests.component';
-import { ActivateUserComponent } from './pages/auth/activate-user/activate-user.component';
 import { LegalNoticeComponent } from './pages/legal-notice/legal-notice.component';
 import { InactiveUsersComponent } from './pages/inactive-users/inactive-users.component';
 import { PrivacyStatementComponent } from './pages/privacy-statement/privacy-statement.component';
 import { NotificationGroupsListComponent } from './pages/notification-groups-list/notification-groups-list.component';
 import { UnsavedGuardService } from './services/unsaved-guard.service';
+import { QuillTestComponent } from './components/quill-test/quill-test.component';
+import { StatisticsPageComponent } from './pages/statistics-page/statistics-page.component';
+import { STATISTICS_FRONT_URL } from '../statics/frontend_links.statics';
 
 const apiRoutes: Routes = [
     {
@@ -99,12 +101,17 @@ const apiRoutes: Routes = [
         component: NotificationGroupsListComponent,
         canActivate: [AuthGuardService]
     },
+    {
+        path: STATISTICS_FRONT_URL,
+        component: StatisticsPageComponent,
+        canActivate: [AuthGuardService]
+    },
     // without access control
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'forgot-password', component: ForgotPasswordComponent },
-    { path: 'reset-password/:id', component: ResetPasswordComponent },
-    { path: 'activate_account/:link', component: ActivateUserComponent },
+    { path: 'reset-password/:userid/:token', component: ResetPasswordComponent },
+    { path: 'activate-account/:userid/:token', component: LoginComponent },
     { path: 'legal_notice', component: LegalNoticeComponent },
     { path: 'privacy_statement', component: PrivacyStatementComponent }
 ];

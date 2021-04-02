@@ -1,6 +1,6 @@
 /*
  * law&orga - record and organization management software for refugee law clinics
- * Copyright (C) 2019  Dominik Walser
+ * Copyright (C) 2021  Dominik Walser
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -16,20 +16,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-// This file is required by karma.conf.js and loads recursively all the .spec and framework files
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import 'zone.js/dist/zone-testing';
-import { getTestBed } from '@angular/core/testing';
-import {
-    BrowserDynamicTestingModule,
-    platformBrowserDynamicTesting
-} from '@angular/platform-browser-dynamic/testing';
+import { TextVersionComponent } from './text-version.component';
 
-declare const require: any;
+describe('TextVersionComponent', () => {
+    let component: TextVersionComponent;
+    let fixture: ComponentFixture<TextVersionComponent>;
 
-// First, initialize the Angular testing environment.
-getTestBed().initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
-// Then we find all the tests.
-const context = require.context('./', true, /\.spec\.ts$/);
-// And load the modules.
-context.keys().map(context);
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            declarations: [TextVersionComponent]
+        }).compileComponents();
+    });
+
+    beforeEach(() => {
+        fixture = TestBed.createComponent(TextVersionComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
+
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
+});

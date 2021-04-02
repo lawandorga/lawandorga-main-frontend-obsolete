@@ -24,6 +24,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { NgModule } from '@angular/core';
 import { NgMaterialMultilevelMenuModule } from 'ng-material-multilevel-menu';
 import { CdkTableModule } from '@angular/cdk/table';
+import { QuillTestComponent } from './components/quill-test/quill-test.component';
+import { QuillModule } from 'ngx-quill';
 
 import { CoreRoutingModule } from './core-routing.module';
 import { ProfileComponent } from './pages/profile/profile.component';
@@ -55,15 +57,16 @@ import {
     NewUserRequestProcessedPipe,
     NewUserRequestRequestedPipe
 } from '../recordmanagement/pipes/new_user_request.pipe';
-import { ActivateUserComponent } from './pages/auth/activate-user/activate-user.component';
 import { LegalNoticeComponent } from './pages/legal-notice/legal-notice.component';
 import { GroupDetailsComponent } from './components/group-details/group-details.component';
 import { InactiveUsersComponent } from './pages/inactive-users/inactive-users.component';
 import { PrivacyStatementComponent } from './pages/privacy-statement/privacy-statement.component';
 import { NotificationGroupsListComponent } from './pages/notification-groups-list/notification-groups-list.component';
 import { NotificationListComponent } from './components/notification-list/notification-list.component';
-
 import { BaseRequestProcessedPipe, BaseRequestRequestedPipe } from './pipes/request.pipe';
+import { StatisticsPageComponent } from './pages/statistics-page/statistics-page.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { StatisticsNumberComponent } from './components/statistics-number/statistics-number.component';
 
 @NgModule({
     imports: [
@@ -76,7 +79,8 @@ import { BaseRequestProcessedPipe, BaseRequestRequestedPipe } from './pipes/requ
         MatTabsModule,
         MatProgressSpinnerModule,
         NgMaterialMultilevelMenuModule,
-        CdkTableModule
+        CdkTableModule,
+        QuillModule
     ],
     declarations: [
         ProfileComponent,
@@ -103,15 +107,17 @@ import { BaseRequestProcessedPipe, BaseRequestRequestedPipe } from './pipes/requ
         NewUserRequestsComponent,
         NewUserRequestRequestedPipe,
         NewUserRequestProcessedPipe,
-        ActivateUserComponent,
         LegalNoticeComponent,
         GroupDetailsComponent,
         InactiveUsersComponent,
         PrivacyStatementComponent,
         NotificationGroupsListComponent,
         NotificationListComponent,
+        QuillTestComponent,
         BaseRequestRequestedPipe,
-        BaseRequestProcessedPipe
+        BaseRequestProcessedPipe,
+        StatisticsPageComponent,
+        StatisticsNumberComponent
     ],
     providers: [],
     exports: [SidebarComponent, BaseRequestRequestedPipe, BaseRequestProcessedPipe]

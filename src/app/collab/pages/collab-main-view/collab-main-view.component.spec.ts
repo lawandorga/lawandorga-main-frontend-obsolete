@@ -1,6 +1,6 @@
 /*
  * law&orga - record and organization management software for refugee law clinics
- * Copyright (C) 2019  Dominik Walser
+ * Copyright (C) 2020  Dominik Walser
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -16,22 +16,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ActivateUserComponent } from './activate-user.component';
+import { CollabMainViewComponent } from './collab-main-view.component';
 
-describe('ActivateUserComponent', () => {
-    let component: ActivateUserComponent;
-    let fixture: ComponentFixture<ActivateUserComponent>;
+describe('CollabMainViewComponent', () => {
+    let component: CollabMainViewComponent;
+    let fixture: ComponentFixture<CollabMainViewComponent>;
 
-    beforeEach(waitForAsync(() => {
-        TestBed.configureTestingModule({
-            declarations: [ActivateUserComponent]
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            declarations: [CollabMainViewComponent]
         }).compileComponents();
-    }));
+    });
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(ActivateUserComponent);
+        fixture = TestBed.createComponent(CollabMainViewComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

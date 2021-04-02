@@ -38,11 +38,27 @@ import { RecordsSandboxService } from './recordmanagement/services/records-sandb
 import { AuthInterceptor } from './core/services/auth.interceptor';
 import { environment } from '../environments/environment';
 import { AppSandboxService } from './core/services/app-sandbox.service';
+import { StatisticsSandboxService } from './core/services/statistics-sandbox.service';
 import { StorageService } from './shared/services/storage.service';
 import { SnackbarService } from './shared/services/snackbar.service';
 import { FilesSandboxService } from './filemanagement/services/files-sandbox.service';
 import { SharedSandboxService } from './shared/services/shared-sandbox.service';
-import { CookieService } from 'ngx-cookie-service';
+
+import { QuillConfig, QuillModule } from 'ngx-quill';
+import Quill from 'quill';
+import QuillCursors from 'quill-cursors';
+import { CollabSandboxService } from './collab/services/collab-sandbox.service';
+
+Quill.register('modules/cursors', QuillCursors);
+Quill.register('modules/mention', QuillCursors);
+
+const quillConfig: QuillConfig = {
+    modules: {
+        cursors: true,
+        table: true,
+        tableUI: true
+    }
+};
 
 registerLocaleData(localeDE);
 
@@ -53,13 +69,15 @@ registerLocaleData(localeDE);
         BrowserAnimationsModule,
         HttpClientModule,
         CustomMaterialModule,
+        BrowserAnimationsModule,
         CoreModule,
         AppRoutingModule,
         StoreModule.forRoot(reducers, {
             runtimeChecks: { strictStateImmutability: false, strictActionImmutability: false }
         }),
         EffectsModule.forRoot([AuthEffects]),
-        !environment.production ? StoreDevtoolsModule.instrument() : []
+        !environment.production ? StoreDevtoolsModule.instrument() : [],
+        QuillModule.forRoot(quillConfig)
     ],
     providers: [
         AuthGuardService,
@@ -67,10 +85,11 @@ registerLocaleData(localeDE);
         CoreSandboxService,
         RecordsSandboxService,
         FilesSandboxService,
+        CollabSandboxService,
+        StatisticsSandboxService,
         StorageService,
         SnackbarService,
         SharedSandboxService,
-        CookieService,
         { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
         { provide: LOCALE_ID, useValue: 'de' }
     ],

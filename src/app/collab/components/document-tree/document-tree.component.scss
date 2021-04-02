@@ -1,0 +1,65 @@
+/*!
+ * law&orga - record and organization management software for refugee law clinics
+ * Copyright (C) 2020  Dominik Walser
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>
+ */
+
+@import "~src/styles/basic";
+
+
+.example-tree-invisible {
+    display: none;
+}
+
+.example-tree ul,
+.example-tree li {
+    margin-top: 0;
+    margin-bottom: 0;
+    list-style-type: none;
+}
+
+.selected-node {
+    color: $c-link-color;
+}
+
+.document-tree__overall-container {
+    width: 300px;
+    overflow: hidden;
+    padding-left: 16px;
+}
+
+.document-tree__name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip;
+    //max-width: 200px;
+    display: inline-block;
+    //display: inherit;
+}
+
+.document-tree__one-line {
+    display: flex;
+    flex-direction: row;
+    flex-flow: nowrap;
+    justify-content: flex-start;
+}
+
+.document-tree_line {
+    display: flex;
+}
+
+.document-tree__test {
+    display: inherit;
+}
