@@ -19,7 +19,7 @@
 import moment from 'moment';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { take } from 'rxjs/operators';
+import { catchError, mergeMap, take } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/app.reducers';
 import { CoreState } from '../store/core.reducers';
@@ -31,6 +31,7 @@ import {
     ResetSpecialForeignUser,
     ResetSpecialGroup,
     ResetSpecialPermission,
+    SET_OTHER_USERS,
     SetSpecialForeignUser,
     StartActivatingInactiveUser,
     StartAddingGroup,
@@ -65,7 +66,7 @@ import { NewUserRequest } from '../models/new_user_request.model';
 import { State } from '../models/state.model';
 import { RlcSettings } from '../models/rlc_settings.model';
 import { HttpClient } from '@angular/common/http';
-import {GetCheckUserActivationApiUrl} from '../../statics/api_urls.statics';
+import { GetCheckUserActivationApiUrl, PROFILES_API_URL } from '../../statics/api_urls.statics';
 
 @Injectable()
 export class CoreSandboxService {
@@ -396,13 +397,13 @@ export class CoreSandboxService {
     startCheckingUserActivationLink(userId: number, token: string): void {
         this.http.get(GetCheckUserActivationApiUrl(userId, token)).subscribe(
             result => {
-                this.snackbarService.showSuccessSnackBar('Your email was confirmed.')
+                this.snackbarService.showSuccessSnackBar('Your email was confirmed.');
             },
-            error => { 
+            error => {
                 if (error.status === 400) {
-                    this.snackbarService.showErrorSnackBar(error.error.message)
+                    this.snackbarService.showErrorSnackBar(error.error.message);
                 } else {
-                    this.snackbarService.showErrorSnackBar('Your activation link is invalid.')
+                    this.snackbarService.showErrorSnackBar('Your activation link is invalid.');
                 }
             }
         );
@@ -485,5 +486,23 @@ export class CoreSandboxService {
 
     incrementNotificationCounter(): void {
         this.coreStateStore.dispatch(new IncrementNotificationCounter());
+    }
+
+    getOtherUserDirect(): Observable<any> {
+        // this.http.get(PROFILES_API_URL).subscribe(
+        //     catchError(error => {
+        //         this.showErrorSnackBar(
+        //             'error at loading profiles: ' + error.error.detail
+        //         );
+        //         return [];
+        //     }),
+        //     mergeMap((response: any) => {
+        //         const users = FullUser.getFullUsersFromJsonArray(
+        //             response.results ? response.results : response
+        //         );
+        //
+        //     })
+        // )
+        return this.http.get(PROFILES_API_URL);
     }
 }
