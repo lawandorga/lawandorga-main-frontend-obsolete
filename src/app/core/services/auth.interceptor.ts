@@ -58,14 +58,11 @@ export class AuthInterceptor implements HttpInterceptor {
                     return next.handle(clonedRequest).pipe(
                         catchError((error: HttpErrorResponse, caught) => {
                             // there is an error with the client's connection
-
                             if (
                                 error.error instanceof ErrorEvent ||
                                 error.error instanceof ProgressEvent
                             ) {
-                                this.coreSB.showErrorSnackBar(
-                                    "There seems to be an error with your connection. Please make sure you're connected to the internet."
-                                );
+                                this.coreSB.showErrorSnackBar('Error');
                             }
                             // the backend returned an unsuccessful response code
                             else {
