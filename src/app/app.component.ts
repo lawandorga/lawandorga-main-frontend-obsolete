@@ -29,7 +29,7 @@ import {
     MAIN_PAGE_FRONT_URL,
     PRIVACY_STATEMENT_FRONT_URL
 } from './statics/frontend_links.statics';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 
 @Component({
     selector: 'app-root',

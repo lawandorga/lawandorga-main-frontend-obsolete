@@ -67,6 +67,7 @@ import {
     RECORD_DOCUMENT_DELETIONS_API_URL
 } from '../../statics/api_urls.statics';
 import { RecordDocumentDeletionRequest } from '../models/reocrd_document_deletion_request.model';
+import { SearchParamsInterface } from '../../shared/interfaces/search_params.interface';
 
 @Injectable({
     providedIn: 'root'

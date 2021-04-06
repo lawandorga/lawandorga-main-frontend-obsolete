@@ -27,7 +27,7 @@ import {
     ViewChild
 } from '@angular/core';
 import { TextDocument } from '../../models/text-document.model';
-import Quill, { Delta } from 'quill';
+import Quill from 'quill';
 import { QuillEditorComponent } from 'ngx-quill';
 import { HasUnsaved } from '../../../core/services/can-have-unsaved.interface';
 import { CollabSandboxService } from '../../services/collab-sandbox.service';
@@ -38,12 +38,8 @@ import { QuillBinding } from 'y-quill';
 import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
 import { RestrictedUser } from '../../../core/models/user.model';
 import { AppSandboxService } from '../../../core/services/app-sandbox.service';
-import { math } from 'lib0';
 import { Router } from '@angular/router';
-import {
-    GetCollabEditFrontUrl,
-    GetCollabViewFrontUrl
-} from '../../../statics/frontend_links.statics';
+import { GetCollabViewFrontUrl } from '../../../statics/frontend_links.statics';
 const hash = require('object-hash');
 
 @Component({
@@ -245,7 +241,7 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
             );
             this.loading = true;
 
-            const timeout = math.max(last_content.length * 0.5, 600);
+            const timeout = Math.max(last_content.length * 0.5, 600);
             setTimeout(() => {
                 if (!this.connectedToPeers && this.provider.awareness.getStates().size === 1) {
                     this.connectedToPeers = true;

@@ -18,7 +18,7 @@
 
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { SharedSandboxService } from '../../services/shared-sandbox.service';
+import { EditTextParamsInterface} from '../../../shared/models/editTextParams.interface'
 
 @Component({
     selector: 'app-edit-text',

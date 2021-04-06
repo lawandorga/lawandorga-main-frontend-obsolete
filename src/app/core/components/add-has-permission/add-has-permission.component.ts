@@ -23,7 +23,7 @@ import { RestrictedUser } from '../../models/user.model';
 import { RestrictedGroup } from '../../models/group.model';
 import { RestrictedRlc } from '../../models/rlc.model';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/internal/operators/tap';
+import { tap } from 'rxjs/operators';
 import { alphabeticalSorterByField } from '../../../shared/other/sorter-helper';
 
 @Component({

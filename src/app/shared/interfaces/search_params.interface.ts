@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-interface SearchParamsInterface {
+export interface SearchParamsInterface {
     filter: string | undefined;
     limit: number | undefined;
     offset: number | undefined;

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-interface EditTextParamsInterface {
+export interface EditTextParamsInterface {
     short: boolean;
     title?: string;
     text?: string;

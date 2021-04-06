@@ -22,6 +22,7 @@ import { RestrictedGroup } from '../core/models/group.model';
 import { Permission } from '../core/models/permission.model';
 import { FullFolder } from '../filemanagement/models/folder.model';
 import { GenerateSearchAppendix } from './api_urls.statics';
+import { SearchParamsInterface } from '../shared/interfaces/search_params.interface'
 
 export const MAIN_PAGE_FRONT_URL = '';
 export const REGISTER_FRONT_URL = 'register';

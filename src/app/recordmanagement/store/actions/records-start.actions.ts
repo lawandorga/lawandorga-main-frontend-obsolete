@@ -23,6 +23,7 @@ import { FullClient } from '../../models/client.model';
 import { Tag } from '../../models/tag.model';
 import { RecordPermissionRequest } from '../../models/record_permission.model';
 import { RecordDeletionRequest } from '../../models/record_deletion_request.model';
+import { SearchParamsInterface } from '../../../shared/interfaces/search_params.interface'
 
 export const START_REQUESTING_RECORD_PERMISSION = 'START_REQUESTING_RECORD_PERMISSION';
 export const START_REQUESTING_RECORD_DELETION = 'START_REQUESTING_RECORD_DELETION';

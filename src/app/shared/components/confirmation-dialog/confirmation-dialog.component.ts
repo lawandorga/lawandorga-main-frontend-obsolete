@@ -18,6 +18,7 @@
 
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {ConfirmTextParamsInterface} from '../../../shared/models/confirmTextParams.interface';
 
 @Component({
     selector: 'app-confirmation-dialog',

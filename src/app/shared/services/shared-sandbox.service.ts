@@ -20,6 +20,8 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { EditTextComponent } from '../components/edit-text/edit-text.component';
 import { ConfirmationDialogComponent } from '../components/confirmation-dialog/confirmation-dialog.component';
+import { EditTextParamsInterface} from '../../shared/models/editTextParams.interface';
+import { ConfirmTextParamsInterface} from '../../shared/models/confirmTextParams.interface';
 
 @Injectable()
 export class SharedSandboxService {

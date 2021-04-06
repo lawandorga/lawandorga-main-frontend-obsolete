@@ -36,7 +36,7 @@ import { CoreSandboxService } from './core/services/core-sandbox.service';
 import { CoreModule } from './core/core.module';
 import { RecordsSandboxService } from './recordmanagement/services/records-sandbox.service';
 import { AuthInterceptor } from './core/services/auth.interceptor';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 import { AppSandboxService } from './core/services/app-sandbox.service';
 import { StatisticsSandboxService } from './core/services/statistics-sandbox.service';
 import { StorageService } from './shared/services/storage.service';

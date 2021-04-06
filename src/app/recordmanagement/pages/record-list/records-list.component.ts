@@ -26,6 +26,7 @@ import { GetRecordFrontUrl, GetRecordListFrontUrl } from '../../../statics/front
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
+import { SearchParamsInterface } from '../../../shared/interfaces/search_params.interface'
 
 @Component({
     selector: 'app-records',

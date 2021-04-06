@@ -1,6 +1,6 @@
 /*
- * rlcapp - record and organization management software for refugee law clinics
- * Copyright (C) 2018  Dominik Walser
+ * law&orga - record and organization management software for refugee law clinics
+ * Copyright (C) 2019  Dominik Walser
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -14,19 +14,11 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
- ******************************************************************************/
-
-import { AppPage } from './app.po';
-
-describe('workspace-project App', () => {
-  let page: AppPage;
-
-  beforeEach(() => {
-    page = new AppPage();
-  });
-
-  it('should display welcome message', () => {
-    page.navigateTo();
-    expect(page.getParagraphText()).toEqual('Welcome to rlcapp!');
-  });
-});
+ */
+​
+export const environment = {
+    production: false,
+    apiUrl: 'http://127.0.0.1:8000/',
+    onProdServer: false,
+    locale: 'en'
+};

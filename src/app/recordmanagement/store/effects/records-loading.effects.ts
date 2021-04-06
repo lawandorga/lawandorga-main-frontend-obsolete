@@ -81,6 +81,7 @@ import { SnackbarService } from '../../../shared/services/snackbar.service';
 import { State } from '../../../core/models/state.model';
 import { RecordDeletionRequest } from '../../models/record_deletion_request.model';
 import { SET_RESULTS_LENGTH } from '../../../core/store/core.actions';
+import { SearchParamsInterface } from '../../../shared/interfaces/search_params.interface'
 
 @Injectable()
 export class RecordsLoadingEffects {

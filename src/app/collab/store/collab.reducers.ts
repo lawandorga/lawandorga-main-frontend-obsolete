@@ -24,7 +24,6 @@ import {
     SET_DOCUMENT_PERMISSIONS
 } from './collab.actions';
 import { getIdObjects } from '../../shared/other/reducer-helper';
-import { tree } from 'lib0';
 import { HasPermission, Permission } from '../../core/models/permission.model';
 import { CollabPermission } from '../models/collab_permission.model';
 
