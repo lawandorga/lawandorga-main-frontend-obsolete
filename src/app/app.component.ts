@@ -21,20 +21,18 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthState } from './core/store/auth/auth.reducers';
 import { Observable } from 'rxjs';
 import { AppSandboxService } from './core/services/app-sandbox.service';
-
 import { MediaMatcher } from '@angular/cdk/layout';
 import { ChangeDetectorRef, OnDestroy } from '@angular/core';
 import {
     LEGAL_NOTICE_FRONT_URL,
     MAIN_PAGE_FRONT_URL,
-    PRIVACY_STATEMENT_FRONT_URL
+    PRIVACY_STATEMENT_FRONT_URL,
 } from './statics/frontend_links.statics';
-import { environment } from '../environments/environment';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss']
+    styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnDestroy, OnInit {
     @ViewChild('snav')
@@ -74,11 +72,13 @@ export class AppComponent implements OnDestroy, OnInit {
         this.mobileQuery.removeListener(this._mobileQueryListener);
     }
 
-    toggleNav() {
+    toggleNav(): void {
+        // eslint-disable-next-line
         if (this.snav) this.snav.toggle();
     }
 
-    redirectToMainPage() {
+    redirectToMainPage(): void {
+        // eslint-disable-next-line
         this.router.navigate([MAIN_PAGE_FRONT_URL]);
     }
 }
