@@ -9,7 +9,7 @@
             "projectType": "application",
             "prefix": "app",
             "schematics": {},
-            "targets": {
+            "architect": {
                 "build": {
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
@@ -37,7 +37,13 @@
                         ]
                     },
                     "configurations": {
-                        "production": {
+                        "prod": {
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.prod.ts"
+                                }
+                            ],
                             "optimization": true,
                             "sourceMap": false,
                             "namedChunks": false,
@@ -46,7 +52,13 @@
                             "vendorChunk": false,
                             "buildOptimizer": true
                         },
-                        "development": {
+                        "test": {
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.test.ts"
+                                }
+                            ],
                             "optimization": true,
                             "sourceMap": false,
                             "namedChunks": false,
@@ -54,6 +66,14 @@
                             "extractLicenses": true,
                             "vendorChunk": false,
                             "buildOptimizer": true
+                        },
+                        "dev": {
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.dev.ts"
+                                }
+                            ]
                         }
                     }
                 },
@@ -64,7 +84,7 @@
                     },
                     "configurations": {
                         "production": {
-                            "browserTarget": "rlcapp:build:production"
+                            "browserTarget": "rlcapp:build:development"
                         }
                     }
                 }

@@ -19,7 +19,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { RecordsSandboxService } from '../../services/records-sandbox.service';
-import { DateAdapter } from '@angular/material/core';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectClientDialogComponent } from '../../components/select-client-dialog/select-client-dialog.component';
@@ -29,7 +28,7 @@ import { RestrictedUser } from '../../../core/models/user.model';
 import { Tag } from '../../models/tag.model';
 import { Observable } from 'rxjs';
 import { dateInPastValidator } from '../../../statics/validators.statics';
-import { tap } from 'rxjs/internal/operators/tap';
+import { tap } from 'rxjs/operators';
 import { alphabeticalSorterByField } from '../../../shared/other/sorter-helper';
 
 @Component({

@@ -1,0 +1,11 @@
+[build]
+  publish = "dist/"
+
+[context.dev]
+  command = "npm run build:dev"
+
+[context.test]
+  command = "npm run build:test"
+
+[context.master]
+  command = "npm run build:prod"

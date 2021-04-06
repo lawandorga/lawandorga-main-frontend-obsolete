@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { environment } from '../../../environments/environment';
+import { environment } from '../../environments/environment';
 import { SearchParamsInterface } from '../shared/interfaces/search_params.interface';
 
 // TODO: check

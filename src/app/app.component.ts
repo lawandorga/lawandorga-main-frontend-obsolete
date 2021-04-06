@@ -29,7 +29,7 @@ import {
     MAIN_PAGE_FRONT_URL,
     PRIVACY_STATEMENT_FRONT_URL
 } from './statics/frontend_links.statics';
-import { environment } from '../../environments/environment';
+import { environment } from '../environments/environment';
 
 @Component({
     selector: 'app-root',
@@ -64,11 +64,6 @@ export class AppComponent implements OnDestroy, OnInit {
     }
 
     ngOnInit(): void {
-        if (environment.onProdServer) {
-            if (location.protocol === 'http:') {
-                window.location.href = location.href.replace('http', 'https');
-            }
-        }
         // allow controlling snav in AppSandboxService
         setTimeout(() => {
             this.appSB.setNavbar(this.snav);
