@@ -1,27 +1,24 @@
 {
-    "compileOnSave": false,
-    "compilerOptions": {
-        "baseUrl": "./",
-        "outDir": "../out-tsc/app",
-        "sourceMap": true,
-        "declaration": false,
-        "downlevelIteration": true,
-        "experimentalDecorators": true,
-        "moduleResolution": "node",
-        "importHelpers": true,
-        "target": "es5",
-        "module": "es2020",
-        "lib": ["es2020", "dom"],
-        // custom stuff
-        "allowSyntheticDefaultImports": true,
-        "paths": {
-            "core-js/es7/reflect": ["node_modules/core-js/proposals/reflect-metadata"],
-            "core-js/es6/*": ["node_modules/core-js/es/*"]
-        },
-    },
-    "include": ["src/**/*"],
-    "exclude": [
-        "**/*.spec.ts",
-        "src/environments/**/*"
-    ]
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "../out-tsc/app",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es5",
+    "module": "es2020",
+    "lib": ["es2020", "dom"],
+    // custom stuff
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "core-js/es7/reflect": ["node_modules/core-js/proposals/reflect-metadata"],
+      "core-js/es6/*": ["node_modules/core-js/es/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.js"],
+  "exclude": ["**/*.spec.ts", "src/environments/*.ts"]
 }

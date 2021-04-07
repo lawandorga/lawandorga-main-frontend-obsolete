@@ -15,8 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
-​
 export const environment = {
-    production: true,
-    apiUrl: 'https://prod-api.law-orga.de/',
+  production: true,
+  apiUrl: 'https://prod-api.law-orga.de/',
 };
