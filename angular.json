@@ -73,12 +73,7 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "rlcapp:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "rlcapp:build:development"
-            }
+            "browserTarget": "rlcapp:build:dev"
           }
         }
       }

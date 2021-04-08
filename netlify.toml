@@ -9,3 +9,8 @@
 
 [context.master]
   command = "npm run build:prod"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
