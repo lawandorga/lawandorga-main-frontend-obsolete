@@ -26,123 +26,121 @@ import { GetRecordFrontUrl, GetRecordListFrontUrl } from '../../../statics/front
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
-import { SearchParamsInterface } from '../../../shared/interfaces/search_params.interface'
+import { SearchParamsInterface } from '../../../shared/interfaces/search_params.interface';
 
 @Component({
-    selector: 'app-records',
-    templateUrl: './records-list.component.html',
-    styleUrls: ['./records-list.component.scss']
+  selector: 'app-records',
+  templateUrl: './records-list.component.html',
+  styleUrls: ['./records-list.component.scss'],
 })
 export class RecordsListComponent implements OnInit, OnDestroy, AfterViewInit {
-    timeout = 400;
-    timer = null;
+  timeout = 400;
+  timer = null;
 
-    columns = ['access', 'token', 'state', 'consultants', 'tags'];
+  columns = ['access', 'token', 'state', 'consultants', 'tags'];
 
-    subscriptions: Subscription[] = [];
+  subscriptions: Subscription[] = [];
 
-    dataSource: RestrictedRecord[] = [];
-    searchValue = '';
-    results_length = 0;
-    searchParams: SearchParamsInterface;
+  dataSource: RestrictedRecord[] = [];
+  searchValue = '';
+  results_length = 0;
+  searchParams: SearchParamsInterface;
 
-    @ViewChild(MatSort, { static: true }) sort: MatSort;
-    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-    constructor(
-        private recordsSandbox: RecordsSandboxService,
-        private coreSB: CoreSandboxService,
-        private route: ActivatedRoute,
-        private router: Router
-    ) {}
+  constructor(
+    private recordsSandbox: RecordsSandboxService,
+    private coreSB: CoreSandboxService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
-    ngAfterViewInit() {
-        this.sort.sortChange.subscribe(event => {
-            this.searchParams = {
-                ...this.searchParams,
-                sort: this.sort.active,
-                sort_direction: this.sort.direction
-            };
-            this.router.navigateByUrl(GetRecordListFrontUrl(this.searchParams));
-        });
+  ngAfterViewInit() {
+    this.sort.sortChange.subscribe((event) => {
+      this.searchParams = {
+        ...this.searchParams,
+        sort: this.sort.active,
+        sort_direction: this.sort.direction,
+      };
+      this.router.navigateByUrl(GetRecordListFrontUrl(this.searchParams));
+    });
 
-        this.paginator.page.subscribe(event => {
-            this.searchParams = {
-                ...this.searchParams,
-                offset: this.paginator.pageSize * this.paginator.pageIndex,
-                limit: this.paginator.pageSize
-            };
-            this.router.navigateByUrl(GetRecordListFrontUrl(this.searchParams));
-        });
-    }
+    this.paginator.page.subscribe((event) => {
+      this.searchParams = {
+        ...this.searchParams,
+        offset: this.paginator.pageSize * this.paginator.pageIndex,
+        limit: this.paginator.pageSize,
+      };
+      this.router.navigateByUrl(GetRecordListFrontUrl(this.searchParams));
+    });
+  }
 
-    ngOnInit() {
-        this.subscriptions.push(
-            this.route.queryParamMap.subscribe(queryParams => {
-                // console.log('search: ', queryParams.get('search'));
-                this.searchValue = queryParams.get('filter');
-                this.paginator.pageSize = Number(queryParams.get('limit'));
-                this.searchParams = {
-                    filter: queryParams.get('filter'),
-                    sort: queryParams.get('sort'),
-                    sort_direction: queryParams.get('sortdirection'),
-                    limit: Number(queryParams.get('limit')),
-                    offset: Number(queryParams.get('offset'))
-                };
-                if (this.searchParams.sort === 'token') {
-                    this.searchParams.sort = 'record_token';
-                }
-                // console.log('search params: ', this.searchParams);
-                this.recordsSandbox.startLoadingRecords(this.searchParams);
-            })
-        );
-
-        this.subscriptions.push(
-            this.recordsSandbox.getRecords(false).subscribe((records: RestrictedRecord[]) => {
-                this.dataSource = records;
-            })
-        );
-        this.subscriptions.push(
-            this.coreSB.getResultsLength().subscribe((results_length: number) => {
-                this.results_length = results_length;
-            })
-        );
-    }
-
-    onSearchClick() {
-        if (this.searchValue && this.searchValue !== '') {
-            this.searchParams = {
-                ...this.searchParams,
-                filter: this.searchValue
-            };
-            this.router.navigateByUrl(GetRecordListFrontUrl(this.searchParams));
-        } else this.router.navigateByUrl(`records`);
-    }
-
-    onSearchChange(searchValue: string) {
-        clearTimeout(this.timer);
-        this.timer = setTimeout(this.fireSearch.bind(this), this.timeout);
-    }
-
-    fireSearch(): void {
-        this.onSearchClick();
-    }
-
-    onRecordSelect(record: RestrictedRecord) {
-        this.router.navigateByUrl(GetRecordFrontUrl(record));
-    }
-
-    onTagClick(tag: Tag) {
+  ngOnInit() {
+    this.subscriptions.push(
+      this.route.queryParamMap.subscribe((queryParams) => {
+        this.searchValue = queryParams.get('filter');
+        this.paginator.pageSize = Number(queryParams.get('limit'));
         this.searchParams = {
-            ...this.searchParams,
-            filter: tag.name
+          filter: queryParams.get('filter'),
+          sort: queryParams.get('sort'),
+          sort_direction: queryParams.get('sortdirection'),
+          limit: Number(queryParams.get('limit')),
+          offset: Number(queryParams.get('offset')),
         };
-        this.router.navigateByUrl(GetRecordListFrontUrl(this.searchParams));
-    }
-
-    ngOnDestroy() {
-        for (const sub of this.subscriptions) {
-            sub.unsubscribe();
+        if (this.searchParams.sort === 'token') {
+          this.searchParams.sort = 'record_token';
         }
+        this.recordsSandbox.startLoadingRecords(this.searchParams);
+      })
+    );
+
+    this.subscriptions.push(
+      this.recordsSandbox.getRecords(false).subscribe((records: RestrictedRecord[]) => {
+        this.dataSource = records;
+      })
+    );
+    this.subscriptions.push(
+      this.coreSB.getResultsLength().subscribe((results_length: number) => {
+        this.results_length = results_length;
+      })
+    );
+  }
+
+  onSearchClick() {
+    if (this.searchValue && this.searchValue !== '') {
+      this.searchParams = {
+        ...this.searchParams,
+        filter: this.searchValue,
+      };
+      this.router.navigateByUrl(GetRecordListFrontUrl(this.searchParams));
+    } else this.router.navigateByUrl(`records`);
+  }
+
+  onSearchChange(searchValue: string) {
+    clearTimeout(this.timer);
+    this.timer = setTimeout(this.fireSearch.bind(this), this.timeout);
+  }
+
+  fireSearch(): void {
+    this.onSearchClick();
+  }
+
+  onRecordSelect(record: RestrictedRecord) {
+    this.router.navigateByUrl(GetRecordFrontUrl(record));
+  }
+
+  onTagClick(tag: Tag) {
+    this.searchParams = {
+      ...this.searchParams,
+      filter: tag.name,
+    };
+    this.router.navigateByUrl(GetRecordListFrontUrl(this.searchParams));
+  }
+
+  ngOnDestroy() {
+    for (const sub of this.subscriptions) {
+      sub.unsubscribe();
     }
+  }
 }

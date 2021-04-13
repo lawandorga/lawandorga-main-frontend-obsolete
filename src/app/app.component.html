@@ -16,35 +16,23 @@
   ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
   -->
 
-<div class="root-container" [class.example-is-mobile]="mobileQuery.matches">
+<div class="root-container">
     <div class="app__main-container">
         <mat-toolbar class="root-toolbar">
             <div class="root-toolbar_left">
-                <button mat-icon-button (click)="toggleNav()"><mat-icon>menu</mat-icon></button>
-                <img
-                    src="/assets/img/rlc_intranet_logo.png"
-                    alt="RLC App"
-                    class="is_clickable"
-                    (click)="redirectToMainPage()"
-                />
+                <button mat-icon-button (click)="toggleNav()">
+                    <mat-icon>menu</mat-icon>
+                </button>
+                <img src="/assets/img/rlc_intranet_logo.png" alt="RLC App" class="is_clickable"
+                    (click)="redirectToMainPage()" />
                 <h1 (click)="redirectToMainPage()" class="is_clickable root-toolbar_text">
                     Law & Orga
                 </h1>
             </div>
         </mat-toolbar>
 
-        <mat-sidenav-container
-            class="sidenav-container"
-            [style.marginTop.px]="mobileQuery.matches ? 56 : 0"
-        >
-            <mat-sidenav
-                #snav
-                [opened]="mobileQuery.matches ? 'false' : 'true'"
-                [mode]="mobileQuery.matches ? 'over' : 'side'"
-                [fixedInViewport]="mobileQuery.matches"
-                fixedTopGap="56"
-                *ngIf="(authState | async).authenticated"
-            >
+        <mat-sidenav-container class="sidenav-container">
+            <mat-sidenav #snav [opened]="'true'" [mode]="'side'" fixedTopGap="56" *ngIf="authenticated | async">
                 <mat-nav-list>
                     <app-sidebar></app-sidebar>
                 </mat-nav-list>
@@ -56,7 +44,7 @@
         </mat-sidenav-container>
     </div>
 
-    <div class="app__additional-link-container" *ngIf="!(authState | async).authenticated">
+    <div class="app__additional-link-container" *ngIf="!authenticated | async">
         <nav class="app__nav-links-container">
             <a routerLink="{{ legalNoticeUrl }}">Impressum</a>
             <a href="{{ privacyStatementUrl }}">Datenschutzerklärung</a>

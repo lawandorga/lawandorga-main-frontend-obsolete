@@ -21,370 +21,325 @@ import { Router } from '@angular/router';
 import { AppSandboxService } from '../../services/app-sandbox.service';
 import { FullUser } from '../../models/user.model';
 import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { Store } from '@ngrx/store';
 import {
-    PERMISSION_ACCEPT_NEW_USERS_RLC,
-    PERMISSION_ACTIVATE_INACTIVE_USERS,
-    PERMISSION_CAN_ADD_RECORD_RLC,
-    PERMISSION_CAN_CONSULT,
-    PERMISSION_CAN_PERMIT_RECORD_PERMISSION_REQUESTS,
-    PERMISSION_CAN_VIEW_PERMISSIONS_RLC,
-    PERMISSION_CAN_VIEW_RECORDS,
-    PERMISSION_PROCESS_RECORD_DELETION_REQUESTS,
-    PERMISSION_PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS
+  PERMISSION_ACCEPT_NEW_USERS_RLC,
+  PERMISSION_ACTIVATE_INACTIVE_USERS,
+  PERMISSION_CAN_ADD_RECORD_RLC,
+  PERMISSION_CAN_CONSULT,
+  PERMISSION_CAN_PERMIT_RECORD_PERMISSION_REQUESTS,
+  PERMISSION_CAN_VIEW_PERMISSIONS_RLC,
+  PERMISSION_CAN_VIEW_RECORDS,
+  PERMISSION_PROCESS_RECORD_DELETION_REQUESTS,
+  PERMISSION_PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS,
 } from '../../../statics/permissions.statics';
 import {
-    ACCEPT_NEW_USER_REQUESTS_FRONT_URL,
-    DELETION_REQUESTS_FRONT_URL,
-    FILES_FRONT_URL,
-    GROUPS_FRONT_URL,
-    INACTIVE_USERS_FRONT_URL,
-    LEGAL_NOTICE_FRONT_URL,
-    OWN_PROFILE_FRONT_URL,
-    PERMISSIONS_FRONT_URL,
-    PROFILES_FRONT_URL,
-    RECORD_POOL_FRONT_URL,
-    RECORDS_ADD_FRONT_URL,
-    RECORDS_FRONT_URL,
-    RECORDS_PERMIT_REQUEST_FRONT_URL,
-    STATISTICS_FRONT_URL
+  ACCEPT_NEW_USER_REQUESTS_FRONT_URL,
+  DELETION_REQUESTS_FRONT_URL,
+  FILES_FRONT_URL,
+  GROUPS_FRONT_URL,
+  INACTIVE_USERS_FRONT_URL,
+  LEGAL_NOTICE_FRONT_URL,
+  OWN_PROFILE_FRONT_URL,
+  PERMISSIONS_FRONT_URL,
+  PROFILES_FRONT_URL,
+  RECORD_POOL_FRONT_URL,
+  RECORDS_ADD_FRONT_URL,
+  RECORDS_FRONT_URL,
+  RECORDS_PERMIT_REQUEST_FRONT_URL,
+  STATISTICS_FRONT_URL,
 } from '../../../statics/frontend_links.statics';
 import { RlcSettings } from '../../models/rlc_settings.model';
 import { Subscription } from 'rxjs';
+import { Logout } from '../../store/auth/actions';
 
 @Component({
-    selector: 'app-sidebar',
-    templateUrl: './sidebar.component.html',
-    styleUrls: ['./sidebar.component.scss']
+  selector: 'app-sidebar',
+  templateUrl: './sidebar.component.html',
+  styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit, OnDestroy {
-    subscriptions: Subscription[] = [];
-    name = '';
-    email = '';
+  subscriptions: Subscription[] = [];
+  name = '';
+  email = '';
 
-    timerCheckPermissions = null;
-    timerLoadUnreadNotifications = null;
-    checkPermissionInterval = 30000;
-    checkNotificationsInterval = 15000;
+  timerCheckPermissions = null;
+  timerLoadUnreadNotifications = null;
+  checkPermissionInterval = 30000;
+  checkNotificationsInterval = 15000;
 
-    number_of_notifications = '0';
+  number_of_notifications = '0';
 
-    legalNoticeUrl = LEGAL_NOTICE_FRONT_URL;
+  legalNoticeUrl = LEGAL_NOTICE_FRONT_URL;
 
-    show_tab_permissions = {
-        records: false,
-        add_record: false,
-        record_permission_request: false,
-        permissions: false,
-        accept_new_user: false,
-        activate_inactive_users: false,
-        process_deletion_requests: {
-            record_documents: false,
-            records: false
-        },
-        record_pool: false
-    };
+  show_tab_permissions = {
+    records: false,
+    add_record: false,
+    record_permission_request: false,
+    permissions: false,
+    accept_new_user: false,
+    activate_inactive_users: false,
+    process_deletion_requests: {
+      record_documents: false,
+      records: false,
+    },
+    record_pool: false,
+  };
 
-    sidebarItemsOrg = [
+  sidebarItemsOrg = [
+    {
+      label: 'Records',
+      // label: '',
+      icon: 'folder',
+      link: RECORDS_FRONT_URL,
+    },
+    {
+      label: 'Create Record',
+      icon: 'create_new_folder',
+      link: RECORDS_ADD_FRONT_URL,
+    },
+    {
+      label: 'Record Pool',
+      icon: 'library_books',
+      link: RECORD_POOL_FRONT_URL,
+    },
+    {
+      label: 'Profiles',
+      icon: 'people_outline',
+      link: PROFILES_FRONT_URL,
+    },
+    {
+      label: 'Groups',
+      icon: 'group',
+      link: GROUPS_FRONT_URL,
+    },
+    {
+      label: 'Files',
+      icon: 'folder_open',
+      link: FILES_FRONT_URL,
+    },
+    {
+      label: 'Collab',
+      icon: 'article',
+      link: 'collab',
+    },
+    {
+      label: 'Admin',
+      icon: 'lock',
+      items: [
         {
-            label: 'Records',
-            // label: '',
-            icon: 'folder',
-            link: RECORDS_FRONT_URL
+          label: 'Statistics',
+          icon: 'analytics',
+          link: STATISTICS_FRONT_URL,
         },
         {
-            label: 'Create Record',
-            icon: 'create_new_folder',
-            link: RECORDS_ADD_FRONT_URL
+          label: 'Permit Requests',
+          icon: 'offline_pin',
+          link: RECORDS_PERMIT_REQUEST_FRONT_URL,
         },
         {
-            label: 'Record Pool',
-            icon: 'library_books',
-            link: RECORD_POOL_FRONT_URL
+          label: 'Permissions',
+          icon: 'vpn_key',
+          link: PERMISSIONS_FRONT_URL,
         },
         {
-            label: 'Profiles',
-            icon: 'people_outline',
-            link: PROFILES_FRONT_URL
+          label: 'New Users',
+          icon: 'person_add',
+          link: ACCEPT_NEW_USER_REQUESTS_FRONT_URL,
         },
         {
-            label: 'Groups',
-            icon: 'group',
-            link: GROUPS_FRONT_URL
+          label: 'Inactive Users',
+          icon: 'perm_identity',
+          link: INACTIVE_USERS_FRONT_URL,
         },
         {
-            label: 'Files',
-            icon: 'folder_open',
-            link: FILES_FRONT_URL
+          label: 'Deletion Requests',
+          icon: 'delete_forever',
+          link: DELETION_REQUESTS_FRONT_URL,
         },
-        {
-            label: 'Collab',
-            icon: 'article',
-            link: 'collab'
-        },
-        {
-            label: 'Admin',
-            icon: 'lock',
-            items: [
-                {
-                    label: 'Statistics',
-                    icon: 'analytics',
-                    link: STATISTICS_FRONT_URL
-                },
-                {
-                    label: 'Permit Requests',
-                    icon: 'offline_pin',
-                    link: RECORDS_PERMIT_REQUEST_FRONT_URL
-                },
-                {
-                    label: 'Permissions',
-                    icon: 'vpn_key',
-                    link: PERMISSIONS_FRONT_URL
-                },
-                {
-                    label: 'New Users',
-                    icon: 'person_add',
-                    link: ACCEPT_NEW_USER_REQUESTS_FRONT_URL
-                },
-                {
-                    label: 'Inactive Users',
-                    icon: 'perm_identity',
-                    link: INACTIVE_USERS_FRONT_URL
-                },
-                {
-                    label: 'Deletion Requests',
-                    icon: 'delete_forever',
-                    link: DELETION_REQUESTS_FRONT_URL
-                }
-            ]
-        }
-    ];
-    actualSidebarItems = [];
+      ],
+    },
+  ];
+  actualSidebarItems = [];
 
-    config = {
-        // interfaceWithRoute: true,
-        highlightOnSelect: true
-    };
+  config = {
+    // interfaceWithRoute: true,
+    highlightOnSelect: true,
+  };
 
-    static removeLink(
-        link: string,
-        itemsToSearch
-    ): { removed: boolean; newItems; deleteMe: boolean } {
-        for (const item of itemsToSearch) {
-            if (item.link === link) {
-                return {
-                    removed: true,
-                    newItems: itemsToSearch.filter(innerItem => innerItem.link !== link),
-                    deleteMe: itemsToSearch.length < 2
-                };
-            }
-            if (item.items) {
-                const result = this.removeLink(link, item.items);
-                if (result.deleteMe) {
-                    return {
-                        removed: true,
-                        newItems: itemsToSearch.filter(innerItem => innerItem !== item),
-                        deleteMe: itemsToSearch.length < 2
-                    };
-                }
-                if (result.removed) {
-                    item.items = result.newItems;
-                    return {
-                        removed: true,
-                        newItems: itemsToSearch,
-                        deleteMe: false
-                    };
-                }
-            }
-        }
+  static removeLink(link: string, itemsToSearch): { removed: boolean; newItems; deleteMe: boolean } {
+    for (const item of itemsToSearch) {
+      if (item.link === link) {
         return {
-            removed: false,
-            newItems: itemsToSearch,
-            deleteMe: false
+          removed: true,
+          newItems: itemsToSearch.filter((innerItem) => innerItem.link !== link),
+          deleteMe: itemsToSearch.length < 2,
         };
+      }
+      if (item.items) {
+        const result = this.removeLink(link, item.items);
+        if (result.deleteMe) {
+          return {
+            removed: true,
+            newItems: itemsToSearch.filter((innerItem) => innerItem !== item),
+            deleteMe: itemsToSearch.length < 2,
+          };
+        }
+        if (result.removed) {
+          item.items = result.newItems;
+          return {
+            removed: true,
+            newItems: itemsToSearch,
+            deleteMe: false,
+          };
+        }
+      }
     }
+    return {
+      removed: false,
+      newItems: itemsToSearch,
+      deleteMe: false,
+    };
+  }
 
-    constructor(
-        private router: Router,
-        private appSB: AppSandboxService,
-        private coreSB: CoreSandboxService
-    ) {
-        this.actualSidebarItems = this.sidebarItemsOrg;
-    }
+  constructor(private router: Router, private appSB: AppSandboxService, private coreSB: CoreSandboxService, private store: Store) {
+    this.actualSidebarItems = this.sidebarItemsOrg;
+  }
 
-    ngOnInit() {
-        this.coreSB.hasPermissionFromStringForOwnRlc(PERMISSION_CAN_VIEW_RECORDS, hasPermission => {
-            if (this.show_tab_permissions.records !== hasPermission) {
-                this.show_tab_permissions.records = hasPermission;
-                this.recheckSidebarItems();
-            }
-        });
-
-        this.coreSB.hasPermissionFromStringForOwnRlc(
-            PERMISSION_CAN_ADD_RECORD_RLC,
-            hasPermission => {
-                if (this.show_tab_permissions.add_record !== hasPermission) {
-                    this.show_tab_permissions.add_record = hasPermission;
-                    this.recheckSidebarItems();
-                }
-            }
-        );
-
-        this.coreSB.hasPermissionFromStringForOwnRlc(
-            PERMISSION_CAN_PERMIT_RECORD_PERMISSION_REQUESTS,
-            hasPermission => {
-                if (this.show_tab_permissions.record_permission_request !== hasPermission) {
-                    this.show_tab_permissions.record_permission_request = hasPermission;
-                    this.recheckSidebarItems();
-                }
-            }
-        );
-
-        this.coreSB.hasPermissionFromStringForOwnRlc(
-            PERMISSION_CAN_VIEW_PERMISSIONS_RLC,
-            hasPermission => {
-                if (this.show_tab_permissions.permissions !== hasPermission) {
-                    this.show_tab_permissions.permissions = hasPermission;
-                    this.recheckSidebarItems();
-                }
-            }
-        );
-
-        this.coreSB.hasPermissionFromStringForOwnRlc(
-            PERMISSION_ACCEPT_NEW_USERS_RLC,
-            hasPermission => {
-                if (this.show_tab_permissions.accept_new_user !== hasPermission) {
-                    this.show_tab_permissions.accept_new_user = hasPermission;
-                    this.recheckSidebarItems();
-                }
-            }
-        );
-
-        this.coreSB.hasPermissionFromStringForOwnRlc(
-            PERMISSION_ACTIVATE_INACTIVE_USERS,
-            hasPermission => {
-                if (this.show_tab_permissions.activate_inactive_users !== hasPermission) {
-                    this.show_tab_permissions.activate_inactive_users = hasPermission;
-                    this.recheckSidebarItems();
-                }
-            }
-        );
-
-        this.coreSB.hasPermissionFromStringForOwnRlc(
-            PERMISSION_PROCESS_RECORD_DELETION_REQUESTS,
-            hasPermission => {
-                if (this.show_tab_permissions.process_deletion_requests.records !== hasPermission) {
-                    this.show_tab_permissions.process_deletion_requests.records = hasPermission;
-                    this.recheckSidebarItems();
-                }
-            }
-        );
-
-        this.coreSB.hasPermissionFromStringForOwnRlc(
-            PERMISSION_PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS,
-            hasPermission => {
-                if (
-                    this.show_tab_permissions.process_deletion_requests.record_documents !==
-                    hasPermission
-                ) {
-                    this.show_tab_permissions.process_deletion_requests.record_documents = hasPermission;
-                    this.recheckSidebarItems();
-                }
-            }
-        );
-
-        this.coreSB.hasPermissionFromStringForOwnRlc(PERMISSION_CAN_CONSULT, hasPermission => {
-            this.coreSB.getRlcSettings().subscribe((settings: RlcSettings) => {
-                if (settings && settings.recordPoolEnabled && hasPermission) {
-                    this.show_tab_permissions.record_pool = true;
-                    this.recheckSidebarItems();
-                }
-            });
-        });
+  ngOnInit() {
+    this.coreSB.hasPermissionFromStringForOwnRlc(PERMISSION_CAN_VIEW_RECORDS, (hasPermission) => {
+      if (this.show_tab_permissions.records !== hasPermission) {
+        this.show_tab_permissions.records = hasPermission;
         this.recheckSidebarItems();
+      }
+    });
 
-        this.subscriptions.push(
-            this.coreSB.getUser().subscribe((user: FullUser) => {
-                this.name = user ? user.name : '';
-                this.email = user ? user.email : '';
-            })
-        );
+    this.coreSB.hasPermissionFromStringForOwnRlc(PERMISSION_CAN_ADD_RECORD_RLC, (hasPermission) => {
+      if (this.show_tab_permissions.add_record !== hasPermission) {
+        this.show_tab_permissions.add_record = hasPermission;
+        this.recheckSidebarItems();
+      }
+    });
 
-        this.subscriptions.push(
-            this.coreSB.getNotifications().subscribe((number_of_notifications: number) => {
-                if (number_of_notifications !== null && number_of_notifications)
-                    this.number_of_notifications = number_of_notifications.toString();
-            })
-        );
+    this.coreSB.hasPermissionFromStringForOwnRlc(PERMISSION_CAN_PERMIT_RECORD_PERMISSION_REQUESTS, (hasPermission) => {
+      if (this.show_tab_permissions.record_permission_request !== hasPermission) {
+        this.show_tab_permissions.record_permission_request = hasPermission;
+        this.recheckSidebarItems();
+      }
+    });
 
-        if (!isDevMode()) {
-            this.timerCheckPermissions = setInterval(() => {
-                this.coreSB.startCheckingUserHasPermissions();
-            }, this.checkPermissionInterval);
-            this.recheckSidebarItems();
+    this.coreSB.hasPermissionFromStringForOwnRlc(PERMISSION_CAN_VIEW_PERMISSIONS_RLC, (hasPermission) => {
+      if (this.show_tab_permissions.permissions !== hasPermission) {
+        this.show_tab_permissions.permissions = hasPermission;
+        this.recheckSidebarItems();
+      }
+    });
+
+    this.coreSB.hasPermissionFromStringForOwnRlc(PERMISSION_ACCEPT_NEW_USERS_RLC, (hasPermission) => {
+      if (this.show_tab_permissions.accept_new_user !== hasPermission) {
+        this.show_tab_permissions.accept_new_user = hasPermission;
+        this.recheckSidebarItems();
+      }
+    });
+
+    this.coreSB.hasPermissionFromStringForOwnRlc(PERMISSION_ACTIVATE_INACTIVE_USERS, (hasPermission) => {
+      if (this.show_tab_permissions.activate_inactive_users !== hasPermission) {
+        this.show_tab_permissions.activate_inactive_users = hasPermission;
+        this.recheckSidebarItems();
+      }
+    });
+
+    this.coreSB.hasPermissionFromStringForOwnRlc(PERMISSION_PROCESS_RECORD_DELETION_REQUESTS, (hasPermission) => {
+      if (this.show_tab_permissions.process_deletion_requests.records !== hasPermission) {
+        this.show_tab_permissions.process_deletion_requests.records = hasPermission;
+        this.recheckSidebarItems();
+      }
+    });
+
+    this.coreSB.hasPermissionFromStringForOwnRlc(PERMISSION_PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS, (hasPermission) => {
+      if (this.show_tab_permissions.process_deletion_requests.record_documents !== hasPermission) {
+        this.show_tab_permissions.process_deletion_requests.record_documents = hasPermission;
+        this.recheckSidebarItems();
+      }
+    });
+
+    this.coreSB.hasPermissionFromStringForOwnRlc(PERMISSION_CAN_CONSULT, (hasPermission) => {
+      this.coreSB.getRlcSettings().subscribe((settings: RlcSettings) => {
+        if (settings && settings.recordPoolEnabled && hasPermission) {
+          this.show_tab_permissions.record_pool = true;
+          this.recheckSidebarItems();
         }
+      });
+    });
+    this.recheckSidebarItems();
 
-        this.timerLoadUnreadNotifications = setInterval(() => {
-            this.coreSB.startLoadingUnreadNotifications();
-        }, this.checkNotificationsInterval);
+    this.subscriptions.push(
+      this.coreSB.getUser().subscribe((user: FullUser) => {
+        this.name = user ? user.name : '';
+        this.email = user ? user.email : '';
+      })
+    );
+
+    this.subscriptions.push(
+      this.coreSB.getNotifications().subscribe((number_of_notifications: number) => {
+        if (number_of_notifications !== null && number_of_notifications) this.number_of_notifications = number_of_notifications.toString();
+      })
+    );
+
+    if (!isDevMode()) {
+      this.timerCheckPermissions = setInterval(() => {
+        this.coreSB.startCheckingUserHasPermissions();
+      }, this.checkPermissionInterval);
+      this.recheckSidebarItems();
     }
 
-    recheckSidebarItems() {
-        let newSidebarItems = JSON.parse(JSON.stringify(this.sidebarItemsOrg));
-        if (!this.show_tab_permissions.records)
-            newSidebarItems = SidebarComponent.removeLink(RECORDS_FRONT_URL, newSidebarItems)
-                .newItems;
-        if (!this.show_tab_permissions.add_record)
-            newSidebarItems = SidebarComponent.removeLink(RECORDS_ADD_FRONT_URL, newSidebarItems)
-                .newItems;
-        if (!this.show_tab_permissions.record_permission_request)
-            newSidebarItems = SidebarComponent.removeLink(
-                RECORDS_PERMIT_REQUEST_FRONT_URL,
-                newSidebarItems
-            ).newItems;
-        if (!this.show_tab_permissions.permissions)
-            newSidebarItems = SidebarComponent.removeLink(PERMISSIONS_FRONT_URL, newSidebarItems)
-                .newItems;
-        if (!this.show_tab_permissions.activate_inactive_users)
-            newSidebarItems = SidebarComponent.removeLink(INACTIVE_USERS_FRONT_URL, newSidebarItems)
-                .newItems;
-        if (!this.show_tab_permissions.accept_new_user)
-            newSidebarItems = SidebarComponent.removeLink(
-                ACCEPT_NEW_USER_REQUESTS_FRONT_URL,
-                newSidebarItems
-            ).newItems;
-        if (
-            !this.show_tab_permissions.process_deletion_requests.record_documents &&
-            !this.show_tab_permissions.process_deletion_requests.records
-        )
-            newSidebarItems = SidebarComponent.removeLink(
-                DELETION_REQUESTS_FRONT_URL,
-                newSidebarItems
-            ).newItems;
-        if (!this.show_tab_permissions.record_pool)
-            newSidebarItems = SidebarComponent.removeLink(RECORD_POOL_FRONT_URL, newSidebarItems)
-                .newItems;
-        this.actualSidebarItems = newSidebarItems;
-    }
+    this.timerLoadUnreadNotifications = setInterval(() => {
+      this.coreSB.startLoadingUnreadNotifications();
+    }, this.checkNotificationsInterval);
+  }
 
-    logout() {
-        clearInterval(this.timerCheckPermissions);
-        clearInterval(this.timerLoadUnreadNotifications);
-        this.appSB.logout();
-    }
+  recheckSidebarItems() {
+    let newSidebarItems = JSON.parse(JSON.stringify(this.sidebarItemsOrg));
+    if (!this.show_tab_permissions.records) newSidebarItems = SidebarComponent.removeLink(RECORDS_FRONT_URL, newSidebarItems).newItems;
+    if (!this.show_tab_permissions.add_record)
+      newSidebarItems = SidebarComponent.removeLink(RECORDS_ADD_FRONT_URL, newSidebarItems).newItems;
+    if (!this.show_tab_permissions.record_permission_request)
+      newSidebarItems = SidebarComponent.removeLink(RECORDS_PERMIT_REQUEST_FRONT_URL, newSidebarItems).newItems;
+    if (!this.show_tab_permissions.permissions)
+      newSidebarItems = SidebarComponent.removeLink(PERMISSIONS_FRONT_URL, newSidebarItems).newItems;
+    if (!this.show_tab_permissions.activate_inactive_users)
+      newSidebarItems = SidebarComponent.removeLink(INACTIVE_USERS_FRONT_URL, newSidebarItems).newItems;
+    if (!this.show_tab_permissions.accept_new_user)
+      newSidebarItems = SidebarComponent.removeLink(ACCEPT_NEW_USER_REQUESTS_FRONT_URL, newSidebarItems).newItems;
+    if (
+      !this.show_tab_permissions.process_deletion_requests.record_documents &&
+      !this.show_tab_permissions.process_deletion_requests.records
+    )
+      newSidebarItems = SidebarComponent.removeLink(DELETION_REQUESTS_FRONT_URL, newSidebarItems).newItems;
+    if (!this.show_tab_permissions.record_pool)
+      newSidebarItems = SidebarComponent.removeLink(RECORD_POOL_FRONT_URL, newSidebarItems).newItems;
+    this.actualSidebarItems = newSidebarItems;
+  }
 
-    showProfile() {
-        this.router.navigate([OWN_PROFILE_FRONT_URL]);
-    }
+  logout() {
+    clearInterval(this.timerCheckPermissions);
+    clearInterval(this.timerLoadUnreadNotifications);
+    this.store.dispatch(Logout());
+  }
 
-    selectedItem(event) {
-        this.router.navigate([event.link]);
-    }
+  showProfile() {
+    this.router.navigate([OWN_PROFILE_FRONT_URL]);
+  }
 
-    ngOnDestroy() {
-        for (const sub of this.subscriptions) {
-            sub.unsubscribe();
-        }
-        clearInterval(this.timerCheckPermissions);
-        clearInterval(this.timerLoadUnreadNotifications);
+  selectedItem(event) {
+    this.router.navigate([event.link]);
+  }
+
+  ngOnDestroy() {
+    for (const sub of this.subscriptions) {
+      sub.unsubscribe();
     }
+    clearInterval(this.timerCheckPermissions);
+    clearInterval(this.timerLoadUnreadNotifications);
+  }
 }

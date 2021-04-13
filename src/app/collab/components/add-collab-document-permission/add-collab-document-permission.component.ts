@@ -53,13 +53,8 @@ export class AddCollabDocumentPermissionComponent implements OnInit {
       const collab_permission_id = this.collabPermissions.filter((perm: Permission) =>
         perm.name.toUpperCase().includes(this.selectedPermission.toUpperCase())
       )[0].id;
-      console.log('permission id: ', collab_permission_id);
 
-      this.collabSB.startAddingCollabDocumentPermission(
-        this.data,
-        this.selectedGroup.id,
-        collab_permission_id
-      );
+      this.collabSB.startAddingCollabDocumentPermission(this.data, this.selectedGroup.id, collab_permission_id);
       this.dialogRef.close();
     } else {
       this.coreSB.showErrorSnackBar('please select a permission');

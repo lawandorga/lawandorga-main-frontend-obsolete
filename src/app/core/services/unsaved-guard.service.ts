@@ -25,30 +25,29 @@ import { CoreSandboxService } from './core-sandbox.service';
 
 @Injectable()
 export class UnsavedGuardService implements CanDeactivate<HasUnsaved> {
-    constructor(private sharedSB: SharedSandboxService, private coreSB: CoreSandboxService) {}
+  constructor(private sharedSB: SharedSandboxService, private coreSB: CoreSandboxService) {}
 
-    canDeactivate(component: HasUnsaved): Observable<any> | boolean {
-        this.coreSB.openedGuardDialogs++;
-        if (!component.hasUnsaved()) return true;
+  canDeactivate(component: HasUnsaved): Observable<any> | boolean {
+    this.coreSB.openedGuardDialogs++;
+    if (!component.hasUnsaved()) return true;
 
-        if (this.coreSB.openedGuardDialogs === 1) {
-            return false;
-        }
-        return new Observable<boolean>(observer => {
-            this.sharedSB.openConfirmDialog(
-                {
-                    description:
-                        'You have unsaved changes! If you leave, your changes will be lost.',
-                    confirmLabel: 'leave',
-                    confirmColor: 'warn',
-                    cancelLabel: 'stay'
-                },
-                (leave: boolean) => {
-                    this.coreSB.openedGuardDialogs = 0;
-                    observer.next(leave);
-                    observer.complete();
-                }
-            );
-        });
+    if (this.coreSB.openedGuardDialogs === 1) {
+      return false;
     }
+    return new Observable<boolean>((observer) => {
+      this.sharedSB.openConfirmDialog(
+        {
+          description: 'You have unsaved changes! If you leave, your changes will be lost.',
+          confirmLabel: 'leave',
+          confirmColor: 'warn',
+          cancelLabel: 'stay',
+        },
+        (leave: boolean) => {
+          this.coreSB.openedGuardDialogs = 0;
+          observer.next(leave);
+          observer.complete();
+        }
+      );
+    });
+  }
 }

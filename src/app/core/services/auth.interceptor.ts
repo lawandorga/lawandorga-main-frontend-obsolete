@@ -17,77 +17,62 @@
  */
 
 import { Injectable } from '@angular/core';
-import {
-    HttpErrorResponse,
-    HttpEvent,
-    HttpHandler,
-    HttpInterceptor,
-    HttpRequest
-} from '@angular/common/http';
-import { AuthState } from '../store/auth/auth.reducers';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { AuthState } from '../store/auth/reducers';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { catchError, switchMap, take } from 'rxjs/operators';
 import { AppSandboxService } from './app-sandbox.service';
 import { CoreSandboxService } from './core-sandbox.service';
+import { Logout } from '../store/auth/actions';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-    constructor(
-        private store: Store<AuthState>,
-        private appSB: AppSandboxService,
-        private coreSB: CoreSandboxService
-    ) {}
+  constructor(private store: Store<AuthState>, private appSB: AppSandboxService, private coreSB: CoreSandboxService) {}
 
-    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        return this.store
-            .select(state => state['auth'])
-            .pipe(
-                take(1),
-                switchMap((authState: AuthState) => {
-                    let newHeaders = req.headers;
-                    newHeaders = newHeaders.append('Authorization', 'Token ' + authState.token);
-                    if (newHeaders.get('private-key')) {
-                        newHeaders = newHeaders.delete('private-key');
-                        let priv_key = authState.users_private_key;
-                        priv_key = priv_key.replace(/(?:\r\n|\r|\n)/g, '<linebreak>');
-                        newHeaders = newHeaders.append('private-key', priv_key);
-                    }
-                    const clonedRequest = req.clone({ headers: newHeaders });
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    return this.store
+      .select((state) => state['auth'])
+      .pipe(
+        take(1),
+        switchMap((authState: AuthState) => {
+          let newHeaders = req.headers;
+          newHeaders = newHeaders.append('Authorization', 'Token ' + authState.token);
+          if (newHeaders.get('private-key')) {
+            newHeaders = newHeaders.delete('private-key');
+            let priv_key = authState.users_private_key;
+            priv_key = priv_key.replace(/(?:\r\n|\r|\n)/g, '<linebreak>');
+            newHeaders = newHeaders.append('private-key', priv_key);
+          }
+          const clonedRequest = req.clone({ headers: newHeaders });
 
-                    return next.handle(clonedRequest).pipe(
-                        catchError((error: HttpErrorResponse, caught) => {
-                            // there is an error with the client's connection
-                            if (
-                                error.error instanceof ErrorEvent ||
-                                error.error instanceof ProgressEvent
-                            ) {
-                                this.coreSB.showErrorSnackBar('Error');
-                            }
-                            // the backend returned an unsuccessful response code
-                            else {
-                                // if the key is not valid anymore log the user out
-                                if (error.status === 401) {
-                                    this.appSB.saveLocation();
-                                    this.appSB.logout();
-                                    this.coreSB.showErrorSnackBar(
-                                        'You were logged out, please login again.'
-                                    );
-                                }
-                                // if the backend returned a message show that message
-                                else {
-                                    console.log('error: ', error);
-                                    if (error.error.message) {
-                                        this.coreSB.showErrorSnackBar(error.error.message);
-                                    } else if (error.error.detail) {
-                                        this.coreSB.showErrorSnackBar(error.error.detail);
-                                    }
-                                }
-                            }
-                            throw error;
-                        })
-                    );
-                })
-            );
-    }
+          return next.handle(clonedRequest).pipe(
+            catchError((error: HttpErrorResponse, caught) => {
+              // there is an error with the client's connection
+              if (error.error instanceof ErrorEvent || error.error instanceof ProgressEvent) {
+                this.coreSB.showErrorSnackBar('Error');
+              }
+              // the backend returned an unsuccessful response code
+              else {
+                // if the key is not valid anymore log the user out
+                if (error.status === 401) {
+                  this.appSB.saveLocation();
+                  this.store.dispatch(Logout());
+                  this.coreSB.showErrorSnackBar('You were logged out, please login again.');
+                }
+                // if the backend returned a message show that message
+                else {
+                  if (error.error.message) {
+                    this.coreSB.showErrorSnackBar(error.error.message);
+                  } else if (error.error.detail) {
+                    this.coreSB.showErrorSnackBar(error.error.detail);
+                  }
+                }
+              }
+              throw error;
+            })
+          );
+        })
+      );
+  }
 }

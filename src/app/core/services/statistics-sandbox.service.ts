@@ -23,9 +23,9 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class StatisticsSandboxService {
-    constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
-    getRecordStatistics(): Observable<any> {
-        return this.http.get<any>(STATISTICS_RECORDS_API_URL);
-    }
+  getRecordStatistics(): Observable<any> {
+    return this.http.get<any>(STATISTICS_RECORDS_API_URL);
+  }
 }

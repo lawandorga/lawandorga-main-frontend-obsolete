@@ -25,34 +25,33 @@ import { CustomQuillContainerComponent } from '../../components/custom-quill-con
 import { EditingRoom } from '../../models/editing-room.model';
 
 @Component({
-    selector: 'app-collab-edit',
-    templateUrl: './collab-edit.component.html',
-    styleUrls: ['./collab-edit.component.scss']
+  selector: 'app-collab-edit',
+  templateUrl: './collab-edit.component.html',
+  styleUrls: ['./collab-edit.component.scss'],
 })
 export class CollabEditComponent implements OnInit, HasUnsaved {
-    text_document: TextDocument;
-    editing_room: EditingRoom;
-    editing_room_was_created: boolean;
+  text_document: TextDocument;
+  editing_room: EditingRoom;
+  editing_room_was_created: boolean;
 
-    @ViewChild(CustomQuillContainerComponent) child: CustomQuillContainerComponent;
+  @ViewChild(CustomQuillContainerComponent) child: CustomQuillContainerComponent;
 
-    constructor(private collabSB: CollabSandboxService, private route: ActivatedRoute) {}
+  constructor(private collabSB: CollabSandboxService, private route: ActivatedRoute) {}
 
-    ngOnInit(): void {
-        this.route.params.subscribe((params: Params) => {
-            const id = Number(params['id']);
-            this.collabSB.fetchTextDocument(id).subscribe((text_document: TextDocument) => {
-                this.text_document = text_document;
-            });
-            this.collabSB.connectToEditingRoom(id).subscribe(response => {
-                this.editing_room = EditingRoom.getEditingRoomFromJson(response);
-                this.editing_room_was_created = response.did_create;
-            });
-        });
-    }
+  ngOnInit(): void {
+    this.route.params.subscribe((params: Params) => {
+      const id = Number(params['id']);
+      this.collabSB.fetchTextDocument(id).subscribe((text_document: TextDocument) => {
+        this.text_document = text_document;
+      });
+      this.collabSB.connectToEditingRoom(id).subscribe((response) => {
+        this.editing_room = EditingRoom.getEditingRoomFromJson(response);
+        this.editing_room_was_created = response.did_create;
+      });
+    });
+  }
 
-    hasUnsaved(): boolean {
-        // console.log('hasUnsaved in CollabEditComponent');
-        return this.child.hasUnsaved();
-    }
+  hasUnsaved(): boolean {
+    return this.child.hasUnsaved();
+  }
 }

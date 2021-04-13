@@ -16,37 +16,30 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { map, take } from 'rxjs/operators';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
-import { AppState } from '../../store/app.reducers';
-import { AuthState } from '../store/auth/auth.reducers';
+import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
+import { AuthState } from '../store/auth/reducers';
 import { LOGIN_FRONT_URL } from '../../statics/frontend_links.statics';
 
 @Injectable()
 export class AuthGuardService implements CanActivate {
-    lastVisitedUrl: string = undefined;
+  lastVisitedUrl: string = undefined;
+  authenticated = false;
 
-    constructor(private router: Router, private store: Store<AppState>) {}
+  constructor(private router: Router, private store: Store<AuthState>) {
+    this.store.select((state) => state.authenticated).subscribe((data) => (this.authenticated = data));
+  }
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        return this.store.select('auth').pipe(
-            take(1),
-            map((authState: AuthState) => {
-                if (!authState.authenticated) {
-                    this.lastVisitedUrl = route.routeConfig.path;
-                    this.router.navigate([LOGIN_FRONT_URL]);
-                }
-                return authState.authenticated;
-            })
-        );
-    }
+  canActivate(): boolean {
+    return this.authenticated;
+  }
 
-    getLastVisitedUrl() {
-        let returnVal;
-        if (this.lastVisitedUrl) returnVal = this.lastVisitedUrl;
-        this.lastVisitedUrl = undefined;
-        return returnVal;
-    }
+  getLastVisitedUrl(): string {
+    let returnVal: string;
+    if (this.lastVisitedUrl) returnVal = this.lastVisitedUrl;
+    this.lastVisitedUrl = undefined;
+    return returnVal;
+  }
 }

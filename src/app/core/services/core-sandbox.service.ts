@@ -19,43 +19,41 @@
 import moment from 'moment';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, mergeMap, take } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
-import { AppState } from '../../store/app.reducers';
 import { CoreState } from '../store/core.reducers';
 import { ForeignUser, FullUser, RestrictedUser } from '../models/user.model';
 import {
-    DecrementNotificationCounter,
-    IncrementNotificationCounter,
-    RemoveActualHasPermissions,
-    ResetSpecialForeignUser,
-    ResetSpecialGroup,
-    ResetSpecialPermission,
-    SET_OTHER_USERS,
-    SetSpecialForeignUser,
-    StartActivatingInactiveUser,
-    StartAddingGroup,
-    StartAddingGroupMembers,
-    StartAddingHasPermission,
-    StartAdmittingNewUserRequest,
-    StartCheckingUserHasPermissions,
-    StartCreateUser,
-    StartDecliningNewUserRequest,
-    StartLoadingGroups,
-    StartLoadingHasPermissionStatics,
-    StartLoadingInactiveUsers,
-    StartLoadingNewUserRequests,
-    StartLoadingOtherUsers,
-    StartLoadingRlcs,
-    StartLoadingRlcSettings,
-    StartLoadingSpecialForeignUser,
-    StartLoadingSpecialGroup,
-    StartLoadingSpecialGroupHasPermissions,
-    StartLoadingSpecialPermission,
-    StartLoadingUnreadNotifications,
-    StartRemovingGroupMember,
-    StartRemovingHasPermission,
-    StartSavingUser
+  DecrementNotificationCounter,
+  IncrementNotificationCounter,
+  RemoveActualHasPermissions,
+  ResetSpecialForeignUser,
+  ResetSpecialGroup,
+  ResetSpecialPermission,
+  SetSpecialForeignUser,
+  StartActivatingInactiveUser,
+  StartAddingGroup,
+  StartAddingGroupMembers,
+  StartAddingHasPermission,
+  StartAdmittingNewUserRequest,
+  StartCheckingUserHasPermissions,
+  StartCreateUser,
+  StartDecliningNewUserRequest,
+  StartLoadingGroups,
+  StartLoadingHasPermissionStatics,
+  StartLoadingInactiveUsers,
+  StartLoadingNewUserRequests,
+  StartLoadingOtherUsers,
+  StartLoadingRlcs,
+  StartLoadingRlcSettings,
+  StartLoadingSpecialForeignUser,
+  StartLoadingSpecialGroup,
+  StartLoadingSpecialGroupHasPermissions,
+  StartLoadingSpecialPermission,
+  StartLoadingUnreadNotifications,
+  StartRemovingGroupMember,
+  StartRemovingHasPermission,
+  StartSavingUser,
 } from '../store/core.actions';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { Observable } from 'rxjs';
@@ -70,439 +68,428 @@ import { GetCheckUserActivationApiUrl, PROFILES_API_URL } from '../../statics/ap
 
 @Injectable()
 export class CoreSandboxService {
-    openedGuardDialogs = 0;
+  openedGuardDialogs = 0;
 
-    constructor(
-        public router: Router,
-        private snackbarService: SnackbarService,
-        private appStateStore: Store<AppState>,
-        private coreStateStore: Store<CoreState>,
-        private http: HttpClient
-    ) {}
+  constructor(
+    public router: Router,
+    private snackbarService: SnackbarService,
+    private coreStateStore: Store<CoreState>,
+    private http: HttpClient
+  ) {}
 
-    static transformDateToString(date: Date | string): string {
-        if (typeof date === 'string') return moment(new Date(date)).format('YYYY-MM-DD');
-        return moment(date).format('YYYY-MM-DD');
-    }
+  static transformDateToString(date: Date | string): string {
+    if (typeof date === 'string') return moment(new Date(date)).format('YYYY-MM-DD');
+    return moment(date).format('YYYY-MM-DD');
+  }
 
-    static transformDate(date: Date | string): Date {
-        if (typeof date === 'string') return new Date(moment(new Date(date)).format('YYYY-MM-DD'));
-        else return new Date(moment(date).format('YYYY-MM-DD'));
-    }
+  static transformDate(date: Date | string): Date {
+    if (typeof date === 'string') return new Date(moment(new Date(date)).format('YYYY-MM-DD'));
+    else return new Date(moment(date).format('YYYY-MM-DD'));
+  }
 
-    getUser(): Observable<FullUser> {
-        return this.coreStateStore.pipe(select((state: any) => state.core.user));
-    }
+  getUser(): Observable<FullUser> {
+    return this.coreStateStore.pipe(select((state: any) => state.core.user));
+  }
 
-    getUserRestricted(): Observable<RestrictedUser> {
-        return this.coreStateStore.pipe(select((state: any) => state.core.user));
-    }
+  getUserRestricted(): Observable<RestrictedUser> {
+    return this.coreStateStore.pipe(select((state: any) => state.core.user));
+  }
 
-    getRlc(): Observable<RestrictedRlc> {
-        return this.coreStateStore.pipe(select((state: any) => state.core.rlc));
-    }
+  getRlc(): Observable<RestrictedRlc> {
+    return this.coreStateStore.pipe(select((state: any) => state.core.rlc));
+  }
 
-    getGroup(): Observable<FullGroup> {
-        return this.coreStateStore.pipe(select((state: any) => state.core.special_group));
-    }
+  getGroup(): Observable<FullGroup> {
+    return this.coreStateStore.pipe(select((state: any) => state.core.special_group));
+  }
 
-    getUserPermissions(asArray: boolean = true): Observable<HasPermission[] | any> {
-        return this.coreStateStore.pipe(
-            select((state: any) => {
-                const values = state.core.user_permissions;
-                return asArray ? Object.values(values) : values;
-            })
-        );
-    }
+  getUserPermissions(asArray: boolean = true): Observable<HasPermission[] | any> {
+    return this.coreStateStore.pipe(
+      select((state: any) => {
+        const values = state.core.user_permissions;
+        return asArray ? Object.values(values) : values;
+      })
+    );
+  }
 
-    getAllPermissions(asArray: boolean = true): Observable<Permission[] | any> {
-        return this.coreStateStore.pipe(
-            select((state: any) => {
-                const values = state.core.all_permissions;
-                return asArray ? Object.values(values) : values;
-            })
-        );
-    }
+  getAllPermissions(): Observable<Permission[] | any> {
+    return this.coreStateStore.pipe(
+      select((state: any) => {
+        const values = state.core.all_permissions;
+        return Object.values(values);
+      })
+    );
+  }
 
-    hasPermissionFromStringForOwnRlc(permission: string, subscriberCallback): void {
-        this.getRlc().subscribe((rlc: RestrictedRlc) => {
-            if (rlc)
-                this.hasPermissionFromString(permission, subscriberCallback, {
-                    for_rlc: rlc.id
-                });
+  hasPermissionFromStringForOwnRlc(permission: string, subscriberCallback): void {
+    this.getRlc().subscribe((rlc: RestrictedRlc) => {
+      if (rlc)
+        this.hasPermissionFromString(permission, subscriberCallback, {
+          for_rlc: rlc.id,
         });
-    }
+    });
+  }
 
-    getResultsLength(): Observable<number> {
-        return this.coreStateStore.pipe(select((state: any) => state.core.results_length));
-    }
+  getResultsLength(): Observable<number> {
+    return this.coreStateStore.pipe(select((state: any) => state.core.results_length));
+  }
 
-    hasPermissionFromString(
-        permission: string,
-        subscriberCallback,
-        permission_for: any = null
-    ): void {
-        /*
+  hasPermissionFromString(permission: string, subscriberCallback, permission_for: any = null): void {
+    /*
         checks if the user has permission and returns to subscriberCallback true or false
          */
-        this.getAllPermissions()
-            .subscribe((all_permissions: Permission[]) => {
-                if (all_permissions.length > 0) {
-                    try {
-                        const id = Number(
-                            all_permissions.filter(
-                                single_permission => single_permission.name === permission
-                            )[0].id
-                        );
-                        this.hasPermissionFromId(id, subscriberCallback, permission_for);
-                    } catch (e) {
-                        subscriberCallback(false);
-                    }
-                }
-            })
-            .unsubscribe();
-    }
+    this.getAllPermissions()
+      .subscribe((all_permissions: Permission[]) => {
+        if (all_permissions.length > 0) {
+          try {
+            const id = Number(all_permissions.filter((single_permission) => single_permission.name === permission)[0].id);
+            this.hasPermissionFromId(id, subscriberCallback, permission_for);
+          } catch (e) {
+            subscriberCallback(false);
+          }
+        }
+      })
+      .unsubscribe();
+  }
 
-    hasPermissionFromId(permission: number, subscriberCallback, permission_for: any = null): void {
-        /*
+  hasPermissionFromId(permission: number, subscriberCallback, permission_for: any = null): void {
+    /*
         checks if the user has permission and returns to subscriberCallback true or false
          */
-        this.getUserPermissions()
-            .subscribe((user_permissions: HasPermission[]) => {
-                subscriberCallback(
-                    HasPermission.checkPermissionMet(user_permissions, permission, permission_for)
-                );
-            })
-            .unsubscribe();
-    }
+    this.getUserPermissions()
+      .subscribe((user_permissions: HasPermission[]) => {
+        subscriberCallback(HasPermission.checkPermissionMet(user_permissions, permission, permission_for));
+      })
+      .unsubscribe();
+  }
 
-    startSavingUser(user: FullUser) {
-        this.coreStateStore.dispatch(new StartSavingUser(user));
-    }
+  startSavingUser(user: FullUser) {
+    this.coreStateStore.dispatch(new StartSavingUser(user));
+  }
 
-    registerUser(user: any) {
-        this.coreStateStore.dispatch(new StartCreateUser(user));
-    }
+  registerUser(user: any) {
+    this.coreStateStore.dispatch(new StartCreateUser(user));
+  }
 
-    getAllRlcs(asArray: boolean = true): Observable<RestrictedRlc[]> {
-        //return this.http.get(RLCS_API_URL);
-        return this.coreStateStore.pipe(
-            select((state: any) => {
-                const values = state.core.rlcs;
-                return asArray ? Object.values(values) : values;
-            })
-        );
-    }
+  getAllRlcs(asArray: boolean = true): Observable<RestrictedRlc[]> {
+    //return this.http.get(RLCS_API_URL);
+    return this.coreStateStore.pipe(
+      select((state: any) => {
+        const values = state.core.rlcs;
+        return asArray ? Object.values(values) : values;
+      })
+    );
+  }
 
-    startLoadingOtherUsers() {
-        this.coreStateStore.dispatch(new StartLoadingOtherUsers());
-    }
+  startLoadingOtherUsers() {
+    this.coreStateStore.dispatch(new StartLoadingOtherUsers());
+  }
 
-    startLoadingGroups() {
-        this.coreStateStore.dispatch(new StartLoadingGroups());
-    }
+  startLoadingGroups() {
+    this.coreStateStore.dispatch(new StartLoadingGroups());
+  }
 
-    getGroups(asArray: boolean = true): Observable<RestrictedGroup[]> | any {
-        return this.coreStateStore.pipe(
-            select((state: any) => {
-                const values = state.core.groups;
-                return asArray ? Object.values(values) : values;
-            })
-        );
-    }
+  getGroups(asArray: boolean = true): Observable<RestrictedGroup[]> | any {
+    return this.coreStateStore.pipe(
+      select((state: any) => {
+        const values = state.core.groups;
+        return asArray ? Object.values(values) : values;
+      })
+    );
+  }
 
-    getOtherUsers(asArray: boolean = true): Observable<RestrictedUser[] | any> {
-        return this.coreStateStore.pipe(
-            select((state: any) => {
-                const values = state.core.other_users;
-                return asArray ? Object.values(values) : values;
-            })
-        );
-    }
+  getOtherUsers(asArray: boolean = true): Observable<RestrictedUser[] | any> {
+    return this.coreStateStore.pipe(
+      select((state: any) => {
+        const values = state.core.other_users;
+        return asArray ? Object.values(values) : values;
+      })
+    );
+  }
 
-    showSuccessSnackBar(message: string, duration: number = 10000) {
-        this.snackbarService.showSuccessSnackBar(message, duration);
-    }
+  showSuccessSnackBar(message: string, duration: number = 10000) {
+    this.snackbarService.showSuccessSnackBar(message, duration);
+  }
 
-    showErrorSnackBar(message: string, duration: number = 10000) {
-        this.snackbarService.showErrorSnackBar(message, duration);
-    }
+  showErrorSnackBar(message: string, duration: number = 10000) {
+    this.snackbarService.showErrorSnackBar(message, duration);
+  }
 
-    relogUser() {
-        this.router.navigate(['login']);
-    }
+  relogUser() {
+    this.router.navigate(['login']);
+  }
 
-    setForeignUser(foreignUser: ForeignUser) {
-        this.coreStateStore.dispatch(new SetSpecialForeignUser(foreignUser));
-    }
+  setForeignUser(foreignUser: ForeignUser) {
+    this.coreStateStore.dispatch(new SetSpecialForeignUser(foreignUser));
+  }
 
-    resetForeignUser() {
-        this.coreStateStore.dispatch(new ResetSpecialForeignUser());
-    }
+  resetForeignUser() {
+    this.coreStateStore.dispatch(new ResetSpecialForeignUser());
+  }
 
-    getSpecialForeignUser(): Observable<ForeignUser | any> {
-        return this.coreStateStore.pipe(select((state: any) => state.core.foreign_user));
-    }
+  getSpecialForeignUser(): Observable<ForeignUser | any> {
+    return this.coreStateStore.pipe(select((state: any) => state.core.foreign_user));
+  }
 
-    loadAndGetSpecialForeignUser(id: string): Observable<ForeignUser | any> {
-        this.coreStateStore.dispatch(new StartLoadingSpecialForeignUser(id));
-        return this.getSpecialForeignUser();
-    }
+  loadAndGetSpecialForeignUser(id: string): Observable<ForeignUser | any> {
+    this.coreStateStore.dispatch(new StartLoadingSpecialForeignUser(id));
+    return this.getSpecialForeignUser();
+  }
 
-    startLoadingSpecialGroup(id: string): void {
-        this.coreStateStore.dispatch(new StartLoadingSpecialGroup(id));
-    }
+  startLoadingSpecialGroup(id: string): void {
+    this.coreStateStore.dispatch(new StartLoadingSpecialGroup(id));
+  }
 
-    resetSpecialGroup(): void {
-        return this.coreStateStore.dispatch(new ResetSpecialGroup());
-    }
+  resetSpecialGroup(): void {
+    return this.coreStateStore.dispatch(new ResetSpecialGroup());
+  }
 
-    addGroupMembers(user_ids: string[], group_id: string): void {
-        return this.coreStateStore.dispatch(new StartAddingGroupMembers({ user_ids, group_id }));
-    }
+  addGroupMembers(user_ids: string[], group_id: string): void {
+    return this.coreStateStore.dispatch(new StartAddingGroupMembers({ user_ids, group_id }));
+  }
 
-    removeGroupMember(user_id: string, group_id: string): void {
-        return this.coreStateStore.dispatch(new StartRemovingGroupMember({ user_id, group_id }));
-    }
+  removeGroupMember(user_id: string, group_id: string): void {
+    return this.coreStateStore.dispatch(new StartRemovingGroupMember({ user_id, group_id }));
+  }
 
-    startLoadingSpecialPermission(id: string): void {
-        return this.coreStateStore.dispatch(new StartLoadingSpecialPermission(id));
-    }
+  startLoadingSpecialPermission(id: string): void {
+    return this.coreStateStore.dispatch(new StartLoadingSpecialPermission(id));
+  }
 
-    getSpecialPermission(): Observable<Permission> {
-        return this.coreStateStore.pipe(select((state: any) => state.core.special_permission));
-    }
+  getSpecialPermission(): Observable<Permission> {
+    return this.coreStateStore.pipe(select((state: any) => state.core.special_permission));
+  }
 
-    resetSpecialPermission(): void {
-        this.coreStateStore.dispatch(new ResetSpecialPermission());
-        this.coreStateStore.dispatch(new RemoveActualHasPermissions());
-    }
+  resetSpecialPermission(): void {
+    this.coreStateStore.dispatch(new ResetSpecialPermission());
+    this.coreStateStore.dispatch(new RemoveActualHasPermissions());
+  }
 
-    startLoadingRlcs(): void {
-        return this.coreStateStore.dispatch(new StartLoadingRlcs());
-    }
+  startLoadingRlcs(): void {
+    return this.coreStateStore.dispatch(new StartLoadingRlcs());
+  }
 
-    startRemovingHasPermission(id: string): void {
-        return this.coreStateStore.dispatch(new StartRemovingHasPermission(id));
-    }
+  startRemovingHasPermission(id: string): void {
+    return this.coreStateStore.dispatch(new StartRemovingHasPermission(id));
+  }
 
-    startCreatingHasPermission(
-        permissionId: string,
-        userHas: RestrictedUser,
-        groupHas: RestrictedGroup,
-        rlcHas: RestrictedRlc,
-        forUser: RestrictedUser,
-        forGroup: RestrictedGroup,
-        forRlc: RestrictedRlc
-    ): void {
-        const toAdd = {
-            permission: permissionId,
-            user_has_permission: userHas ? userHas.id : null,
-            group_has_permission: groupHas ? groupHas.id : null,
-            rlc_has_permission: rlcHas ? rlcHas.id : null,
-            permission_for_user: forUser ? forUser.id : null,
-            permission_for_group: forGroup ? forGroup.id : null,
-            permission_for_rlc: forRlc ? forRlc.id : null
-        };
+  startCreatingHasPermission(
+    permissionId: string,
+    userHas: RestrictedUser,
+    groupHas: RestrictedGroup,
+    rlcHas: RestrictedRlc,
+    forUser: RestrictedUser,
+    forGroup: RestrictedGroup,
+    forRlc: RestrictedRlc
+  ): void {
+    const toAdd = {
+      permission: permissionId,
+      user_has_permission: userHas ? userHas.id : null,
+      group_has_permission: groupHas ? groupHas.id : null,
+      rlc_has_permission: rlcHas ? rlcHas.id : null,
+      permission_for_user: forUser ? forUser.id : null,
+      permission_for_group: forGroup ? forGroup.id : null,
+      permission_for_rlc: forRlc ? forRlc.id : null,
+    };
 
-        return this.coreStateStore.dispatch(new StartAddingHasPermission(toAdd));
-    }
+    return this.coreStateStore.dispatch(new StartAddingHasPermission(toAdd));
+  }
 
-    getOtherUserById(id: string): RestrictedUser {
-        let user: RestrictedUser = null;
-        this.coreStateStore
-            .pipe(
-                take(1),
-                select((state: any) => state.core.other_users[id])
-            )
-            .subscribe(actualUser => (user = actualUser));
-        return user;
-    }
+  getOtherUserById(id: string): RestrictedUser {
+    let user: RestrictedUser = null;
+    this.coreStateStore
+      .pipe(
+        take(1),
+        select((state: any) => state.core.other_users[id])
+      )
+      .subscribe((actualUser) => (user = actualUser));
+    return user;
+  }
 
-    getGroupById(id: string): RestrictedGroup {
-        let group: RestrictedGroup = null;
-        this.coreStateStore
-            .pipe(
-                take(1),
-                select((state: any) => state.core.groups[id])
-            )
-            .subscribe(actualGroup => (group = actualGroup));
-        return group;
-    }
+  getGroupById(id: string): RestrictedGroup {
+    let group: RestrictedGroup = null;
+    this.coreStateStore
+      .pipe(
+        take(1),
+        select((state: any) => state.core.groups[id])
+      )
+      .subscribe((actualGroup) => (group = actualGroup));
+    return group;
+  }
 
-    getRlcById(id: string): RestrictedRlc {
-        let rlc: RestrictedRlc = null;
-        this.coreStateStore
-            .pipe(
-                take(1),
-                select((state: any) => state.core.rlcs[id])
-            )
-            .subscribe(actualRlc => (rlc = actualRlc));
-        return rlc;
-    }
+  getRlcById(id: string): RestrictedRlc {
+    let rlc: RestrictedRlc = null;
+    this.coreStateStore
+      .pipe(
+        take(1),
+        select((state: any) => state.core.rlcs[id])
+      )
+      .subscribe((actualRlc) => (rlc = actualRlc));
+    return rlc;
+  }
 
-    getPermissionById(id: string): Permission {
-        let permission: Permission = null;
-        this.coreStateStore
-            .pipe(
-                take(1),
-                select((state: any) => state.core.all_permissions[id])
-            )
-            .subscribe(actualPermission => (permission = actualPermission));
-        return permission;
-    }
+  getPermissionById(id: string): Permission {
+    let permission: Permission = null;
+    this.coreStateStore
+      .pipe(
+        take(1),
+        select((state: any) => state.core.all_permissions[id])
+      )
+      .subscribe((actualPermission) => (permission = actualPermission));
+    return permission;
+  }
 
-    startLoadingGroupHasPermissions(group_id: string): void {
-        this.coreStateStore.dispatch(new StartLoadingSpecialGroupHasPermissions(group_id));
-    }
+  startLoadingGroupHasPermissions(group_id: string): void {
+    this.coreStateStore.dispatch(new StartLoadingSpecialGroupHasPermissions(group_id));
+  }
 
-    getActualHasPermissions(asArray: boolean = true): Observable<HasPermission[]> | any {
-        return this.coreStateStore.pipe(
-            select((state: any) => {
-                const values = state.core.actual_has_permissions;
-                return asArray ? Object.values(values) : values;
-            })
-        );
-    }
+  getActualHasPermissions(asArray: boolean = true): Observable<HasPermission[]> | any {
+    return this.coreStateStore.pipe(
+      select((state: any) => {
+        const values = state.core.actual_has_permissions;
+        return asArray ? Object.values(values) : values;
+      })
+    );
+  }
 
-    startLoadingPermissionStatics(): void {
-        this.coreStateStore.dispatch(new StartLoadingHasPermissionStatics());
-    }
+  startLoadingPermissionStatics(): void {
+    this.coreStateStore.dispatch(new StartLoadingHasPermissionStatics());
+  }
 
-    startAddingGroup(newGroup: any): void {
-        this.coreStateStore.dispatch(new StartAddingGroup(newGroup));
-    }
+  startAddingGroup(newGroup: any): void {
+    this.coreStateStore.dispatch(new StartAddingGroup(newGroup));
+  }
 
-    startLoadingNewUserRequests(): void {
-        this.coreStateStore.dispatch(new StartLoadingNewUserRequests());
-    }
+  startLoadingNewUserRequests(): void {
+    this.coreStateStore.dispatch(new StartLoadingNewUserRequests());
+  }
 
-    getNewUserRequests(asArray: boolean = true): Observable<NewUserRequest[]> | any {
-        return this.coreStateStore.pipe(
-            select((state: any) => {
-                const values = state.core.new_user_requests;
-                return asArray ? Object.values(values) : values;
-            })
-        );
-    }
+  getNewUserRequests(asArray: boolean = true): Observable<NewUserRequest[]> | any {
+    return this.coreStateStore.pipe(
+      select((state: any) => {
+        const values = state.core.new_user_requests;
+        return asArray ? Object.values(values) : values;
+      })
+    );
+  }
 
-    startAdmittingNewUserRequest(newUserRequest: NewUserRequest): void {
-        this.coreStateStore.dispatch(new StartAdmittingNewUserRequest(newUserRequest));
-    }
+  startAdmittingNewUserRequest(newUserRequest: NewUserRequest): void {
+    this.coreStateStore.dispatch(new StartAdmittingNewUserRequest(newUserRequest));
+  }
 
-    startDecliningNewUserRequest(newUserRequest: NewUserRequest): void {
-        this.coreStateStore.dispatch(new StartDecliningNewUserRequest(newUserRequest));
-    }
+  startDecliningNewUserRequest(newUserRequest: NewUserRequest): void {
+    this.coreStateStore.dispatch(new StartDecliningNewUserRequest(newUserRequest));
+  }
 
-    startCheckingUserActivationLink(userId: number, token: string): void {
-        this.http.get(GetCheckUserActivationApiUrl(userId, token)).subscribe(
-            result => {
-                this.snackbarService.showSuccessSnackBar('Your email was confirmed.');
-            },
-            error => {
-                if (error.status === 400) {
-                    this.snackbarService.showErrorSnackBar(error.error.message);
-                } else {
-                    this.snackbarService.showErrorSnackBar('Your activation link is invalid.');
-                }
-            }
-        );
-    }
+  startCheckingUserActivationLink(userId: number, token: string): void {
+    this.http.get(GetCheckUserActivationApiUrl(userId, token)).subscribe(
+      (result) => {
+        this.snackbarService.showSuccessSnackBar('Your email was confirmed.');
+      },
+      (error) => {
+        if (error.status === 400) {
+          this.snackbarService.showErrorSnackBar(error.error.message);
+        } else {
+          this.snackbarService.showErrorSnackBar('Your activation link is invalid.');
+        }
+      }
+    );
+  }
 
-    getUserStates(asArray: boolean = true): Observable<State[]> {
-        return this.coreStateStore.pipe(
-            select((state: any) => {
-                const values = state.core.user_states;
-                return asArray ? Object.values(values) : values;
-            })
-        );
-    }
+  getUserStates(asArray: boolean = true): Observable<State[]> {
+    return this.coreStateStore.pipe(
+      select((state: any) => {
+        const values = state.core.user_states;
+        return asArray ? Object.values(values) : values;
+      })
+    );
+  }
 
-    getUserRecordStates(asArray: boolean = true): Observable<State[]> {
-        return this.coreStateStore.pipe(
-            select((state: any) => {
-                const values = state.core.user_record_states;
-                return asArray ? Object.values(values) : values;
-            })
-        );
-    }
+  getUserRecordStates(asArray: boolean = true): Observable<State[]> {
+    return this.coreStateStore.pipe(
+      select((state: any) => {
+        const values = state.core.user_record_states;
+        return asArray ? Object.values(values) : values;
+      })
+    );
+  }
 
-    getUserStateByAbbreviation(abb: string): Observable<State> {
-        return this.coreStateStore.pipe(select((state: any) => state.core.user_states[abb]));
-    }
+  getUserStateByAbbreviation(abb: string): Observable<State> {
+    return this.coreStateStore.pipe(select((state: any) => state.core.user_states[abb]));
+  }
 
-    getUserRecordStateByAbbreviation(abb: string): Observable<State> {
-        return this.coreStateStore.pipe(select((state: any) => state.core.user_record_states[abb]));
-    }
+  getUserRecordStateByAbbreviation(abb: string): Observable<State> {
+    return this.coreStateStore.pipe(select((state: any) => state.core.user_record_states[abb]));
+  }
 
-    startLoadingInactiveUsers(): void {
-        this.coreStateStore.dispatch(new StartLoadingInactiveUsers());
-    }
+  startLoadingInactiveUsers(): void {
+    this.coreStateStore.dispatch(new StartLoadingInactiveUsers());
+  }
 
-    getInactiveUsers(asArray: boolean = true): Observable<FullUser[]> {
-        return this.coreStateStore.pipe(
-            select((state: any) => {
-                const values = state.core.inactive_users;
-                return asArray ? Object.values(values) : values;
-            })
-        );
-    }
+  getInactiveUsers(asArray: boolean = true): Observable<FullUser[]> {
+    return this.coreStateStore.pipe(
+      select((state: any) => {
+        const values = state.core.inactive_users;
+        return asArray ? Object.values(values) : values;
+      })
+    );
+  }
 
-    startActivatingInactiveUser(user: FullUser): void {
-        this.coreStateStore.dispatch(new StartActivatingInactiveUser(user.id));
-    }
+  startActivatingInactiveUser(user: FullUser): void {
+    this.coreStateStore.dispatch(new StartActivatingInactiveUser(user.id));
+  }
 
-    startCheckingUserHasPermissions(): void {
-        this.coreStateStore.dispatch(new StartCheckingUserHasPermissions());
-    }
+  startCheckingUserHasPermissions(): void {
+    this.coreStateStore.dispatch(new StartCheckingUserHasPermissions());
+  }
 
-    startLoadingRlcSettings(): void {
-        this.coreStateStore.dispatch(new StartLoadingRlcSettings());
-    }
+  startLoadingRlcSettings(): void {
+    this.coreStateStore.dispatch(new StartLoadingRlcSettings());
+  }
 
-    startLoadingUnreadNotifications(): void {
-        this.coreStateStore.dispatch(new StartLoadingUnreadNotifications());
-    }
+  startLoadingUnreadNotifications(): void {
+    this.coreStateStore.dispatch(new StartLoadingUnreadNotifications());
+  }
 
-    getRlcSettings(): Observable<RlcSettings> {
-        return this.coreStateStore.pipe(
-            select((state: any) => {
-                return state.core.rlc_settings;
-            })
-        );
-    }
+  getRlcSettings(): Observable<RlcSettings> {
+    return this.coreStateStore.pipe(
+      select((state: any) => {
+        return state.core.rlc_settings;
+      })
+    );
+  }
 
-    getNotifications(): Observable<number> {
-        return this.coreStateStore.pipe(
-            select((state: any) => {
-                return state.core.notifications;
-            })
-        );
-    }
+  getNotifications(): Observable<number> {
+    return this.coreStateStore.pipe(
+      select((state: any) => {
+        return state.core.notifications;
+      })
+    );
+  }
 
-    decrementNotificationCounter(): void {
-        this.coreStateStore.dispatch(new DecrementNotificationCounter());
-    }
+  decrementNotificationCounter(): void {
+    this.coreStateStore.dispatch(new DecrementNotificationCounter());
+  }
 
-    incrementNotificationCounter(): void {
-        this.coreStateStore.dispatch(new IncrementNotificationCounter());
-    }
+  incrementNotificationCounter(): void {
+    this.coreStateStore.dispatch(new IncrementNotificationCounter());
+  }
 
-    getOtherUserDirect(): Observable<any> {
-        // this.http.get(PROFILES_API_URL).subscribe(
-        //     catchError(error => {
-        //         this.showErrorSnackBar(
-        //             'error at loading profiles: ' + error.error.detail
-        //         );
-        //         return [];
-        //     }),
-        //     mergeMap((response: any) => {
-        //         const users = FullUser.getFullUsersFromJsonArray(
-        //             response.results ? response.results : response
-        //         );
-        //
-        //     })
-        // )
-        return this.http.get(PROFILES_API_URL);
-    }
+  getOtherUserDirect(): Observable<any> {
+    // this.http.get(PROFILES_API_URL).subscribe(
+    //     catchError(error => {
+    //         this.showErrorSnackBar(
+    //             'error at loading profiles: ' + error.error.detail
+    //         );
+    //         return [];
+    //     }),
+    //     mergeMap((response: any) => {
+    //         const users = FullUser.getFullUsersFromJsonArray(
+    //             response.results ? response.results : response
+    //         );
+    //
+    //     })
+    // )
+    return this.http.get(PROFILES_API_URL);
+  }
 }

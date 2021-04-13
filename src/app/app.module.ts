@@ -15,23 +15,17 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
-
 import { BrowserModule } from '@angular/platform-browser';
-import { LOCALE_ID, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { registerLocaleData } from '@angular/common';
-import localeDE from '@angular/common/locales/de';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthGuardService } from './core/services/auth-guard.service';
-import { CustomMaterialModule } from './custom-material.module';
-import { reducers } from './store/app.reducers';
-import { AuthEffects } from './core/store/auth/auth.effects';
+import { AuthEffects } from './core/store/auth/effects';
 import { CoreSandboxService } from './core/services/core-sandbox.service';
 import { CoreModule } from './core/core.module';
 import { RecordsSandboxService } from './recordmanagement/services/records-sandbox.service';
@@ -43,56 +37,52 @@ import { StorageService } from './shared/services/storage.service';
 import { SnackbarService } from './shared/services/snackbar.service';
 import { FilesSandboxService } from './filemanagement/services/files-sandbox.service';
 import { SharedSandboxService } from './shared/services/shared-sandbox.service';
-
-import { QuillConfig, QuillModule } from 'ngx-quill';
+import { QuillModule } from 'ngx-quill';
 import Quill from 'quill';
 import QuillCursors from 'quill-cursors';
 import { CollabSandboxService } from './collab/services/collab-sandbox.service';
+import { MaterialModule } from './material/material.module';
+import { reducer as authReducer } from './core/store/auth/reducers';
 
 Quill.register('modules/cursors', QuillCursors);
 Quill.register('modules/mention', QuillCursors);
 
-const quillConfig: QuillConfig = {
-    modules: {
+@NgModule({
+  declarations: [AppComponent],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+    MaterialModule,
+    BrowserAnimationsModule,
+    CoreModule,
+    AppRoutingModule,
+    StoreModule.forRoot({ auth: authReducer }),
+    EffectsModule.forRoot([AuthEffects]),
+    StoreDevtoolsModule.instrument({
+      logOnly: environment.production as boolean,
+    }),
+    QuillModule.forRoot({
+      modules: {
         cursors: true,
         table: true,
-        tableUI: true
-    }
-};
-
-registerLocaleData(localeDE);
-
-@NgModule({
-    declarations: [AppComponent],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        HttpClientModule,
-        CustomMaterialModule,
-        BrowserAnimationsModule,
-        CoreModule,
-        AppRoutingModule,
-        StoreModule.forRoot(reducers, {
-            runtimeChecks: { strictStateImmutability: false, strictActionImmutability: false }
-        }),
-        EffectsModule.forRoot([AuthEffects]),
-        !environment.production ? StoreDevtoolsModule.instrument() : [],
-        QuillModule.forRoot(quillConfig)
-    ],
-    providers: [
-        AuthGuardService,
-        AppSandboxService,
-        CoreSandboxService,
-        RecordsSandboxService,
-        FilesSandboxService,
-        CollabSandboxService,
-        StatisticsSandboxService,
-        StorageService,
-        SnackbarService,
-        SharedSandboxService,
-        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-        { provide: LOCALE_ID, useValue: 'de' }
-    ],
-    bootstrap: [AppComponent]
+        tableUI: true,
+      },
+    }),
+  ],
+  providers: [
+    AuthGuardService,
+    AppSandboxService,
+    CoreSandboxService,
+    RecordsSandboxService,
+    FilesSandboxService,
+    CollabSandboxService,
+    StatisticsSandboxService,
+    StorageService,
+    SnackbarService,
+    SharedSandboxService,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  ],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

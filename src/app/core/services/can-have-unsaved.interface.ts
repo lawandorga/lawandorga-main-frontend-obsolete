@@ -17,5 +17,5 @@
  */
 
 export interface HasUnsaved {
-    hasUnsaved(): boolean;
+  hasUnsaved(): boolean;
 }

@@ -19,7 +19,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ChipAutocompleteComponent } from './components/chip-autocomplete/chip-autocomplete.component';
-import { CustomMaterialModule } from '../custom-material.module';
+import { MaterialModule } from '../material/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AutocompleteComponent } from './components/autocomplete/autocomplete.component';
 import { GetColorOnHoverDirective } from './directives/get-color-on-hover.directive';
@@ -30,36 +30,30 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
-    imports: [
-        CommonModule,
-        CustomMaterialModule,
-        FormsModule,
-        ReactiveFormsModule,
-        NgxChartsModule
-    ],
-    declarations: [
-        ChipAutocompleteComponent,
-        AutocompleteComponent,
-        GetColorOnHoverDirective,
-        AutoExpandDirective,
-        ExpandableButtonComponent,
-        EditTextComponent,
-        ConfirmationDialogComponent
-    ],
-    exports: [
-        CommonModule,
-        CustomMaterialModule,
-        FormsModule,
-        ReactiveFormsModule,
-        NgxChartsModule,
-        ChipAutocompleteComponent,
-        AutocompleteComponent,
-        GetColorOnHoverDirective,
-        AutoExpandDirective,
-        ExpandableButtonComponent,
-        ReactiveFormsModule,
-        EditTextComponent,
-        ConfirmationDialogComponent
-    ]
+  imports: [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule, NgxChartsModule],
+  declarations: [
+    ChipAutocompleteComponent,
+    AutocompleteComponent,
+    GetColorOnHoverDirective,
+    AutoExpandDirective,
+    ExpandableButtonComponent,
+    EditTextComponent,
+    ConfirmationDialogComponent,
+  ],
+  exports: [
+    CommonModule,
+    MaterialModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgxChartsModule,
+    ChipAutocompleteComponent,
+    AutocompleteComponent,
+    GetColorOnHoverDirective,
+    AutoExpandDirective,
+    ExpandableButtonComponent,
+    ReactiveFormsModule,
+    EditTextComponent,
+    ConfirmationDialogComponent,
+  ],
 })
 export class SharedModule {}

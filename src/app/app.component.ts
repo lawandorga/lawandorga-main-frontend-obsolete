@@ -17,68 +17,43 @@
  */
 
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { AuthState } from './core/store/auth/auth.reducers';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { AuthState } from './core/store/auth/reducers';
 import { Observable } from 'rxjs';
 import { AppSandboxService } from './core/services/app-sandbox.service';
-import { MediaMatcher } from '@angular/cdk/layout';
-import { ChangeDetectorRef, OnDestroy } from '@angular/core';
-import {
-    LEGAL_NOTICE_FRONT_URL,
-    MAIN_PAGE_FRONT_URL,
-    PRIVACY_STATEMENT_FRONT_URL,
-} from './statics/frontend_links.statics';
+import { LEGAL_NOTICE_FRONT_URL, MAIN_PAGE_FRONT_URL, PRIVACY_STATEMENT_FRONT_URL } from './statics/frontend_links.statics';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnDestroy, OnInit {
-    @ViewChild('snav')
-    snav;
+export class AppComponent implements OnInit {
+  @ViewChild('snav')
+  snav;
 
-    title = 'rlcapp';
-    authState: Observable<AuthState>;
+  authenticated: Observable<boolean>;
 
-    mobileQuery: MediaQueryList;
+  privacyStatementUrl = PRIVACY_STATEMENT_FRONT_URL;
+  legalNoticeUrl = LEGAL_NOTICE_FRONT_URL;
 
-    private _mobileQueryListener: () => void;
+  constructor(private router: Router, private appSB: AppSandboxService, private store: Store<AuthState>) {
+    this.authenticated = store.select((state: AuthState) => state.authenticated);
+  }
 
-    privacyStatementUrl = PRIVACY_STATEMENT_FRONT_URL;
-    legalNoticeUrl = LEGAL_NOTICE_FRONT_URL;
+  ngOnInit(): void {
+    // allow controlling snav in AppSandboxService
+    setTimeout(() => {
+      this.appSB.setNavbar(this.snav);
+    }, 5);
+  }
 
-    constructor(
-        private route: ActivatedRoute,
-        private router: Router,
-        private appSB: AppSandboxService,
-        changeDetectorRef: ChangeDetectorRef,
-        media: MediaMatcher
-    ) {
-        this.authState = this.appSB.startApp();
-        this.mobileQuery = media.matchMedia('(max-width: 600px)');
-        this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-        this.mobileQuery.addListener(this._mobileQueryListener);
-    }
+  toggleNav(): void {
+    if (this.snav) this.snav.toggle();
+  }
 
-    ngOnInit(): void {
-        // allow controlling snav in AppSandboxService
-        setTimeout(() => {
-            this.appSB.setNavbar(this.snav);
-        }, 5);
-    }
-
-    ngOnDestroy(): void {
-        this.mobileQuery.removeListener(this._mobileQueryListener);
-    }
-
-    toggleNav(): void {
-        // eslint-disable-next-line
-        if (this.snav) this.snav.toggle();
-    }
-
-    redirectToMainPage(): void {
-        // eslint-disable-next-line
-        this.router.navigate([MAIN_PAGE_FRONT_URL]);
-    }
+  redirectToMainPage(): void {
+    this.router.navigate([MAIN_PAGE_FRONT_URL]);
+  }
 }

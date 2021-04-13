@@ -21,62 +21,59 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { isDevMode } from '@angular/core';
 import { AppSandboxService } from '../../../services/app-sandbox.service';
-import {
-    FORGOT_PASSWORD_FRONT_URL,
-    MAIN_PAGE_FRONT_URL,
-    REGISTER_FRONT_URL
-} from '../../../../statics/frontend_links.statics';
+import { FORGOT_PASSWORD_FRONT_URL, MAIN_PAGE_FRONT_URL, REGISTER_FRONT_URL } from '../../../../statics/frontend_links.statics';
 import { CoreSandboxService } from '../../../services/core-sandbox.service';
+import { Store } from '@ngrx/store';
+import { TryLogin } from '../../../store/auth/actions';
 
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss']
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-    loginForm: FormGroup;
+  loginForm: FormGroup;
 
-    constructor(
-        private route: ActivatedRoute,
-        private router: Router,
-        private appSB: AppSandboxService,
-        private coreSB: CoreSandboxService,
-    ) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private appSB: AppSandboxService,
+    private coreSB: CoreSandboxService,
+    private store: Store
+  ) {}
 
-    ngOnInit() {
-        if (this.appSB.isAuthenticated()) {
-            this.router.navigate([MAIN_PAGE_FRONT_URL]);
-        }
-
-        this.loginForm = new FormGroup({
-            email: new FormControl('', [Validators.required, Validators.email]),
-            password: new FormControl('', [Validators.required])
-        });
-        if (isDevMode()) {
-            this.loginForm.controls['email'].setValue('dummy@rlcm.de');
-            this.loginForm.controls['password'].setValue('qwe123');
-        }
-
-        // if an activation link was used try to activate the user
-        // url: activate-user/:id/:token/
-        this.route.params.subscribe((params: Params) => {
-            const token: string = params['token'];
-            const userId: number = params['userid'];
-            if (token && userId)
-            this.coreSB.startCheckingUserActivationLink(userId, token);
-        });
+  ngOnInit(): void {
+    if (this.appSB.isAuthenticated()) {
+      this.router.navigate([MAIN_PAGE_FRONT_URL]);
     }
 
-    onLogInClick() {
-        if (this.loginForm.valid)
-            this.appSB.login(this.loginForm.value.email, this.loginForm.value.password);
+    this.loginForm = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required]),
+    });
+    if (isDevMode()) {
+      this.loginForm.controls['email'].setValue('dummy@rlcm.de');
+      this.loginForm.controls['password'].setValue('qwe123');
     }
 
-    onRegisterClick() {
-        this.router.navigate([REGISTER_FRONT_URL]);
-    }
+    // if an activation link was used try to activate the user
+    // url: activate-user/:id/:token/
+    this.route.params.subscribe((params: Params) => {
+      const token: string = params['token'];
+      const userId: number = params['userid'];
+      if (token && userId) this.coreSB.startCheckingUserActivationLink(userId, token);
+    });
+  }
 
-    onForgotPasswordClick() {
-        this.router.navigate([FORGOT_PASSWORD_FRONT_URL]);
-    }
+  onLogInClick(): void {
+    this.store.dispatch(TryLogin({ username: this.loginForm.value.email, password: this.loginForm.value.password }));
+  }
+
+  onRegisterClick(): void {
+    this.router.navigate([REGISTER_FRONT_URL]);
+  }
+
+  onForgotPasswordClick(): void {
+    this.router.navigate([FORGOT_PASSWORD_FRONT_URL]);
+  }
 }

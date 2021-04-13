@@ -17,120 +17,94 @@
  */
 
 import { Injectable } from '@angular/core';
-import { AppState } from '../../store/app.reducers';
 import { select, Store } from '@ngrx/store';
 import { take } from 'rxjs/operators';
-import {
-    ForgotPassword,
-    ReloadStaticInformation,
-    ResetPassword,
-    SetUsersPrivateKey,
-    SetToken,
-    StartLoggingOut,
-    TryLogin
-} from '../store/auth/auth.actions';
+import { ForgotPassword, ReloadStaticInformation, ResetPassword, SetUsersPrivateKey, SetToken, TryLogin } from '../store/auth/actions';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AuthState } from '../store/auth/auth.reducers';
+import { AuthState } from '../store/auth/reducers';
 import { HttpHeaders } from '@angular/common/http';
 import { MediaMatcher } from '@angular/cdk/layout';
 
 @Injectable()
 export class AppSandboxService {
-    savedLocation = '';
-    toggleNav: Function;
-    navbar;
+  savedLocation = '';
+  toggleNav: Function;
+  navbar;
 
-    static getPrivateKeyPlaceholder(): any {
-        let headers = new HttpHeaders();
-        headers = headers.append('private-key', 'placeholder');
-        return { headers };
+  static getPrivateKeyPlaceholder(): any {
+    let headers = new HttpHeaders();
+    headers = headers.append('private-key', 'placeholder');
+    return { headers };
+  }
+
+  constructor(private store: Store<AuthState>, private router: Router, private media: MediaMatcher) {}
+
+  isAuthenticated(): boolean {
+    let isAuthenticated = false;
+    this.store
+      .pipe(
+        take(1),
+        select((state: any) => state.auth.authenticated)
+      )
+      .subscribe((authenticated) => (isAuthenticated = authenticated));
+    return isAuthenticated;
+  }
+
+  startApp(): void {
+    const loginInformation = this.loadTokenAndUsersPrivateKey();
+    if (loginInformation.token !== null && loginInformation.token !== '') {
+      this.store.dispatch(SetToken({ token: loginInformation.token }));
+      this.store.dispatch(SetUsersPrivateKey({ privateKey: loginInformation.users_private_key }));
+      this.store.dispatch(ReloadStaticInformation({ token: loginInformation.token }));
     }
+  }
 
-    constructor(
-        private store: Store<AppState>,
-        private router: Router,
-        private media: MediaMatcher
-    ) {}
+  saveLocation() {
+    this.savedLocation = this.router.url;
+  }
 
-    isAuthenticated(): boolean {
-        let isAuthenticated = false;
-        this.store
-            .pipe(
-                take(1),
-                select((state: any) => state.auth.authenticated)
-            )
-            .subscribe(authenticated => (isAuthenticated = authenticated));
-        return isAuthenticated;
-    }
+  forgotPassword(email: string): void {
+    this.store.dispatch(ForgotPassword({ email }));
+  }
 
-    logout() {
-        // this.resetTokenAndUsersPrivateKey();
-        this.store.dispatch(new StartLoggingOut());
-        // this.router.navigate([LOGIN_FRONT_URL]);
-    }
+  resetPassword(new_password: string, userId: number, token: string): void {
+    this.store.dispatch(ResetPassword({ newPassword: new_password, userId: userId, token: token }));
+  }
 
-    login(username: string, password: string) {
-        this.store.dispatch(new TryLogin({ username, password }));
-    }
+  saveTokenAndUsersPrivateKey(token: string, users_private_key: string): void {
+    localStorage.setItem('token', token);
+    localStorage.setItem('users_private_key', users_private_key);
+  }
 
-    startApp(): Observable<AuthState> {
-        const loginInformation = this.loadTokenAndUsersPrivateKey();
-        if (loginInformation.token !== null && loginInformation.token !== '') {
-            this.store.dispatch(new SetToken(loginInformation.token));
-            this.store.dispatch(new SetUsersPrivateKey(loginInformation.users_private_key));
-            this.store.dispatch(new ReloadStaticInformation({ token: loginInformation.token }));
-        }
-        return this.store.pipe(select('auth'));
-    }
+  loadTokenAndUsersPrivateKey(): { token: string; users_private_key: string } {
+    return {
+      token: localStorage.getItem('token'),
+      users_private_key: localStorage.getItem('users_private_key'),
+    };
+  }
 
-    saveLocation() {
-        this.savedLocation = this.router.url;
-    }
+  resetTokenAndUsersPrivateKey(): void {
+    localStorage.clear();
+  }
 
-    forgotPassword(email: string): void {
-        this.store.dispatch(new ForgotPassword({ email }));
-    }
+  setNavbar(navbar) {
+    this.navbar = navbar;
+  }
 
-    resetPassword(new_password: string, userId: number, token: string): void {
-        this.store.dispatch(
-            new ResetPassword({ newPassword: new_password, userId: userId, token: token })
-        );
-    }
+  closeNavbar(): void {
+    if (this.navbar) this.navbar.close();
+  }
 
-    saveTokenAndUsersPrivateKey(token: string, users_private_key: string): void {
-        localStorage.setItem('token', token);
-        localStorage.setItem('users_private_key', users_private_key);
-    }
+  openNavbar(): void {
+    if (this.navbar) this.navbar.open();
+  }
 
-    loadTokenAndUsersPrivateKey(): any {
-        return {
-            token: localStorage.getItem('token'),
-            users_private_key: localStorage.getItem('users_private_key')
-        };
-    }
+  toggleNavbar(): void {
+    if (this.navbar) this.navbar.toggle();
+  }
 
-    resetTokenAndUsersPrivateKey(): void {
-        localStorage.clear();
-    }
-
-    setNavbar(navbar) {
-        this.navbar = navbar;
-    }
-
-    closeNavbar(): void {
-        if (this.navbar) this.navbar.close();
-    }
-
-    openNavbar(): void {
-        if (this.navbar) this.navbar.open();
-    }
-
-    toggleNavbar(): void {
-        if (this.navbar) this.navbar.toggle();
-    }
-
-    isOnMobile(): boolean {
-        return this.media.matchMedia('(max-width: 600px)').matches;
-    }
+  isOnMobile(): boolean {
+    return this.media.matchMedia('(max-width: 600px)').matches;
+  }
 }

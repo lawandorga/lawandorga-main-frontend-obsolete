@@ -22,31 +22,30 @@ import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { AuthGuardService } from './core/services/auth-guard.service';
 
 const appRoutes: Routes = [
-    {
-        path: 'records',
-        loadChildren: () => import('./recordmanagement/records.module').then(m => m.RecordsModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'files',
-        loadChildren: () =>
-            import('./filemanagement/filemanagement.module').then(m => m.FilemanagementModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'collab',
-        loadChildren: () => import('./collab/collab.module').then(m => m.CollabModule),
-        canActivate: [AuthGuardService]
-    }
+  {
+    path: 'records',
+    loadChildren: () => import('./recordmanagement/records.module').then((m) => m.RecordsModule),
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'files',
+    loadChildren: () => import('./filemanagement/filemanagement.module').then((m) => m.FilemanagementModule),
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'collab',
+    loadChildren: () => import('./collab/collab.module').then((m) => m.CollabModule),
+    canActivate: [AuthGuardService],
+  },
 ];
 
 @NgModule({
-    imports: [
-        RouterModule.forRoot(appRoutes, {
-            preloadingStrategy: PreloadAllModules,
-            relativeLinkResolution: 'legacy'
-        })
-    ],
-    exports: [RouterModule]
+  imports: [
+    RouterModule.forRoot(appRoutes, {
+      preloadingStrategy: PreloadAllModules,
+      relativeLinkResolution: 'legacy',
+    }),
+  ],
+  exports: [RouterModule],
 })
 export class AppRoutingModule {}

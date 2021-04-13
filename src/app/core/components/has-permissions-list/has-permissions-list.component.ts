@@ -18,16 +18,7 @@
 
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
-import {
-    animate,
-    animateChild,
-    group,
-    query,
-    state,
-    style,
-    transition,
-    trigger
-} from '@angular/animations';
+import { animate, animateChild, group, query, state, style, transition, trigger } from '@angular/animations';
 import { Router } from '@angular/router';
 
 import { HasPermission } from '../../models/permission.model';
@@ -39,89 +30,78 @@ import { PERMISSION_CAN_MANAGE_PERMISSIONS_RLC } from '../../../statics/permissi
 import { GetPermissionFrontUrl } from '../../../statics/frontend_links.statics';
 
 @Component({
-    selector: 'app-has-permissions-list',
-    templateUrl: './has-permissions-list.component.html',
-    styleUrls: ['./has-permissions-list.component.scss']
+  selector: 'app-has-permissions-list',
+  templateUrl: './has-permissions-list.component.html',
+  styleUrls: ['./has-permissions-list.component.scss'],
 })
 export class HasPermissionsListComponent implements OnInit, OnChanges {
-    @Input()
-    hasPermissions: HasPermission[];
+  @Input()
+  hasPermissions: HasPermission[];
 
-    permissionNames: {};
+  permissionNames: {};
 
-    @Input()
-    permissionHolder: RestrictedUser | RestrictedGroup | RestrictedRlc;
+  @Input()
+  permissionHolder: RestrictedUser | RestrictedGroup | RestrictedRlc;
 
-    columns = ['permission_name', 'permission_for', 'remove'];
+  columns = ['permission_name', 'permission_for', 'remove'];
 
-    canEditPermissions = false;
-    selection = new SelectionModel<HasPermission>(true, []);
+  canEditPermissions = false;
+  selection = new SelectionModel<HasPermission>(true, []);
 
-    foldStates = {};
-    removeText = 'remove';
+  foldStates = {};
+  removeText = 'remove';
 
-    constructor(private coreSB: CoreSandboxService, private router: Router) {}
+  constructor(private coreSB: CoreSandboxService, private router: Router) {}
 
-    ngOnInit() {
-        if (!this.hasPermissions || this.hasPermissions.length === 0)
-            throw new Error(
-                'HasPermissionsList-Error: hasPermissions has to be set and .length != 0'
-            );
+  ngOnInit() {
+    if (!this.hasPermissions || this.hasPermissions.length === 0)
+      throw new Error('HasPermissionsList-Error: hasPermissions has to be set and .length != 0');
 
-        this.coreSB.hasPermissionFromStringForOwnRlc(
-            PERMISSION_CAN_MANAGE_PERMISSIONS_RLC,
-            hasPermission => {
-                this.canEditPermissions = hasPermission;
-            }
-        );
+    this.coreSB.hasPermissionFromStringForOwnRlc(PERMISSION_CAN_MANAGE_PERMISSIONS_RLC, (hasPermission) => {
+      this.canEditPermissions = hasPermission;
+    });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.permissionNames = {};
+
+    let resetStates = false;
+    if (this.hasPermissions.length !== Object.keys(this.foldStates).length) {
+      this.foldStates = {};
+      resetStates = true;
     }
+    this.hasPermissions.forEach((hasPermission: HasPermission) => {
+      this.permissionNames[hasPermission.id] = this.coreSB.getPermissionById(hasPermission.permission_id).name;
 
-    ngOnChanges(changes: SimpleChanges): void {
-        this.permissionNames = {};
+      if (resetStates) this.foldStates[hasPermission.id] = 'folded';
+    });
+  }
 
-        let resetStates = false;
-        if (this.hasPermissions.length !== Object.keys(this.foldStates).length) {
-            this.foldStates = {};
-            resetStates = true;
-        }
-        this.hasPermissions.forEach((hasPermission: HasPermission) => {
-            this.permissionNames[hasPermission.id] = this.coreSB.getPermissionById(
-                hasPermission.permission_id
-            ).name;
+  onRemoveClick(hasPermission: HasPermission): void {
+    this.coreSB.startRemovingHasPermission(hasPermission.id);
+  }
 
-            if (resetStates) this.foldStates[hasPermission.id] = 'folded';
-        });
-    }
+  onHasPermissionNameClick(hasPermission: HasPermission): void {
+    this.router.navigateByUrl(GetPermissionFrontUrl(hasPermission.permission_id));
+  }
 
-    onRemoveClick(hasPermission: HasPermission): void {
-        this.coreSB.startRemovingHasPermission(hasPermission.id);
-    }
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.hasPermissions.length;
+    return numSelected === numRows;
+  }
 
-    onHasPermissionNameClick(hasPermission: HasPermission): void {
-        this.router.navigateByUrl(GetPermissionFrontUrl(hasPermission.permission_id));
-    }
+  masterToggle() {
+    this.isAllSelected() ? this.selection.clear() : this.hasPermissions.forEach((row) => this.selection.select(row));
+  }
 
-    isAllSelected() {
-        const numSelected = this.selection.selected.length;
-        const numRows = this.hasPermissions.length;
-        return numSelected === numRows;
-    }
+  animationStarted($event) {}
 
-    masterToggle() {
-        this.isAllSelected()
-            ? this.selection.clear()
-            : this.hasPermissions.forEach(row => this.selection.select(row));
-    }
+  onMouseEnter(id: number): void {
+    this.foldStates[id] = 'unfolded';
+  }
 
-    animationStarted($event) {
-        // console.log("started", $event);
-    }
-
-    onMouseEnter(id: number): void {
-        this.foldStates[id] = 'unfolded';
-    }
-
-    onMouseLeave(id: number): void {
-        this.foldStates[id] = 'folded';
-    }
+  onMouseLeave(id: number): void {
+    this.foldStates[id] = 'folded';
+  }
 }

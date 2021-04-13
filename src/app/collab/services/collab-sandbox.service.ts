@@ -21,23 +21,23 @@ import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { CollabState } from '../store/collab.reducers';
 import {
-    StartAddingCollabDocumentPermission,
-    StartAddingDocument,
-    StartDeletingCollabDocument,
-    StartDeletingCollabDocumentPermission,
-    StartLoadingAllDocuments,
-    StartLoadingCollabDocumentPermissions,
-    StartLoadingCollabPermissions
+  StartAddingCollabDocumentPermission,
+  StartAddingDocument,
+  StartDeletingCollabDocument,
+  StartDeletingCollabDocumentPermission,
+  StartLoadingAllDocuments,
+  StartLoadingCollabDocumentPermissions,
+  StartLoadingCollabPermissions,
 } from '../store/collab.actions';
 import { HttpClient } from '@angular/common/http';
 import { SharedSandboxService } from '../../shared/services/shared-sandbox.service';
 import { NameCollabDocument } from '../models/collab-document.model';
 import { Observable } from 'rxjs';
 import {
-    GetCollabEditingApiUrl,
-    GetCollabTextDocumentApiUrl,
-    GetCollabTextDocumentVersionsApiUrl,
-    GetCollabTextDocumentVersionsModelApiUrl
+  GetCollabEditingApiUrl,
+  GetCollabTextDocumentApiUrl,
+  GetCollabTextDocumentVersionsApiUrl,
+  GetCollabTextDocumentVersionsModelApiUrl,
 } from '../../statics/api_urls.statics';
 import { AppSandboxService } from '../../core/services/app-sandbox.service';
 import { EditingRoom } from '../models/editing-room.model';
@@ -46,164 +46,133 @@ import { HasPermission, Permission } from '../../core/models/permission.model';
 import { CollabPermission } from '../models/collab_permission.model';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class CollabSandboxService {
-    constructor(
-        private router: Router,
-        private collabStore: Store<CollabState>,
-        private http: HttpClient,
-        private sharedSB: SharedSandboxService,
-        private snackbackService: SnackbarService
-    ) {}
+  constructor(
+    private router: Router,
+    private collabStore: Store<CollabState>,
+    private http: HttpClient,
+    private sharedSB: SharedSandboxService,
+    private snackbackService: SnackbarService
+  ) {}
 
-    startLoadingAllDocuments(): void {
-        this.collabStore.dispatch(new StartLoadingAllDocuments());
-    }
+  startLoadingAllDocuments(): void {
+    this.collabStore.dispatch(new StartLoadingAllDocuments());
+  }
 
-    addNewCollabDocument(id?: number): void {
-        this.sharedSB.openEditTextDialog(
-            {
-                short: true,
-                descriptionLabel: 'name',
-                saveLabel: 'create',
-                title: 'add new document'
-            },
-            result => {
-                if (result) {
-                    if (result.includes('/')) {
-                        this.snackbackService.showErrorSnackBar("document name can't contain /");
-                        return;
-                    }
-                    if (id) {
-                        this.getSingleDocumentById(id)
-                            .subscribe((parent: NameCollabDocument) => {
-                                result = `${parent.path}/${result}`;
-                                this.collabStore.dispatch(
-                                    new StartAddingDocument({ path: result })
-                                );
-                            })
-                            .unsubscribe();
-                    } else {
-                        this.collabStore.dispatch(new StartAddingDocument({ path: result }));
-                    }
-                }
-            }
-        );
-    }
+  addNewCollabDocument(id?: number): void {
+    this.sharedSB.openEditTextDialog(
+      {
+        short: true,
+        descriptionLabel: 'name',
+        saveLabel: 'create',
+        title: 'add new document',
+      },
+      (result) => {
+        if (result) {
+          if (result.includes('/')) {
+            this.snackbackService.showErrorSnackBar("document name can't contain /");
+            return;
+          }
+          if (id) {
+            this.getSingleDocumentById(id)
+              .subscribe((parent: NameCollabDocument) => {
+                result = `${parent.path}/${result}`;
+                this.collabStore.dispatch(new StartAddingDocument({ path: result }));
+              })
+              .unsubscribe();
+          } else {
+            this.collabStore.dispatch(new StartAddingDocument({ path: result }));
+          }
+        }
+      }
+    );
+  }
 
-    getSingleDocumentById(id: number): Observable<NameCollabDocument> {
-        return this.collabStore.pipe(select((state: any) => state.collab.all_documents[id]));
-    }
+  getSingleDocumentById(id: number): Observable<NameCollabDocument> {
+    return this.collabStore.pipe(select((state: any) => state.collab.all_documents[id]));
+  }
 
-    getAllDocuments(): Observable<NameCollabDocument[]> {
-        return this.collabStore.pipe(
-            select((state: any) => Object.values(state.collab.all_documents))
-        );
-    }
+  getAllDocuments(): Observable<NameCollabDocument[]> {
+    return this.collabStore.pipe(select((state: any) => Object.values(state.collab.all_documents)));
+  }
 
-    getAllTreeDocuments(): Observable<NameCollabDocument[]> {
-        return this.collabStore.pipe(
-            select((state: any) => Object.values(state.collab.all_documents_tree))
-        );
-    }
+  getAllTreeDocuments(): Observable<NameCollabDocument[]> {
+    return this.collabStore.pipe(select((state: any) => Object.values(state.collab.all_documents_tree)));
+  }
 
-    fetchTextDocument(id: number): Observable<any> {
-        const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
-        return this.http.get(GetCollabTextDocumentApiUrl(id), privateKeyPlaceholder);
-    }
+  fetchTextDocument(id: number): Observable<any> {
+    const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
+    return this.http.get(GetCollabTextDocumentApiUrl(id), privateKeyPlaceholder);
+  }
 
-    fetchTextDocumentVersions(id: number): Observable<any> {
-        const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
-        return this.http.get(GetCollabTextDocumentVersionsApiUrl(id), privateKeyPlaceholder);
-    }
+  fetchTextDocumentVersions(id: number): Observable<any> {
+    const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
+    return this.http.get(GetCollabTextDocumentVersionsApiUrl(id), privateKeyPlaceholder);
+  }
 
-    fetchTextDocumentVersion(version_id: number): Observable<any> {
-        const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
-        return this.http.get(
-            GetCollabTextDocumentVersionsModelApiUrl(version_id),
-            privateKeyPlaceholder
-        );
-    }
+  fetchTextDocumentVersion(version_id: number): Observable<any> {
+    const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
+    return this.http.get(GetCollabTextDocumentVersionsModelApiUrl(version_id), privateKeyPlaceholder);
+  }
 
-    startDeletingCollabDocument(id: number): void {
-        this.collabStore.dispatch(new StartDeletingCollabDocument({ id }));
-    }
+  startDeletingCollabDocument(id: number): void {
+    this.collabStore.dispatch(new StartDeletingCollabDocument({ id }));
+  }
 
-    saveTextDocument(id: number, content: string, is_draft: boolean = false): void {
-        const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
-        this.http
-            .post(
-                GetCollabTextDocumentVersionsApiUrl(id),
-                { content, is_draft },
-                privateKeyPlaceholder
-            )
-            .subscribe(response => {
-                // check response?
-                if (is_draft) {
-                    this.snackbackService.showSuccessSnackBar('document draft saved');
-                } else {
-                    this.snackbackService.showSuccessSnackBar('document saved');
-                }
-            });
-    }
+  saveTextDocument(id: number, content: string, is_draft: boolean = false): void {
+    const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
+    this.http.post(GetCollabTextDocumentVersionsApiUrl(id), { content, is_draft }, privateKeyPlaceholder).subscribe((response) => {
+      // check response?
+      if (is_draft) {
+        this.snackbackService.showSuccessSnackBar('document draft saved');
+      } else {
+        this.snackbackService.showSuccessSnackBar('document saved');
+      }
+    });
+  }
 
-    connectToEditingRoom(id: number): Observable<any> {
-        return this.http.get(GetCollabEditingApiUrl(id));
-    }
+  connectToEditingRoom(id: number): Observable<any> {
+    return this.http.get(GetCollabEditingApiUrl(id));
+  }
 
-    closeEditingRoom(document_id: number): void {
-        this.http.delete(GetCollabEditingApiUrl(document_id)).subscribe(res => {
-            console.log('response from deleting editing room: ', res);
-        });
-    }
+  closeEditingRoom(document_id: number): void {
+    this.http.delete(GetCollabEditingApiUrl(document_id)).subscribe((res) => {});
+  }
 
-    startLoadingCollabDocumentPermission(document_id: number): void {
-        this.collabStore.dispatch(new StartLoadingCollabDocumentPermissions({ id: document_id }));
-    }
+  startLoadingCollabDocumentPermission(document_id: number): void {
+    this.collabStore.dispatch(new StartLoadingCollabDocumentPermissions({ id: document_id }));
+  }
 
-    startAddingCollabDocumentPermission(
-        document_id: number,
-        group_id: string,
-        permission_id: string
-    ): void {
-        this.collabStore.dispatch(
-            new StartAddingCollabDocumentPermission({ document_id, group_id, permission_id })
-        );
-    }
+  startAddingCollabDocumentPermission(document_id: number, group_id: string, permission_id: string): void {
+    this.collabStore.dispatch(new StartAddingCollabDocumentPermission({ document_id, group_id, permission_id }));
+  }
 
-    startLoadingCollabPermissions(): void {
-        this.collabStore.dispatch(new StartLoadingCollabPermissions());
-    }
+  startLoadingCollabPermissions(): void {
+    this.collabStore.dispatch(new StartLoadingCollabPermissions());
+  }
 
-    getCollabPermissions(): Observable<Permission[]> {
-        return this.collabStore.pipe(
-            select((state: any) => Object.values(state.collab.collab_permissions))
-        );
-    }
+  getCollabPermissions(): Observable<Permission[]> {
+    return this.collabStore.pipe(select((state: any) => Object.values(state.collab.collab_permissions)));
+  }
 
-    getDocumentPermissions(): Observable<{
-        general_permissions: HasPermission[];
-        document_permissions: CollabPermission[];
-    }> {
-        return this.collabStore.pipe(select((state: any) => state.collab.document_permissions));
-    }
+  getDocumentPermissions(): Observable<{
+    general_permissions: HasPermission[];
+    document_permissions: CollabPermission[];
+  }> {
+    return this.collabStore.pipe(select((state: any) => state.collab.document_permissions));
+  }
 
-    getDocumentPermissionsCollab(): Observable<CollabPermission[]> {
-        return this.collabStore.pipe(
-            select((state: any) => state.collab.document_permissions.collab_permissions)
-        );
-    }
+  getDocumentPermissionsCollab(): Observable<CollabPermission[]> {
+    return this.collabStore.pipe(select((state: any) => state.collab.document_permissions.collab_permissions));
+  }
 
-    getDocumentPermissionsGeneral(): Observable<HasPermission[]> {
-        return this.collabStore.pipe(
-            select((state: any) => state.collab.document_permissions.general_permissions)
-        );
-    }
+  getDocumentPermissionsGeneral(): Observable<HasPermission[]> {
+    return this.collabStore.pipe(select((state: any) => state.collab.document_permissions.general_permissions));
+  }
 
-    startDeletingDocumentPermission(collab_document_permission_id: number): void {
-        this.collabStore.dispatch(
-            new StartDeletingCollabDocumentPermission({ collab_document_permission_id })
-        );
-    }
+  startDeletingDocumentPermission(collab_document_permission_id: number): void {
+    this.collabStore.dispatch(new StartDeletingCollabDocumentPermission({ collab_document_permission_id }));
+  }
 }

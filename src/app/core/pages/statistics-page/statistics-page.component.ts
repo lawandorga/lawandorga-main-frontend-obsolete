@@ -20,47 +20,41 @@ import { Component, OnInit } from '@angular/core';
 import { StatisticsSandboxService } from '../../services/statistics-sandbox.service';
 
 @Component({
-    selector: 'app-statistics-page',
-    templateUrl: './statistics-page.component.html',
-    styleUrls: ['./statistics-page.component.scss']
+  selector: 'app-statistics-page',
+  templateUrl: './statistics-page.component.html',
+  styleUrls: ['./statistics-page.component.scss'],
 })
 export class StatisticsPageComponent implements OnInit {
-    view: any[] = [700, 400];
-    single: any[];
-    colorScheme = {
-        domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
-    };
+  view: any[] = [700, 400];
+  single: any[];
+  colorScheme = {
+    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA'],
+  };
 
-    statistics = {
-        record_tags: {
-            values: [],
-            empty: []
-        },
-        records: {
-            overall: 0,
-            states: [],
-            last_edited: [],
-            created_on: [],
-            in_month: []
-        }
-    };
+  statistics = {
+    record_tags: {
+      values: [],
+      empty: [],
+    },
+    records: {
+      overall: 0,
+      states: [],
+      last_edited: [],
+      created_on: [],
+      in_month: [],
+    },
+  };
 
-    constructor(private statisticsSB: StatisticsSandboxService) {}
+  constructor(private statisticsSB: StatisticsSandboxService) {}
 
-    ngOnInit(): void {
-        this.statisticsSB.getRecordStatistics().subscribe(response => {
-            this.statistics.record_tags.values = response.tags.filter(
-                (entry: any) => entry.value > 0
-            );
-            this.statistics.record_tags.empty = response.tags.filter(
-                (entry: any) => entry.value === 0
-            );
+  ngOnInit(): void {
+    this.statisticsSB.getRecordStatistics().subscribe((response) => {
+      this.statistics.record_tags.values = response.tags.filter((entry: any) => entry.value > 0);
+      this.statistics.record_tags.empty = response.tags.filter((entry: any) => entry.value === 0);
 
-            this.statistics.records = response.records;
-        });
-    }
+      this.statistics.records = response.records;
+    });
+  }
 
-    onSelect(event) {
-        console.log(event);
-    }
+  onSelect(event) {}
 }

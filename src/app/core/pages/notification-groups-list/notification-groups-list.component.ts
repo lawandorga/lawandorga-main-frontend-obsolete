@@ -32,147 +32,132 @@ import { GetRecordFrontUrl } from '../../../statics/frontend_links.statics';
 import { Filterable } from '../../../shared/models/filterable.model';
 
 @Component({
-    selector: 'app-notification-groups-list',
-    templateUrl: './notification-groups-list.component.html',
-    styleUrls: ['./notification-groups-list.component.scss'],
-    animations: [
-        trigger('detailExpand', [
-            state('collapsed', style({ height: '0px', minHeight: '0', display: 'none' })),
-            state('expanded', style({ height: '*' })),
-            // transition('expanded <=> collapsed', animate('290ms cubic-bezier(0.4, 0.0, 0.2, 1)'))
-            transition('collapsed <=> expanded', animate('300ms ease-in'))
-            // transition('expanded <=> collapsed', animate('1000ms ease-in'))
-        ])
-    ]
+  selector: 'app-notification-groups-list',
+  templateUrl: './notification-groups-list.component.html',
+  styleUrls: ['./notification-groups-list.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({ height: '0px', minHeight: '0', display: 'none' })),
+      state('expanded', style({ height: '*' })),
+      // transition('expanded <=> collapsed', animate('290ms cubic-bezier(0.4, 0.0, 0.2, 1)'))
+      transition('collapsed <=> expanded', animate('300ms ease-in')),
+      // transition('expanded <=> collapsed', animate('1000ms ease-in'))
+    ]),
+  ],
 })
 export class NotificationGroupsListComponent implements AfterViewInit {
-    columns = ['read', 'last_activity', 'text'];
+  columns = ['read', 'last_activity', 'text'];
 
-    data: NotificationGroup[] = [];
-    expandedElement: NotificationGroup | null;
-    results_length = 0;
+  data: NotificationGroup[] = [];
+  expandedElement: NotificationGroup | null;
+  results_length = 0;
 
-    filterValuesObservable: Observable<FilterableTypes[]> = this.generateFilterableTypes();
-    currentFilterValues: FilterableTypes[] = [];
+  filterValuesObservable: Observable<FilterableTypes[]> = this.generateFilterableTypes();
+  currentFilterValues: FilterableTypes[] = [];
 
-    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-    @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-    change = new EventEmitter(); // TODO: maybe reload with timer? every x seconds, last updated
+  change = new EventEmitter(); // TODO: maybe reload with timer? every x seconds, last updated
 
-    constructor(
-        private coreSB: CoreSandboxService,
-        private router: Router,
-        private httpClient: HttpClient
-    ) {}
+  constructor(private coreSB: CoreSandboxService, private router: Router, private httpClient: HttpClient) {}
 
-    ngAfterViewInit() {
-        merge(this.sort.sortChange, this.paginator.page, this.change)
-            .pipe(
-                startWith({}),
-                switchMap(() => {
-                    // this.isLoadingResults = true;
-                    return this.getNotifications(
-                        this.paginator.pageSize,
-                        this.paginator.pageSize * this.paginator.pageIndex,
-                        this.sort.active,
-                        this.sort.direction
-                    );
-                }),
-                map((data: NotificationResponse) => {
-                    this.results_length = data.count;
-                    return data;
-                }),
-                catchError(error => {
-                    console.log('error: ', error);
-                    return [];
-                })
-            )
-            .subscribe((data: NotificationResponse) => {
-                this.data = NotificationGroup.getNotificationGroupsFromJsonArray(data.results);
-            });
+  ngAfterViewInit() {
+    merge(this.sort.sortChange, this.paginator.page, this.change)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          // this.isLoadingResults = true;
+          return this.getNotifications(
+            this.paginator.pageSize,
+            this.paginator.pageSize * this.paginator.pageIndex,
+            this.sort.active,
+            this.sort.direction
+          );
+        }),
+        map((data: NotificationResponse) => {
+          this.results_length = data.count;
+          return data;
+        }),
+        catchError((error) => {
+          return [];
+        })
+      )
+      .subscribe((data: NotificationResponse) => {
+        this.data = NotificationGroup.getNotificationGroupsFromJsonArray(data.results);
+      });
+  }
+
+  getNotifications(limit: number, offset: number, sort_active: string, sort_direction: string): Observable<NotificationResponse> {
+    const filtersAsStrings: string[] = [];
+    for (const currentFilter of this.currentFilterValues) {
+      filtersAsStrings.push(currentFilter.name);
     }
+    const filterString = filtersAsStrings.join('___');
 
-    getNotifications(
-        limit: number,
-        offset: number,
-        sort_active: string,
-        sort_direction: string
-    ): Observable<NotificationResponse> {
-        const filtersAsStrings: string[] = [];
-        for (const currentFilter of this.currentFilterValues) {
-            filtersAsStrings.push(currentFilter.name);
+    const requestUrl = `${NOTIFICATION_GROUPS_API_URL}?limit=${limit}&offset=${offset}&sort=${sort_active}&sortdirection=${sort_direction}&filter=${filterString}`;
+    return this.httpClient.get<NotificationResponse>(requestUrl);
+  }
+
+  selectedFilterChanged(event: FilterableTypes[]): void {
+    this.currentFilterValues = event;
+    this.change.emit();
+  }
+
+  onReadClick(event, notificationGroup: NotificationGroup): void {
+    event.stopPropagation();
+    const toPost = {
+      read: !notificationGroup.read,
+    };
+    this.httpClient.patch(`${NOTIFICATION_GROUPS_API_URL}${notificationGroup.id}/`, toPost).subscribe((response) => {
+      if (notificationGroup.read) {
+        this.coreSB.incrementNotificationCounter();
+      } else {
+        this.coreSB.decrementNotificationCounter();
+        for (const notification of notificationGroup.notifications) {
+          notification.read = true;
         }
-        const filterString = filtersAsStrings.join('___');
+      }
+      notificationGroup.read = !notificationGroup.read;
+    });
+  }
 
-        const requestUrl = `${NOTIFICATION_GROUPS_API_URL}?limit=${limit}&offset=${offset}&sort=${sort_active}&sortdirection=${sort_direction}&filter=${filterString}`;
-        return this.httpClient.get<NotificationResponse>(requestUrl);
+  onNotificationGroupClick(event, notificationGroup: NotificationGroup): void {
+    event.stopPropagation();
+    if (
+      notificationGroup.type === NotificationGroupType.RECORD ||
+      notificationGroup.type === NotificationGroupType.RECORD_DELETION_REQUEST ||
+      notificationGroup.type === NotificationGroupType.RECORD_PERMISSION_REQUEST
+    ) {
+      this.router.navigateByUrl(GetRecordFrontUrl(notificationGroup.ref_id));
     }
+  }
 
-    selectedFilterChanged(event: FilterableTypes[]): void {
-        this.currentFilterValues = event;
-        this.change.emit();
+  generateFilterableTypes(): Observable<FilterableTypes[]> {
+    const list = [];
+    for (const name of Object.keys(NotificationGroupType)) {
+      list.push(new FilterableTypes(name));
     }
-
-    onReadClick(event, notificationGroup: NotificationGroup): void {
-        event.stopPropagation();
-        const toPost = {
-            read: !notificationGroup.read
-        };
-        this.httpClient
-            .patch(`${NOTIFICATION_GROUPS_API_URL}${notificationGroup.id}/`, toPost)
-            .subscribe(response => {
-                if (notificationGroup.read) {
-                    this.coreSB.incrementNotificationCounter();
-                } else {
-                    this.coreSB.decrementNotificationCounter();
-                    for (const notification of notificationGroup.notifications) {
-                        notification.read = true;
-                    }
-                }
-                notificationGroup.read = !notificationGroup.read;
-            });
-    }
-
-    onNotificationGroupClick(event, notificationGroup: NotificationGroup): void {
-        event.stopPropagation();
-        if (
-            notificationGroup.type === NotificationGroupType.RECORD ||
-            notificationGroup.type === NotificationGroupType.RECORD_DELETION_REQUEST ||
-            notificationGroup.type === NotificationGroupType.RECORD_PERMISSION_REQUEST
-        ) {
-            this.router.navigateByUrl(GetRecordFrontUrl(notificationGroup.ref_id));
-        }
-    }
-
-    generateFilterableTypes(): Observable<FilterableTypes[]> {
-        const list = [];
-        for (const name of Object.keys(NotificationGroupType)) {
-            list.push(new FilterableTypes(name));
-        }
-        return of(list);
-    }
+    return of(list);
+  }
 }
 
 interface NotificationResponse {
-    results: NotificationGroup[];
-    count: number;
-    next: string;
-    previous: string;
+  results: NotificationGroup[];
+  count: number;
+  next: string;
+  previous: string;
 }
 
 class FilterableTypes implements Filterable {
-    public readonly toShow: string;
+  public readonly toShow: string;
 
-    getFilterableProperty() {
-        return this.toShow;
-    }
+  getFilterableProperty() {
+    return this.toShow;
+  }
 
-    constructor(public readonly name: string) {
-        this.name = name;
-        this.toShow = name
-            .toLowerCase()
-            .split('_')
-            .join(' ');
-    }
+  constructor(public readonly name: string) {
+    this.name = name;
+    this.toShow = name.toLowerCase().split('_').join(' ');
+  }
 }
