@@ -53,10 +53,7 @@ import { HasPermissionSideComponent } from './components/has-permission-side/has
 import { AddHasPermissionForComponent } from './components/add-has-permission-for/add-has-permission-for.component';
 import { AddGroupComponent } from './components/add-group/add-group.component';
 import { NewUserRequestsComponent } from './pages/new-user-requests/new-user-requests.component';
-import {
-    NewUserRequestProcessedPipe,
-    NewUserRequestRequestedPipe
-} from '../recordmanagement/pipes/new_user_request.pipe';
+import { NewUserRequestProcessedPipe, NewUserRequestRequestedPipe } from '../recordmanagement/pipes/new_user_request.pipe';
 import { LegalNoticeComponent } from './pages/legal-notice/legal-notice.component';
 import { GroupDetailsComponent } from './components/group-details/group-details.component';
 import { InactiveUsersComponent } from './pages/inactive-users/inactive-users.component';
@@ -69,57 +66,57 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { StatisticsNumberComponent } from './components/statistics-number/statistics-number.component';
 
 @NgModule({
-    imports: [
-        CoreRoutingModule,
-        SharedModule,
-        FormsModule,
-        ReactiveFormsModule,
-        StoreModule.forFeature('core', coreReducer),
-        EffectsModule.forFeature([CoreEffects]),
-        MatTabsModule,
-        MatProgressSpinnerModule,
-        NgMaterialMultilevelMenuModule,
-        CdkTableModule,
-        QuillModule
-    ],
-    declarations: [
-        ProfileComponent,
-        RegisterComponent,
-        DashboardComponent,
-        LoginComponent,
-        ProfilesListComponent,
-        SidebarComponent,
-        ForeignProfileComponent,
-        ForgotPasswordComponent,
-        ResetPasswordComponent,
-        GroupsListComponent,
-        GroupComponent,
-        EditGroupComponent,
-        ShowGroupComponent,
-        AddGroupMemberComponent,
-        PermissionListComponent,
-        EditPermissionComponent,
-        AddHasPermissionComponent,
-        HasPermissionsListComponent,
-        HasPermissionSideComponent,
-        AddHasPermissionForComponent,
-        AddGroupComponent,
-        NewUserRequestsComponent,
-        NewUserRequestRequestedPipe,
-        NewUserRequestProcessedPipe,
-        LegalNoticeComponent,
-        GroupDetailsComponent,
-        InactiveUsersComponent,
-        PrivacyStatementComponent,
-        NotificationGroupsListComponent,
-        NotificationListComponent,
-        QuillTestComponent,
-        BaseRequestRequestedPipe,
-        BaseRequestProcessedPipe,
-        StatisticsPageComponent,
-        StatisticsNumberComponent
-    ],
-    providers: [],
-    exports: [SidebarComponent, BaseRequestRequestedPipe, BaseRequestProcessedPipe]
+  imports: [
+    CoreRoutingModule,
+    SharedModule,
+    FormsModule,
+    ReactiveFormsModule,
+    StoreModule.forFeature('core', coreReducer),
+    EffectsModule.forFeature([CoreEffects]),
+    MatTabsModule,
+    MatProgressSpinnerModule,
+    NgMaterialMultilevelMenuModule,
+    CdkTableModule,
+    QuillModule,
+  ],
+  declarations: [
+    ProfileComponent,
+    RegisterComponent,
+    DashboardComponent,
+    LoginComponent,
+    ProfilesListComponent,
+    SidebarComponent,
+    ForeignProfileComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent,
+    GroupsListComponent,
+    GroupComponent,
+    EditGroupComponent,
+    ShowGroupComponent,
+    AddGroupMemberComponent,
+    PermissionListComponent,
+    EditPermissionComponent,
+    AddHasPermissionComponent,
+    HasPermissionsListComponent,
+    HasPermissionSideComponent,
+    AddHasPermissionForComponent,
+    AddGroupComponent,
+    NewUserRequestsComponent,
+    NewUserRequestRequestedPipe,
+    NewUserRequestProcessedPipe,
+    LegalNoticeComponent,
+    GroupDetailsComponent,
+    InactiveUsersComponent,
+    PrivacyStatementComponent,
+    NotificationGroupsListComponent,
+    NotificationListComponent,
+    QuillTestComponent,
+    BaseRequestRequestedPipe,
+    BaseRequestProcessedPipe,
+    StatisticsPageComponent,
+    StatisticsNumberComponent,
+  ],
+  providers: [],
+  exports: [SidebarComponent, BaseRequestRequestedPipe, BaseRequestProcessedPipe],
 })
 export class CoreModule {}
