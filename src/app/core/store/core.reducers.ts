@@ -18,38 +18,38 @@
 
 import { ForeignUser, FullUser, RestrictedUser } from '../models/user.model';
 import {
-    ADD_GROUP,
-    ADD_SINGLE_HAS_PERMISSION,
-    CoreActions,
-    DECREMENT_NOTIFICATION_COUNTER,
-    INCREMENT_NOTIFICATION_COUNTER,
-    REMOVE_ACTUAL_HAS_PERMISSIONS,
-    REMOVE_INACTIVE_USER,
-    REMOVE_SINGLE_HAS_PERMISSION,
-    RESET_INACTIVE_USERS,
-    RESET_RESULTS_LENGTH,
-    RESET_SPECIAL_FOREIGN_USER,
-    RESET_SPECIAL_GROUP,
-    RESET_SPECIAL_PERMISSION,
-    SET_ACTUAL_HAS_PERMISSIONS,
-    SET_ALL_PERMISSIONS,
-    SET_GROUPS,
-    SET_INACTIVE_USERS,
-    SET_NEW_USER_REQUESTS,
-    SET_NOTIFICATIONS,
-    SET_OTHER_USERS,
-    SET_RESULTS_LENGTH,
-    SET_RLC,
-    SET_RLC_SETTINGS,
-    SET_RLCS,
-    SET_SPECIAL_FOREIGN_USER,
-    SET_SPECIAL_GROUP,
-    SET_SPECIAL_PERMISSION,
-    SET_USER,
-    SET_USER_PERMISSIONS,
-    SET_USER_RECORD_STATES,
-    SET_USER_STATES,
-    UPDATE_NEW_USER_REQUEST
+  ADD_GROUP,
+  ADD_SINGLE_HAS_PERMISSION,
+  CoreActions,
+  DECREMENT_NOTIFICATION_COUNTER,
+  INCREMENT_NOTIFICATION_COUNTER,
+  REMOVE_ACTUAL_HAS_PERMISSIONS,
+  REMOVE_INACTIVE_USER,
+  REMOVE_SINGLE_HAS_PERMISSION,
+  RESET_INACTIVE_USERS,
+  RESET_RESULTS_LENGTH,
+  RESET_SPECIAL_FOREIGN_USER,
+  RESET_SPECIAL_GROUP,
+  RESET_SPECIAL_PERMISSION,
+  SET_ACTUAL_HAS_PERMISSIONS,
+  SET_ALL_PERMISSIONS,
+  SET_GROUPS,
+  SET_INACTIVE_USERS,
+  SET_NEW_USER_REQUESTS,
+  SET_NOTIFICATIONS,
+  SET_OTHER_USERS,
+  SET_RESULTS_LENGTH,
+  SET_RLC,
+  SET_RLC_SETTINGS,
+  SET_RLCS,
+  SET_SPECIAL_FOREIGN_USER,
+  SET_SPECIAL_GROUP,
+  SET_SPECIAL_PERMISSION,
+  SET_USER,
+  SET_USER_PERMISSIONS,
+  SET_USER_RECORD_STATES,
+  SET_USER_STATES,
+  UPDATE_NEW_USER_REQUEST,
 } from './core.actions';
 import { HasPermission, Permission } from '../models/permission.model';
 import { RestrictedRlc } from '../models/rlc.model';
@@ -59,221 +59,221 @@ import { NewUserRequest } from '../models/new_user_request.model';
 import { RlcSettings } from '../models/rlc_settings.model';
 
 export interface CoreState {
-    user: FullUser;
-    other_users: { [id: number]: FullUser };
-    all_permissions: { [id: number]: Permission };
-    user_permissions: { [id: number]: HasPermission };
-    groups: { [id: number]: RestrictedGroup };
-    special_group: FullGroup;
-    actual_has_permissions: { [id: number]: HasPermission };
-    foreign_user: ForeignUser;
-    rlc: RestrictedRlc;
-    rlc_settings: RlcSettings;
-    user_states: any;
-    user_record_states: any;
-    special_permission: Permission;
-    rlcs: { [id: number]: RestrictedRlc };
-    new_user_requests: { [id: number]: NewUserRequest };
-    inactive_users: { [id: number]: FullUser };
-    notifications: number;
-    results_length: number;
+  user: FullUser;
+  other_users: { [id: number]: FullUser };
+  all_permissions: { [id: number]: Permission };
+  user_permissions: { [id: number]: HasPermission };
+  groups: { [id: number]: RestrictedGroup };
+  special_group: FullGroup;
+  actual_has_permissions: { [id: number]: HasPermission };
+  foreign_user: ForeignUser;
+  rlc: RestrictedRlc;
+  rlc_settings: RlcSettings;
+  user_states: any;
+  user_record_states: any;
+  special_permission: Permission;
+  rlcs: { [id: number]: RestrictedRlc };
+  new_user_requests: { [id: number]: NewUserRequest };
+  inactive_users: { [id: number]: FullUser };
+  notifications: number;
+  results_length: number;
 }
 
 const initialState: CoreState = {
-    user: null,
-    other_users: {},
-    all_permissions: {},
-    user_permissions: {},
-    groups: {},
-    special_group: null,
-    actual_has_permissions: {},
-    foreign_user: null,
-    rlc: null,
-    rlc_settings: null,
-    user_states: [],
-    user_record_states: [],
-    special_permission: null,
-    rlcs: {},
-    new_user_requests: {},
-    inactive_users: {},
-    notifications: 0,
-    results_length: 0
+  user: null,
+  other_users: {},
+  all_permissions: {},
+  user_permissions: {},
+  groups: {},
+  special_group: null,
+  actual_has_permissions: {},
+  foreign_user: null,
+  rlc: null,
+  rlc_settings: null,
+  user_states: [],
+  user_record_states: [],
+  special_permission: null,
+  rlcs: {},
+  new_user_requests: {},
+  inactive_users: {},
+  notifications: 0,
+  results_length: 0,
 };
 
 export function coreReducer(state = initialState, action: CoreActions) {
-    switch (action.type) {
-        case ADD_GROUP:
-            return {
-                ...state,
-                groups: {
-                    ...state.groups,
-                    [action.payload.id]: action.payload
-                }
-            };
-        case ADD_SINGLE_HAS_PERMISSION:
-            const hasPerm: HasPermission = action.payload;
-            return {
-                ...state,
-                actual_has_permissions: {
-                    ...state.actual_has_permissions,
-                    [hasPerm.id]: hasPerm
-                }
-            };
-        case REMOVE_ACTUAL_HAS_PERMISSIONS:
-            return {
-                ...state,
-                actual_has_permissions: {}
-            };
-        case REMOVE_SINGLE_HAS_PERMISSION:
-            const hasPermissions = state.actual_has_permissions;
-            delete hasPermissions[action.payload];
+  switch (action.type) {
+    case ADD_GROUP:
+      return {
+        ...state,
+        groups: {
+          ...state.groups,
+          [action.payload.id]: action.payload,
+        },
+      };
+    case ADD_SINGLE_HAS_PERMISSION:
+      const hasPerm: HasPermission = action.payload;
+      return {
+        ...state,
+        actual_has_permissions: {
+          ...state.actual_has_permissions,
+          [hasPerm.id]: hasPerm,
+        },
+      };
+    case REMOVE_ACTUAL_HAS_PERMISSIONS:
+      return {
+        ...state,
+        actual_has_permissions: {},
+      };
+    case REMOVE_SINGLE_HAS_PERMISSION:
+      const hasPermissions = state.actual_has_permissions;
+      delete hasPermissions[action.payload];
 
-            return {
-                ...state,
-                actual_has_permissions: hasPermissions
-            };
-        case REMOVE_INACTIVE_USER:
-            const inactive_users = state.inactive_users;
-            delete inactive_users[action.payload];
+      return {
+        ...state,
+        actual_has_permissions: hasPermissions,
+      };
+    case REMOVE_INACTIVE_USER:
+      const inactive_users = state.inactive_users;
+      delete inactive_users[action.payload];
 
-            return {
-                ...state,
-                inactive_users: inactive_users
-            };
-        case RESET_INACTIVE_USERS:
-            return {
-                ...state,
-                inactive_users: {}
-            };
-        case RESET_SPECIAL_FOREIGN_USER:
-            return {
-                ...state,
-                foreign_user: null
-            };
-        case RESET_SPECIAL_GROUP:
-            return {
-                ...state,
-                special_group: null
-            };
-        case RESET_SPECIAL_PERMISSION:
-            return {
-                ...state,
-                special_permission: null
-            };
-        case SET_ACTUAL_HAS_PERMISSIONS:
-            return {
-                ...state,
-                actual_has_permissions: getIdObjects(action.payload)
-            };
-        case SET_ALL_PERMISSIONS:
-            return {
-                ...state,
-                all_permissions: getIdObjects(action.payload)
-            };
-        case SET_GROUPS:
-            return {
-                ...state,
-                groups: getIdObjects(action.payload)
-            };
-        case SET_INACTIVE_USERS:
-            return {
-                ...state,
-                inactive_users: getIdObjects(action.payload)
-            };
-        case SET_NEW_USER_REQUESTS:
-            return {
-                ...state,
-                new_user_requests: getIdObjects(action.payload)
-            };
-        case SET_OTHER_USERS:
-            return {
-                ...state,
-                other_users: getIdObjects(action.payload)
-            };
-        case SET_RLC:
-            return {
-                ...state,
-                rlc: action.payload
-            };
-        case SET_RLCS:
-            return {
-                ...state,
-                rlcs: getIdObjects(action.payload)
-            };
-        case SET_SPECIAL_FOREIGN_USER:
-            return {
-                ...state,
-                foreign_user: action.payload
-            };
-        case SET_SPECIAL_GROUP:
-            return {
-                ...state,
-                special_group: action.payload
-            };
-        case SET_SPECIAL_PERMISSION:
-            return {
-                ...state,
-                special_permission: action.payload
-            };
-        case SET_USER:
-            return {
-                ...state,
-                user: action.payload
-            };
-        case SET_USER_PERMISSIONS:
-            return {
-                ...state,
-                user_permissions: getIdObjects(action.payload)
-            };
-        case SET_USER_RECORD_STATES:
-            return {
-                ...state,
-                user_record_states: getObjectsByField(action.payload, 'abbreviation')
-            };
-        case SET_USER_STATES:
-            return {
-                ...state,
-                user_states: getObjectsByField(action.payload, 'abbreviation')
-            };
-        case UPDATE_NEW_USER_REQUEST:
-            return {
-                ...state,
-                new_user_requests: {
-                    ...state.new_user_requests,
-                    [action.payload.id]: action.payload
-                }
-            };
-        case SET_RLC_SETTINGS:
-            return {
-                ...state,
-                rlc_settings: action.payload
-            };
-        case SET_NOTIFICATIONS:
-            return {
-                ...state,
-                notifications: action.payload
-            };
-        case INCREMENT_NOTIFICATION_COUNTER:
-            return {
-                ...state,
-                notifications: state.notifications + 1
-            };
-        case DECREMENT_NOTIFICATION_COUNTER:
-            return {
-                ...state,
-                notifications: state.notifications - 1
-            };
-        case RESET_RESULTS_LENGTH:
-            return {
-                ...state,
-                results_length: 0
-            };
-        case SET_RESULTS_LENGTH:
-            return {
-                ...state,
-                results_length: action.payload
-            };
-        default:
-            return state;
-    }
+      return {
+        ...state,
+        inactive_users: inactive_users,
+      };
+    case RESET_INACTIVE_USERS:
+      return {
+        ...state,
+        inactive_users: {},
+      };
+    case RESET_SPECIAL_FOREIGN_USER:
+      return {
+        ...state,
+        foreign_user: null,
+      };
+    case RESET_SPECIAL_GROUP:
+      return {
+        ...state,
+        special_group: null,
+      };
+    case RESET_SPECIAL_PERMISSION:
+      return {
+        ...state,
+        special_permission: null,
+      };
+    case SET_ACTUAL_HAS_PERMISSIONS:
+      return {
+        ...state,
+        actual_has_permissions: getIdObjects(action.payload),
+      };
+    case SET_ALL_PERMISSIONS:
+      return {
+        ...state,
+        all_permissions: getIdObjects(action.payload),
+      };
+    case SET_GROUPS:
+      return {
+        ...state,
+        groups: getIdObjects(action.payload),
+      };
+    case SET_INACTIVE_USERS:
+      return {
+        ...state,
+        inactive_users: getIdObjects(action.payload),
+      };
+    case SET_NEW_USER_REQUESTS:
+      return {
+        ...state,
+        new_user_requests: getIdObjects(action.payload),
+      };
+    case SET_OTHER_USERS:
+      return {
+        ...state,
+        other_users: getIdObjects(action.payload),
+      };
+    case SET_RLC:
+      return {
+        ...state,
+        rlc: action.payload,
+      };
+    case SET_RLCS:
+      return {
+        ...state,
+        rlcs: getIdObjects(action.payload),
+      };
+    case SET_SPECIAL_FOREIGN_USER:
+      return {
+        ...state,
+        foreign_user: action.payload,
+      };
+    case SET_SPECIAL_GROUP:
+      return {
+        ...state,
+        special_group: action.payload,
+      };
+    case SET_SPECIAL_PERMISSION:
+      return {
+        ...state,
+        special_permission: action.payload,
+      };
+    case SET_USER:
+      return {
+        ...state,
+        user: action.payload,
+      };
+    case SET_USER_PERMISSIONS:
+      return {
+        ...state,
+        user_permissions: getIdObjects(action.payload),
+      };
+    case SET_USER_RECORD_STATES:
+      return {
+        ...state,
+        user_record_states: getObjectsByField(action.payload, 'abbreviation'),
+      };
+    case SET_USER_STATES:
+      return {
+        ...state,
+        user_states: getObjectsByField(action.payload, 'abbreviation'),
+      };
+    case UPDATE_NEW_USER_REQUEST:
+      return {
+        ...state,
+        new_user_requests: {
+          ...state.new_user_requests,
+          [action.payload.id]: action.payload,
+        },
+      };
+    case SET_RLC_SETTINGS:
+      return {
+        ...state,
+        rlc_settings: action.payload,
+      };
+    case SET_NOTIFICATIONS:
+      return {
+        ...state,
+        notifications: action.payload,
+      };
+    case INCREMENT_NOTIFICATION_COUNTER:
+      return {
+        ...state,
+        notifications: state.notifications + 1,
+      };
+    case DECREMENT_NOTIFICATION_COUNTER:
+      return {
+        ...state,
+        notifications: state.notifications - 1,
+      };
+    case RESET_RESULTS_LENGTH:
+      return {
+        ...state,
+        results_length: 0,
+      };
+    case SET_RESULTS_LENGTH:
+      return {
+        ...state,
+        results_length: action.payload,
+      };
+    default:
+      return state;
+  }
 }

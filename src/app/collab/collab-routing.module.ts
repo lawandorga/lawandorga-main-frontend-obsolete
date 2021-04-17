@@ -26,25 +26,25 @@ import { CollabEditComponent } from './pages/collab-edit/collab-edit.component';
 import { TextVersionComponent } from './components/text-version/text-version.component';
 
 const collabRoutes: Routes = [
-    {
-        path: '',
-        pathMatch: 'full',
-        component: PageViewComponent
-    },
-    {
-        path: ':id',
-        component: PageViewComponent
-    },
-    {
-        path: 'edit/:id',
-        component: CollabEditComponent,
-        canDeactivate: [UnsavedGuardService]
-    }
+  {
+    path: '',
+    pathMatch: 'full',
+    component: PageViewComponent,
+  },
+  {
+    path: ':id',
+    component: PageViewComponent,
+  },
+  {
+    path: 'edit/:id',
+    component: CollabEditComponent,
+    canDeactivate: [UnsavedGuardService],
+  },
 ];
 
 @NgModule({
-    imports: [RouterModule.forChild(collabRoutes)],
-    exports: [RouterModule],
-    providers: [AuthGuardService, UnsavedGuardService]
+  imports: [RouterModule.forChild(collabRoutes)],
+  exports: [RouterModule],
+  providers: [AuthGuardService, UnsavedGuardService],
 })
 export class CollabRoutingModule {}

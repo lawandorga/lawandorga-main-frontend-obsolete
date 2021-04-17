@@ -62,7 +62,6 @@ import { NotificationGroupsListComponent } from './pages/notification-groups-lis
 import { NotificationListComponent } from './components/notification-list/notification-list.component';
 import { BaseRequestProcessedPipe, BaseRequestRequestedPipe } from './pipes/request.pipe';
 import { StatisticsPageComponent } from './pages/statistics-page/statistics-page.component';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { StatisticsNumberComponent } from './components/statistics-number/statistics-number.component';
 
 @NgModule({

@@ -42,83 +42,83 @@ import { StatisticsPageComponent } from './pages/statistics-page/statistics-page
 import { STATISTICS_FRONT_URL } from '../statics/frontend_links.statics';
 
 const apiRoutes: Routes = [
-    {
-        path: 'profile',
-        component: ProfileComponent,
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'profiles',
-        pathMatch: 'full',
-        component: ProfilesListComponent,
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: '',
-        pathMatch: 'full',
-        component: DashboardComponent,
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'profiles/:id',
-        component: ForeignProfileComponent,
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'groups',
-        pathMatch: 'full',
-        component: GroupsListComponent,
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'groups/:id',
-        component: GroupComponent,
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'permissions',
-        pathMatch: 'full',
-        component: PermissionListComponent,
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'permissions/:id',
-        component: EditPermissionComponent,
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'new_user_requests',
-        component: NewUserRequestsComponent,
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'inactive_users',
-        component: InactiveUsersComponent,
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'notifications',
-        component: NotificationGroupsListComponent,
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: STATISTICS_FRONT_URL,
-        component: StatisticsPageComponent,
-        canActivate: [AuthGuardService]
-    },
-    // without access control
-    { path: 'login', component: LoginComponent },
-    { path: 'register', component: RegisterComponent },
-    { path: 'forgot-password', component: ForgotPasswordComponent },
-    { path: 'reset-password/:userid/:token', component: ResetPasswordComponent },
-    { path: 'activate-account/:userid/:token', component: LoginComponent },
-    { path: 'legal_notice', component: LegalNoticeComponent },
-    { path: 'privacy_statement', component: PrivacyStatementComponent }
+  {
+    path: 'profile',
+    component: ProfileComponent,
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'profiles',
+    pathMatch: 'full',
+    component: ProfilesListComponent,
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: '',
+    pathMatch: 'full',
+    component: DashboardComponent,
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'profiles/:id',
+    component: ForeignProfileComponent,
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'groups',
+    pathMatch: 'full',
+    component: GroupsListComponent,
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'groups/:id',
+    component: GroupComponent,
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'permissions',
+    pathMatch: 'full',
+    component: PermissionListComponent,
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'permissions/:id',
+    component: EditPermissionComponent,
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'new_user_requests',
+    component: NewUserRequestsComponent,
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'inactive_users',
+    component: InactiveUsersComponent,
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'notifications',
+    component: NotificationGroupsListComponent,
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: STATISTICS_FRONT_URL,
+    component: StatisticsPageComponent,
+    canActivate: [AuthGuardService],
+  },
+  // without access control
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'reset-password/:userid/:token', component: ResetPasswordComponent },
+  { path: 'activate-account/:userid/:token', component: LoginComponent },
+  { path: 'legal_notice', component: LegalNoticeComponent },
+  { path: 'privacy_statement', component: PrivacyStatementComponent },
 ];
 
 @NgModule({
-    imports: [RouterModule.forChild(apiRoutes)],
-    exports: [RouterModule],
-    providers: [AuthGuardService, UnsavedGuardService]
+  imports: [RouterModule.forChild(apiRoutes)],
+  exports: [RouterModule],
+  providers: [AuthGuardService, UnsavedGuardService],
 })
 export class CoreRoutingModule {}

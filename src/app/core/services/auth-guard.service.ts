@@ -17,7 +17,7 @@
  */
 
 import { Injectable, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { map, take } from 'rxjs/operators';
 import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
 import { AuthState } from '../store/auth/reducers';
@@ -29,7 +29,7 @@ export class AuthGuardService implements CanActivate {
   authenticated = false;
 
   constructor(private router: Router, private store: Store<AuthState>) {
-    this.store.select((state) => state.authenticated).subscribe((data) => (this.authenticated = data));
+    store.pipe(select((state: any) => state.auth.authenticated)).subscribe((authenticated) => (this.authenticated = authenticated));
   }
 
   canActivate(): boolean {

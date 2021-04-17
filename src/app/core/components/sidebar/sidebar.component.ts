@@ -89,7 +89,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
   sidebarItemsOrg = [
     {
       label: 'Records',
-      // label: '',
       icon: 'folder',
       link: RECORDS_FRONT_URL,
     },
@@ -332,6 +331,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   selectedItem(event) {
+    console.log(event);
     this.router.navigate([event.link]);
   }
 

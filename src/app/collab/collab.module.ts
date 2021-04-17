@@ -47,40 +47,40 @@ bold.tagName = 'b';
 Quill.register(bold, true);
 
 const quillConfig: QuillConfig = {
-    modules: {
-        cursors: true,
-        table: true,
-        tableUI: true
-    }
+  modules: {
+    cursors: true,
+    table: true,
+    tableUI: true,
+  },
 };
 
 @NgModule({
-    imports: [
-        CollabRoutingModule,
-        CommonModule,
-        SharedModule,
-        FormsModule,
-        ReactiveFormsModule,
-        CoreModule,
-        StoreModule.forFeature('collab', collabReducer),
-        EffectsModule.forFeature([CollabEffects]),
-        QuillModule.forRoot(quillConfig)
-    ],
-    declarations: [
-        CollabMainViewComponent,
-        DocumentTreeComponent,
-        PageViewComponent,
-        CollabDocumentViewerComponent,
-        CustomQuillContainerComponent,
-        CollabEditComponent,
-        TextVersionComponent,
-        CollabDocumentPermissionsComponent,
-        AddCollabDocumentPermissionComponent
-    ],
-    providers: []
+  imports: [
+    CollabRoutingModule,
+    CommonModule,
+    SharedModule,
+    FormsModule,
+    ReactiveFormsModule,
+    CoreModule,
+    StoreModule.forFeature('collab', collabReducer),
+    EffectsModule.forFeature([CollabEffects]),
+    QuillModule.forRoot(quillConfig),
+  ],
+  declarations: [
+    CollabMainViewComponent,
+    DocumentTreeComponent,
+    PageViewComponent,
+    CollabDocumentViewerComponent,
+    CustomQuillContainerComponent,
+    CollabEditComponent,
+    TextVersionComponent,
+    CollabDocumentPermissionsComponent,
+    AddCollabDocumentPermissionComponent,
+  ],
+  providers: [],
 })
 export class CollabModule {
-    constructor(private collabSB: CollabSandboxService) {
-        this.collabSB.startLoadingCollabPermissions();
-    }
+  constructor(private collabSB: CollabSandboxService) {
+    this.collabSB.startLoadingCollabPermissions();
+  }
 }

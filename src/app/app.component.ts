@@ -18,9 +18,10 @@
 
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AuthState } from './core/store/auth/reducers';
 import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { AppSandboxService } from './core/services/app-sandbox.service';
 import { LEGAL_NOTICE_FRONT_URL, MAIN_PAGE_FRONT_URL, PRIVACY_STATEMENT_FRONT_URL } from './statics/frontend_links.statics';
 
@@ -39,7 +40,7 @@ export class AppComponent implements OnInit {
   legalNoticeUrl = LEGAL_NOTICE_FRONT_URL;
 
   constructor(private router: Router, private appSB: AppSandboxService, private store: Store<AuthState>) {
-    this.authenticated = store.select((state: AuthState) => state.authenticated);
+    store.pipe(select((state: any) => state.auth.authenticated)).subscribe((authenticated) => (this.authenticated = authenticated));
   }
 
   ngOnInit(): void {
@@ -51,6 +52,7 @@ export class AppComponent implements OnInit {
 
   toggleNav(): void {
     if (this.snav) this.snav.toggle();
+    console.log(this.authenticated);
   }
 
   redirectToMainPage(): void {

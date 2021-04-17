@@ -61,7 +61,7 @@ export class AuthEffects {
           mergeMap((response: { token: string; users_private_key: string }) => {
             this.appSB.saveTokenAndUsersPrivateKey(response.token, response.users_private_key);
             console.log('hello');
-            this.router.navigate(['/']);
+            void this.router.navigate(['/']);
 
             return [
               SetToken({ token: response.token }),
