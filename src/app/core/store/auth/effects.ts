@@ -60,7 +60,6 @@ export class AuthEffects {
         this.http.post(LOGIN_API_URL, payload).pipe(
           mergeMap((response: { token: string; users_private_key: string }) => {
             this.appSB.saveTokenAndUsersPrivateKey(response.token, response.users_private_key);
-            console.log('hello');
             void this.router.navigate(['/']);
 
             return [

@@ -331,7 +331,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   selectedItem(event) {
-    console.log(event);
     this.router.navigate([event.link]);
   }
 

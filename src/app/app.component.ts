@@ -53,7 +53,6 @@ export class AppComponent implements OnInit {
 
   toggleNav(): void {
     if (this.snav) this.snav.toggle();
-    console.log(this.authenticated);
   }
 
   redirectToMainPage(): void {

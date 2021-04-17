@@ -122,12 +122,7 @@ export class CoreSandboxService {
   }
 
   hasPermissionFromStringForOwnRlc(permission: string, subscriberCallback): void {
-    this.getRlc().subscribe((rlc: RestrictedRlc) => {
-      if (rlc)
-        this.hasPermissionFromString(permission, subscriberCallback, {
-          for_rlc: rlc.id,
-        });
-    });
+    this.hasPermissionFromString(permission, subscriberCallback);
   }
 
   getResultsLength(): Observable<number> {
@@ -138,29 +133,25 @@ export class CoreSandboxService {
     /*
         checks if the user has permission and returns to subscriberCallback true or false
          */
-    this.getAllPermissions()
-      .subscribe((all_permissions: Permission[]) => {
-        if (all_permissions.length > 0) {
-          try {
-            const id = Number(all_permissions.filter((single_permission) => single_permission.name === permission)[0].id);
-            this.hasPermissionFromId(id, subscriberCallback, permission_for);
-          } catch (e) {
-            subscriberCallback(false);
-          }
+    this.getAllPermissions().subscribe((all_permissions: Permission[]) => {
+      if (all_permissions.length > 0) {
+        try {
+          const id = Number(all_permissions.filter((single_permission) => single_permission.name === permission)[0].id);
+          this.hasPermissionFromId(id, subscriberCallback, permission_for);
+        } catch (e) {
+          subscriberCallback(false);
         }
-      })
-      .unsubscribe();
+      }
+    });
   }
 
   hasPermissionFromId(permission: number, subscriberCallback, permission_for: any = null): void {
     /*
         checks if the user has permission and returns to subscriberCallback true or false
          */
-    this.getUserPermissions()
-      .subscribe((user_permissions: HasPermission[]) => {
-        subscriberCallback(HasPermission.checkPermissionMet(user_permissions, permission, permission_for));
-      })
-      .unsubscribe();
+    this.getUserPermissions().subscribe((user_permissions: HasPermission[]) => {
+      subscriberCallback(HasPermission.checkPermissionMet(user_permissions, permission, permission_for));
+    });
   }
 
   startSavingUser(user: FullUser) {
