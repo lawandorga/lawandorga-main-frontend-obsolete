@@ -40,6 +40,7 @@ export class AppComponent implements OnInit {
   legalNoticeUrl = LEGAL_NOTICE_FRONT_URL;
 
   constructor(private router: Router, private appSB: AppSandboxService, private store: Store<AuthState>) {
+    appSB.startApp();
     store.pipe(select((state: any) => state.auth.authenticated)).subscribe((authenticated) => (this.authenticated = authenticated));
   }
 

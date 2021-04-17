@@ -25,17 +25,17 @@ const appRoutes: Routes = [
   {
     path: 'records',
     loadChildren: () => import('./recordmanagement/records.module').then((m) => m.RecordsModule),
-    canActivate: [],
+    canActivate: [AuthGuardService],
   },
   {
     path: 'files',
     loadChildren: () => import('./filemanagement/filemanagement.module').then((m) => m.FilemanagementModule),
-    canActivate: [],
+    canActivate: [AuthGuardService],
   },
   {
     path: 'collab',
     loadChildren: () => import('./collab/collab.module').then((m) => m.CollabModule),
-    canActivate: [],
+    canActivate: [AuthGuardService],
   },
 ];
 
