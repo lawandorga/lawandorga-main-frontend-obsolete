@@ -285,16 +285,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
       })
     );
 
-    if (!isDevMode()) {
-      this.timerCheckPermissions = setInterval(() => {
-        this.coreSB.startCheckingUserHasPermissions();
-      }, this.checkPermissionInterval);
-      this.recheckSidebarItems();
-    }
+    // this.timerCheckPermissions = setInterval(() => {
+    //   this.coreSB.startCheckingUserHasPermissions();
+    // }, this.checkPermissionInterval);
+    this.recheckSidebarItems();
 
-    this.timerLoadUnreadNotifications = setInterval(() => {
-      this.coreSB.startLoadingUnreadNotifications();
-    }, this.checkNotificationsInterval);
+    // this.timerLoadUnreadNotifications = setInterval(() => {
+    //   this.coreSB.startLoadingUnreadNotifications();
+    // }, this.checkNotificationsInterval);
   }
 
   recheckSidebarItems() {
@@ -321,8 +319,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    clearInterval(this.timerCheckPermissions);
-    clearInterval(this.timerLoadUnreadNotifications);
+    // clearInterval(this.timerCheckPermissions);
+    // clearInterval(this.timerLoadUnreadNotifications);
     this.store.dispatch(Logout());
   }
 
@@ -338,7 +336,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     for (const sub of this.subscriptions) {
       sub.unsubscribe();
     }
-    clearInterval(this.timerCheckPermissions);
-    clearInterval(this.timerLoadUnreadNotifications);
+    // clearInterval(this.timerCheckPermissions);
+    // clearInterval(this.timerLoadUnreadNotifications);
   }
 }
