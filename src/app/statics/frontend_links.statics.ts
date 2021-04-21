@@ -22,9 +22,9 @@ import { RestrictedGroup } from '../core/models/group.model';
 import { Permission } from '../core/models/permission.model';
 import { FullFolder } from '../filemanagement/models/folder.model';
 import { GenerateSearchAppendix } from './api_urls.statics';
-import { SearchParamsInterface } from '../shared/interfaces/search_params.interface'
+import { SearchParamsInterface } from '../shared/interfaces/search_params.interface';
 
-export const MAIN_PAGE_FRONT_URL = '';
+export const MAIN_PAGE_FRONT_URL = 'dashboard';
 export const REGISTER_FRONT_URL = 'register';
 export const LOGIN_FRONT_URL = 'login';
 export const FORGOT_PASSWORD_FRONT_URL = 'forgot-password';
@@ -48,59 +48,59 @@ export const COLLAB_VERSIONS = 'collab/versions/';
 export const COLLAB_BASE = 'collab/';
 
 export const GetProfileFrontUrl = (profile: RestrictedUser | string): string => {
-    if (profile instanceof RestrictedUser) return `${PROFILES_FRONT_URL}/${profile.id}`;
-    else return `${PROFILES_FRONT_URL}/${profile}`;
+  if (profile instanceof RestrictedUser) return `${PROFILES_FRONT_URL}/${profile.id}`;
+  else return `${PROFILES_FRONT_URL}/${profile}`;
 };
 
 export const GetRecordSearchFrontUrl = (searchTerm: string): string => {
-    return `${RECORDS_FRONT_URL}?search=${searchTerm}`;
+  return `${RECORDS_FRONT_URL}?search=${searchTerm}`;
 };
 
 export const GetRecordListFrontUrl = (searchParams: SearchParamsInterface) => {
-    return GenerateSearchAppendix(RECORDS_FRONT_URL, searchParams);
+  return GenerateSearchAppendix(RECORDS_FRONT_URL, searchParams);
 };
 
 export const GetRecordFrontUrl = (record: TokenRecord | string): string => {
-    if (record instanceof TokenRecord) return `${RECORDS_FRONT_URL}/${record.id}`;
-    else return `${RECORDS_FRONT_URL}/${record}`;
+  if (record instanceof TokenRecord) return `${RECORDS_FRONT_URL}/${record.id}`;
+  else return `${RECORDS_FRONT_URL}/${record}`;
 };
 
 export const GetGroupFrontUrl = (group: RestrictedGroup | string): string => {
-    if (group instanceof RestrictedGroup) return `${GROUPS_FRONT_URL}/${group.id}`;
-    else return `${GROUPS_FRONT_URL}/${group}`;
+  if (group instanceof RestrictedGroup) return `${GROUPS_FRONT_URL}/${group.id}`;
+  else return `${GROUPS_FRONT_URL}/${group}`;
 };
 
 export const GetPermissionFrontUrl = (permission: Permission | string): string => {
-    if (permission instanceof Permission) return `${PERMISSIONS_FRONT_URL}/${permission.id}`;
-    else return `${PERMISSIONS_FRONT_URL}/${permission}`;
+  if (permission instanceof Permission) return `${PERMISSIONS_FRONT_URL}/${permission.id}`;
+  else return `${PERMISSIONS_FRONT_URL}/${permission}`;
 };
 
 export const GetFolderFrontUrlRelative = (currentPath: string, folder: FullFolder | string) => {
-    if (!currentPath.endsWith('/') && currentPath !== '') {
-        currentPath = currentPath + '/';
-    }
-    if (folder instanceof FullFolder) {
-        return `${FILES_FRONT_URL}?path=${currentPath}${folder.name}`;
-    } else {
-        return `${FILES_FRONT_URL}?path=${currentPath}${folder}`;
-    }
+  if (!currentPath.endsWith('/') && currentPath !== '') {
+    currentPath = currentPath + '/';
+  }
+  if (folder instanceof FullFolder) {
+    return `${FILES_FRONT_URL}?path=${currentPath}${folder.name}`;
+  } else {
+    return `${FILES_FRONT_URL}?path=${currentPath}${folder}`;
+  }
 };
 
 export const GetFolderFrontUrlAbsolute = (path: string) => {
-    if (path === '') {
-        return `${FILES_FRONT_URL}`;
-    }
-    return `${FILES_FRONT_URL}?path=${path}`;
+  if (path === '') {
+    return `${FILES_FRONT_URL}`;
+  }
+  return `${FILES_FRONT_URL}?path=${path}`;
 };
 
 export const GetCollabEditFrontUrl = (id: number) => {
-    return `${COLLAB_EDIT}${id}`;
+  return `${COLLAB_EDIT}${id}`;
 };
 
 export const GetCollabVersionsFrontUrl = (id: number) => {
-    return `${COLLAB_VERSIONS}${id}`;
+  return `${COLLAB_VERSIONS}${id}`;
 };
 
 export const GetCollabViewFrontUrl = (id: number) => {
-    return `${COLLAB_BASE}${id}`;
+  return `${COLLAB_BASE}${id}`;
 };

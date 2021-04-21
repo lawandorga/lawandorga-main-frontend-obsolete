@@ -37,7 +37,6 @@ import { InactiveUsersComponent } from './pages/inactive-users/inactive-users.co
 import { PrivacyStatementComponent } from './pages/privacy-statement/privacy-statement.component';
 import { NotificationGroupsListComponent } from './pages/notification-groups-list/notification-groups-list.component';
 import { UnsavedGuardService } from './services/unsaved-guard.service';
-import { QuillTestComponent } from './components/quill-test/quill-test.component';
 import { StatisticsPageComponent } from './pages/statistics-page/statistics-page.component';
 import { STATISTICS_FRONT_URL } from '../statics/frontend_links.statics';
 
@@ -54,7 +53,7 @@ const apiRoutes: Routes = [
     canActivate: [AuthGuardService],
   },
   {
-    path: '',
+    path: 'dashboard',
     pathMatch: 'full',
     component: DashboardComponent,
     canActivate: [AuthGuardService],
@@ -108,6 +107,7 @@ const apiRoutes: Routes = [
   },
   // without access control
   { path: 'login', component: LoginComponent },
+  { path: '', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'reset-password/:userid/:token', component: ResetPasswordComponent },

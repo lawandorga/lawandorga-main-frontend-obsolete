@@ -59,6 +59,7 @@ export class LoginComponent implements OnInit {
     // if an activation link was used try to activate the user
     // url: activate-user/:id/:token/
     this.route.params.subscribe((params: Params) => {
+      console.log('hello');
       const token: string = params['token'];
       const userId: number = params['userid'];
       if (token && userId) this.coreSB.startCheckingUserActivationLink(userId, token);

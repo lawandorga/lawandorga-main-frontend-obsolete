@@ -57,8 +57,9 @@ export class ProfilesListComponent implements OnInit {
 
   onUnlockClick(id: number): void {
     this.http.post(GetProfilesUnlockApiUrl(id), {}).subscribe();
-    // todo
-    this.coreSB.showSuccessSnackBar('Clicked!');
+    this.coreSB.showSuccessSnackBar(
+      'The user was unlocked! Reload the page for the unlock button to disappear. The user should be able to login again.'
+    );
   }
 
   onDeActiveClick(user: FullUser): void {

@@ -60,7 +60,7 @@ Quill.register('modules/mention', QuillCursors);
     StoreModule.forRoot({ auth: authReducer }),
     EffectsModule.forRoot([AuthEffects]),
     StoreDevtoolsModule.instrument({
-      logOnly: environment.production as boolean,
+      logOnly: environment.production,
     }),
     QuillModule.forRoot({
       modules: {

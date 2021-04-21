@@ -24,37 +24,38 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { CustomErrorStateMatcher } from '../../../../statics/errror_state_matcher.statics';
 
 @Component({
-    selector: 'app-reset-password',
-    templateUrl: './reset-password.component.html',
-    styleUrls: ['./reset-password.component.scss']
+  selector: 'app-reset-password',
+  templateUrl: './reset-password.component.html',
+  styleUrls: ['./reset-password.component.scss'],
 })
 export class ResetPasswordComponent implements OnInit {
-    resetPasswordForm: FormGroup;
-    userId: number;
-    token: string;
-    errorStateMatcher = new CustomErrorStateMatcher();
+  resetPasswordForm: FormGroup;
+  userId: number;
+  token: string;
+  errorStateMatcher = new CustomErrorStateMatcher();
 
-    constructor(private appSB: AppSandboxService, private route: ActivatedRoute) {
-        this.resetPasswordForm = new FormGroup(
-            {
-                new_password: new FormControl('', [Validators.required, passwordValidator]),
-                new_password_confirm: new FormControl('', [Validators.required])
-            },
-            matchValidator('new_password', 'new_password_confirm')
-        );
-    }
+  constructor(private appSB: AppSandboxService, private route: ActivatedRoute) {
+    this.resetPasswordForm = new FormGroup(
+      {
+        new_password: new FormControl('', [Validators.required, passwordValidator]),
+        new_password_confirm: new FormControl('', [Validators.required]),
+      },
+      matchValidator('new_password', 'new_password_confirm')
+    );
+  }
 
-    ngOnInit() {
-        this.route.params.subscribe((params: Params) => {
-            this.userId = params['userid'];
-            this.token = params['token'];
-        });
-    }
+  ngOnInit() {
+    console.log('hello from reset');
+    this.route.params.subscribe((params: Params) => {
+      this.userId = params['userid'];
+      this.token = params['token'];
+    });
+  }
 
-    onSendClick() {
-        if (this.resetPasswordForm.valid) {
-            const new_pw = this.resetPasswordForm.controls['new_password'].value;
-            this.appSB.resetPassword(new_pw, this.userId, this.token);
-        }
+  onSendClick() {
+    if (this.resetPasswordForm.valid) {
+      const new_pw = this.resetPasswordForm.controls['new_password'].value;
+      this.appSB.resetPassword(new_pw, this.userId, this.token);
     }
+  }
 }

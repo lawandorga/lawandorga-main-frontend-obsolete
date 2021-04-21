@@ -44,6 +44,17 @@ export class AppComponent implements OnInit {
     store.pipe(select((state: any) => state.auth.authenticated)).subscribe((authenticated) => (this.authenticated = authenticated));
   }
 
+  isAuthenticated(): boolean {
+    let isAuthenticated = false;
+    this.store
+      .pipe(
+        take(1),
+        select((state: any) => state.auth.authenticated)
+      )
+      .subscribe((authenticated) => (isAuthenticated = authenticated));
+    return isAuthenticated;
+  }
+
   ngOnInit(): void {
     // allow controlling snav in AppSandboxService
     setTimeout(() => {
