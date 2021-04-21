@@ -24,7 +24,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AutocompleteComponent } from './components/autocomplete/autocomplete.component';
 import { GetColorOnHoverDirective } from './directives/get-color-on-hover.directive';
 import { AutoExpandDirective } from './directives/auto-expand.directive';
-import { ExpandableButtonComponent } from './components/expandable-button/expandable-button.component';
 import { EditTextComponent } from './components/edit-text/edit-text.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -36,7 +35,6 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     AutocompleteComponent,
     GetColorOnHoverDirective,
     AutoExpandDirective,
-    ExpandableButtonComponent,
     EditTextComponent,
     ConfirmationDialogComponent,
   ],
@@ -50,7 +48,6 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     AutocompleteComponent,
     GetColorOnHoverDirective,
     AutoExpandDirective,
-    ExpandableButtonComponent,
     ReactiveFormsModule,
     EditTextComponent,
     ConfirmationDialogComponent,

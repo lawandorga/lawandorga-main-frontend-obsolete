@@ -43,9 +43,9 @@
             <ng-container matColumnDef="remove" *ngIf="editGroupMembers">
                 <th mat-header-cell *matHeaderCellDef></th>
                 <td mat-cell *matCellDef="let member">
-                    <app-expandable-button (buttonClicked)="onRemoveGroupMemberClick(member.id)" content="remove"
-                                           icon="delete" color="warn"
-                                           [styleParams]=" {fontSize: '14px'} "></app-expandable-button>
+                    <button (click)="onRemoveGroupMemberClick(member.id)" mat-button color="warn">
+                        Remove
+                    </button>
                 </td>
             </ng-container>
 
@@ -54,4 +54,3 @@
         </table>
     </ng-template>
 </div>
-

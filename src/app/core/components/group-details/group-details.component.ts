@@ -27,59 +27,59 @@ import { RestrictedUser } from '../../models/user.model';
 import { SharedSandboxService } from '../../../shared/services/shared-sandbox.service';
 
 @Component({
-    selector: 'app-group-details',
-    templateUrl: './group-details.component.html',
-    styleUrls: ['./group-details.component.scss']
+  selector: 'app-group-details',
+  templateUrl: './group-details.component.html',
+  styleUrls: ['./group-details.component.scss'],
 })
 export class GroupDetailsComponent implements OnInit {
-    memberColumns = [];
+  memberColumns = [];
 
-    @Input()
-    editGroupMembers: boolean;
+  @Input()
+  editGroupMembers: boolean;
 
-    @Input()
-    group: FullGroup;
+  @Input()
+  group: FullGroup;
 
-    constructor(
-        private coreSB: CoreSandboxService,
-        public dialog: MatDialog,
-        private router: Router,
-        private sharedSB: SharedSandboxService
-    ) {}
+  constructor(
+    private coreSB: CoreSandboxService,
+    public dialog: MatDialog,
+    private router: Router,
+    private sharedSB: SharedSandboxService
+  ) {}
 
-    ngOnInit() {
-        this.editGroupMembers = this.editGroupMembers !== undefined;
+  ngOnInit() {
+    this.editGroupMembers = this.editGroupMembers !== undefined;
 
-        if (this.editGroupMembers) {
-            this.memberColumns = ['member', 'remove'];
-        } else {
-            this.memberColumns = ['member'];
+    if (this.editGroupMembers) {
+      this.memberColumns = ['member', 'remove'];
+    } else {
+      this.memberColumns = ['member'];
+    }
+  }
+
+  onRemoveGroupMemberClick(user_id: string) {
+    this.sharedSB.openConfirmDialog(
+      {
+        description: 'are you sure you want to remove this user?',
+        confirmLabel: 'remove',
+        confirmColor: 'warn',
+      },
+      (remove: boolean) => {
+        if (remove) {
+          this.coreSB.removeGroupMember(user_id, this.group.id);
         }
-    }
+      }
+    );
+  }
 
-    onRemoveGroupMemberClick(user_id: string) {
-        this.sharedSB.openConfirmDialog(
-            {
-                description: 'are you sure you want to remove this user?',
-                confirmLabel: 'remove',
-                confirmColor: 'warn'
-            },
-            (remove: boolean) => {
-                if (remove) {
-                    this.coreSB.removeGroupMember(user_id, this.group.id);
-                }
-            }
-        );
-    }
+  onAddGroupMemberClick() {
+    this.dialog.open(AddGroupMemberComponent, {
+      maxHeight: '50vh',
+      maxWidth: '50vh',
+    });
+  }
 
-    onAddGroupMemberClick() {
-        this.dialog.open(AddGroupMemberComponent, {
-            maxHeight: '50vh',
-            maxWidth: '50vh'
-        });
-    }
-
-    onUserClick(user: RestrictedUser) {
-        this.router.navigateByUrl(GetProfileFrontUrl(user));
-    }
+  onUserClick(user: RestrictedUser) {
+    this.router.navigateByUrl(GetProfileFrontUrl(user));
+  }
 }
