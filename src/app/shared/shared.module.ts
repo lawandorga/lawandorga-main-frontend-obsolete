@@ -19,6 +19,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ChipAutocompleteComponent } from './components/chip-autocomplete/chip-autocomplete.component';
+import { DynamicFormComponent } from './components/dynamic-form/dynamic-form.component';
+import { DynamicInputComponent } from './components/dynamic-input/dynamic-input.component';
 import { MaterialModule } from '../material/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AutocompleteComponent } from './components/autocomplete/autocomplete.component';
@@ -35,6 +37,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     AutocompleteComponent,
     GetColorOnHoverDirective,
     AutoExpandDirective,
+    DynamicFormComponent,
+    DynamicInputComponent,
     EditTextComponent,
     ConfirmationDialogComponent,
   ],
@@ -44,6 +48,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     FormsModule,
     ReactiveFormsModule,
     NgxChartsModule,
+    DynamicInputComponent,
+    DynamicFormComponent,
     ChipAutocompleteComponent,
     AutocompleteComponent,
     GetColorOnHoverDirective,

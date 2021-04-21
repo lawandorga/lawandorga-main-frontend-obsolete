@@ -47,7 +47,7 @@ export class GroupDetailsComponent implements OnInit {
     private sharedSB: SharedSandboxService
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.editGroupMembers = this.editGroupMembers !== undefined;
 
     if (this.editGroupMembers) {
@@ -57,7 +57,7 @@ export class GroupDetailsComponent implements OnInit {
     }
   }
 
-  onRemoveGroupMemberClick(user_id: string) {
+  onRemoveGroupMemberClick(user_id: string): void {
     this.sharedSB.openConfirmDialog(
       {
         description: 'are you sure you want to remove this user?',
@@ -72,14 +72,14 @@ export class GroupDetailsComponent implements OnInit {
     );
   }
 
-  onAddGroupMemberClick() {
+  onAddGroupMemberClick(): void {
     this.dialog.open(AddGroupMemberComponent, {
       maxHeight: '50vh',
       maxWidth: '50vh',
     });
   }
 
-  onUserClick(user: RestrictedUser) {
-    this.router.navigateByUrl(GetProfileFrontUrl(user));
+  onUserClick(user: RestrictedUser): void {
+    void this.router.navigateByUrl(GetProfileFrontUrl(user));
   }
 }

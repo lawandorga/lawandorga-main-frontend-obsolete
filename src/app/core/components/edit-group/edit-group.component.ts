@@ -28,65 +28,59 @@ import { HasPermission } from '../../models/permission.model';
 import { AddHasPermissionForComponent } from '../add-has-permission-for/add-has-permission-for.component';
 
 @Component({
-    selector: 'app-edit-group',
-    templateUrl: './edit-group.component.html',
-    styleUrls: ['./edit-group.component.scss']
+  selector: 'app-edit-group',
+  templateUrl: './edit-group.component.html',
+  styleUrls: ['./edit-group.component.scss'],
 })
 export class EditGroupComponent implements OnInit, OnDestroy {
-    group: FullGroup;
-    canEditPermissions = false;
+  group: FullGroup;
+  canEditPermissions = false;
 
-    groupHasPermissions: HasPermission[];
-    groupPermissionsLoaded = false;
-    memberColumns = ['member', 'remove'];
+  groupHasPermissions: HasPermission[];
+  groupPermissionsLoaded = false;
+  memberColumns = ['member', 'remove'];
 
-    getGroupSubscription: Subscription;
-    getActualHasPermission: Subscription;
+  getGroupSubscription: Subscription;
+  getActualHasPermission: Subscription;
 
-    constructor(private coreSB: CoreSandboxService, public dialog: MatDialog) {}
+  constructor(private coreSB: CoreSandboxService, public dialog: MatDialog) {}
 
-    ngOnInit() {
-        this.coreSB.startLoadingPermissionStatics();
+  ngOnInit() {
+    this.coreSB.startLoadingPermissionStatics();
 
-        this.getGroupSubscription = this.coreSB.getGroup().subscribe((group: FullGroup) => {
-            if (group) {
-                this.group = group;
-                if (this.group && this.canEditPermissions && !this.groupPermissionsLoaded) {
-                    this.coreSB.startLoadingGroupHasPermissions(this.group.id);
-                    this.groupPermissionsLoaded = true;
-                }
-            }
-        });
-        this.coreSB.hasPermissionFromStringForOwnRlc(
-            PERMISSION_CAN_MANAGE_PERMISSIONS_RLC,
-            hasPermission => {
-                this.canEditPermissions = hasPermission;
-            }
-        );
+    this.getGroupSubscription = this.coreSB.getGroup().subscribe((group: FullGroup) => {
+      if (group) {
+        this.group = group;
+        if (this.group && this.canEditPermissions && !this.groupPermissionsLoaded) {
+          this.coreSB.startLoadingGroupHasPermissions(this.group.id);
+          this.groupPermissionsLoaded = true;
+        }
+      }
+    });
+    this.coreSB.hasPermissionFromStringForOwnRlc(PERMISSION_CAN_MANAGE_PERMISSIONS_RLC, (hasPermission) => {
+      this.canEditPermissions = hasPermission;
+    });
 
-        this.getActualHasPermission = this.coreSB
-            .getActualHasPermissions()
-            .subscribe((hasPermissions: HasPermission[]) => {
-                this.groupHasPermissions = hasPermissions;
-            });
-    }
+    this.getActualHasPermission = this.coreSB.getActualHasPermissions().subscribe((hasPermissions: HasPermission[]) => {
+      this.groupHasPermissions = hasPermissions;
+    });
+  }
 
-    ngOnDestroy(): void {
-        this.coreSB.resetSpecialGroup();
-        if (this.getActualHasPermission) this.getActualHasPermission.unsubscribe();
-        if (this.getGroupSubscription) this.getGroupSubscription.unsubscribe();
-    }
+  ngOnDestroy(): void {
+    this.coreSB.resetSpecialGroup();
+    if (this.getActualHasPermission) this.getActualHasPermission.unsubscribe();
+    if (this.getGroupSubscription) this.getGroupSubscription.unsubscribe();
+  }
 
-    onAddGroupMemberClick() {
-        this.dialog.open(AddGroupMemberComponent);
-    }
+  onAddGroupMemberClick() {
+    this.dialog.open(AddGroupMemberComponent);
+  }
 
-    onRemoveGroupMemberClick(user_id: string) {
-        this.coreSB.removeGroupMember(user_id, this.group.id);
-    }
+  onRemoveGroupMemberClick(user_id: string) {
+    this.coreSB.removeGroupMember(user_id, this.group.id);
+  }
 
-    onAddPermissionsClick(): void {
-        if (this.canEditPermissions)
-            this.dialog.open(AddHasPermissionForComponent, { data: this.group });
-    }
+  onAddPermissionsClick(): void {
+    if (this.canEditPermissions) this.dialog.open(AddHasPermissionForComponent, { data: this.group });
+  }
 }

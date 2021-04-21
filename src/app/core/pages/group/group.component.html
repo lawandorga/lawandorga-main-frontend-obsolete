@@ -20,3 +20,8 @@
 </app-edit-group>
 <app-show-group *ngIf="!can_edit">
 </app-show-group>
+
+
+<div class="py-20">
+  <dynamic-form [fields]="fields" [data]="group" method="patch" [action]="action"></dynamic-form>
+</div>

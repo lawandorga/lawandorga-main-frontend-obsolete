@@ -20,59 +20,59 @@ import { Filterable } from '../../shared/models/filterable.model';
 import { RestrictedUser } from './user.model';
 
 export class RestrictedGroup implements Filterable {
-    constructor(public id: string, public name: string) {
-        this.id = id;
-        this.name = name;
-    }
+  constructor(public id: string, public name: string) {
+    this.id = id;
+    this.name = name;
+  }
 
-    static getRestrictedGroupsFromJsonArray(jsonArray) {
-        const restrictedGroups: Array<RestrictedGroup> = [];
-        Object.values(jsonArray).map(restrictedJsonUser => {
-            restrictedGroups.push(RestrictedGroup.getRestrictedUserFromJson(restrictedJsonUser));
-        });
-        return restrictedGroups;
-    }
+  static getRestrictedGroupsFromJsonArray(jsonArray) {
+    const restrictedGroups: Array<RestrictedGroup> = [];
+    Object.values(jsonArray).map((restrictedJsonUser) => {
+      restrictedGroups.push(RestrictedGroup.getRestrictedUserFromJson(restrictedJsonUser));
+    });
+    return restrictedGroups;
+  }
 
-    static getRestrictedUserFromJson(json) {
-        if (json) return new RestrictedGroup(json.id, json.name);
-        return null;
-    }
+  static getRestrictedUserFromJson(json) {
+    if (json) return new RestrictedGroup(json.id, json.name);
+    return null;
+  }
 
-    getFilterableProperty() {
-        return this.name;
-    }
+  getFilterableProperty() {
+    return this.name;
+  }
 }
 
 export class FullGroup extends RestrictedGroup {
-    constructor(
-        id: string,
-        name: string,
-        public creator_id: string,
-        public members: RestrictedUser[],
-        public visible: boolean,
-        public description: string,
-        public note: string
-    ) {
-        super(id, name);
-        this.creator_id = creator_id;
-        this.members = members;
-        this.visible = visible;
-        this.description = description;
-        this.note = note;
-    }
+  constructor(
+    id: string,
+    name: string,
+    public creator_id: string,
+    public members: RestrictedUser[],
+    public visible: boolean,
+    public description: string,
+    public note: string
+  ) {
+    super(id, name);
+    this.creator_id = creator_id;
+    this.members = members;
+    this.visible = visible;
+    this.description = description;
+    this.note = note;
+  }
 
-    static getFullGroupFromJson(json) {
-        if (json)
-            return new FullGroup(
-                json.id,
-                json.name,
-                json.creator,
-                // json.group_members,
-                RestrictedUser.getRestrictedUsersFromJsonArray(json.group_members),
-                json.visible,
-                json.description,
-                json.note
-            );
-        return null;
-    }
+  static getFullGroupFromJson(json) {
+    if (json)
+      return new FullGroup(
+        json.id,
+        json.name,
+        json.creator,
+        // json.group_members,
+        RestrictedUser.getRestrictedUsersFromJsonArray(json.group_members),
+        json.visible,
+        json.description,
+        json.note
+      );
+    return null;
+  }
 }

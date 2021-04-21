@@ -1,0 +1,9 @@
+<div>
+    <label [for]="name" class="block text-sm font-medium text-gray-700">{{ label }}</label>
+    <div class="mt-1">
+        <input
+            class="shadow-sm focus:ring-blue-700 focus:border-blue-700 block w-full sm:text-sm border-gray-300 rounded-md"
+            *ngIf="tag === 'input'" [type]="type" [value]="value && value[name]" [name]="name" [id]="name"
+            [required]="required" ngModel />
+    </div>
+</div>

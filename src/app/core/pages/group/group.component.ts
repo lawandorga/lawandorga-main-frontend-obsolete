@@ -19,51 +19,72 @@
 import { Component, OnInit } from '@angular/core';
 import { CoreSandboxService } from '../../services/core-sandbox.service';
 import { ActivatedRoute, Params } from '@angular/router';
-import {
-    PERMISSION_CAN_MANAGE_GROUP,
-    PERMISSION_CAN_MANAGE_GROUPS_RLC
-} from '../../../statics/permissions.statics';
-import { RestrictedRlc } from '../../models/rlc.model';
+import { PERMISSION_CAN_MANAGE_GROUP, PERMISSION_CAN_MANAGE_GROUPS_RLC } from '../../../statics/permissions.statics';
 import { FullGroup } from '../../models/group.model';
+import axios from 'axios';
+import { environment } from '../../../../environments/environment';
 
 @Component({
-    selector: 'app-group',
-    templateUrl: './group.component.html',
-    styleUrls: ['./group.component.scss']
+  selector: 'app-group',
+  templateUrl: './group.component.html',
+  styleUrls: ['./group.component.scss'],
 })
 export class GroupComponent implements OnInit {
-    id: string;
-    can_edit = false;
+  id: string;
+  can_edit = false;
+  group: Object;
+  action: string;
 
-    constructor(private coreSB: CoreSandboxService, private route: ActivatedRoute) {}
+  fields = [
+    {
+      label: 'Name',
+      type: 'text',
+      tag: 'input',
+      name: 'name',
+      required: true,
+    },
+  ];
 
-    ngOnInit() {
-        this.route.params.subscribe((params: Params) => {
-            this.id = params['id'];
-            this.coreSB.startLoadingSpecialGroup(this.id);
-        });
+  constructor(private coreSB: CoreSandboxService, private route: ActivatedRoute) {}
 
-        this.coreSB.getGroup().subscribe((group: FullGroup) => {
-            this.coreSB.hasPermissionFromString(
-                PERMISSION_CAN_MANAGE_GROUP,
-                hasPermission => {
-                    if (hasPermission) {
-                        this.can_edit = true;
-                    }
-                },
-                {
-                    for_group: this.id
-                }
-            );
+  ngOnInit(): void {
+    this.route.params.subscribe((params: Params) => {
+      this.id = String(params['id']);
+      this.action = `api/groups/${this.id}/`;
+      this.coreSB.startLoadingSpecialGroup(this.id);
+    });
 
-            this.coreSB.hasPermissionFromStringForOwnRlc(
-                PERMISSION_CAN_MANAGE_GROUPS_RLC,
-                permission => {
-                    if (permission) {
-                        this.can_edit = true;
-                    }
-                }
-            );
-        });
-    }
+    this.coreSB.getGroup().subscribe((group: FullGroup) => {
+      this.coreSB.hasPermissionFromString(
+        PERMISSION_CAN_MANAGE_GROUP,
+        (hasPermission) => {
+          if (hasPermission) {
+            this.can_edit = true;
+          }
+        },
+        {
+          for_group: this.id,
+        }
+      );
+
+      this.coreSB.hasPermissionFromStringForOwnRlc(PERMISSION_CAN_MANAGE_GROUPS_RLC, (permission) => {
+        if (permission) {
+          this.can_edit = true;
+        }
+      });
+    });
+
+    const config = {
+      headers: {
+        Authorization: `Token ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json',
+        'private-key': localStorage.getItem('users_private_key').replace(/(?:\r\n|\r|\n)/g, ''),
+      },
+    };
+
+    void axios
+      .get(`${environment.apiUrl}api/groups/${this.id}/`, config)
+      .then((response) => (this.group = response.data))
+      .catch();
+  }
 }
