@@ -19,109 +19,104 @@
 import { Filterable } from '../../shared/models/filterable.model';
 
 export class RestrictedUser implements Filterable {
-    constructor(public id: string, public name: string) {
-        this.id = id;
-        this.name = name;
-    }
+  constructor(public id: string, public name: string) {
+    this.id = id;
+    this.name = name;
+  }
 
-    static getRestrictedUsersFromJsonArray(jsonArray): RestrictedUser[] {
-        const restrictedUsers: RestrictedUser[] = [];
-        Object.values(jsonArray).map(restrictedJsonUser => {
-            restrictedUsers.push(RestrictedUser.getRestrictedUserFromJson(restrictedJsonUser));
-        });
-        return restrictedUsers;
-    }
+  static getRestrictedUsersFromJsonArray(jsonArray): RestrictedUser[] {
+    const restrictedUsers: RestrictedUser[] = [];
+    Object.values(jsonArray).map((restrictedJsonUser) => {
+      restrictedUsers.push(RestrictedUser.getRestrictedUserFromJson(restrictedJsonUser));
+    });
+    return restrictedUsers;
+  }
 
-    static getRestrictedUserFromJson(json): RestrictedUser {
-        if (json) return new RestrictedUser(json.id, json.name);
-        return new RestrictedUser('-1', 'DELETED');
-    }
+  static getRestrictedUserFromJson(json): RestrictedUser {
+    if (json) return new RestrictedUser(json.id, json.name);
+    return new RestrictedUser('-1', 'DELETED');
+  }
 
-    getFilterableProperty() {
-        return this.name;
-    }
+  getFilterableProperty() {
+    return this.name;
+  }
 }
 
 export class ForeignUser extends RestrictedUser {
-    /**
-     * ForeignUser represents a user from the own rlc but not the user himself -> contact information,
-     * RestrictedUser < foreign < full
-     */
-    constructor(
-        id: string = '',
-        public email: string = '',
-        name: string = '',
-        public phone_number: string = ''
-    ) {
-        super(id, name);
-        this.email = email;
-        this.phone_number = phone_number;
-    }
+  /**
+   * ForeignUser represents a user from the own rlc but not the user himself -> contact information,
+   * RestrictedUser < foreign < full
+   */
+  constructor(id: string = '', public email: string = '', name: string = '', public phone_number: string = '') {
+    super(id, name);
+    this.email = email;
+    this.phone_number = phone_number;
+  }
 
-    static getForeignUserFromJson(json): ForeignUser {
-        if (json) return new ForeignUser(json.id, json.email, json.name, json.phone_number);
-        return null;
-    }
+  static getForeignUserFromJson(json): ForeignUser {
+    if (json) return new ForeignUser(json.id, json.email, json.name, json.phone_number);
+    return null;
+  }
 }
 
 export class FullUser extends RestrictedUser {
-    constructor(
-        id: string = '',
-        public email: string = '',
-        name: string = '',
-        public birthday: Date = new Date(),
-        public phone_number: string = '',
-        public street: string = '',
-        public city: string = '',
-        public postal_code: string = '',
-        public user_state: string = '',
-        public user_record_state: string = '',
-        public locked: boolean = false,
-        public email_confirmed: boolean = true,
-        public is_active: boolean = true,
-        public accepted: boolean = true
-    ) {
-        super(id, name);
-        this.email = email;
-        this.birthday = birthday;
-        this.phone_number = phone_number;
-        this.street = street;
-        this.city = city;
-        this.postal_code = postal_code;
-        this.user_state = user_state;
-        this.user_record_state = user_record_state;
-        this.locked = locked;
-        this.email_confirmed = email_confirmed;
-        this.is_active = is_active;
-        this.accepted = accepted;
-    }
+  constructor(
+    id: string = '',
+    public email: string = '',
+    name: string = '',
+    public birthday: Date = new Date(),
+    public phone_number: string = '',
+    public street: string = '',
+    public city: string = '',
+    public postal_code: string = '',
+    public user_state: string = '',
+    public user_record_state: string = '',
+    public locked: boolean = false,
+    public email_confirmed: boolean = true,
+    public is_active: boolean = true,
+    public accepted: boolean = true
+  ) {
+    super(id, name);
+    this.email = email;
+    this.birthday = birthday;
+    this.phone_number = phone_number;
+    this.street = street;
+    this.city = city;
+    this.postal_code = postal_code;
+    this.user_state = user_state;
+    this.user_record_state = user_record_state;
+    this.locked = locked;
+    this.email_confirmed = email_confirmed;
+    this.is_active = is_active;
+    this.accepted = accepted;
+  }
 
-    static getFullUserFromJson(json): FullUser {
-        if (json)
-            return new FullUser(
-                json.id,
-                json.email,
-                json.name,
-                new Date(json.birthday),
-                json.phone_number,
-                json.street,
-                json.city,
-                json.postal_code,
-                json.user_state,
-                json.user_record_state,
-                json.locked,
-                json.email_confirmed,
-                json.is_active,
-                json.accepted
-            );
-        return null;
-    }
+  static getFullUserFromJson(json): FullUser {
+    if (json)
+      return new FullUser(
+        json.id,
+        json.email,
+        json.name,
+        new Date(json.birthday),
+        json.phone_number,
+        json.street,
+        json.city,
+        json.postal_code,
+        json.user_state,
+        json.user_record_state,
+        json.locked,
+        json.email_confirmed,
+        json.is_active,
+        json.accepted
+      );
+    return null;
+  }
 
-    static getFullUsersFromJsonArray(jsonArray): FullUser[] {
-        const fullUsers: FullUser[] = [];
-        Object.values(jsonArray).map(fullJsonUser => {
-            fullUsers.push(FullUser.getFullUserFromJson(fullJsonUser));
-        });
-        return fullUsers;
-    }
+  static getFullUsersFromJsonArray(jsonArray): FullUser[] {
+    const fullUsers: FullUser[] = [];
+    Object.values(jsonArray).map((fullJsonUser) => {
+      fullUsers.push(FullUser.getFullUserFromJson(fullJsonUser));
+    });
+    return fullUsers;
+  }
 }

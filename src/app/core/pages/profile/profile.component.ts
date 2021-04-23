@@ -26,92 +26,87 @@ import { State } from '../../models/state.model';
 import { Observable } from 'rxjs';
 
 @Component({
-    selector: 'app-profile',
-    templateUrl: './profile.component.html',
-    styleUrls: ['./profile.component.scss']
+  selector: 'app-profile',
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
-    userForm: FormGroup;
-    allUserStates: Observable<State[]>;
-    selectedUserState: State;
-    selUserState: Observable<State>;
-    allUserRecordStates: Observable<State[]>;
-    selectedUserRecordState: State;
-    user: FullUser;
+  userForm: FormGroup;
+  allUserStates: Observable<State[]>;
+  selectedUserState: State;
+  selUserState: Observable<State>;
+  allUserRecordStates: Observable<State[]>;
+  selectedUserRecordState: State;
+  user: FullUser;
 
-    @ViewChild('fileInput')
-    fileInput: ElementRef<HTMLInputElement>;
+  @ViewChild('fileInput')
+  fileInput: ElementRef<HTMLInputElement>;
 
-    constructor(private coreSB: CoreSandboxService) {
-        this.userForm = new FormGroup({
-            email: new FormControl(''),
-            phone_number: new FormControl(''),
-            street: new FormControl(''),
-            postal_code: new FormControl(''),
-            city: new FormControl(''),
-            birthday: new FormControl(''),
-            user_state: new FormControl('')
-        });
-    }
+  constructor(private coreSB: CoreSandboxService) {
+    this.userForm = new FormGroup({
+      email: new FormControl(''),
+      phone_number: new FormControl(''),
+      street: new FormControl(''),
+      postal_code: new FormControl(''),
+      city: new FormControl(''),
+      birthday: new FormControl(''),
+      user_state: new FormControl(''),
+    });
+  }
 
-    ngOnInit() {
-        this.coreSB
-            .getUser()
-            .pipe(take(2))
-            .subscribe((user: FullUser) => {
-                if (user) {
-                    this.user = user;
-                    this.setValues();
-                }
-            });
-        this.allUserStates = this.coreSB.getUserStates();
-        this.allUserRecordStates = this.coreSB.getUserRecordStates();
-    }
+  ngOnInit() {
+    this.coreSB
+      .getUser()
+      .pipe(take(2))
+      .subscribe((user: FullUser) => {
+        if (user) {
+          this.user = user;
+          this.setValues();
+        }
+      });
+    this.allUserStates = this.coreSB.getUserStates();
+    this.allUserRecordStates = this.coreSB.getUserRecordStates();
+  }
 
-    setValues(): void {
-        this.userForm.controls['phone_number'].setValue(this.user.phone_number);
-        this.userForm.controls['street'].setValue(this.user.street);
-        this.userForm.controls['postal_code'].setValue(this.user.postal_code);
-        this.userForm.controls['city'].setValue(this.user.city);
-        this.userForm.controls['birthday'].setValue(this.user.birthday);
+  setValues(): void {
+    this.userForm.controls['phone_number'].setValue(this.user.phone_number);
+    this.userForm.controls['street'].setValue(this.user.street);
+    this.userForm.controls['postal_code'].setValue(this.user.postal_code);
+    this.userForm.controls['city'].setValue(this.user.city);
+    this.userForm.controls['birthday'].setValue(this.user.birthday);
 
-        this.coreSB
-            .getUserStateByAbbreviation(this.user.user_state)
-            .subscribe((user_state: State) => {
-                this.selectedUserState = user_state;
-                if (user_state) this.userForm.controls['user_state'].setValue(user_state.full_name);
-            });
-        this.coreSB
-            .getUserRecordStateByAbbreviation(this.user.user_record_state)
-            .subscribe((user_record_state: State) => {
-                this.selectedUserRecordState = user_record_state;
-            });
-    }
+    this.coreSB.getUserStateByAbbreviation(this.user.user_state).subscribe((user_state: State) => {
+      this.selectedUserState = user_state;
+      if (user_state) this.userForm.controls['user_state'].setValue(user_state.full_name);
+    });
+    this.coreSB.getUserRecordStateByAbbreviation(this.user.user_record_state).subscribe((user_record_state: State) => {
+      this.selectedUserRecordState = user_record_state;
+    });
+  }
 
-    loadValuesToUser(): void {
-        this.user.phone_number = 'asdfasdf';
+  loadValuesToUser(): void {
+    this.user.phone_number = 'asdfasdf';
 
-        this.user.phone_number = this.userForm.value['phone_number'];
-        this.user.street = this.userForm.value['street'];
-        this.user.postal_code = this.userForm.value['postal_code'];
-        this.user.phone_number = this.userForm.value['phone_number'];
-        this.user.city = this.userForm.value['city'];
-        this.user.birthday = CoreSandboxService.transformDate(this.userForm.value['birthday']);
-        if (this.selectedUserState) this.user.user_state = this.selectedUserState.abbreviation;
-        if (this.selectedUserRecordState)
-            this.user.user_record_state = this.selectedUserRecordState.abbreviation;
-    }
+    this.user.phone_number = this.userForm.value['phone_number'];
+    this.user.street = this.userForm.value['street'];
+    this.user.postal_code = this.userForm.value['postal_code'];
+    this.user.phone_number = this.userForm.value['phone_number'];
+    this.user.city = this.userForm.value['city'];
+    this.user.birthday = CoreSandboxService.transformDate(this.userForm.value['birthday']);
+    if (this.selectedUserState) this.user.user_state = this.selectedUserState.abbreviation;
+    if (this.selectedUserRecordState) this.user.user_record_state = this.selectedUserRecordState.abbreviation;
+  }
 
-    onSaveClick() {
-        this.loadValuesToUser();
-        this.coreSB.startSavingUser(this.user);
-    }
+  onSaveClick() {
+    this.loadValuesToUser();
+    this.coreSB.startSavingUser(this.user);
+  }
 
-    onSelectedUserStateChanged(newSelectedState: State): void {
-        this.selectedUserState = newSelectedState;
-    }
+  onSelectedUserStateChanged(newSelectedState: State): void {
+    this.selectedUserState = newSelectedState;
+  }
 
-    onSelectedUserRecordStateChanged(newSelectedState: State): void {
-        this.selectedUserRecordState = newSelectedState;
-    }
+  onSelectedUserRecordStateChanged(newSelectedState: State): void {
+    this.selectedUserRecordState = newSelectedState;
+  }
 }
