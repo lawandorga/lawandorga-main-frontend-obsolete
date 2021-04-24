@@ -10,7 +10,7 @@ const defaultOptions = {
   headers: {
     Authorization: `Token ${localStorage.getItem('token')}`,
     'Content-Type': 'application/json',
-    'private-key': localStorage.getItem('users_private_key').replace(/(?:\r\n|\r|\n)/g, ''),
+    'private-key': localStorage.getItem('users_private_key').replace(/(?:\r\n|\r|\n)/g, '<linebreak>'),
   },
 };
 

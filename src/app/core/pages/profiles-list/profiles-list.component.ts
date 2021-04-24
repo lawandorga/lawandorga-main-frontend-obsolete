@@ -55,11 +55,6 @@ export class ProfilesListComponent implements OnInit {
       .post(GetProfilesUnlockApiUrl(id), {})
       .then((response) => this.updateUsers(response))
       .catch((err: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(err.response.data.detail));
-
-    // TODO
-    this.coreSB.showSuccessSnackBar(
-      'The user was unlocked! Reload the page for the unlock button to disappear. The user should be able to login again.'
-    );
   }
 
   onDeActiveClick(user: FullUser): void {
