@@ -16,8 +16,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, Input, forwardRef } from '@angular/core';
+import { Component, Input, forwardRef, OnInit, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FormControl, FormGroupDirective, NgForm } from '@angular/forms';
+import { ErrorStateMatcher } from '@angular/material/core';
+
+/** Error when invalid control is dirty, touched, or submitted. */
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    console.log(control);
+    console.log(form);
+    return true;
+  }
+}
 
 export interface DynamicField {
   label: string;
@@ -31,21 +42,18 @@ export interface DynamicField {
 @Component({
   selector: 'dynamic-input',
   templateUrl: './dynamic-input.component.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => DynamicInputComponent),
-      multi: true,
-    },
-  ],
 })
-export class DynamicInputComponent implements ControlValueAccessor {
+export class DynamicInputComponent {
   @Input() label: DynamicField['label'];
   @Input() tag: DynamicField['tag'];
   @Input() type: DynamicField['type'];
   @Input() value: DynamicField['value'];
   @Input() name: DynamicField['name'];
   @Input() required: DynamicField['required'];
+  @Input() errors: Object;
+  @Input() control: FormControl;
+
+  matcher = new MyErrorStateMatcher();
 
   writeValue(obj: string | number): void {
     if (obj !== undefined) this.value = obj;

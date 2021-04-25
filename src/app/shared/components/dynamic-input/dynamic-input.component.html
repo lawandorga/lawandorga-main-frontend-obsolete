@@ -1,9 +1,10 @@
-<div>
-    <label [for]="name" class="block text-sm font-medium text-gray-700">{{ label }}</label>
-    <div class="mt-1">
-        <input
-            class="shadow-sm focus:ring-blue-900 focus:border-blue-900 block w-full sm:text-sm border-gray-300 rounded-md"
-            *ngIf="tag === 'input'" [type]="type" [value]="value" [name]="name" [id]="name"
-            [required]="required" (change)="onChange($event)" />
-    </div>
-</div>
+<mat-form-field>
+    <mat-label class="block text-sm font-medium text-gray-700">{{ label }}</mat-label>
+    <input
+        matInput
+        *ngIf="tag === 'input'" [type]="type" [name]="name" [id]="name"
+        [required]="required"
+        [formControl]="control"
+    >
+    <mat-error *ngIf="errors && errors[name]">{{ errors[name] }}</mat-error>
+</mat-form-field>

@@ -21,9 +21,8 @@ import { CoreSandboxService } from '../../services/core-sandbox.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { PERMISSION_CAN_MANAGE_GROUP, PERMISSION_CAN_MANAGE_GROUPS_RLC } from '../../../statics/permissions.statics';
 import { FullGroup } from '../../models/group.model';
-import axios, { DjangoError } from '../../../shared/services/axios';
-import { environment } from '../../../../environments/environment';
-import { AxiosError, AxiosResponse } from 'axios';
+import axios from '../../../shared/services/axios';
+import { AxiosResponse } from 'axios';
 
 @Component({
   selector: 'app-group',
@@ -86,6 +85,6 @@ export class GroupComponent implements OnInit {
     void axios
       .patch(`api/groups/${this.id}/`, values)
       .then((response: AxiosResponse<FullGroup>) => (this.group = response.data))
-      .catch((error) => (this.errors = error.response.data));
+      .catch((error) => (this.errors = error.response.data)); // eslint-disable-line
   }
 }

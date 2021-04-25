@@ -16,21 +16,36 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Component, Input, EventEmitter, Output, OnInit } from '@angular/core';
 import { DynamicField } from '../dynamic-input/dynamic-input.component';
-import { NgForm } from '@angular/forms';
+import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'dynamic-form',
   templateUrl: './dynamic-form.component.html',
 })
-export class DynamicFormComponent {
+export class DynamicFormComponent implements OnInit {
   @Input() fields: [DynamicField];
   @Input() data: Object; // eslint-disable-line
-  @Input() errors: Object; // eslint-disable-line
+  @Input() errors: { test: 'test error'}; // eslint-disable-line
   @Output() send = new EventEmitter();
+  form: FormGroup;
+  controls: { [key: string]: FormControl } = {};
 
-  onSubmit(form: NgForm): void {
-    this.send.emit(form.value);
+  constructor(private fb: FormBuilder) {}
+
+  ngOnInit(): void {
+    console.log(this.errors);
+    this.fields.forEach((field) => {
+      this.controls[field.name] = new FormControl();
+    });
+    this.form = this.fb.group(this.controls);
+  }
+
+  onSubmit(): void {
+    // form.getControl('name');
+    // console.log(this.form.value);
+    this.send.emit(this.form.value);
+    // this.controls['name'].setErrors({ incorrect: true });
   }
 }
