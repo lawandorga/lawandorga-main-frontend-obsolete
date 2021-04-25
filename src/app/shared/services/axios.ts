@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { environment } from '../../../environments/environment';
 
 // types
 export interface DjangoError {
@@ -12,6 +13,7 @@ const defaultOptions = {
     'Content-Type': 'application/json',
     'private-key': localStorage.getItem('users_private_key').replace(/(?:\r\n|\r|\n)/g, '<linebreak>'),
   },
+  baseURL: environment.apiUrl,
 };
 
 // create instance

@@ -16,51 +16,50 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-//  @import "tailwindcss/base";
-//  @import "tailwindcss/components";
-//  @import "tailwindcss/utilities";
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 @import "styles/basic.scss";
 @import "styles/global.scss";
 
-@import '~quill/dist/quill.core.css';
-@import '~quill/dist/quill.bubble.css';
-@import '~quill/dist/quill.snow.css';
+@import "~quill/dist/quill.core.css";
+@import "~quill/dist/quill.bubble.css";
+@import "~quill/dist/quill.snow.css";
 @import "~quill-mention/dist/quill.mention.css";
 
 html,
 body {
-    margin: 0;
-    padding: 0;
-    height: 100%; /* braucht es für die min-height des Containers */
-    background-color: $c-background;
-    overflow: hidden;
+  margin: 0;
+  padding: 0;
+  height: 100%; /* braucht es für die min-height des Containers */
+  background-color: $c-background;
+  overflow: hidden;
 }
 
 * {
-    //font-family: 'Roboto', sans-serif !important;
-    font-family: "Roboto", sans-serif;
-    font-weight: 400;
+  //font-family: 'Roboto', sans-serif !important;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
 }
 
 button {
-    //min-width: 125px !important;
-    //width: 125px;
-    color: $c-on-primary;
-    background-color: $c-primary;
-    border-radius: 28px !important;
+  //min-width: 125px !important;
+  //width: 125px;
+  color: $c-on-primary;
+  background-color: $c-primary;
+  border-radius: 28px !important;
 }
 
 mat-nav-list {
-    overflow: hidden;
-    height: 100%;
+  overflow: hidden;
+  height: 100%;
 }
 
 mat-card {
-    margin-bottom: 50px;
+  margin-bottom: 50px;
 }
 
 .mat-tooltip {
-    max-width: unset !important;
+  max-width: unset !important;
 }
-

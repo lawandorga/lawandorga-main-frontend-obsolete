@@ -21,18 +21,19 @@ import { CoreSandboxService } from '../../services/core-sandbox.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { PERMISSION_CAN_MANAGE_GROUP, PERMISSION_CAN_MANAGE_GROUPS_RLC } from '../../../statics/permissions.statics';
 import { FullGroup } from '../../models/group.model';
-import axios from 'axios';
+import axios, { DjangoError } from '../../../shared/services/axios';
 import { environment } from '../../../../environments/environment';
+import { AxiosError, AxiosResponse } from 'axios';
 
 @Component({
   selector: 'app-group',
   templateUrl: './group.component.html',
-  styleUrls: ['./group.component.scss'],
 })
 export class GroupComponent implements OnInit {
   id: string;
   can_edit = false;
   group: Object;
+  errors: Object;
   action: string;
 
   fields = [
@@ -74,17 +75,17 @@ export class GroupComponent implements OnInit {
       });
     });
 
-    const config = {
-      headers: {
-        Authorization: `Token ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json',
-        'private-key': localStorage.getItem('users_private_key').replace(/(?:\r\n|\r|\n)/g, ''),
-      },
-    };
-
     void axios
-      .get(`${environment.apiUrl}api/groups/${this.id}/`, config)
-      .then((response) => (this.group = response.data))
+      .get(`api/groups/${this.id}/`)
+      .then((response: AxiosResponse<FullGroup>) => (this.group = response.data))
       .catch();
+  }
+
+  onSend(values: Object): void { // eslint-disable-line
+    console.log(values);
+    void axios
+      .patch(`api/groups/${this.id}/`, values)
+      .then((response: AxiosResponse<FullGroup>) => (this.group = response.data))
+      .catch((error) => (this.errors = error.response.data));
   }
 }

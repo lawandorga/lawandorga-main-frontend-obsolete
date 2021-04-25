@@ -1,13 +1,23 @@
 <div>
     <div class="rounded-sm bg-white shadow-lg max-w-2xl w-full px-4 py-4">
         <form class="space-y-4" (ngSubmit)="onSubmit(dynamicForm)" #dynamicForm="ngForm">
-            <input type="text" name="test" ngModel>
-            <div *ngFor="let field of fields">
-                <dynamic-input [name]="field.name" [tag]="field.tag" [label]="field.label" [type]="field.type"
-                    [required]="field.required" [value]="data" ngModel>
-                </dynamic-input>
+            <div *ngIf="errors && errors['non_field_errors']">
+                <p class="mb-10 text-sm text-red-600">{{ errors['non_field_errors'] }}</p>
+            </div>
+            <div *ngIf="data">
+                <div *ngFor="let field of fields">
+                    <dynamic-input [name]="field.name" [tag]="field.tag" [label]="field.label" [type]="field.type"
+                        [required]="field.required" [ngModel]="data[field.name]">
+                    </dynamic-input>
+                    <div *ngIf="errors && errors[field.name]">
+                        <p class="mt-2 text-sm text-red-600">{{ errors[field.name] }}</p>
+                    </div>
+                </div>
             </div>
             <button type="submit" mat-raised-button color="primary">Save</button>
         </form>
     </div>
+    <pre>{{ dynamicForm.value | json }}</pre>
+    <pre>{{ errors | json }}</pre>
+
 </div>

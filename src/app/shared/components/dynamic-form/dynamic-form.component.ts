@@ -16,10 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { DynamicField } from '../dynamic-input/dynamic-input.component';
-import { environment } from '../../../../environments/environment';
-import axios, { Method } from 'axios';
 import { NgForm } from '@angular/forms';
 
 @Component({
@@ -28,21 +26,11 @@ import { NgForm } from '@angular/forms';
 })
 export class DynamicFormComponent {
   @Input() fields: [DynamicField];
-  @Input() data: Object;
-  @Input() action: string;
-  @Input() method: Method;
+  @Input() data: Object; // eslint-disable-line
+  @Input() errors: Object; // eslint-disable-line
+  @Output() send = new EventEmitter();
 
   onSubmit(form: NgForm): void {
-    console.log(form.value);
-
-    const headers = {
-      Authorization: `Token ${localStorage.getItem('token')}`,
-      'Content-Type': 'application/json',
-      'private-key': localStorage.getItem('users_private_key').replace(/(?:\r\n|\r|\n)/g, ''),
-    };
-
-    void axios({ method: this.method, url: `${environment.apiUrl}${this.action}`, headers: headers })
-      .then((response) => console.log(response))
-      .catch();
+    this.send.emit(form.value);
   }
 }
