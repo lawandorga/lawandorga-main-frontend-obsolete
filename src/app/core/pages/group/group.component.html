@@ -22,6 +22,77 @@
 </app-show-group>
 
 
-<div class="py-20" style="padding-bottom: 50%;">
-  <dynamic-form (send)="onSend($event)" [errors]="errors" [fields]="fields" [data]="group"></dynamic-form>
-</div>
+<mat-card *ngIf="group" class="mat-elevation-z1" style="max-width: 350px;">
+  <mat-card-title>
+    {{ group.name }}
+  </mat-card-title>
+  <mat-card-subtitle>
+    Group
+  </mat-card-subtitle>
+  <mat-card-content>
+    <p>
+      Note: {{group.note}}
+    </p>
+    <p>
+      Description: {{group.description}}
+    </p>
+  </mat-card-content>
+</mat-card>
+
+<mat-card style="max-width: 500px;">
+  <mat-card-content>
+    <dynamic-form (send)="onSend($event)" [errors]="errors" [fields]="fields" [data]="group"></dynamic-form>
+  </mat-card-content>
+</mat-card>
+
+<mat-card style="padding: 0;">
+  <table *ngIf="permissions" mat-table [dataSource]="permissions" style="width: 100%;">
+    <ng-container matColumnDef="permission">
+      <th mat-header-cell *matHeaderCellDef>Permission</th>
+      <td mat-cell *matCellDef="let permission"> {{permission.id}} </td>
+    </ng-container>
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef style="text-align: right;">
+        <button mat-button (click)="onAddPermissionClick(permission.id)" color="primary">
+          Add Permission
+        </button>
+      </th>
+      <td mat-cell *matCellDef="let permission" style="text-align: right;">
+        <button mat-button (click)="onRemovePermissionClick(permission.id)" color="warn">
+          Remove
+        </button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="permissionsDisplayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: permissionsDisplayedColumns;"></tr>
+  </table>
+</mat-card>
+
+<mat-card style="padding: 0;">
+  <table *ngIf="members" mat-table [dataSource]="members" style="width: 100%;">
+    <ng-container matColumnDef="member">
+      <th mat-header-cell *matHeaderCellDef> Member </th>
+      <td mat-cell *matCellDef="let user"> {{user.name}} </td>
+    </ng-container>
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef> E-Mail </th>
+      <td mat-cell *matCellDef="let user"> {{user.email}} </td>
+    </ng-container>
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef style="text-align: right;">
+        <button mat-button (click)="onAddUserClick(permission.id)" color="primary">
+          Add Member
+        </button>
+      </th>
+      <td mat-cell *matCellDef="let user" style="text-align: right;">
+        <button mat-button (click)="onRemoveMemberClick(user.id)" color="warn">
+          Remove
+        </button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="membersDisplayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: membersDisplayedColumns;"></tr>
+  </table>
+</mat-card>
+
+<div style="height: 500px;"></div>

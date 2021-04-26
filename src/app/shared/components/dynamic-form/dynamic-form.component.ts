@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, Input, EventEmitter, Output, OnInit } from '@angular/core';
+import { Component, Input, EventEmitter, Output, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { DynamicField } from '../dynamic-input/dynamic-input.component';
 import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
 
@@ -24,10 +24,10 @@ import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
   selector: 'dynamic-form',
   templateUrl: './dynamic-form.component.html',
 })
-export class DynamicFormComponent implements OnInit {
+export class DynamicFormComponent implements OnInit, OnChanges {
   @Input() fields: [DynamicField];
   @Input() data: Object; // eslint-disable-line
-  @Input() errors: { test: 'test error'}; // eslint-disable-line
+  @Input() errors: Object; // eslint-disable-line
   @Output() send = new EventEmitter();
   form: FormGroup;
   controls: { [key: string]: FormControl } = {};
@@ -35,16 +35,21 @@ export class DynamicFormComponent implements OnInit {
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    console.log(this.errors);
     this.fields.forEach((field) => {
       this.controls[field.name] = new FormControl();
     });
     this.form = this.fb.group(this.controls);
+    this.form.patchValue(this.data);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.data && changes.data.currentValue) this.form.patchValue(changes.data.currentValue);
   }
 
   onSubmit(): void {
     // form.getControl('name');
     // console.log(this.form.value);
+    this.errors = {};
     this.send.emit(this.form.value);
     // this.controls['name'].setErrors({ incorrect: true });
   }

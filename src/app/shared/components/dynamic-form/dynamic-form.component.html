@@ -7,17 +7,12 @@
             <div *ngIf="data">
                 <div *ngFor="let field of fields">
                     <dynamic-input [name]="field.name" [tag]="field.tag" [label]="field.label" [type]="field.type"
-                        [required]="field.required" 
-                        [control]="controls[field.name]"
-                        [errors]="errors"
-                    >
+                        [required]="field.required" [control]="controls[field.name]" [errors]="errors">
                     </dynamic-input>
                 </div>
             </div>
             <button type="submit" mat-raised-button color="primary">Save</button>
         </form>
     </div>
-    <pre>{{ form.value | json }}</pre>
     <pre>{{ errors | json }}</pre>
-
 </div>

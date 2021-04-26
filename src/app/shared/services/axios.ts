@@ -4,6 +4,7 @@ import { environment } from '../../../environments/environment';
 // types
 export interface DjangoError {
   detail?: string;
+  non_field_errors?: Array<string>;
 }
 
 // default options

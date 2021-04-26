@@ -1,10 +1,11 @@
-<mat-form-field>
+<mat-form-field style="width: 100%; margin-bottom: 12px;">
     <mat-label class="block text-sm font-medium text-gray-700">{{ label }}</mat-label>
-    <input
-        matInput
-        *ngIf="tag === 'input'" [type]="type" [name]="name" [id]="name"
-        [required]="required"
-        [formControl]="control"
-    >
-    <mat-error *ngIf="errors && errors[name]">{{ errors[name] }}</mat-error>
+    <input matInput *ngIf="tag === 'input'" [type]="type" [name]="name" [id]="name" [required]="required"
+        [formControl]="control">
+    <mat-error>
+        <div *ngIf="errors && errors[name]">
+            {{ errors[name] }}
+        </div>
+        &nbsp;
+    </mat-error>
 </mat-form-field>

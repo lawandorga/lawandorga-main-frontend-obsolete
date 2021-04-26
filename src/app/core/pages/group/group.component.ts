@@ -21,8 +21,10 @@ import { CoreSandboxService } from '../../services/core-sandbox.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { PERMISSION_CAN_MANAGE_GROUP, PERMISSION_CAN_MANAGE_GROUPS_RLC } from '../../../statics/permissions.statics';
 import { FullGroup } from '../../models/group.model';
-import axios from '../../../shared/services/axios';
+import axios, { DjangoError } from '../../../shared/services/axios';
 import { AxiosResponse } from 'axios';
+import { FullUser } from '../../models/user.model';
+import { HasPermission } from '../../models/permission.model';
 
 @Component({
   selector: 'app-group',
@@ -31,9 +33,12 @@ import { AxiosResponse } from 'axios';
 export class GroupComponent implements OnInit {
   id: string;
   can_edit = false;
-  group: Object;
-  errors: Object;
-  action: string;
+  group: FullGroup;
+  errors: DjangoError;
+  members: Array<FullUser>;
+  permissions: Array<HasPermission>;
+  membersDisplayedColumns: string[] = ['member', 'email', 'action'];
+  permissionsDisplayedColumns: string[] = ['permission', 'action'];
 
   fields = [
     {
@@ -43,6 +48,20 @@ export class GroupComponent implements OnInit {
       name: 'name',
       required: true,
     },
+    {
+      label: 'Description',
+      type: 'text',
+      tag: 'input',
+      name: 'description',
+      required: false,
+    },
+    {
+      label: 'Note',
+      type: 'text',
+      tag: 'input',
+      name: 'note',
+      required: false,
+    },
   ];
 
   constructor(private coreSB: CoreSandboxService, private route: ActivatedRoute) {}
@@ -50,7 +69,6 @@ export class GroupComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
       this.id = String(params['id']);
-      this.action = `api/groups/${this.id}/`;
       this.coreSB.startLoadingSpecialGroup(this.id);
     });
 
@@ -78,10 +96,19 @@ export class GroupComponent implements OnInit {
       .get(`api/groups/${this.id}/`)
       .then((response: AxiosResponse<FullGroup>) => (this.group = response.data))
       .catch();
+
+    void axios
+      .get(`api/groups/${this.id}/members/`)
+      .then((response: AxiosResponse<Array<FullUser>>) => (this.members = response.data))
+      .catch();
+
+    void axios
+      .get(`api/groups/${this.id}/permissions/`)
+      .then((response: AxiosResponse<Array<HasPermission>>) => (this.permissions = response.data))
+      .catch();
   }
 
   onSend(values: Object): void { // eslint-disable-line
-    console.log(values);
     void axios
       .patch(`api/groups/${this.id}/`, values)
       .then((response: AxiosResponse<FullGroup>) => (this.group = response.data))
