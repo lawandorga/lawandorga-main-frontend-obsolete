@@ -20,7 +20,7 @@ import { FullUser } from '../../models/user.model';
 import { CoreSandboxService } from '../../services/core-sandbox.service';
 import { GetProfilesDetailApiUrl, GetProfilesUnlockApiUrl, PROFILES_API_URL } from '../../../statics/api_urls.statics';
 import { SharedSandboxService } from '../../../shared/services/shared-sandbox.service';
-import axios, { DjangoError } from '../../../shared/services/axios';
+import axios, { DjangoError, removeFromArray } from '../../../shared/services/axios';
 import { AxiosError, AxiosResponse } from 'axios';
 
 @Component({
