@@ -14,5 +14,5 @@
             <button type="submit" mat-raised-button color="primary">Save</button>
         </form>
     </div>
-    <pre>{{ errors | json }}</pre>
+    <div *ngIf="errors">{{ errors | json }}</div>
 </div>

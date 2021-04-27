@@ -22,3 +22,9 @@ const instance = axios.create(defaultOptions);
 
 // export axios instance
 export default instance;
+
+// useful stuff
+export const removeFromArray = (array: Array<any>, id: number): Array<any> => {  // eslint-disable-line
+  const newArray = array.filter((item) => item.id !== id);  // eslint-disable-line
+  return newArray;  // eslint-disable-line
+};

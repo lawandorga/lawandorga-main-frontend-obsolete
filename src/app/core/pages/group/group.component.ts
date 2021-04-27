@@ -15,14 +15,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
-
 import { Component, OnInit } from '@angular/core';
 import { CoreSandboxService } from '../../services/core-sandbox.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { PERMISSION_CAN_MANAGE_GROUP, PERMISSION_CAN_MANAGE_GROUPS_RLC } from '../../../statics/permissions.statics';
 import { FullGroup } from '../../models/group.model';
-import axios, { DjangoError } from '../../../shared/services/axios';
-import { AxiosResponse } from 'axios';
+import axios, { DjangoError, removeFromArray } from '../../../shared/services/axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import { FullUser } from '../../models/user.model';
 import { HasPermission } from '../../models/permission.model';
 
@@ -112,6 +111,24 @@ export class GroupComponent implements OnInit {
     void axios
       .patch(`api/groups/${this.id}/`, values)
       .then((response: AxiosResponse<FullGroup>) => (this.group = response.data))
-      .catch((error) => (this.errors = error.response.data)); // eslint-disable-line
+      .catch((error: AxiosError) => (this.errors = error.response.data)); // eslint-disable-line
+  }
+
+  onRemoveMember(id: number): void {
+    void axios
+      .post(`api/groups/${this.id}/remove/`, { member: id })
+      .then(() => {
+        this.members = removeFromArray(this.members, id);  // eslint-disable-line
+      })
+      .catch((error: AxiosError) => console.log(error.response));
+  }
+
+  onRemovePermission(id: number): void {
+    void axios
+      .delete(`api/has_permission/${id}/`)
+      .then(() => {
+        this.permissions = removeFromArray(this.permissions, id);  // eslint-disable-line
+      })
+      .catch((error: AxiosError) => console.log(error.response));
   }
 }

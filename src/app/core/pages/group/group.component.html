@@ -49,16 +49,16 @@
   <table *ngIf="permissions" mat-table [dataSource]="permissions" style="width: 100%;">
     <ng-container matColumnDef="permission">
       <th mat-header-cell *matHeaderCellDef>Permission</th>
-      <td mat-cell *matCellDef="let permission"> {{permission.id}} </td>
+      <td mat-cell *matCellDef="let permission">{{ permission.name }}</td>
     </ng-container>
     <ng-container matColumnDef="action">
       <th mat-header-cell *matHeaderCellDef style="text-align: right;">
-        <button mat-button (click)="onAddPermissionClick(permission.id)" color="primary">
+        <button mat-button (click)="onAddPermission(permission.id)" color="primary">
           Add Permission
         </button>
       </th>
       <td mat-cell *matCellDef="let permission" style="text-align: right;">
-        <button mat-button (click)="onRemovePermissionClick(permission.id)" color="warn">
+        <button mat-button (click)="onRemovePermission(permission.id)" color="warn">
           Remove
         </button>
       </td>
@@ -80,12 +80,12 @@
     </ng-container>
     <ng-container matColumnDef="action">
       <th mat-header-cell *matHeaderCellDef style="text-align: right;">
-        <button mat-button (click)="onAddUserClick(permission.id)" color="primary">
+        <button mat-button (click)="onAddUser(permission.id)" color="primary">
           Add Member
         </button>
       </th>
       <td mat-cell *matCellDef="let user" style="text-align: right;">
-        <button mat-button (click)="onRemoveMemberClick(user.id)" color="warn">
+        <button mat-button (click)="onRemoveMember(user.id)" color="warn">
           Remove
         </button>
       </td>
