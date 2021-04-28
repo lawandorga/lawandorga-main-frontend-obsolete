@@ -11,11 +11,20 @@ export interface DjangoError {
 }
 
 // default options
+const token = () => {
+  const token = localStorage.getItem('token');
+  return token ? token : '';
+};
+const privateKey = () => {
+  const privateKey = localStorage.getItem('users_private_key');
+  return privateKey ? privateKey : '';
+};
+
 const defaultOptions = {
   headers: {
-    Authorization: `Token ${localStorage.getItem('token')}`,
+    Authorization: `Token ${token()}`,
     'Content-Type': 'application/json',
-    'private-key': localStorage.getItem('users_private_key').replace(/(?:\r\n|\r|\n)/g, '<linebreak>'),
+    'private-key': privateKey().replace(/(?:\r\n|\r|\n)/g, '<linebreak>'),
   },
   baseURL: environment.apiUrl,
 };
