@@ -16,41 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
-import { CoreSandboxService } from '../../services/core-sandbox.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-add-group',
-    templateUrl: './add-group.component.html',
-    styleUrls: ['./add-group.component.scss']
+  selector: 'add-group',
+  templateUrl: './add-group.component.html',
 })
-export class AddGroupComponent implements OnInit {
-    addGroupForm: FormGroup;
-
-    constructor(
-        private coreSB: CoreSandboxService,
-        public dialogRef: MatDialogRef<AddGroupComponent>
-    ) {}
-
-    ngOnInit() {
-        this.addGroupForm = new FormGroup({
-            name: new FormControl('', [Validators.required]),
-            visible: new FormControl(true)
-        });
-    }
-
-    onAddClick(): void {
-        const newGroup = {
-            name: this.addGroupForm.controls['name'].value,
-            visible: this.addGroupForm.controls['visible'].value
-        };
-        this.coreSB.startAddingGroup(newGroup);
-        this.dialogRef.close();
-    }
-
-    onCloseClick(): void {
-        this.dialogRef.close();
-    }
+export class AddGroupComponent {
+  name: string;
 }

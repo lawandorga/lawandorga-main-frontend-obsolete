@@ -20,30 +20,30 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { EditTextComponent } from '../components/edit-text/edit-text.component';
 import { ConfirmationDialogComponent } from '../components/confirmation-dialog/confirmation-dialog.component';
-import { EditTextParamsInterface} from '../../shared/models/editTextParams.interface';
-import { ConfirmTextParamsInterface} from '../../shared/models/confirmTextParams.interface';
+import { EditTextParamsInterface } from '../../shared/models/editTextParams.interface';
+import { ConfirmTextParamsInterface } from '../../shared/models/confirmTextParams.interface';
 
 @Injectable()
 export class SharedSandboxService {
-    constructor(public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog) {}
 
-    openEditTextDialog(data: EditTextParamsInterface, callback) {
-        const dialogRef = this.dialog.open(EditTextComponent, {
-            data
-        });
+  openEditTextDialog(data: EditTextParamsInterface, callback) {
+    const dialogRef = this.dialog.open(EditTextComponent, {
+      data,
+    });
 
-        dialogRef.afterClosed().subscribe(result => {
-            callback(result);
-        });
-    }
+    dialogRef.afterClosed().subscribe((result) => {
+      callback(result);
+    });
+  }
 
-    openConfirmDialog(data: ConfirmTextParamsInterface, callback) {
-        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-            data
-        });
+  openConfirmDialog(data: ConfirmTextParamsInterface, callback) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data,
+    });
 
-        dialogRef.afterClosed().subscribe(result => {
-            callback(result);
-        });
-    }
+    dialogRef.afterClosed().subscribe((result) => {
+      callback(result);
+    });
+  }
 }

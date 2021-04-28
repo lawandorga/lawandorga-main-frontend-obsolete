@@ -16,42 +16,36 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {ConfirmTextParamsInterface} from '../../../shared/models/confirmTextParams.interface';
+import { ConfirmTextParamsInterface } from '../../../shared/models/confirmTextParams.interface';
 
 @Component({
-    selector: 'app-confirmation-dialog',
-    templateUrl: './confirmation-dialog.component.html',
-    styleUrls: ['./confirmation-dialog.component.scss']
+  selector: 'app-confirmation-dialog',
+  templateUrl: './confirmation-dialog.component.html',
 })
-export class ConfirmationDialogComponent implements OnInit {
-    title: string;
-    description: string;
-    cancelLabel: string;
-    confirmLabel: string;
-    confirmColor: string;
+export class ConfirmationDialogComponent {
+  title: string;
+  description: string;
+  cancelLabel: string;
+  confirmLabel: string;
+  confirmColor: string;
 
-    constructor(
-        public dialogRef: MatDialogRef<ConfirmationDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) data: ConfirmTextParamsInterface
-    ) {
-        this.title = data.title ? data.title : 'Are you sure?';
-        if (data.description) {
-            this.description = data.description;
-        }
-        this.confirmLabel = data.confirmLabel ? data.confirmLabel : 'yes';
-        this.cancelLabel = data.cancelLabel ? data.cancelLabel : 'no';
-        this.confirmColor = data.confirmColor ? data.confirmColor : 'primary';
+  constructor(public dialogRef: MatDialogRef<ConfirmationDialogComponent>, @Inject(MAT_DIALOG_DATA) data: ConfirmTextParamsInterface) {
+    this.title = data.title ? data.title : 'Are you sure?';
+    if (data.description) {
+      this.description = data.description;
     }
+    this.confirmLabel = data.confirmLabel ? data.confirmLabel : 'Yes';
+    this.cancelLabel = data.cancelLabel ? data.cancelLabel : 'No';
+    this.confirmColor = data.confirmColor ? data.confirmColor : 'primary';
+  }
 
-    ngOnInit() {}
+  onCancelClick(): void {
+    this.dialogRef.close(false);
+  }
 
-    onCancelClick() {
-        this.dialogRef.close(false);
-    }
-
-    onConfirmClick() {
-        this.dialogRef.close(true);
-    }
+  onConfirmClick(): void {
+    this.dialogRef.close(true);
+  }
 }

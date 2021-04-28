@@ -16,14 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { CoreSandboxService } from '../../services/core-sandbox.service';
 import { ActivatedRoute, Params } from '@angular/router';
-import { PERMISSION_CAN_MANAGE_GROUP, PERMISSION_CAN_MANAGE_GROUPS_RLC } from '../../../statics/permissions.statics';
 import { FullGroup } from '../../models/group.model';
-import axios, { DjangoError, removeFromArray } from '../../../shared/services/axios';
+import axios, { addToArray, DjangoError, removeFromArray } from '../../../shared/services/axios';
 import { AxiosError, AxiosResponse } from 'axios';
 import { FullUser } from '../../models/user.model';
 import { HasPermission } from '../../models/permission.model';
+import { AddPermissionComponent } from '../../components/add-permission/add-permission.component';
+import { AddMemberComponent } from '../../components/add-member/add-member.component';
 
 @Component({
   selector: 'app-group',
@@ -34,8 +36,8 @@ export class GroupComponent implements OnInit {
   can_edit = false;
   group: FullGroup;
   errors: DjangoError;
-  members: Array<FullUser>;
-  permissions: Array<HasPermission>;
+  members: FullUser[];
+  permissions: HasPermission[];
   membersDisplayedColumns: string[] = ['member', 'email', 'action'];
   permissionsDisplayedColumns: string[] = ['permission', 'action'];
 
@@ -63,33 +65,13 @@ export class GroupComponent implements OnInit {
     },
   ];
 
-  constructor(private coreSB: CoreSandboxService, private route: ActivatedRoute) {}
+  animal: string;
+  name: string;
+
+  constructor(private coreSB: CoreSandboxService, private route: ActivatedRoute, public dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe((params: Params) => {
-      this.id = String(params['id']);
-      this.coreSB.startLoadingSpecialGroup(this.id);
-    });
-
-    this.coreSB.getGroup().subscribe((group: FullGroup) => {
-      this.coreSB.hasPermissionFromString(
-        PERMISSION_CAN_MANAGE_GROUP,
-        (hasPermission) => {
-          if (hasPermission) {
-            this.can_edit = true;
-          }
-        },
-        {
-          for_group: this.id,
-        }
-      );
-
-      this.coreSB.hasPermissionFromStringForOwnRlc(PERMISSION_CAN_MANAGE_GROUPS_RLC, (permission) => {
-        if (permission) {
-          this.can_edit = true;
-        }
-      });
-    });
+    this.route.params.subscribe((params: Params) => (this.id = String(params['id'])));
 
     void axios
       .get(`api/groups/${this.id}/`)
@@ -114,20 +96,46 @@ export class GroupComponent implements OnInit {
       .catch((error: AxiosError) => (this.errors = error.response.data)); // eslint-disable-line
   }
 
-  onRemoveMember(id: number): void {
-    void axios
-      .post(`api/groups/${this.id}/remove/`, { member: id })
-      .then(() => {
-        this.members = removeFromArray(this.members, id);  // eslint-disable-line
-      })
-      .catch((error: AxiosError) => console.log(error.response));
+  onAddPermission(): void {
+    const dialogRef = this.dialog.open(AddPermissionComponent);
+
+    dialogRef.afterClosed().subscribe((result: number) => {
+      if (result)
+        axios
+          .post('api/has_permission/', { permission: result, group_has_permission: this.id })
+          .then(
+            (response: AxiosResponse<HasPermission>) => (this.permissions = addToArray(this.permissions, response.data) as HasPermission[])
+          )
+          .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
+    });
   }
 
   onRemovePermission(id: number): void {
     void axios
       .delete(`api/has_permission/${id}/`)
       .then(() => {
-        this.permissions = removeFromArray(this.permissions, id);  // eslint-disable-line
+        this.permissions = removeFromArray(this.permissions, id) as HasPermission[];
+      })
+      .catch((error: AxiosError) => console.log(error.response));
+  }
+
+  onAddMember(): void {
+    const dialogRef = this.dialog.open(AddMemberComponent);
+
+    dialogRef.afterClosed().subscribe((result: number) => {
+      if (result)
+        axios
+          .post(`api/groups/${this.id}/member/`, { member: result })
+          .then((response: AxiosResponse<FullUser>) => (this.members = addToArray(this.members, response.data) as FullUser[]))
+          .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
+    });
+  }
+
+  onRemoveMember(id: number): void {
+    void axios
+      .post(`api/groups/${this.id}/remove/`, { member: id })
+      .then(() => {
+        this.members = removeFromArray(this.members, id) as FullUser[];
       })
       .catch((error: AxiosError) => console.log(error.response));
   }

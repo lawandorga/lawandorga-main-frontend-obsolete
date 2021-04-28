@@ -1,27 +1,3 @@
-<!--
-  ~ law&orga - record and organization management software for refugee law clinics
-  ~ Copyright (C) 2019  Dominik Walser
-  ~
-  ~ This program is free software: you can redistribute it and/or modify
-  ~ it under the terms of the GNU Affero General Public License as
-  ~ published by the Free Software Foundation, either version 3 of the
-  ~ License, or (at your option) any later version.
-  ~
-  ~ This program is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~ GNU Affero General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU Affero General Public License
-  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
-  -->
-
-<app-edit-group *ngIf="can_edit">
-</app-edit-group>
-<app-show-group *ngIf="!can_edit">
-</app-show-group>
-
-
 <mat-card *ngIf="group" class="mat-elevation-z1" style="max-width: 350px;">
   <mat-card-title>
     {{ group.name }}
@@ -53,7 +29,7 @@
     </ng-container>
     <ng-container matColumnDef="action">
       <th mat-header-cell *matHeaderCellDef style="text-align: right;">
-        <button mat-button (click)="onAddPermission(permission.id)" color="primary">
+        <button mat-button (click)="onAddPermission()" color="primary">
           Add Permission
         </button>
       </th>
@@ -72,15 +48,15 @@
   <table *ngIf="members" mat-table [dataSource]="members" style="width: 100%;">
     <ng-container matColumnDef="member">
       <th mat-header-cell *matHeaderCellDef> Member </th>
-      <td mat-cell *matCellDef="let user"> {{user.name}} </td>
+      <td mat-cell *matCellDef="let user">{{ user.name }}</td>
     </ng-container>
     <ng-container matColumnDef="email">
       <th mat-header-cell *matHeaderCellDef> E-Mail </th>
-      <td mat-cell *matCellDef="let user"> {{user.email}} </td>
+      <td mat-cell *matCellDef="let user">{{ user.email }}</td>
     </ng-container>
     <ng-container matColumnDef="action">
       <th mat-header-cell *matHeaderCellDef style="text-align: right;">
-        <button mat-button (click)="onAddUser(permission.id)" color="primary">
+        <button mat-button (click)="onAddMember()" color="primary">
           Add Member
         </button>
       </th>

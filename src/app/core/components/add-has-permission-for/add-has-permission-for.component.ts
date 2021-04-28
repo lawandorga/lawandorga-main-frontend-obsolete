@@ -29,53 +29,45 @@ import { tap } from 'rxjs/operators';
 import { alphabeticalSorterByField } from '../../../shared/other/sorter-helper';
 
 @Component({
-    selector: 'app-add-has-permission-for',
-    templateUrl: './add-has-permission-for.component.html',
-    styleUrls: ['./add-has-permission-for.component.scss']
+  selector: 'app-add-has-permission-for',
+  templateUrl: './add-has-permission-for.component.html',
+  styleUrls: ['./add-has-permission-for.component.scss'],
 })
 export class AddHasPermissionForComponent implements OnInit {
-    allPermissions: Observable<Permission[]>;
-    selectedPermission: Permission = null;
+  allPermissions: Observable<Permission[]>;
+  selectedPermission: Permission = null;
 
-    ownRlc: RestrictedRlc;
+  ownRlc: RestrictedRlc;
 
-    constructor(
-        private coreSB: CoreSandboxService,
-        public dialogRef: MatDialogRef<AddHasPermissionComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any
-    ) {}
+  constructor(
+    private coreSB: CoreSandboxService,
+    public dialogRef: MatDialogRef<AddHasPermissionComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
 
-    ngOnInit() {
-        this.allPermissions = this.coreSB.getAllPermissions().pipe(
-            tap(results => {
-                alphabeticalSorterByField(results, 'name');
-            })
-        );
+  ngOnInit() {
+    this.allPermissions = this.coreSB.getAllPermissions().pipe(
+      tap((results) => {
+        alphabeticalSorterByField(results, 'name');
+      })
+    );
 
-        this.coreSB.getRlc().subscribe((rlc: RestrictedRlc) => {
-            this.ownRlc = rlc;
-        });
-    }
+    this.coreSB.getRlc().subscribe((rlc: RestrictedRlc) => {
+      this.ownRlc = rlc;
+    });
+  }
 
-    onCloseClick(): void {
-        this.dialogRef.close();
-    }
+  onCloseClick(): void {
+    this.dialogRef.close();
+  }
 
-    onAddClick(): void {
-        const group = new RestrictedGroup(this.data.id, this.data.name);
-        this.coreSB.startCreatingHasPermission(
-            this.selectedPermission.id,
-            null,
-            group,
-            null,
-            null,
-            null,
-            this.ownRlc
-        );
-        this.dialogRef.close();
-    }
+  onAddClick(): void {
+    const group = new RestrictedGroup(this.data.id, this.data.name);
+    this.coreSB.startCreatingHasPermission(this.selectedPermission.id, null, group, null, null, null, this.ownRlc);
+    this.dialogRef.close();
+  }
 
-    onSelectedPermissionChanged(selectedPermission: Permission): void {
-        this.selectedPermission = selectedPermission;
-    }
+  onSelectedPermissionChanged(selectedPermission: Permission): void {
+    this.selectedPermission = selectedPermission;
+  }
 }

@@ -18,10 +18,11 @@
 
 <h1 mat-dialog-title>{{title}}</h1>
 <div mat-dialog-content *ngIf="description">
-    <p>{{description}}</p>
+  {{description}}
 </div>
 
-<div mat-dialog-actions>
-    <button mat-flat-button (click)="onCancelClick()" class="confirmation-dialog__buttons">{{cancelLabel}}</button>
-    <button mat-flat-button type="submit" (click)="onConfirmClick()" color="{{confirmColor}}" class="confirmation-dialog__buttons">{{confirmLabel}}</button>
+<div mat-dialog-actions style="justify-content: flex-end;">
+  <button mat-flat-button (click)="onCancelClick()" class="confirmation-dialog__buttons">{{cancelLabel}}</button>
+  <button mat-flat-button type="submit" (click)="onConfirmClick()" color="{{confirmColor}}"
+    class="confirmation-dialog__buttons">{{confirmLabel}}</button>
 </div>

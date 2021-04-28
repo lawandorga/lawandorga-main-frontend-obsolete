@@ -63,6 +63,8 @@ import { NotificationListComponent } from './components/notification-list/notifi
 import { BaseRequestProcessedPipe, BaseRequestRequestedPipe } from './pipes/request.pipe';
 import { StatisticsPageComponent } from './pages/statistics-page/statistics-page.component';
 import { StatisticsNumberComponent } from './components/statistics-number/statistics-number.component';
+import { AddPermissionComponent } from './components/add-permission/add-permission.component';
+import { AddMemberComponent } from './components/add-member/add-member.component';
 
 @NgModule({
   imports: [
@@ -99,6 +101,8 @@ import { StatisticsNumberComponent } from './components/statistics-number/statis
     HasPermissionsListComponent,
     HasPermissionSideComponent,
     AddHasPermissionForComponent,
+    AddPermissionComponent,
+    AddMemberComponent,
     AddGroupComponent,
     NewUserRequestsComponent,
     NewUserRequestRequestedPipe,

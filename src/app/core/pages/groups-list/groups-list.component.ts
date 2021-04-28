@@ -18,60 +18,69 @@
 
 import { Component, OnInit } from '@angular/core';
 import { CoreSandboxService } from '../../services/core-sandbox.service';
-import { Observable } from 'rxjs';
 import { RestrictedGroup } from '../../models/group.model';
 import { Router } from '@angular/router';
 import { GetGroupFrontUrl } from '../../../statics/frontend_links.statics';
-import {
-    PERMISSION_CAN_ADD_GROUP_RLC,
-    PERMISSION_CAN_MANAGE_GROUPS_RLC
-} from '../../../statics/permissions.statics';
 import { MatDialog } from '@angular/material/dialog';
 import { AddGroupComponent } from '../../components/add-group/add-group.component';
+import { AxiosError, AxiosResponse } from 'axios';
+import axios, { addToArray, DjangoError, removeFromArray } from '../../../shared/services/axios';
+import { SharedSandboxService } from 'src/app/shared/services/shared-sandbox.service';
 
 @Component({
-    selector: 'app-manage-groups',
-    templateUrl: './groups-list.component.html',
-    styleUrls: ['./groups-list.component.scss']
+  templateUrl: './groups-list.component.html',
 })
 export class GroupsListComponent implements OnInit {
-    groups: Observable<RestrictedGroup[]>;
+  groups: RestrictedGroup[];
+  groupsDisplayedColumns = ['group', 'action'];
 
-    canAddGroup = false;
+  constructor(
+    private coreSB: CoreSandboxService,
+    private router: Router,
+    public dialog: MatDialog,
+    private sharedSB: SharedSandboxService
+  ) {}
 
-    constructor(
-        private coreSB: CoreSandboxService,
-        private router: Router,
-        public dialog: MatDialog
-    ) {}
+  ngOnInit(): void {
+    axios
+      .get('api/groups/')
+      .then((response: AxiosResponse<RestrictedGroup[]>) => (this.groups = response.data))
+      .catch((error: AxiosError) => console.log(error.response));
+  }
 
-    ngOnInit() {
-        this.coreSB.startLoadingGroups();
-        this.groups = this.coreSB.getGroups();
+  onOpenGroup(id: number): void {
+    void this.router.navigate([GetGroupFrontUrl(String(id))]);
+  }
 
-        this.coreSB.hasPermissionFromStringForOwnRlc(
-            PERMISSION_CAN_MANAGE_GROUPS_RLC,
-            hasPermission => {
-                if (hasPermission) this.canAddGroup = hasPermission;
-            }
-        );
-        this.coreSB.hasPermissionFromStringForOwnRlc(
-            PERMISSION_CAN_ADD_GROUP_RLC,
-            hasPermission => {
-                if (hasPermission) this.canAddGroup = hasPermission;
-            }
-        );
-    }
+  onAddGroup(): void {
+    const dialogRef = this.dialog.open(AddGroupComponent);
 
-    onGroupClick(id: string) {
-        this.router.navigate([GetGroupFrontUrl(id)]);
-    }
+    dialogRef.afterClosed().subscribe((result: string) => {
+      if (result)
+        axios
+          .post(`api/groups/`, { name: result })
+          .then((response: AxiosResponse<RestrictedGroup>) => (this.groups = addToArray(this.groups, response.data) as RestrictedGroup[]))
+          .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
+    });
+  }
 
-    onAddGroupClick() {
-        if (this.canAddGroup) {
-            this.dialog.open(AddGroupComponent);
-        } else {
-            this.coreSB.showErrorSnackBar('no permission to add new group');
+  onDeleteGroup(id: number): void {
+    this.sharedSB.openConfirmDialog(
+      {
+        title: 'Delete',
+        description: 'Are you sure you want to delete this group?',
+        confirmLabel: 'Delete',
+        cancelLabel: 'Cancel',
+        confirmColor: 'warn',
+      },
+      (remove: boolean) => {
+        if (remove) {
+          axios
+            .delete(`api/groups/${id}/`)
+            .then(() => (this.groups = removeFromArray(this.groups, id) as RestrictedGroup[]))
+            .catch((err: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(err.response.data.detail));
         }
-    }
+      }
+    );
+  }
 }

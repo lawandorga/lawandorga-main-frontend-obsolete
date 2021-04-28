@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>Add Member</h1>
+<div mat-dialog-content>
+    <mat-form-field>
+        <mat-label>Member</mat-label>
+        <mat-select [(ngModel)]="selectedMember" name="member">
+            <mat-option *ngFor="let member of members" [value]="member.id">
+                {{member.name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+<div mat-dialog-actions>
+    <button mat-flat-button color="primary" [mat-dialog-close]="selectedMember">Add</button>
+</div>

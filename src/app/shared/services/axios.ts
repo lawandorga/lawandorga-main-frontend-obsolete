@@ -1,4 +1,7 @@
 import axios from 'axios';
+import { RestrictedGroup } from 'src/app/core/models/group.model';
+import { HasPermission, Permission } from 'src/app/core/models/permission.model';
+import { FullUser } from 'src/app/core/models/user.model';
 import { environment } from '../../../environments/environment';
 
 // types
@@ -24,7 +27,18 @@ const instance = axios.create(defaultOptions);
 export default instance;
 
 // useful stuff
-export const removeFromArray = (array: Array<any>, id: number): Array<any> => {  // eslint-disable-line
-  const newArray = array.filter((item) => item.id !== id);  // eslint-disable-line
-  return newArray;  // eslint-disable-line
+export interface BaseModel {
+  id: number | string;
+  [key: string]: unknown;
+}
+export type DjangoModel = BaseModel | FullUser | HasPermission | Permission | RestrictedGroup;
+
+export const removeFromArray = (array: DjangoModel[], id: number): DjangoModel[] => {
+  const newArray = array.filter((item) => item.id !== id);
+  return newArray;
+};
+
+export const addToArray = (array: DjangoModel[], data: DjangoModel): DjangoModel[] => {
+  array.push(data);
+  return [...array];
 };

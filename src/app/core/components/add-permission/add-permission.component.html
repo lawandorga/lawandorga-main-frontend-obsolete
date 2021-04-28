@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>Add Permission</h1>
+<div mat-dialog-content>
+    <mat-form-field>
+        <mat-label>Permission</mat-label>
+        <mat-select [(ngModel)]="selectedPermission" name="permission">
+            <mat-option *ngFor="let permission of permissions" [value]="permission.id">
+                {{permission.name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+<div mat-dialog-actions>
+    <button mat-flat-button color="primary" [mat-dialog-close]="selectedPermission">Add</button>
+</div>
