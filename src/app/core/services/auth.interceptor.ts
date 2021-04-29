@@ -55,19 +55,19 @@ export class AuthInterceptor implements HttpInterceptor {
               // the backend returned an unsuccessful response code
               else {
                 // if the key is not valid anymore log the user out
-                // if (error.status === 401) {
-                //   this.appSB.saveLocation();
-                //   this.store.dispatch(Logout());
-                //   this.coreSB.showErrorSnackBar('You were logged out, please login again.');
-                // }
+                if (error.status === 401) {
+                  // this.appSB.saveLocation();
+                  this.store.dispatch(Logout());
+                  this.coreSB.showErrorSnackBar('You were logged out, please login again.');
+                }
                 // if the backend returned a message show that message
-                // else {
-                //   if (error.error.message) {
-                //     this.coreSB.showErrorSnackBar(error.error.message);
-                //   } else if (error.error.detail) {
-                //     this.coreSB.showErrorSnackBar(error.error.detail);
-                //   }
-                // }
+                else {
+                  if (error.error.message) {
+                    this.coreSB.showErrorSnackBar(error.error.message);
+                  } else if (error.error.detail) {
+                    this.coreSB.showErrorSnackBar(error.error.detail);
+                  }
+                }
               }
               throw error;
             })
