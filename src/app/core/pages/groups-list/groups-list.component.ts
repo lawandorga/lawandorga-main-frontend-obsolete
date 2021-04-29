@@ -64,6 +64,10 @@ export class GroupsListComponent implements OnInit {
     });
   }
 
+  groupDetailUrl(id: number): string {
+    return `/groups/${id}/`;
+  }
+
   onDeleteGroup(id: number): void {
     this.sharedSB.openConfirmDialog(
       {

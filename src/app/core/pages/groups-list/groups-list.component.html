@@ -20,7 +20,7 @@
         <ng-container matColumnDef="group">
             <th mat-header-cell *matHeaderCellDef> Group </th>
             <td mat-cell *matCellDef="let group">
-                {{ group.name }}
+                <a [routerLink]="groupDetailUrl(group.id)">{{ group.name }}</a>
             </td>
         </ng-container>
         <ng-container matColumnDef="action">
