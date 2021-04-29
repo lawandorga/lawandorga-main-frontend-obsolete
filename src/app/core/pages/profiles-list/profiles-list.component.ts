@@ -26,7 +26,6 @@ import { AxiosError, AxiosResponse } from 'axios';
 @Component({
   selector: 'app-profiles-list',
   templateUrl: './profiles-list.component.html',
-  styleUrls: ['./profiles-list.component.scss'],
 })
 export class ProfilesListComponent implements OnInit {
   displayedColumns: string[] = ['name', 'email', 'phone_number', 'actions'];
@@ -64,11 +63,16 @@ export class ProfilesListComponent implements OnInit {
       .catch((err: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(err.response.data.detail));
   }
 
+  getUserDetailUrl(id: number): string {
+    return `/profiles/${id}/`;
+  }
+
   onDeleteClick(id: number): void {
     this.sharedSB.openConfirmDialog(
       {
+        title: 'Delete User',
         description: 'Are you sure you want to delete this user?',
-        confirmLabel: 'remove',
+        confirmLabel: 'Delete',
         confirmColor: 'warn',
       },
       (remove: boolean) => {
@@ -76,7 +80,7 @@ export class ProfilesListComponent implements OnInit {
           axios
             .delete(GetProfilesDetailApiUrl(id), {})
             .then(() => {
-              this.users = this.users.filter((user) => parseInt(user.id) !== id);
+              this.users = removeFromArray(this.users, id) as FullUser[];
             })
             .catch((err: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(err.response.data.detail));
         }

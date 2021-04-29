@@ -32,7 +32,7 @@ import { SharedSandboxService } from 'src/app/shared/services/shared-sandbox.ser
 })
 export class GroupsListComponent implements OnInit {
   groups: RestrictedGroup[];
-  groupsDisplayedColumns = ['group', 'action'];
+  groupsDisplayedColumns = ['group', 'description', 'action'];
 
   constructor(
     private coreSB: CoreSandboxService,

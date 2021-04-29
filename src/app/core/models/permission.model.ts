@@ -53,7 +53,16 @@ export class HasPermission {
     public rlcHas: string,
     public forUser: string,
     public forGroup: string,
-    public forRlc: string
+    public forRlc: string,
+    public user_has_permission?: {
+      name: string;
+    },
+    public group_has_permission?: {
+      name: string;
+    },
+    public rlc_has_permission?: {
+      name: string;
+    }
   ) {
     this.id = id;
     this.permission_id = permission_id;

@@ -47,12 +47,12 @@
                     <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
                 <app-autocomplete [allValuesObservable]="allUserStates" placeholder="user state"
-                                  [setSelectedValue]="selectedUserState" valueToShow="full_name"
-                                  (selectedValueChanged)="onSelectedUserStateChanged($event)">
+                    [setSelectedValue]="selectedUserState" valueToShow="full_name"
+                    (selectedValueChanged)="onSelectedUserStateChanged($event)">
                 </app-autocomplete>
                 <app-autocomplete [allValuesObservable]="allUserRecordStates" placeholder="user record state"
-                                  [setSelectedValue]="selectedUserRecordState" valueToShow="full_name"
-                                  (selectedValueChanged)="onSelectedUserRecordStateChanged($event)">
+                    [setSelectedValue]="selectedUserRecordState" valueToShow="full_name"
+                    (selectedValueChanged)="onSelectedUserRecordStateChanged($event)">
                 </app-autocomplete>
             </form>
 

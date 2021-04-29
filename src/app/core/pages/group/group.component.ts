@@ -65,9 +65,6 @@ export class GroupComponent implements OnInit {
     },
   ];
 
-  animal: string;
-  name: string;
-
   constructor(private coreSB: CoreSandboxService, private route: ActivatedRoute, public dialog: MatDialog) {}
 
   ngOnInit(): void {
@@ -92,7 +89,10 @@ export class GroupComponent implements OnInit {
   onSend(values: Object): void { // eslint-disable-line
     void axios
       .patch(`api/groups/${this.id}/`, values)
-      .then((response: AxiosResponse<FullGroup>) => (this.group = response.data))
+      .then((response: AxiosResponse<FullGroup>) => {
+        this.group = response.data;
+        this.coreSB.showSuccessSnackBar('Group information saved.');
+      })
       .catch((error: AxiosError) => (this.errors = error.response.data)); // eslint-disable-line
   }
 

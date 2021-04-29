@@ -31,6 +31,7 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   @Output() send = new EventEmitter();
   form: FormGroup;
   controls: { [key: string]: FormControl } = {};
+  success: string;
 
   constructor(private fb: FormBuilder) {}
 
@@ -49,7 +50,8 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   onSubmit(): void {
     // form.getControl('name');
     // console.log(this.form.value);
-    this.errors = {};
+    this.errors = null;
+    this.success = 'Saved';
     this.send.emit(this.form.value);
     // this.controls['name'].setErrors({ incorrect: true });
   }
