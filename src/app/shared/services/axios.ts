@@ -11,26 +11,32 @@ export interface DjangoError {
 }
 
 // default options
-const token = () => {
-  const token = localStorage.getItem('token');
-  return token ? token : '';
-};
-const privateKey = () => {
-  const privateKey = localStorage.getItem('users_private_key');
-  return privateKey ? privateKey : '';
-};
-
 const defaultOptions = {
   headers: {
-    Authorization: `Token ${token()}`,
     'Content-Type': 'application/json',
-    'private-key': privateKey().replace(/(?:\r\n|\r|\n)/g, '<linebreak>'),
   },
   baseURL: environment.apiUrl,
 };
 
 // create instance
 const instance = axios.create(defaultOptions);
+
+// default options
+function token(): string {
+  const token = localStorage.getItem('token');
+  return token ? token : '';
+}
+
+function privateKey(): string {
+  const privateKey = localStorage.getItem('users_private_key');
+  return privateKey ? privateKey : '';
+}
+
+instance.interceptors.request.use((config) => {
+  config.headers['Authorization'] = `Token ${token()}`;
+  config.headers['private-key'] = privateKey().replace(/(?:\r\n|\r|\n)/g, '<linebreak>');
+  return config;
+});
 
 // export axios instance
 export default instance;
