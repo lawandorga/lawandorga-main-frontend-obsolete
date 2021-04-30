@@ -40,10 +40,11 @@ export class DynamicFormComponent implements OnInit, OnChanges {
       this.controls[field.name] = new FormControl();
     });
     this.form = this.fb.group(this.controls);
-    this.form.patchValue(this.data);
+    if (this.data) this.form.patchValue(this.data);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes);
     if (changes.data && changes.data.currentValue) this.form.patchValue(changes.data.currentValue);
   }
 

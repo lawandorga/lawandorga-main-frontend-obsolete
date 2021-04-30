@@ -4,10 +4,11 @@
             <div *ngIf="errors && errors['non_field_errors']">
                 <p class="mb-10 text-sm text-red-600">{{ errors['non_field_errors'] }}</p>
             </div>
-            <div *ngIf="data">
+            <div>
                 <div *ngFor="let field of fields">
                     <dynamic-input [name]="field.name" [tag]="field.tag" [label]="field.label" [type]="field.type"
-                        [required]="field.required" [control]="controls[field.name]" [errors]="errors">
+                        [required]="field.required" [control]="controls[field.name]" [errors]="errors"
+                        [options]="field.options">
                     </dynamic-input>
                 </div>
             </div>

@@ -16,16 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, Input, forwardRef, OnInit, Output } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { FormControl, FormGroupDirective, NgForm } from '@angular/forms';
+import { Component, Input } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
+import { DjangoError } from '../../services/axios';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    console.log(control);
-    console.log(form);
+  isErrorState(): boolean {
     return true;
   }
 }
@@ -37,6 +35,7 @@ export interface DynamicField {
   name: string;
   value: string | number;
   required: boolean;
+  options: Array<{ id: number; name: string }>;
 }
 
 @Component({
@@ -50,8 +49,9 @@ export class DynamicInputComponent {
   @Input() value: DynamicField['value'];
   @Input() name: DynamicField['name'];
   @Input() required: DynamicField['required'];
-  @Input() errors: Object;
+  @Input() errors: DjangoError;
   @Input() control: FormControl;
+  @Input() options: DynamicField['options'];
 
   matcher = new MyErrorStateMatcher();
 

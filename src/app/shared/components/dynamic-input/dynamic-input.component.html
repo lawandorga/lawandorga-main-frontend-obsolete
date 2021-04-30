@@ -1,7 +1,35 @@
 <mat-form-field style="width: 100%; margin-bottom: 12px;">
+    <!-- label -->
     <mat-label class="block text-sm font-medium text-gray-700">{{ label }}</mat-label>
-    <input matInput *ngIf="tag === 'input'" [type]="type" [name]="name" [id]="name" [required]="required"
-        [formControl]="control">
+    <!-- normal -->
+    <ng-container *ngIf="tag === 'input'">
+        <input matInput [type]="type" [name]="name" [id]="name" [required]="required" [formControl]="control">
+    </ng-container>
+    <!-- select -->
+    <ng-container *ngIf="tag === 'select'">
+        <mat-select>
+            <mat-option *ngFor="let option of options" [value]="option.id">
+                {{ option.name }}
+            </mat-option>
+        </mat-select>
+    </ng-container>
+    <!-- select-multiple -->
+    <ng-container *ngIf="tag === 'select-multiple'">
+        <mat-select multiple>
+            <mat-option *ngFor="let option of options" [value]="option.id">
+                {{ option.name }}
+            </mat-option>
+        </mat-select>
+    </ng-container>
+    <!-- datepicker -->
+    <ng-container *ngIf="tag === 'datepicker'">
+        <input matInput [matDatepicker]="datepicker" [name]="name" [id]="name" [required]="required"
+            [formControl]="control">
+        <mat-datepicker-toggle style="position: absolute; right: 0; bottom: 0;" matSuffix [for]="datepicker">
+        </mat-datepicker-toggle>
+        <mat-datepicker #datepicker></mat-datepicker>
+    </ng-container>
+    <!-- errors -->
     <mat-error>
         <div *ngIf="errors && errors[name]">
             {{ errors[name] }}

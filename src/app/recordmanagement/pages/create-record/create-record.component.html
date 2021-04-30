@@ -25,8 +25,8 @@
                 <div class="create-record__containers">
                     <mat-form-field class="create-record__item">
                         <input matInput [matDatepicker]="picker" placeholder="birthday"
-                               formControlName="client_birthday" (dateChange)="onClientBirthdayChange($event)"
-                               (click)="picker.open()">
+                            formControlName="client_birthday" (dateChange)="onClientBirthdayChange($event)"
+                            (click)="picker.open()">
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
@@ -38,10 +38,8 @@
                 </div>
                 <div class="create-record__containers create-record__origin-country">
                     <app-autocomplete [allValuesObservable]="allCountries" placeholder="origin country*"
-                                      (selectedValueChanged)="selectedCountryChanged($event)"
-                                      [errors]="originCountryError"
-                                      [setSelectedValue]="givenOriginCountry" class="full_width"
-                                      disableAfterSetSelectedValue>
+                        (selectedValueChanged)="selectedCountryChanged($event)" [errors]="originCountryError"
+                        [setSelectedValue]="givenOriginCountry" class="full_width" disableAfterSetSelectedValue>
                         <mat-error *ngIf="originCountryError && originCountryError.null">
                             please select a country
                         </mat-error>
@@ -66,8 +64,7 @@
                 <div class="create-record__containers">
                     <mat-form-field class="create-record__item">
                         <input matInput [matDatepicker]="picker_first_contact_date" placeholder="contact date"
-                               formControlName="first_contact_date"
-                               (click)="picker_first_contact_date.open()">
+                            formControlName="first_contact_date" (click)="picker_first_contact_date.open()">
                         <mat-datepicker-toggle matSuffix [for]="picker_first_contact_date"></mat-datepicker-toggle>
                         <mat-datepicker #picker_first_contact_date></mat-datepicker>
                     </mat-form-field>
@@ -78,20 +75,17 @@
                     </mat-form-field>
                 </div>
                 <div class="create-record__containers">
-                    <app-chip-autocomplete [allValuesObservable]="allConsultants"
-                                           placeholder="consultants*"
-                                           (selectedValuesChanged)="selectedConsultantsChanged($event)"
-                                           [errors]="consultantErrors" class="full_width">
+                    <app-chip-autocomplete [allValuesObservable]="allConsultants" placeholder="consultants*"
+                        (selectedValuesChanged)="selectedConsultantsChanged($event)" [errors]="consultantErrors"
+                        class="full_width">
                         <mat-error *ngIf="consultantErrors && consultantErrors.null">
                             at least two consultants for case
                         </mat-error>
                     </app-chip-autocomplete>
                 </div>
                 <div class="create-record__containers">
-                    <app-chip-autocomplete [allValuesObservable]="allRecordTags" class="full_width"
-                                           placeholder="tags*"
-                                           (selectedValuesChanged)="selectedRecordTagsChanged($event)"
-                                           [errors]="recordTagErrors">
+                    <app-chip-autocomplete [allValuesObservable]="allRecordTags" class="full_width" placeholder="tags*"
+                        (selectedValuesChanged)="selectedRecordTagsChanged($event)" [errors]="recordTagErrors">
                         <mat-error *ngIf="recordTagErrors && recordTagErrors.null">
                             at least one tag for case is required
                         </mat-error>
@@ -99,7 +93,7 @@
                 </div>
                 <div class="create-record__containers">
                     <mat-form-field class="create-record__item create-record__notes">
-                    <textarea type="text" matInput formControlName="record_note" placeholder="note about record">
+                        <textarea type="text" matInput formControlName="record_note" placeholder="note about record">
 
                     </textarea>
                     </mat-form-field>
@@ -109,8 +103,15 @@
     </mat-card-content>
     <mat-card-actions>
         <button mat-flat-button color="primary" type="submit" [disabled]="!createRecordForm.valid"
-                class="create-record__button" (click)="onAddRecordClick()">
+            class="create-record__button" (click)="onAddRecordClick()">
             Add record
         </button>
     </mat-card-actions>
+</mat-card>
+
+
+<mat-card style="max-width: 500px;">
+    <mat-card-content>
+        <dynamic-form (send)="onSend($event)" [errors]="errors" [fields]="fields"></dynamic-form>
+    </mat-card-content>
 </mat-card>
