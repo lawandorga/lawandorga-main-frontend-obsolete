@@ -7,7 +7,7 @@
     </ng-container>
     <!-- select -->
     <ng-container *ngIf="tag === 'select'">
-        <mat-select>
+        <mat-select [required]="required" [formControl]="control">
             <mat-option *ngFor="let option of options" [value]="option.id">
                 {{ option.name }}
             </mat-option>
@@ -15,7 +15,7 @@
     </ng-container>
     <!-- select-multiple -->
     <ng-container *ngIf="tag === 'select-multiple'">
-        <mat-select multiple>
+        <mat-select multiple [required]="required" [formControl]="control">
             <mat-option *ngFor="let option of options" [value]="option.id">
                 {{ option.name }}
             </mat-option>
@@ -34,6 +34,10 @@
         <div *ngIf="errors && errors[name]">
             {{ errors[name] }}
         </div>
-        &nbsp;
     </mat-error>
 </mat-form-field>
+<!-- <div>
+
+</div>
+{{ name }}
+{{ errors[name] }} -->

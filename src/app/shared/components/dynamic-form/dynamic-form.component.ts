@@ -31,7 +31,6 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   @Output() send = new EventEmitter();
   form: FormGroup;
   controls: { [key: string]: FormControl } = {};
-  success: string;
 
   constructor(private fb: FormBuilder) {}
 
@@ -45,14 +44,18 @@ export class DynamicFormComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.data && changes.data.currentValue) this.form.patchValue(changes.data.currentValue);
+    if (changes.errors && changes.errors.currentValue) {
+      // for debug
+      // Object.keys(this.controls).forEach((key) => this.controls[key].setErrors({ incorrect: true }));
+      // end debug
+      Object.keys(changes.errors.currentValue).forEach((key) => {
+        if (key in this.controls) this.controls[key].setErrors({ incorrect: true });
+      });
+    }
   }
 
   onSubmit(): void {
-    // form.getControl('name');
-    // console.log(this.form.value);
     this.errors = null;
-    this.success = 'Saved';
     this.send.emit(this.form.value);
-    // this.controls['name'].setErrors({ incorrect: true });
   }
 }

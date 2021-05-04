@@ -93,7 +93,7 @@ export class GroupComponent implements OnInit {
         this.group = response.data;
         this.coreSB.showSuccessSnackBar('Group information saved.');
       })
-      .catch((error: AxiosError) => (this.errors = error.response.data)); // eslint-disable-line
+      .catch((error: AxiosError<DjangoError>) => (this.errors = error.response.data));
   }
 
   onAddPermission(): void {

@@ -17,23 +17,16 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { RecordsSandboxService } from '../../services/records-sandbox.service';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
-import { SelectClientDialogComponent } from '../../components/select-client-dialog/select-client-dialog.component';
-import { FullClient } from '../../models/client.model';
 import { OriginCountry } from '../../models/country.model';
 import { RestrictedUser } from '../../../core/models/user.model';
 import { Tag } from '../../models/tag.model';
-import { Observable } from 'rxjs';
-import { dateInPastValidator } from '../../../statics/validators.statics';
-import { tap } from 'rxjs/operators';
-import { alphabeticalSorterByField } from '../../../shared/other/sorter-helper';
 import { DjangoError } from 'src/app/shared/services/axios';
 import axios from '../../../shared/services/axios';
 import { CoreSandboxService } from 'src/app/core/services/core-sandbox.service';
 import { AxiosError, AxiosResponse } from 'axios';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-record',
@@ -41,25 +34,8 @@ import { AxiosError, AxiosResponse } from 'axios';
   styleUrls: ['./create-record.component.scss'],
 })
 export class CreateRecordComponent implements OnInit {
-  createRecordForm: FormGroup;
-  client: FullClient;
-
-  allConsultants: Observable<RestrictedUser[]>;
-  consultantErrors: any;
-  selectedConsultants: RestrictedUser[];
-
-  allCountries: Observable<OriginCountry[]>;
-  originCountryError: any;
-  originCountry: OriginCountry;
-  givenOriginCountry: OriginCountry;
-
-  allRecordTags: Observable<Tag[]>;
-  recordTagErrors: any;
-  selectedRecordTags: Tag[];
-
   originCountries: OriginCountry[];
   tags: Tag[];
-
   errors: DjangoError;
   fields = [
     {
@@ -73,12 +49,12 @@ export class CreateRecordComponent implements OnInit {
       label: 'Birthday',
       tag: 'datepicker',
       name: 'birthday',
-      required: true,
+      required: false,
     },
     {
       label: 'Client Origin Country',
       tag: 'select',
-      name: 'description',
+      name: 'origin_country',
       required: true,
       options: [],
     },
@@ -86,7 +62,7 @@ export class CreateRecordComponent implements OnInit {
       label: 'Client Phone',
       type: 'tel',
       tag: 'input',
-      name: 'phone',
+      name: 'phone_number',
       required: false,
     },
     {
@@ -100,27 +76,27 @@ export class CreateRecordComponent implements OnInit {
       label: 'Record Token',
       type: 'text',
       tag: 'input',
-      name: 'token',
+      name: 'record_token',
       required: false,
     },
     {
-      label: 'Contact Date',
+      label: 'Record Contact Date',
       type: 'text',
       tag: 'datepicker',
-      name: 'token',
+      name: 'first_contact_date',
       required: false,
     },
     {
-      label: 'Consultants',
+      label: 'Record Consultants',
       tag: 'select-multiple',
-      name: 'consultants',
+      name: 'working_on_record',
       required: true,
       options: [],
     },
     {
-      label: 'Tags',
+      label: 'Record Tags',
       tag: 'select-multiple',
-      name: 'tags',
+      name: 'tagged',
       required: true,
       options: [],
     },
@@ -128,42 +104,12 @@ export class CreateRecordComponent implements OnInit {
       label: 'Record Note',
       type: 'text',
       tag: 'input',
-      name: 'note',
+      name: 'record_note',
       required: false,
     },
   ];
 
-  constructor(private recordSB: RecordsSandboxService, private coreSB: CoreSandboxService, public dialog: MatDialog) {
-    const date = new Date();
-    date.setFullYear(date.getFullYear() - 20);
-
-    this.createRecordForm = new FormGroup({
-      first_contact_date: new FormControl(new Date(), dateInPastValidator),
-      client_birthday: new FormControl(date, dateInPastValidator),
-      // client_birthday: new FormControl(date),
-      client_name: new FormControl('', [Validators.required]),
-      client_phone_number: new FormControl(''),
-      client_note: new FormControl(''),
-      record_token: new FormControl('', [Validators.required]),
-      record_note: new FormControl(''),
-    });
-
-    this.allConsultants = this.recordSB.getConsultants().pipe(
-      tap((results) => {
-        alphabeticalSorterByField(results, 'name');
-      })
-    );
-    this.allCountries = this.recordSB.getOriginCountries().pipe(
-      tap((results) => {
-        alphabeticalSorterByField(results, 'name');
-      })
-    );
-    this.allRecordTags = this.recordSB.getRecordTags().pipe(
-      tap((results) => {
-        alphabeticalSorterByField(results, 'name');
-      })
-    );
-  }
+  constructor(private coreSB: CoreSandboxService, private router: Router) {}
 
   ngOnInit(): void {
     axios
@@ -182,97 +128,15 @@ export class CreateRecordComponent implements OnInit {
       .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
   }
 
-  onClientBirthdayChange(event: MatDatepickerInputEvent<Date>) {
-    // const birthday = this.createRecordForm.get("client_birthday").searchValue;
-    // if (birthday !== null){
-    //     this.recordSB.loadClientPossibilities(new Date(this.createRecordForm.get("client_birthday").searchValue));
-    //     this.openSelectClientDialog();
-    // }
-  }
-
-  selectedConsultantsChanged(selectedConsultants) {
-    this.selectedConsultants = selectedConsultants;
-    if (selectedConsultants.length <= 1) {
-      this.consultantErrors = { null: 'true' };
-    } else {
-      this.consultantErrors = null;
-    }
-  }
-
-  selectedCountryChanged(selectedCountry) {
-    this.originCountry = selectedCountry;
-  }
-
-  selectedRecordTagsChanged(selectedRecordTags) {
-    this.selectedRecordTags = selectedRecordTags;
-    if (selectedRecordTags.length === 0) {
-      this.recordTagErrors = { null: 'true' };
-    } else {
-      this.recordTagErrors = null;
-    }
-  }
-
-  openSelectClientDialog() {
-    const dialogRef = this.dialog.open(SelectClientDialogComponent);
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        if (result !== -1) {
-          this.client = this.recordSB.getSpecialPossibleClient(result);
-          this.originCountry = this.recordSB.getOriginCountryById(this.client.origin_country);
-          this.givenOriginCountry = this.originCountry;
-          this.setClientFields();
-        } else {
-          this.client = null;
-          this.originCountry = null;
-          this.givenOriginCountry = null;
-          this.resetClientFields();
-        }
-      } else {
-        this.client = null;
-        this.originCountry = null;
-        this.givenOriginCountry = null;
-        this.resetClientFields();
-      }
-      this.recordSB.resetPossibleClients();
-    });
-  }
-
-  setClientFields() {
-    this.createRecordForm.controls['client_name'].setValue(this.client.name);
-    this.createRecordForm.controls['client_phone_number'].setValue(this.client.phone_number);
-
-    this.createRecordForm.controls['client_note'].setValue(this.client.note);
-
-    this.createRecordForm.controls['client_name'].disable();
-  }
-
-  resetClientFields() {
-    this.createRecordForm.controls['client_name'].setValue('');
-    this.createRecordForm.controls['client_phone_number'].setValue('');
-    this.createRecordForm.controls['client_note'].setValue('');
-
-    this.createRecordForm.controls['client_name'].enable();
-  }
-
-  onAddRecordClick() {
-    let invalid = false;
-    if (!this.selectedRecordTags || this.selectedRecordTags.length < 1) {
-      this.recordTagErrors = { null: 'true' };
-      invalid = true;
-    }
-    if (!this.selectedConsultants || this.selectedConsultants.length < 2) {
-      this.consultantErrors = { null: 'true' };
-      invalid = true;
-    }
-
-    if (!invalid) {
-      this.recordSB.createNewRecord(
-        this.createRecordForm.value,
-        this.client,
-        this.originCountry,
-        this.selectedConsultants,
-        this.selectedRecordTags
-      );
-    }
+  onSend(values: Object): void {  // eslint-disable-line
+    axios
+      .post('api/records/records/', values)
+      .then(() => {
+        this.coreSB.showSuccessSnackBar('Record was created.');
+        void this.router.navigate(['/records/']);
+      })
+      .catch((error: AxiosError<DjangoError>) => {
+        this.errors = error.response.data;
+      });
   }
 }
