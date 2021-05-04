@@ -44,7 +44,6 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
     if (changes.data && changes.data.currentValue) this.form.patchValue(changes.data.currentValue);
   }
 
