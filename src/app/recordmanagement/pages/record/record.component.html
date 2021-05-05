@@ -17,10 +17,31 @@
   -->
 
 <div *ngIf="loading; else loaded" class="full_width record__progress-spinner-container">
-    <mat-spinner></mat-spinner>
+  <mat-spinner></mat-spinner>
 </div>
 <ng-template #loaded>
-    <app-full-record-detail *ngIf="type === 'FullRecord'"> </app-full-record-detail>
-    <app-restricted-record-detail *ngIf="type === 'RestrictedRecord'">
-    </app-restricted-record-detail>
+  <app-full-record-detail *ngIf="type === 'FullRecord'"> </app-full-record-detail>
+  <app-restricted-record-detail *ngIf="type === 'RestrictedRecord'">
+  </app-restricted-record-detail>
 </ng-template>
+
+
+<div style="display: flex;">
+
+  <mat-card style="width: 50%">
+    <mat-card-title>Record</mat-card-title>
+    <mat-card-content>
+      <dynamic-form [fields]="recordFields" [errors]="recordErrors" [data]="record"></dynamic-form>
+    </mat-card-content>
+    {{ record|json }}
+  </mat-card>
+
+  <mat-card style="width: 50%;">
+    <mat-card-title>Client</mat-card-title>
+    <mat-card-content>
+      <dynamic-form [fields]="clientFields" [errors]="clientErrors" [data]="client"></dynamic-form>
+    </mat-card-content>
+    {{ client|json }}
+  </mat-card>
+
+</div>

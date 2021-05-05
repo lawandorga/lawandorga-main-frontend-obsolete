@@ -17,8 +17,6 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { RecordsSandboxService } from '../../services/records-sandbox.service';
-import { MatDialog } from '@angular/material/dialog';
 import { OriginCountry } from '../../models/country.model';
 import { RestrictedUser } from '../../../core/models/user.model';
 import { Tag } from '../../models/tag.model';
@@ -31,7 +29,6 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-add-record',
   templateUrl: './create-record.component.html',
-  styleUrls: ['./create-record.component.scss'],
 })
 export class CreateRecordComponent implements OnInit {
   originCountries: OriginCountry[];
