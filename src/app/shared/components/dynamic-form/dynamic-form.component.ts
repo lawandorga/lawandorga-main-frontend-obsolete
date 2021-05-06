@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, Input, EventEmitter, Output, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, EventEmitter, Output, OnInit, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { DynamicField } from '../dynamic-input/dynamic-input.component';
 import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
 
@@ -32,7 +32,7 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   form: FormGroup;
   controls: { [key: string]: FormControl } = {};
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.fields.forEach((field) => {
@@ -58,4 +58,22 @@ export class DynamicFormComponent implements OnInit, OnChanges {
     this.errors = null;
     this.send.emit(this.form.value);
   }
+
+  // onFileChange(event) {
+  //   const reader = new FileReader();
+
+  //   if (event.target.files && event.target.files.length) {
+  //     const [file] = event.target.files;
+  //     reader.readAsDataURL(file);
+
+  //     reader.onload = () => {
+  //       this.form.patchValue({
+  //         file: reader.result,
+  //       });
+
+  //       // need to run CD since file load runs outside of zone
+  //       this.cd.markForCheck();
+  //     };
+  //   }
+  // }
 }

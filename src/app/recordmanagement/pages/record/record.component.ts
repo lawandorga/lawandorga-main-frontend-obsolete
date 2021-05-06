@@ -27,8 +27,9 @@ import { CoreSandboxService } from 'src/app/core/services/core-sandbox.service';
 import { AxiosError, AxiosResponse } from 'axios';
 import { OriginCountry } from '../../models/country.model';
 import { RestrictedUser } from 'src/app/core/models/user.model';
-import moment from 'moment';
 import { Message } from '../../models/message.model';
+import { RecordDocument } from '../../models/record_document.model';
+import { StorageService } from 'src/app/shared/services/storage.service';
 
 @Component({
   selector: 'app-record',
@@ -249,9 +250,27 @@ export class RecordComponent implements OnInit {
   messages: Message[];
   messageData: { message: string };
 
-  constructor(private recordSB: RecordsSandboxService, private route: ActivatedRoute, private coreSB: CoreSandboxService) {}
+  documentFields = [
+    {
+      label: 'File',
+      type: 'file',
+      tag: 'file',
+      name: 'file',
+      required: false,
+    },
+  ];
+  documentErrors: DjangoError;
+  documents: RecordDocument[];
+  documentData: { file: string };
 
-  ngOnInit() {
+  constructor(
+    private recordSB: RecordsSandboxService,
+    private route: ActivatedRoute,
+    private coreSB: CoreSandboxService,
+    private storageService: StorageService
+  ) {}
+
+  ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
       this.id = params['id'] as string;
     });
@@ -274,12 +293,21 @@ export class RecordComponent implements OnInit {
     this.getRecord(this.id);
 
     this.getMessages(this.id);
+
+    this.getDocuments(this.id);
   }
 
   getMessages(id: string | number): void {
     axios
       .get(`api/records/records/${id}/messages/`)
       .then((response: AxiosResponse<Message[]>) => (this.messages = response.data))
+      .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
+  }
+
+  getDocuments(id: string | number): void {
+    axios
+      .get(`api/records/records/${id}/documents/`)
+      .then((response: AxiosResponse<RecordDocument[]>) => (this.documents = response.data))
       .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
   }
 
@@ -319,6 +347,8 @@ export class RecordComponent implements OnInit {
   }
 
   onMessageSend(data: SubmitData): void {
+    console.log(data);
+
     void axios
       .post(`api/records/records/${this.record.id}/add_message/`, data)
       .then((response: AxiosResponse<Message>) => {
@@ -326,5 +356,30 @@ export class RecordComponent implements OnInit {
         this.messageData = { message: '' };
       })
       .catch((error: AxiosError<DjangoError>) => (this.messageErrors = error.response.data));
+  }
+
+  onDocumentSend(data: SubmitData): void {
+    const formData = new FormData();
+    // eslint-disable-next-line
+    formData.append('files', data['file']['_files'][0] as File);
+
+    void axios
+      .post(`api/records/e_record/${this.record.id}/documents/`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((response: AxiosResponse<RecordDocument[]>) => {
+        this.documents = addToArray(this.documents, response.data[0]) as RecordDocument[];
+        this.documentData = { file: '' };
+      })
+      .catch((error: AxiosError<DjangoError>) => (this.messageErrors = error.response.data));
+  }
+
+  onDownloadClick(id: number, name: string): void {
+    axios
+      .get(`api/records/e_record/documents/${id}/`)
+      .then((response: AxiosResponse<FullClient>) => StorageService.saveFile(response.data, name))
+      .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
   }
 }

@@ -54,29 +54,4 @@ export class DynamicInputComponent {
   @Input() options: DynamicField['options'];
 
   matcher = new MyErrorStateMatcher();
-
-  writeValue(obj: string | number): void {
-    if (obj !== undefined) this.value = obj;
-  }
-
-  // eslint-disable-next-line
-  propagateChange = (_: any): void => {
-    // do nothing
-  };
-
-  // eslint-disable-next-line
-  registerOnChange(fn: any): void {
-    // eslint-disable-next-line
-    this.propagateChange = fn;
-  }
-
-  // eslint-disable-next-line
-  registerOnTouched(fn: any): void {
-    // do nothing
-  }
-
-  onChange(event: Event): void {
-    const value = (event.target as HTMLInputElement).value;
-    this.propagateChange(value);
-  }
 }

@@ -3,6 +3,7 @@ import { RestrictedGroup } from 'src/app/core/models/group.model';
 import { HasPermission, Permission } from 'src/app/core/models/permission.model';
 import { FullUser } from 'src/app/core/models/user.model';
 import { Message } from 'src/app/recordmanagement/models/message.model';
+import { RecordDocument } from 'src/app/recordmanagement/models/record_document.model';
 import { environment } from '../../../environments/environment';
 
 // types
@@ -49,7 +50,7 @@ export interface BaseModel {
   id: number | string;
   [key: string]: unknown;
 }
-export type DjangoModel = BaseModel | FullUser | HasPermission | Permission | RestrictedGroup | Message;
+export type DjangoModel = BaseModel | FullUser | HasPermission | Permission | RestrictedGroup | Message | RecordDocument;
 
 export interface SubmitData {
   [key: string]: string | number;

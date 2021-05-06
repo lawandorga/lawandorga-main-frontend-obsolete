@@ -5,6 +5,12 @@
     <ng-container *ngIf="tag === 'input'">
         <input matInput [type]="type" [name]="name" [id]="name" [required]="required" [formControl]="control">
     </ng-container>
+    <!-- file -->
+    <ng-container *ngIf="tag === 'file'">
+        <ngx-mat-file-input [formControl]="control" [id]="name" [required]="required">
+        </ngx-mat-file-input>
+        <mat-icon style="position: absolute; right: 0; bottom: 0;">folder</mat-icon>
+    </ng-container>
     <!-- select -->
     <ng-container *ngIf="tag === 'select'">
         <mat-select [required]="required" [formControl]="control">

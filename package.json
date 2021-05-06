@@ -55,6 +55,7 @@
     "mime": "^2.4.6",
     "moment": "^2.27.0",
     "ng-material-multilevel-menu": "^4.12.2",
+    "ngx-material-file-input": "^2.1.1",
     "ngx-quill": "^12.0.1",
     "object-hash": "^2.0.3",
     "postcss": "^8.2.10",

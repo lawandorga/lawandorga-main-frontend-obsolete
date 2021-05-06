@@ -35,7 +35,6 @@
         <dynamic-form [fields]="recordFields" [errors]="recordErrors" [data]="record" (send)="onRecordSend($event)">
         </dynamic-form>
       </mat-card-content>
-      {{ record|json }}
     </mat-card>
   </div>
 
@@ -48,27 +47,51 @@
         <dynamic-form [fields]="clientFields" [errors]="clientErrors" [data]="client" (send)="onClientSend($event)">
         </dynamic-form>
       </mat-card-content>
-      {{ client|json }}
+    </mat-card>
+
+    <mat-card style="margin-bottom: 12px;">
+      <mat-card-title>Files</mat-card-title>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item *ngFor="let document of documents">
+            <mat-icon mat-list-icon style="opacity: 0.54; margin-right: 6px;">attach_file</mat-icon>
+            <div mat-line><b>{{ document.name }}</b></div>
+            <div mat-line><i>{{ document.created_on|date:'dd.MM.yyyy HH:mm' }}</i></div>
+            <button mat-button color="primary" (click)="onDownloadClick(document.id, document.name)">Download</button>
+          </mat-list-item>
+          <mat-list-item style="height: auto; padding-top: 16px;">
+            <dynamic-form style="width: 100%;" [fields]="documentFields" [errors]="documentErrors"
+              (send)="onDocumentSend($event)" [data]="documentData">
+            </dynamic-form>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
     </mat-card>
 
     <mat-card>
       <mat-card-title>Messages</mat-card-title>
       <mat-card-content>
-        <ul style="list-style: none; padding-left: 0;">
-          <li *ngFor="let message of messages" style="border-bottom: 1px solid gray;">
-            <div style="padding: 12px 0;">
-              <div style="display: flex; justify-content: space-between;">
+        <mat-list>
+          <mat-list-item *ngFor="let message of messages">
+            <mat-icon mat-list-icon style="opacity: 0.54; margin-right: 6px;">chat</mat-icon>
+            <div mat-line style="width: 100%;">
+              <div style="width: 100%; display: flex; justify-content: space-between;">
                 <b>{{ message.sender ? message.sender.name : 'Deleted user' }}:</b>
                 <i>{{ message.created_on|date:'dd.MM.yyyy HH:mm' }}</i>
               </div>
               <p style="margin-top: 2px; margin-bottom: 0;">{{ message.message }}</p>
             </div>
-          </li>
-        </ul>
-        <dynamic-form [fields]="messageFields" [errors]="messageErrors" (send)="onMessageSend($event)"
-          [data]="messageData"></dynamic-form>
+          </mat-list-item>
+          <mat-list-item style="height: auto; padding-top: 16px;">
+            <dynamic-form style="width: 100%;" [fields]="messageFields" [errors]="messageErrors"
+              (send)="onMessageSend($event)" [data]="messageData"></dynamic-form>
+          </mat-list-item>
+        </mat-list>
+
       </mat-card-content>
     </mat-card>
   </div>
 
 </div>
+
+<div style="height: 500px;"></div>
