@@ -16,25 +16,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { RecordsSandboxService } from '../../services/records-sandbox.service';
-import { FullRecord, RestrictedRecord } from '../../models/record.model';
+import { FullRecord } from '../../models/record.model';
 import { ActivatedRoute, Params } from '@angular/router';
-import { HasUnsaved } from '../../../core/services/can-have-unsaved.interface';
 import { FullRecordDetailComponent } from '../../components/records/full-record-detail/full-record-detail.component';
 import { FullClient } from '../../models/client.model';
-import axios, { DjangoError } from 'src/app/shared/services/axios';
+import axios, { addToArray, DjangoError, SubmitData } from 'src/app/shared/services/axios';
 import { CoreSandboxService } from 'src/app/core/services/core-sandbox.service';
 import { AxiosError, AxiosResponse } from 'axios';
 import { OriginCountry } from '../../models/country.model';
 import { RestrictedUser } from 'src/app/core/models/user.model';
+import moment from 'moment';
+import { Message } from '../../models/message.model';
 
 @Component({
   selector: 'app-record',
   templateUrl: './record.component.html',
   styleUrls: ['./record.component.scss'],
 })
-export class RecordComponent implements OnInit, HasUnsaved, OnDestroy {
+export class RecordComponent implements OnInit {
   id: string;
   type: string;
   loading = true;
@@ -235,22 +236,24 @@ export class RecordComponent implements OnInit, HasUnsaved, OnDestroy {
     },
   ];
 
+  messageFields = [
+    {
+      label: 'Message',
+      type: 'text',
+      tag: 'input',
+      name: 'message',
+      required: false,
+    },
+  ];
+  messageErrors: DjangoError;
+  messages: Message[];
+  messageData: { message: string };
+
   constructor(private recordSB: RecordsSandboxService, private route: ActivatedRoute, private coreSB: CoreSandboxService) {}
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
-      this.loading = true;
       this.id = params['id'] as string;
-      this.recordSB.loadAndGetSpecialRecord(this.id).subscribe((special_record) => {
-        if (special_record.record !== null) {
-          this.loading = false;
-        }
-        if (special_record.client) {
-          this.type = 'FullRecord';
-        } else {
-          this.type = 'RestrictedRecord';
-        }
-      });
     });
 
     axios
@@ -268,24 +271,60 @@ export class RecordComponent implements OnInit, HasUnsaved, OnDestroy {
       .then((response: AxiosResponse<OriginCountry[]>) => (this.clientFields[2].options = response.data))
       .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
 
+    this.getRecord(this.id);
+
+    this.getMessages(this.id);
+  }
+
+  getMessages(id: string | number): void {
     axios
-      .get(`api/records/records/${this.id}/`)
-      .then((response: AxiosResponse) => {
-        this.record = response.data.record;
-        this.client = response.data.client;
+      .get(`api/records/records/${id}/messages/`)
+      .then((response: AxiosResponse<Message[]>) => (this.messages = response.data))
+      .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
+  }
+
+  getRecord(id: string | number): void {
+    axios
+      .get(`api/records/records/${id}/`)
+      .then((response: AxiosResponse<FullRecord>) => {
+        this.record = response.data;
+        this.getClient(response.data.client);
       })
       .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
   }
 
-  ngOnDestroy(): void {
-    this.recordSB.resetFullClientInformation();
+  getClient(id: number): void {
+    void axios
+      .get(`api/records/e_clients/${id}/`)
+      .then((response: AxiosResponse<FullClient>) => (this.client = response.data))
+      .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
   }
 
-  hasUnsaved(): boolean {
-    if (this.type === 'FullRecord') {
-      return this.child.hasUnsaved();
-    } else {
-      return false;
-    }
+  onClientSend(data: SubmitData): void {
+    void axios
+      .patch(`api/records/e_clients/${this.client.id}/`, data)
+      .then((response: AxiosResponse<FullClient>) => {
+        this.client = response.data;
+      })
+      .catch((error: AxiosError<DjangoError>) => (this.clientErrors = error.response.data));
+  }
+
+  onRecordSend(data: SubmitData): void {
+    void axios
+      .patch(`api/records/records/${this.record.id}/`, data)
+      .then((response: AxiosResponse<FullRecord>) => {
+        this.record = response.data;
+      })
+      .catch((error: AxiosError<DjangoError>) => (this.recordErrors = error.response.data));
+  }
+
+  onMessageSend(data: SubmitData): void {
+    void axios
+      .post(`api/records/records/${this.record.id}/add_message/`, data)
+      .then((response: AxiosResponse<Message>) => {
+        this.messages = addToArray(this.messages, response.data) as Message[];
+        this.messageData = { message: '' };
+      })
+      .catch((error: AxiosError<DjangoError>) => (this.messageErrors = error.response.data));
   }
 }

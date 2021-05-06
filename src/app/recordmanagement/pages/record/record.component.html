@@ -16,32 +16,59 @@
   ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
   -->
 
-<div *ngIf="loading; else loaded" class="full_width record__progress-spinner-container">
+<!-- <div *ngIf="loading; else loaded" class="full_width record__progress-spinner-container">
   <mat-spinner></mat-spinner>
 </div>
 <ng-template #loaded>
   <app-full-record-detail *ngIf="type === 'FullRecord'"> </app-full-record-detail>
   <app-restricted-record-detail *ngIf="type === 'RestrictedRecord'">
   </app-restricted-record-detail>
-</ng-template>
+</ng-template> -->
 
 
-<!-- <div style="display: flex;">
+<div style="display: flex;">
 
-  <mat-card style="width: 50%">
-    <mat-card-title>Record</mat-card-title>
-    <mat-card-content>
-      <dynamic-form [fields]="recordFields" [errors]="recordErrors" [data]="record"></dynamic-form>
-    </mat-card-content>
-    {{ record|json }}
-  </mat-card>
+  <div style="width: 50%">
+    <mat-card>
+      <mat-card-title>Record</mat-card-title>
+      <mat-card-content>
+        <dynamic-form [fields]="recordFields" [errors]="recordErrors" [data]="record" (send)="onRecordSend($event)">
+        </dynamic-form>
+      </mat-card-content>
+      {{ record|json }}
+    </mat-card>
+  </div>
 
-  <mat-card style="width: 50%;">
-    <mat-card-title>Client</mat-card-title>
-    <mat-card-content>
-      <dynamic-form [fields]="clientFields" [errors]="clientErrors" [data]="client"></dynamic-form>
-    </mat-card-content>
-    {{ client|json }}
-  </mat-card>
+  <div style="width: 12px;"></div>
 
-</div> -->
+  <div style="width: 50%;">
+    <mat-card style="margin-bottom: 12px;">
+      <mat-card-title>Client</mat-card-title>
+      <mat-card-content>
+        <dynamic-form [fields]="clientFields" [errors]="clientErrors" [data]="client" (send)="onClientSend($event)">
+        </dynamic-form>
+      </mat-card-content>
+      {{ client|json }}
+    </mat-card>
+
+    <mat-card>
+      <mat-card-title>Messages</mat-card-title>
+      <mat-card-content>
+        <ul style="list-style: none; padding-left: 0;">
+          <li *ngFor="let message of messages" style="border-bottom: 1px solid gray;">
+            <div style="padding: 12px 0;">
+              <div style="display: flex; justify-content: space-between;">
+                <b>{{ message.sender ? message.sender.name : 'Deleted user' }}:</b>
+                <i>{{ message.created_on|date:'dd.MM.yyyy HH:mm' }}</i>
+              </div>
+              <p style="margin-top: 2px; margin-bottom: 0;">{{ message.message }}</p>
+            </div>
+          </li>
+        </ul>
+        <dynamic-form [fields]="messageFields" [errors]="messageErrors" (send)="onMessageSend($event)"
+          [data]="messageData"></dynamic-form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+</div>

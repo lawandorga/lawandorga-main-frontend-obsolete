@@ -2,6 +2,7 @@ import axios from 'axios';
 import { RestrictedGroup } from 'src/app/core/models/group.model';
 import { HasPermission, Permission } from 'src/app/core/models/permission.model';
 import { FullUser } from 'src/app/core/models/user.model';
+import { Message } from 'src/app/recordmanagement/models/message.model';
 import { environment } from '../../../environments/environment';
 
 // types
@@ -33,7 +34,9 @@ function privateKey(): string {
 }
 
 instance.interceptors.request.use((config) => {
+  // eslint-disable-next-line
   config.headers['Authorization'] = `Token ${token()}`;
+  // eslint-disable-next-line
   config.headers['private-key'] = privateKey().replace(/(?:\r\n|\r|\n)/g, '<linebreak>');
   return config;
 });
@@ -46,7 +49,11 @@ export interface BaseModel {
   id: number | string;
   [key: string]: unknown;
 }
-export type DjangoModel = BaseModel | FullUser | HasPermission | Permission | RestrictedGroup;
+export type DjangoModel = BaseModel | FullUser | HasPermission | Permission | RestrictedGroup | Message;
+
+export interface SubmitData {
+  [key: string]: string | number;
+}
 
 export const removeFromArray = (array: DjangoModel[], id: number): DjangoModel[] => {
   const newArray = array.filter((item) => item.id !== id);
