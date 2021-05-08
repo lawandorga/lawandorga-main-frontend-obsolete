@@ -58,6 +58,7 @@
             <div mat-line><b>{{ document.name }}</b></div>
             <div mat-line><i>{{ document.created_on|date:'dd.MM.yyyy HH:mm' }}</i></div>
             <button mat-button color="primary" (click)="onDownloadClick(document.id, document.name)">Download</button>
+            <button mat-button color="warn" (click)="onDeleteClick(document.id)">Delete</button>
           </mat-list-item>
           <mat-list-item style="height: auto; padding-top: 16px;">
             <dynamic-form style="width: 100%;" [fields]="documentFields" [errors]="documentErrors"

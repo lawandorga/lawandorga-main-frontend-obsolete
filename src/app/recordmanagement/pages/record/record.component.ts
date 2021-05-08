@@ -16,13 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { RecordsSandboxService } from '../../services/records-sandbox.service';
+import { Component, OnInit } from '@angular/core';
 import { FullRecord } from '../../models/record.model';
 import { ActivatedRoute, Params } from '@angular/router';
-import { FullRecordDetailComponent } from '../../components/records/full-record-detail/full-record-detail.component';
 import { FullClient } from '../../models/client.model';
-import axios, { addToArray, DjangoError, SubmitData } from 'src/app/shared/services/axios';
+import axios, { addToArray, DjangoError, removeFromArray, SubmitData } from 'src/app/shared/services/axios';
 import { CoreSandboxService } from 'src/app/core/services/core-sandbox.service';
 import { AxiosError, AxiosResponse } from 'axios';
 import { OriginCountry } from '../../models/country.model';
@@ -30,6 +28,7 @@ import { RestrictedUser } from 'src/app/core/models/user.model';
 import { Message } from '../../models/message.model';
 import { RecordDocument } from '../../models/record_document.model';
 import { StorageService } from 'src/app/shared/services/storage.service';
+import { SharedSandboxService } from 'src/app/shared/services/shared-sandbox.service';
 
 @Component({
   selector: 'app-record',
@@ -38,10 +37,6 @@ import { StorageService } from 'src/app/shared/services/storage.service';
 })
 export class RecordComponent implements OnInit {
   id: string;
-  type: string;
-  loading = true;
-
-  @ViewChild(FullRecordDetailComponent) child: FullRecordDetailComponent;
 
   record: FullRecord;
   recordErrors: DjangoError;
@@ -263,12 +258,7 @@ export class RecordComponent implements OnInit {
   documents: RecordDocument[];
   documentData: { file: string };
 
-  constructor(
-    private recordSB: RecordsSandboxService,
-    private route: ActivatedRoute,
-    private coreSB: CoreSandboxService,
-    private storageService: StorageService
-  ) {}
+  constructor(private sharedSB: SharedSandboxService, private route: ActivatedRoute, private coreSB: CoreSandboxService) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
@@ -381,5 +371,25 @@ export class RecordComponent implements OnInit {
       .get(`api/records/e_record/documents/${id}/`)
       .then((response: AxiosResponse<FullClient>) => StorageService.saveFile(response.data, name))
       .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
+  }
+
+  onDeleteClick(id: number): void {
+    this.sharedSB.openConfirmDialog(
+      {
+        title: 'Delete',
+        description: 'Are you sure you want to delete this file?',
+        confirmLabel: 'Delete',
+        cancelLabel: 'Cancel',
+        confirmColor: 'warn',
+      },
+      (remove: boolean) => {
+        if (remove) {
+          axios
+            .delete(`api/records/record_documents/${id}/`)
+            .then(() => (this.documents = removeFromArray(this.documents, id) as RecordDocument[]))
+            .catch((err: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(err.response.data.detail));
+        }
+      }
+    );
   }
 }
