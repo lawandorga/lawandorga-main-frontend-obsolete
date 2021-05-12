@@ -20,140 +20,155 @@ import { Tag } from './tag.model';
 import { State } from '../../core/models/state.model';
 
 export class TokenRecord {
-    constructor(public id: number, public token: string) {
-        this.id = id;
-        this.token = token;
-    }
+  constructor(public id: number, public token: string) {
+    this.id = id;
+    this.token = token;
+  }
 
-    static getTokenRecordFromJson(json: any): TokenRecord {
-        if (!json) {
-            return new TokenRecord(-1, 'DELETED');
-        }
-        return new TokenRecord(json.id, json.record_token);
+  static getTokenRecordFromJson(json: any): TokenRecord {
+    if (!json) {
+      return new TokenRecord(-1, 'DELETED');
     }
+    return new TokenRecord(json.id, json.record_token);
+  }
+}
+
+export interface NewRestrictedRecord {
+  id: number;
+  state: string;
+  created_on: string;
+  last_edited: string;
+  record_token: string;
+  tagged: { id: number; name: string }[];
+  working_on_record: { id: number; name: string; email: string }[];
+  official_note: string;
+  access: boolean;
 }
 
 export class RestrictedRecord extends TokenRecord {
-    constructor(
-        id: number,
-        token: string,
-        public last_contact_date: Date,
-        public state: string,
-        public tags: Tag[],
-        public working_on_record: [number, string],
-        public official_note: string,
-        public is_restricted: boolean
-    ) {
-        super(id, token);
-        this.id = id;
-        this.token = token;
-        this.last_contact_date = last_contact_date;
+  constructor(
+    id: number,
+    token: string,
+    public last_contact_date: Date,
+    public state: string,
+    public record_token: string,
+    public tags: Tag[],
+    public working_on_record: [number, string],
+    public official_note: string,
+    public is_restricted: boolean
+  ) {
+    super(id, token);
+    this.id = id;
+    this.token = token;
+    this.record_token = token;
+    this.last_contact_date = last_contact_date;
 
-        if (state.length > 2) {
-            this.state = State.getStateAbbreviationFromDirtyString(state);
-        } else {
-            this.state = state;
-        }
-        this.tags = tags;
-        this.working_on_record = working_on_record;
-        this.official_note = official_note;
-        this.is_restricted = is_restricted;
+    if (state.length > 2) {
+      this.state = State.getStateAbbreviationFromDirtyString(state);
+    } else {
+      this.state = state;
     }
+    this.tags = tags;
+    this.working_on_record = working_on_record;
+    this.official_note = official_note;
+    this.is_restricted = is_restricted;
+  }
 
-    static getRestrictedRecordFromJson(json: any): RestrictedRecord {
-        return new RestrictedRecord(
-            json.id,
-            json.record_token,
-            new Date(json.last_contact_date),
-            json.state,
-            Tag.getTagsFromJsonArray(json.tagged),
-            json.working_on_record,
-            json.official_note,
-            true
-        );
-    }
+  static getRestrictedRecordFromJson(json: any): RestrictedRecord {
+    return new RestrictedRecord(
+      json.id,
+      json.record_token,
+      new Date(json.last_contact_date),
+      json.state,
+      json.record_token,
+      Tag.getTagsFromJsonArray(json.tagged),
+      json.working_on_record,
+      json.official_note,
+      true
+    );
+  }
 }
 
 export class FullRecord extends RestrictedRecord {
-    constructor(
-        id: number,
-        token: string,
-        last_contact_date: Date,
-        state: string,
-        tags: Tag[],
-        working_on_record: [number, string],
-        official_note: string,
-        public created_on: Date,
-        public last_edited: Date,
-        public first_contact_date: Date,
-        public note: string,
-        public from_rlc: number,
-        public client: number,
-        public first_consultation: Date,
-        public consultant_team: string,
-        public lawyer: string,
-        public related_persons: string,
-        public contact: string,
-        public bamf_token: string,
-        public foreign_token: string,
-        public first_correspondence: string,
-        public circumstances: string,
-        public next_steps: string,
-        public status_described: string,
-        public additional_facts: string
-    ) {
-        super(id, token, last_contact_date, state, tags, working_on_record, official_note, false);
-        this.created_on = created_on;
-        this.last_edited = last_edited;
-        this.first_contact_date = first_contact_date;
-        this.note = note;
-        this.from_rlc = from_rlc;
-        this.client = client;
-        this.first_consultation = first_consultation;
-        this.contact = contact;
-        this.circumstances = circumstances;
-        this.consultant_team = consultant_team;
-        this.lawyer = lawyer;
-        this.related_persons = related_persons;
-        this.bamf_token = bamf_token;
-        this.foreign_token = foreign_token;
-        this.first_correspondence = first_correspondence;
-        this.next_steps = next_steps;
-        this.status_described = status_described;
-        this.additional_facts = additional_facts;
-    }
+  constructor(
+    id: number,
+    token: string,
+    last_contact_date: Date,
+    state: string,
+    tags: Tag[],
+    working_on_record: [number, string],
+    official_note: string,
+    public created_on: Date,
+    public last_edited: Date,
+    public first_contact_date: Date,
+    public note: string,
+    public from_rlc: number,
+    public client: number,
+    public first_consultation: Date,
+    public consultant_team: string,
+    public lawyer: string,
+    public related_persons: string,
+    public contact: string,
+    public bamf_token: string,
+    public foreign_token: string,
+    public first_correspondence: string,
+    public circumstances: string,
+    public next_steps: string,
+    public status_described: string,
+    public additional_facts: string
+  ) {
+    super(id, token, last_contact_date, state, token, tags, working_on_record, official_note, false);
+    this.created_on = created_on;
+    this.last_edited = last_edited;
+    this.first_contact_date = first_contact_date;
+    this.note = note;
+    this.from_rlc = from_rlc;
+    this.client = client;
+    this.first_consultation = first_consultation;
+    this.contact = contact;
+    this.circumstances = circumstances;
+    this.consultant_team = consultant_team;
+    this.lawyer = lawyer;
+    this.related_persons = related_persons;
+    this.bamf_token = bamf_token;
+    this.foreign_token = foreign_token;
+    this.first_correspondence = first_correspondence;
+    this.next_steps = next_steps;
+    this.status_described = status_described;
+    this.additional_facts = additional_facts;
+  }
 
-    static getFullRecordFromJson(json) {
-        return new FullRecord(
-            json.id,
-            json.record_token,
-            new Date(json.last_contact_date),
-            json.state,
-            Tag.getTagsFromJsonArray(json.tagged),
-            json.working_on_record,
-            json.official_note,
-            new Date(json.created_on),
-            new Date(json.last_edited),
-            new Date(json.first_contact_date),
-            json.note,
-            json.from_rlc,
-            json.client,
-            new Date(json.first_consultation),
-            json.consultant_team,
-            json.lawyer,
-            json.related_persons,
-            json.contact,
-            json.bamf_token,
-            json.foreign_token,
-            json.first_correspondence,
-            json.circumstances,
-            json.next_steps,
-            json.status_described,
-            json.additional_facts
-        );
-    }
+  static getFullRecordFromJson(json) {
+    return new FullRecord(
+      json.id,
+      json.record_token,
+      new Date(json.last_contact_date),
+      json.state,
+      Tag.getTagsFromJsonArray(json.tagged),
+      json.working_on_record,
+      json.official_note,
+      new Date(json.created_on),
+      new Date(json.last_edited),
+      new Date(json.first_contact_date),
+      json.note,
+      json.from_rlc,
+      json.client,
+      new Date(json.first_consultation),
+      json.consultant_team,
+      json.lawyer,
+      json.related_persons,
+      json.contact,
+      json.bamf_token,
+      json.foreign_token,
+      json.first_correspondence,
+      json.circumstances,
+      json.next_steps,
+      json.status_described,
+      json.additional_facts
+    );
+  }
 }
 
 export const isRestrictedRecord = (record): boolean => {
-    return !('note' in record);
+  return !('note' in record);
 };
