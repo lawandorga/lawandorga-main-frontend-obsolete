@@ -33,7 +33,6 @@ import { SharedSandboxService } from 'src/app/shared/services/shared-sandbox.ser
 @Component({
   selector: 'app-record',
   templateUrl: './record.component.html',
-  styleUrls: ['./record.component.scss'],
 })
 export class RecordComponent implements OnInit {
   id: string;
@@ -323,6 +322,7 @@ export class RecordComponent implements OnInit {
       .patch(`api/records/e_clients/${this.client.id}/`, data)
       .then((response: AxiosResponse<FullClient>) => {
         this.client = response.data;
+        this.coreSB.showSuccessSnackBar('Client saved successfully.');
       })
       .catch((error: AxiosError<DjangoError>) => (this.clientErrors = error.response.data));
   }
@@ -332,18 +332,18 @@ export class RecordComponent implements OnInit {
       .patch(`api/records/records/${this.record.id}/`, data)
       .then((response: AxiosResponse<FullRecord>) => {
         this.record = response.data;
+        this.coreSB.showSuccessSnackBar('Record saved successfully.');
       })
       .catch((error: AxiosError<DjangoError>) => (this.recordErrors = error.response.data));
   }
 
   onMessageSend(data: SubmitData): void {
-    console.log(data);
-
     void axios
       .post(`api/records/records/${this.record.id}/add_message/`, data)
       .then((response: AxiosResponse<Message>) => {
         this.messages = addToArray(this.messages, response.data) as Message[];
         this.messageData = { message: '' };
+        this.coreSB.showSuccessSnackBar('Message saved successfully.');
       })
       .catch((error: AxiosError<DjangoError>) => (this.messageErrors = error.response.data));
   }
@@ -362,6 +362,7 @@ export class RecordComponent implements OnInit {
       .then((response: AxiosResponse<RecordDocument[]>) => {
         this.documents = addToArray(this.documents, response.data[0]) as RecordDocument[];
         this.documentData = { file: '' };
+        this.coreSB.showSuccessSnackBar('File saved successfully.');
       })
       .catch((error: AxiosError<DjangoError>) => (this.messageErrors = error.response.data));
   }
