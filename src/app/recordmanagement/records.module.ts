@@ -17,57 +17,19 @@
  */
 
 import { NgModule } from '@angular/core';
-import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RecordsRoutingModule } from './records-routing.module';
 import { RecordsListComponent } from './pages/record-list/records-list.component';
-import { recordsReducer } from './store/records.reducers';
-import { RecordsEffects } from './store/effects/records.effects';
 import { CreateRecordComponent } from './pages/create-record/create-record.component';
-import { RecordsSandboxService } from './services/records-sandbox.service';
 import { SharedModule } from '../shared/shared.module';
 import { RecordComponent } from './pages/record/record.component';
-import { UsersFieldComponent } from './components/users-field/users-field.component';
-import { RecordsLoadingEffects } from './store/effects/records-loading.effects';
 import { RecordsPermitRequestsComponent } from './pages/records-permit-requests/records-permit-requests.component';
-import { RecordPermissionsProcessedPipe, RecordPermissionsRequestedPipe } from './pipes/record_permission.pipe';
-import { RecordDeletionRequestsComponent } from './components/record-deletion-requests/record-deletion-requests.component';
-import { RecordDeletionsProcessedPipe, RecordDeletionsRequestedPipe } from './pipes/record_deletions.pipe';
 import { RecordPoolComponent } from './pages/record-pool/record-pool.component';
-import { DeletionRequestsComponent } from './pages/deletion-requests/deletion-requests.component';
-import { RecordDocumentDeletionRequestsComponent } from './components/record-document-deletion-requests/record-document-deletion-requests.component';
 import { CoreModule } from '../core/core.module';
 
 @NgModule({
-  imports: [
-    RecordsRoutingModule,
-    SharedModule,
-    FormsModule,
-    ReactiveFormsModule,
-    StoreModule.forFeature('records', recordsReducer),
-    EffectsModule.forFeature([RecordsEffects, RecordsLoadingEffects]),
-    CoreModule,
-  ],
-  declarations: [
-    RecordsListComponent,
-    CreateRecordComponent,
-    RecordComponent,
-    UsersFieldComponent,
-    RecordsPermitRequestsComponent,
-    RecordPermissionsRequestedPipe,
-    RecordPermissionsProcessedPipe,
-    RecordDeletionRequestsComponent,
-    RecordDeletionsRequestedPipe,
-    RecordDeletionsProcessedPipe,
-    RecordPoolComponent,
-    DeletionRequestsComponent,
-    RecordDocumentDeletionRequestsComponent,
-  ],
+  imports: [RecordsRoutingModule, SharedModule, FormsModule, ReactiveFormsModule, CoreModule],
+  declarations: [RecordsListComponent, CreateRecordComponent, RecordComponent, RecordsPermitRequestsComponent, RecordPoolComponent],
   providers: [],
 })
-export class RecordsModule {
-  constructor(private recordSB: RecordsSandboxService) {
-    this.recordSB.startLoadingRecordStatics();
-  }
-}
+export class RecordsModule {}

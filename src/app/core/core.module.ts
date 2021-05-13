@@ -26,9 +26,7 @@ import { NgMaterialMultilevelMenuModule } from 'ng-material-multilevel-menu';
 import { CdkTableModule } from '@angular/cdk/table';
 import { QuillTestComponent } from './components/quill-test/quill-test.component';
 import { QuillModule } from 'ngx-quill';
-
 import { CoreRoutingModule } from './core-routing.module';
-import { ProfileComponent } from './pages/profile/profile.component';
 import { RegisterComponent } from './pages/auth/register/register.component';
 import { DashboardComponent } from './pages/Dashboard/dashboard.component';
 import { LoginComponent } from './pages/auth/login/login.component';
@@ -81,7 +79,6 @@ import { AddMemberComponent } from './components/add-member/add-member.component
     QuillModule,
   ],
   declarations: [
-    ProfileComponent,
     RegisterComponent,
     DashboardComponent,
     LoginComponent,

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { RecordsSandboxService } from '../../services/records-sandbox.service';
 import { CoreSandboxService } from 'src/app/core/services/core-sandbox.service';
 import axios, { DjangoError } from '../../../shared/services/axios';
 import { AxiosError, AxiosResponse } from 'axios';
@@ -39,7 +38,7 @@ export class RecordPoolComponent implements OnInit {
   ];
   pool: Pool;
 
-  constructor(private recordSB: RecordsSandboxService, private coreSB: CoreSandboxService) {}
+  constructor(private coreSB: CoreSandboxService) {}
 
   ngOnInit(): void {
     axios

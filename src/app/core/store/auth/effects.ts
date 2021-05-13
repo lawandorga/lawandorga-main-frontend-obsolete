@@ -27,19 +27,14 @@ import {
   SET_RLC,
   SET_USER,
   SET_USER_PERMISSIONS,
-  SET_USER_RECORD_STATES,
-  SET_USER_STATES,
   START_LOADING_RLC_SETTINGS,
 } from '../core.actions';
-import { AuthGuardService } from '../../services/auth-guard.service';
 import { FullUser } from '../../models/user.model';
-import { RecordsSandboxService } from '../../../recordmanagement/services/records-sandbox.service';
 import { CoreSandboxService } from '../../services/core-sandbox.service';
 import { HasPermission, Permission } from '../../models/permission.model';
 import { RestrictedRlc } from '../../models/rlc.model';
 import { AppSandboxService } from '../../services/app-sandbox.service';
 import { LOGIN_FRONT_URL } from '../../../statics/frontend_links.statics';
-import { State } from '../../models/state.model';
 
 @Injectable()
 export class AuthEffects {
@@ -47,8 +42,6 @@ export class AuthEffects {
     private actions: Actions,
     private http: HttpClient,
     private router: Router,
-    private guard: AuthGuardService,
-    private recordSB: RecordsSandboxService,
     private coreSB: CoreSandboxService,
     private appSB: AppSandboxService
   ) {}
@@ -121,7 +114,6 @@ export class AuthEffects {
     this.actions.pipe(
       ofType(SET_TOKEN),
       mergeMap(() => {
-        this.recordSB.startLoadingRecordStatics();
         return [];
       })
     )
@@ -133,7 +125,7 @@ export class AuthEffects {
       mergeMap((payload: { email: string }) =>
         this.http.post(FORGOT_PASSWORD_API_URL, { email: payload.email }).pipe(
           catchError((error) => {
-            this.recordSB.showError(error.error.detail);
+            this.coreSB.showErrorSnackBar(error.error.detail);
             return [];
           }),
           mergeMap((response) => {
@@ -157,7 +149,7 @@ export class AuthEffects {
           })
           .pipe(
             catchError((error) => {
-              this.recordSB.showError(error.error.detail);
+              this.coreSB.showErrorSnackBar(error.error.detail);
               return [];
             }),
             mergeMap((response) => {
@@ -181,7 +173,7 @@ export class AuthEffects {
             return [];
           }),
           catchError((error) => {
-            this.recordSB.showError(error.error.detail);
+            this.coreSB.showErrorSnackBar(error.error.detail);
             return [];
           })
         )

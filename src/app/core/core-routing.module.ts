@@ -19,7 +19,6 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { AuthGuardService } from './services/auth-guard.service';
-import { ProfileComponent } from './pages/profile/profile.component';
 import { DashboardComponent } from './pages/Dashboard/dashboard.component';
 import { LoginComponent } from './pages/auth/login/login.component';
 import { RegisterComponent } from './pages/auth/register/register.component';
@@ -41,11 +40,6 @@ import { StatisticsPageComponent } from './pages/statistics-page/statistics-page
 import { STATISTICS_FRONT_URL } from '../statics/frontend_links.statics';
 
 const apiRoutes: Routes = [
-  {
-    path: 'profile',
-    component: ProfileComponent,
-    canActivate: [AuthGuardService],
-  },
   {
     path: 'profiles',
     pathMatch: 'full',
