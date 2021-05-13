@@ -101,14 +101,6 @@ export class AuthEffects {
                 payload: RestrictedRlc.getRestrictedRlcFromJson(response.rlc),
               },
               {
-                type: SET_USER_STATES,
-                payload: State.getStatesFromJsonArray(response.user_states),
-              },
-              {
-                type: SET_USER_RECORD_STATES,
-                payload: State.getStatesFromJsonArray(response.user_record_states),
-              },
-              {
                 type: START_LOADING_RLC_SETTINGS,
               },
               {
