@@ -20,7 +20,6 @@ import { NgModule } from '@angular/core';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { RecordsRoutingModule } from './records-routing.module';
 import { RecordsListComponent } from './pages/record-list/records-list.component';
 import { recordsReducer } from './store/records.reducers';
@@ -36,60 +35,53 @@ import { UsersFieldComponent } from './components/users-field/users-field.compon
 import { RecordDocumentsListComponent } from './components/records/documents/record-documents-list/record-documents-list.component';
 import { RecordMessagesComponent } from './components/records/messages/record-messages/record-messages.component';
 import { RecordMessageItemComponent } from './components/records/messages/record-message-item/record-message-item.component';
-import { RecordsAddEffects } from './store/effects/records-add.effects';
 import { RecordsLoadingEffects } from './store/effects/records-loading.effects';
 import { RecordsPermitRequestsComponent } from './pages/records-permit-requests/records-permit-requests.component';
-import {
-    RecordPermissionsProcessedPipe,
-    RecordPermissionsRequestedPipe
-} from './pipes/record_permission.pipe';
+import { RecordPermissionsProcessedPipe, RecordPermissionsRequestedPipe } from './pipes/record_permission.pipe';
 import { RecordDocumentItemDetailComponent } from './components/records/documents/record-document-item-detail/record-document-item-detail.component';
 import { RecordDeletionRequestsComponent } from './components/record-deletion-requests/record-deletion-requests.component';
-import {
-    RecordDeletionsProcessedPipe,
-    RecordDeletionsRequestedPipe
-} from './pipes/record_deletions.pipe';
+import { RecordDeletionsProcessedPipe, RecordDeletionsRequestedPipe } from './pipes/record_deletions.pipe';
 import { RecordPoolComponent } from './pages/record-pool/record-pool.component';
 import { DeletionRequestsComponent } from './pages/deletion-requests/deletion-requests.component';
 import { RecordDocumentDeletionRequestsComponent } from './components/record-document-deletion-requests/record-document-deletion-requests.component';
 import { CoreModule } from '../core/core.module';
 
 @NgModule({
-    imports: [
-        RecordsRoutingModule,
-        SharedModule,
-        FormsModule,
-        ReactiveFormsModule,
-        StoreModule.forFeature('records', recordsReducer),
-        EffectsModule.forFeature([RecordsEffects, RecordsAddEffects, RecordsLoadingEffects]),
-        CoreModule
-    ],
-    declarations: [
-        RecordsListComponent,
-        CreateRecordComponent,
-        SelectClientDialogComponent,
-        RecordComponent,
-        FullRecordDetailComponent,
-        RestrictedRecordDetailComponent,
-        UsersFieldComponent,
-        RecordDocumentsListComponent,
-        RecordMessagesComponent,
-        RecordMessageItemComponent,
-        RecordsPermitRequestsComponent,
-        RecordPermissionsRequestedPipe,
-        RecordPermissionsProcessedPipe,
-        RecordDocumentItemDetailComponent,
-        RecordDeletionRequestsComponent,
-        RecordDeletionsRequestedPipe,
-        RecordDeletionsProcessedPipe,
-        RecordPoolComponent,
-        DeletionRequestsComponent,
-        RecordDocumentDeletionRequestsComponent
-    ],
-    providers: []
+  imports: [
+    RecordsRoutingModule,
+    SharedModule,
+    FormsModule,
+    ReactiveFormsModule,
+    StoreModule.forFeature('records', recordsReducer),
+    EffectsModule.forFeature([RecordsEffects, RecordsLoadingEffects]),
+    CoreModule,
+  ],
+  declarations: [
+    RecordsListComponent,
+    CreateRecordComponent,
+    SelectClientDialogComponent,
+    RecordComponent,
+    FullRecordDetailComponent,
+    RestrictedRecordDetailComponent,
+    UsersFieldComponent,
+    RecordDocumentsListComponent,
+    RecordMessagesComponent,
+    RecordMessageItemComponent,
+    RecordsPermitRequestsComponent,
+    RecordPermissionsRequestedPipe,
+    RecordPermissionsProcessedPipe,
+    RecordDocumentItemDetailComponent,
+    RecordDeletionRequestsComponent,
+    RecordDeletionsRequestedPipe,
+    RecordDeletionsProcessedPipe,
+    RecordPoolComponent,
+    DeletionRequestsComponent,
+    RecordDocumentDeletionRequestsComponent,
+  ],
+  providers: [],
 })
 export class RecordsModule {
-    constructor(private recordSB: RecordsSandboxService) {
-        this.recordSB.startLoadingRecordStatics();
-    }
+  constructor(private recordSB: RecordsSandboxService) {
+    this.recordSB.startLoadingRecordStatics();
+  }
 }
