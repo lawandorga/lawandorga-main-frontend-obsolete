@@ -1,51 +1,85 @@
-/*
- * law&orga - record and organization management software for refugee law clinics
- * Copyright (C) 2020  Dominik Walser
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>
- */
-
 import { Component, OnInit } from '@angular/core';
 import { RecordsSandboxService } from '../../services/records-sandbox.service';
-import { Observable } from 'rxjs';
+import { CoreSandboxService } from 'src/app/core/services/core-sandbox.service';
+import axios, { DjangoError } from '../../../shared/services/axios';
+import { AxiosError, AxiosResponse } from 'axios';
+import { NewRestrictedRecord } from '../../models/record.model';
+
+interface Pool {
+  type: string;
+  entries: Array<{
+    id: number;
+    enlisted: string;
+    consultant?: number;
+    record_key?: string;
+    record?: number;
+    yielder?: number;
+  }>;
+  number_of_own_enlistings: number;
+}
 
 @Component({
-    selector: 'app-record-pool',
-    templateUrl: './record-pool.component.html',
-    styleUrls: ['./record-pool.component.scss']
+  selector: 'app-record-pool',
+  templateUrl: './record-pool.component.html',
 })
 export class RecordPoolComponent implements OnInit {
-    consultants: number;
-    records: number;
-    users_enlistings: number;
+  consultants: number;
+  records: number;
+  users_enlistings: number;
 
-    constructor(private recordSB: RecordsSandboxService) {}
+  errors: DjangoError;
+  fields = [
+    {
+      label: 'Record',
+      tag: 'select',
+      name: 'record',
+      required: true,
+      options: [],
+    },
+  ];
+  pool: Pool;
 
-    ngOnInit() {
-        this.recordSB.startLoadingRecordPool();
-        this.recordSB.getPoolConsultants().subscribe((consultants: number) => {
-            this.consultants = consultants;
-        });
-        this.recordSB.getPoolRecords().subscribe((records: number) => {
-            this.records = records;
-        });
-        this.recordSB.getUsersPoolEnlistings().subscribe((own_enlistings: number) => {
-            this.users_enlistings = own_enlistings;
-        });
-    }
+  constructor(private recordSB: RecordsSandboxService, private coreSB: CoreSandboxService) {}
 
-    onEnlistClick() {
-        this.recordSB.startEnlistingPoolConsultant();
-    }
+  ngOnInit(): void {
+    axios
+      .get('api/records/records/')
+      .then((response: AxiosResponse<NewRestrictedRecord[]>) => {
+        this.fields[0].options = response.data
+          .filter((record) => record.access)
+          .map((record) => ({ name: record.record_token, id: record.id }));
+      })
+      .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
+
+    this.getPool();
+  }
+
+  getPool(): void {
+    axios
+      .get('api/records/record_pool/')
+      .then((response: AxiosResponse<Pool>) => (this.pool = response.data))
+      .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
+  }
+
+  onEnlistClick(): void {
+    axios
+      .post('api/records/pool_consultants/')
+      .then((response: AxiosResponse<{ action: string }>) => {
+        const message =
+          response.data.action === 'created' ? 'You enlisted successfully into the record pool.' : "You've been given a record";
+        this.coreSB.showSuccessSnackBar(message);
+        this.getPool();
+      })
+      .catch(() => this.coreSB.showErrorSnackBar('Ooops there seems to be an error. Please write an email to it@law-orga.de!'));
+  }
+
+  onYieldRecord(data: { record: number }): void {
+    axios
+      .post('api/records/pool_records/', { record: data.record })
+      .then(() => {
+        this.coreSB.showSuccessSnackBar('Record was added to the record pool.');
+        this.getPool();
+      })
+      .catch((error: AxiosError<DjangoError>) => (this.errors = error.response.data));
+  }
 }
