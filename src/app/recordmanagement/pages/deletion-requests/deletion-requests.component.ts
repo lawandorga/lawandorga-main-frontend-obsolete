@@ -18,35 +18,29 @@
 
 import { Component, OnInit } from '@angular/core';
 import {
-    PERMISSION_PROCESS_RECORD_DELETION_REQUESTS,
-    PERMISSION_PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS
+  PERMISSION_PROCESS_RECORD_DELETION_REQUESTS,
+  PERMISSION_PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS,
 } from '../../../statics/permissions.statics';
 import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
 
 @Component({
-    selector: 'app-deletion-requests',
-    templateUrl: './deletion-requests.component.html',
-    styleUrls: ['./deletion-requests.component.scss']
+  selector: 'app-deletion-requests',
+  templateUrl: './deletion-requests.component.html',
+  styleUrls: ['./deletion-requests.component.scss'],
 })
 export class DeletionRequestsComponent implements OnInit {
-    showRecordDeletionRequests = false;
-    showRecordDocumentDeletionRequests = false;
+  showRecordDeletionRequests = false;
+  showRecordDocumentDeletionRequests = false;
 
-    constructor(private coreSB: CoreSandboxService) {}
+  constructor(private coreSB: CoreSandboxService) {}
 
-    ngOnInit(): void {
-        this.coreSB.hasPermissionFromStringForOwnRlc(
-            PERMISSION_PROCESS_RECORD_DELETION_REQUESTS,
-            hasPermission => {
-                this.showRecordDeletionRequests = hasPermission;
-            }
-        );
+  ngOnInit(): void {
+    this.coreSB.hasPermissionFromStringForOwnRlc(PERMISSION_PROCESS_RECORD_DELETION_REQUESTS, (hasPermission) => {
+      this.showRecordDeletionRequests = hasPermission;
+    });
 
-        this.coreSB.hasPermissionFromStringForOwnRlc(
-            PERMISSION_PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS,
-            hasPermission => {
-                this.showRecordDocumentDeletionRequests = hasPermission;
-            }
-        );
-    }
+    this.coreSB.hasPermissionFromStringForOwnRlc(PERMISSION_PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS, (hasPermission) => {
+      this.showRecordDocumentDeletionRequests = hasPermission;
+    });
+  }
 }

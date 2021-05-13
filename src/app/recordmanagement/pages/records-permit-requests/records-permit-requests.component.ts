@@ -25,43 +25,36 @@ import { RestrictedUser } from '../../../core/models/user.model';
 import { GetProfileFrontUrl, GetRecordFrontUrl } from '../../../statics/frontend_links.statics';
 
 @Component({
-    selector: 'app-records-permit-requests',
-    templateUrl: './records-permit-requests.component.html',
-    styleUrls: ['./records-permit-requests.component.scss']
+  selector: 'app-records-permit-requests',
+  templateUrl: './records-permit-requests.component.html',
+  styleUrls: ['./records-permit-requests.component.scss'],
 })
 export class RecordsPermitRequestsComponent implements OnInit {
-    recordPermissionRequests: Observable<RecordPermissionRequest[]>;
+  recordPermissionRequests: Observable<RecordPermissionRequest[]>;
 
-    constructor(private recordSB: RecordsSandboxService, private router: Router) {}
+  constructor(private recordSB: RecordsSandboxService, private router: Router) {}
 
-    toProcessColumns = ['request_from', 'record', 'requested', 'state', 'accept'];
-    alreadyProcessedColumns = [
-        'request_from',
-        'record',
-        'requested',
-        'state',
-        'processor',
-        'processed_on'
-    ];
+  toProcessColumns = ['request_from', 'record', 'requested', 'state', 'accept'];
+  alreadyProcessedColumns = ['request_from', 'record', 'requested', 'state', 'processor', 'processed_on'];
 
-    ngOnInit() {
-        this.recordSB.startLoadingRecordPermissionRequests();
-        this.recordPermissionRequests = this.recordSB.getRecordPermissionRequests();
-    }
+  ngOnInit() {
+    this.recordSB.startLoadingRecordPermissionRequests();
+    this.recordPermissionRequests = this.recordSB.getRecordPermissionRequests();
+  }
 
-    permitRequest(request: RecordPermissionRequest) {
-        this.recordSB.admitRecordPermissionRequest(request);
-    }
+  permitRequest(request: RecordPermissionRequest) {
+    this.recordSB.admitRecordPermissionRequest(request);
+  }
 
-    declineRequest(request: RecordPermissionRequest) {
-        this.recordSB.declineRecordPermissionRequest(request);
-    }
+  declineRequest(request: RecordPermissionRequest) {
+    this.recordSB.declineRecordPermissionRequest(request);
+  }
 
-    onRequestClick(request: RecordPermissionRequest) {
-        this.router.navigateByUrl(GetRecordFrontUrl(request.record));
-    }
+  onRequestClick(request: RecordPermissionRequest) {
+    this.router.navigateByUrl(GetRecordFrontUrl(request.record));
+  }
 
-    onUserClick(user: RestrictedUser) {
-        this.router.navigateByUrl(GetProfileFrontUrl(user));
-    }
+  onUserClick(user: RestrictedUser) {
+    this.router.navigateByUrl(GetProfileFrontUrl(user));
+  }
 }

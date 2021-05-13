@@ -15,48 +15,32 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
-
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { HttpClient } from '@angular/common/http';
-import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
+import { catchError, map, mergeMap } from 'rxjs/operators';
 import { from } from 'rxjs';
-
 import {
   START_ADMITTING_RECORD_PERMISSION_REQUEST,
   START_DECLINING_RECORD_PERMISSION_REQUEST,
-  START_ENLISTING_POOL_CONSULTANT,
-  START_LOADING_RECORD_POOL,
-  START_LOADING_SPECIAL_RECORD,
   START_PROCESSING_RECORD_DELETION_REQUEST,
   START_REQUESTING_RECORD_DELETION,
   START_REQUESTING_RECORD_PERMISSION,
-  START_SAVING_RECORD,
-  START_SETTING_RECORD_DOCUMENT_TAGS,
-  START_YIELDING_RECORD,
   StartAdmittingRecordPermissionRequest,
   StartDecliningRecordPermissionRequest,
   StartProcessingRecordDeletionRequest,
   StartRequestingReadPermission,
   StartRequestingRecordDeletion,
-  StartSavingRecord,
-  StartSettingRecordDocumentTags,
-  StartYieldingRecord,
   UPDATE_RECORD_DELETION_REQUEST,
   UPDATE_RECORD_PERMISSION_REQUEST,
 } from '../actions/records.actions';
 import {
-  GetRecordDocumentApiUrl,
   GetRecordPermissionRequestApiUrl,
-  GetSpecialRecordApiURL,
-  POOL_CONSULTANT_API_URL,
-  POOL_RECORD_API_URL,
   PROCESS_RECORD_DELETIONS_API_URL,
   RECORD_DELETIONS_API_URL,
   RECORD_PERMISSIONS_LIST_API_URL,
 } from '../../../statics/api_urls.statics';
-import { FullRecord, RestrictedRecord } from '../../models/record.model';
-import { Tag } from '../../models/tag.model';
+import { RestrictedRecord } from '../../models/record.model';
 import { AppSandboxService } from '../../../core/services/app-sandbox.service';
 import { RecordsSandboxService } from '../../services/records-sandbox.service';
 import { RecordPermissionRequest } from '../../models/record_permission.model';
@@ -72,59 +56,6 @@ export class RecordsEffects {
     private appSB: AppSandboxService,
     private coreSB: CoreSandboxService
   ) {}
-
-  @Effect()
-  startSavingRecord = this.actions.pipe(
-    ofType(START_SAVING_RECORD),
-    map((action: StartSavingRecord) => {
-      return action.payload;
-    }),
-    switchMap((payload: { data: any; id: string }) => {
-      const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
-
-      return from(
-        this.http.patch(GetSpecialRecordApiURL(payload.id), payload.data, privateKeyPlaceholder).pipe(
-          catchError((error) => {
-            this.recordSB.showError(`error at saving records: ${error.error.detail}`);
-            return [];
-          }),
-          mergeMap((response: any) => {
-            this.recordSB.successfullySavedRecord(response);
-            return [{ type: START_LOADING_SPECIAL_RECORD, payload: payload.id }];
-          })
-        )
-      );
-    })
-  );
-
-  @Effect()
-  startSettingRecordDocumentTags = this.actions.pipe(
-    ofType(START_SETTING_RECORD_DOCUMENT_TAGS),
-    map((action: StartSettingRecordDocumentTags) => {
-      return action.payload;
-    }),
-    mergeMap((payload: { tags: Tag[]; document_id: string }) => {
-      return from(
-        this.http
-          .post(GetRecordDocumentApiUrl(payload.document_id), {
-            tag_ids: payload.tags,
-          })
-          .pipe(
-            catchError((error) => {
-              this.recordSB.showError(`error at loading records: ${error.error.detail}`);
-              return [];
-            }),
-            mergeMap((response: { error }) => {
-              if (response.error) {
-                this.recordSB.showError('sending error');
-                return [];
-              }
-              return [];
-            })
-          )
-      );
-    })
-  );
 
   @Effect()
   startRequestingRecordPermission = this.actions.pipe(
@@ -286,74 +217,6 @@ export class RecordsEffects {
               ];
             })
           )
-      );
-    })
-  );
-
-  @Effect()
-  startYieldingRecord = this.actions.pipe(
-    ofType(START_YIELDING_RECORD),
-    map((action: StartYieldingRecord) => {
-      return action.payload;
-    }),
-    mergeMap((payload: FullRecord) => {
-      const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
-      return from(
-        this.http
-          .post(
-            POOL_RECORD_API_URL,
-            {
-              record: payload.id,
-            },
-            privateKeyPlaceholder
-          )
-          .pipe(
-            catchError((error) => {
-              this.recordSB.showError(`error at yielding record: ${error.error.detail}`);
-              return [];
-            }),
-            mergeMap((response: { error }) => {
-              if (response.error) {
-                this.recordSB.showError('sending error');
-                return [];
-              }
-              if (response['action'] === 'created') {
-                this.coreSB.showSuccessSnackBar('record added to record pool');
-              } else if (response['action'] === 'matched') {
-                this.coreSB.showSuccessSnackBar('record matched with consultant from pool, you are no longer responsible for this record');
-              }
-              return [{ type: START_LOADING_RECORD_POOL }];
-            })
-          )
-      );
-    })
-  );
-
-  @Effect()
-  startEnlistingPoolConsultant = this.actions.pipe(
-    ofType(START_ENLISTING_POOL_CONSULTANT),
-    switchMap(() => {
-      return from(
-        this.http.post(POOL_CONSULTANT_API_URL, {}).pipe(
-          catchError((error) => {
-            this.recordSB.showError(`error at enlisting to consultant pool: ${error.error.detail}`);
-            return [];
-          }),
-          mergeMap((response) => {
-            if (response.error) {
-              this.recordSB.showError('sending error');
-              return [];
-            }
-            if (response['action'] === 'created') {
-              this.coreSB.showSuccessSnackBar(
-                `you enlisted successfully to consultant pool. You are enlisted ${response.number_of_enlistings} times`
-              );
-            } else if (response['action'] === 'matched') {
-              this.coreSB.showSuccessSnackBar('you matched successfully, you are now responsible for another record');
-            }
-            return [{ type: START_LOADING_RECORD_POOL }];
-          })
-        )
       );
     })
   );

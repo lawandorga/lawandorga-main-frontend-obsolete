@@ -25,20 +25,13 @@ import { RecordsListComponent } from './pages/record-list/records-list.component
 import { recordsReducer } from './store/records.reducers';
 import { RecordsEffects } from './store/effects/records.effects';
 import { CreateRecordComponent } from './pages/create-record/create-record.component';
-import { SelectClientDialogComponent } from './components/select-client-dialog/select-client-dialog.component';
 import { RecordsSandboxService } from './services/records-sandbox.service';
 import { SharedModule } from '../shared/shared.module';
 import { RecordComponent } from './pages/record/record.component';
-import { FullRecordDetailComponent } from './components/records/full-record-detail/full-record-detail.component';
-import { RestrictedRecordDetailComponent } from './components/records/restricted-record-detail/restricted-record-detail.component';
 import { UsersFieldComponent } from './components/users-field/users-field.component';
-import { RecordDocumentsListComponent } from './components/records/documents/record-documents-list/record-documents-list.component';
-import { RecordMessagesComponent } from './components/records/messages/record-messages/record-messages.component';
-import { RecordMessageItemComponent } from './components/records/messages/record-message-item/record-message-item.component';
 import { RecordsLoadingEffects } from './store/effects/records-loading.effects';
 import { RecordsPermitRequestsComponent } from './pages/records-permit-requests/records-permit-requests.component';
 import { RecordPermissionsProcessedPipe, RecordPermissionsRequestedPipe } from './pipes/record_permission.pipe';
-import { RecordDocumentItemDetailComponent } from './components/records/documents/record-document-item-detail/record-document-item-detail.component';
 import { RecordDeletionRequestsComponent } from './components/record-deletion-requests/record-deletion-requests.component';
 import { RecordDeletionsProcessedPipe, RecordDeletionsRequestedPipe } from './pipes/record_deletions.pipe';
 import { RecordPoolComponent } from './pages/record-pool/record-pool.component';
@@ -59,18 +52,11 @@ import { CoreModule } from '../core/core.module';
   declarations: [
     RecordsListComponent,
     CreateRecordComponent,
-    SelectClientDialogComponent,
     RecordComponent,
-    FullRecordDetailComponent,
-    RestrictedRecordDetailComponent,
     UsersFieldComponent,
-    RecordDocumentsListComponent,
-    RecordMessagesComponent,
-    RecordMessageItemComponent,
     RecordsPermitRequestsComponent,
     RecordPermissionsRequestedPipe,
     RecordPermissionsProcessedPipe,
-    RecordDocumentItemDetailComponent,
     RecordDeletionRequestsComponent,
     RecordDeletionsRequestedPipe,
     RecordDeletionsProcessedPipe,
