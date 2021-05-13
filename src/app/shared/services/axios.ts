@@ -3,7 +3,9 @@ import { RestrictedGroup } from 'src/app/core/models/group.model';
 import { HasPermission, Permission } from 'src/app/core/models/permission.model';
 import { FullUser } from 'src/app/core/models/user.model';
 import { Message } from 'src/app/recordmanagement/models/message.model';
+import { RecordDeletionRequest } from 'src/app/recordmanagement/models/record_deletion_request.model';
 import { RecordDocument } from 'src/app/recordmanagement/models/record_document.model';
+import { RecordPermissionRequest } from 'src/app/recordmanagement/models/record_permission.model';
 import { environment } from '../../../environments/environment';
 
 // types
@@ -50,7 +52,16 @@ export interface BaseModel {
   id: number | string;
   [key: string]: unknown;
 }
-export type DjangoModel = BaseModel | FullUser | HasPermission | Permission | RestrictedGroup | Message | RecordDocument;
+export type DjangoModel =
+  | BaseModel
+  | FullUser
+  | HasPermission
+  | Permission
+  | RestrictedGroup
+  | Message
+  | RecordDocument
+  | RecordPermissionRequest
+  | RecordDeletionRequest;
 
 export interface SubmitData {
   [key: string]: string | number;
@@ -63,5 +74,11 @@ export const removeFromArray = (array: DjangoModel[], id: number): DjangoModel[]
 
 export const addToArray = (array: DjangoModel[], data: DjangoModel): DjangoModel[] => {
   array.push(data);
+  return [...array];
+};
+
+export const replaceInArray = (array: DjangoModel[], data: DjangoModel): DjangoModel[] => {
+  const index = array.findIndex((item) => item.id === data.id);
+  array.splice(index, 1, data);
   return [...array];
 };

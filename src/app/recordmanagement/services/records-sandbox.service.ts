@@ -25,23 +25,14 @@ import { HttpClient } from '@angular/common/http';
 
 import { RecordsState } from '../store/records.reducers';
 import {
-  AddRecordDocument,
-  ResetFullClientInformation,
-  SetSpecialRecordRequestState,
-  StartAddingNewRecordMessage,
   StartAdmittingRecordPermissionRequest,
   StartDecliningRecordPermissionRequest,
   StartLoadingRecordDeletionRequests,
   StartLoadingRecordPermissionRequests,
   StartLoadingRecordStatics,
   StartProcessingRecordDeletionRequest,
-  StartRequestingReadPermission,
-  StartRequestingRecordDeletion,
-  StartSettingRecordDocumentTags,
 } from '../store/actions/records.actions';
-import { Tag } from '../models/tag.model';
 import { CoreSandboxService } from '../../core/services/core-sandbox.service';
-import { RestrictedRecord } from '../models/record.model';
 import { StorageService } from '../../shared/services/storage.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { RecordPermissionRequest } from '../models/record_permission.model';

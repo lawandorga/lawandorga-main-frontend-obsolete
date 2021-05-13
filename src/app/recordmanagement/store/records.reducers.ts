@@ -18,33 +18,22 @@
 
 import { RestrictedRecord } from '../models/record.model';
 import {
-    ADD_RECORD_DOCUMENT,
-    ADD_RECORD_MESSAGE,
-    RecordsActions,
-    RESET_FULL_CLIENT_INFORMATION,
-    RESET_POSSIBLE_CLIENTS,
-    RESET_SPECIAL_RECORD_REQUEST_STATE,
-    SET_CONSULTANTS,
-    SET_COUNTRY_STATES,
-    SET_ORIGIN_COUNTRIES,
-    SET_POOL_CONSULTANTS,
-    SET_POOL_RECORDS,
-    SET_POSSIBLE_CLIENTS,
-    SET_RECORD_DELETION_REQUESTS,
-    SET_RECORD_DOCUMENT_TAGS,
-    SET_RECORD_PERMISSION_REQUESTS,
-    SET_RECORD_STATES,
-    SET_RECORD_TAGS,
-    SET_RECORDS,
-    SET_SPECIAL_CLIENT,
-    SET_SPECIAL_ORIGIN_COUNTRY,
-    SET_SPECIAL_RECORD,
-    SET_SPECIAL_RECORD_DOCUMENTS,
-    SET_SPECIAL_RECORD_MESSAGES,
-    SET_SPECIAL_RECORD_REQUEST_STATE,
-    SET_USERS_POOL_ENLISTINGS,
-    UPDATE_RECORD_DELETION_REQUEST,
-    UPDATE_RECORD_PERMISSION_REQUEST
+  RecordsActions,
+  SET_RECORD_DELETION_REQUESTS,
+  SET_RECORD_DOCUMENT_TAGS,
+  SET_RECORD_PERMISSION_REQUESTS,
+  SET_RECORD_STATES,
+  SET_RECORD_TAGS,
+  SET_RECORDS,
+  SET_SPECIAL_CLIENT,
+  SET_SPECIAL_ORIGIN_COUNTRY,
+  SET_SPECIAL_RECORD,
+  SET_SPECIAL_RECORD_DOCUMENTS,
+  SET_SPECIAL_RECORD_MESSAGES,
+  SET_SPECIAL_RECORD_REQUEST_STATE,
+  SET_USERS_POOL_ENLISTINGS,
+  UPDATE_RECORD_DELETION_REQUEST,
+  UPDATE_RECORD_PERMISSION_REQUEST,
 } from './actions/records.actions';
 import { OriginCountry } from '../models/country.model';
 import { Tag } from '../models/tag.model';
@@ -58,248 +47,89 @@ import { State } from '../../core/models/state.model';
 import { RecordDeletionRequest } from '../models/record_deletion_request.model';
 
 export interface RecordsState {
-    special_record: {
-        record: RestrictedRecord;
-        client: FullClient;
-        origin_country: OriginCountry;
-        record_documents: { [id: number]: RecordDocument };
-        record_messages: { [id: number]: RecordMessage };
-        request_state: string;
-    };
-    admin: {
-        record_permission_requests: { [id: number]: RecordPermissionRequest };
-        record_deletion_requests: { [id: number]: RecordDeletionRequest };
-    };
-    records: RestrictedRecord[];
-    consultants: { [id: number]: RestrictedUser };
-    origin_countries: { [id: number]: OriginCountry };
-    record_tags: { [id: number]: Tag };
-    record_document_tags: { [id: number]: Tag };
-    record_states: State[];
-    country_states: State[];
-    possible_clients: { [id: number]: FullClient };
-    pool_records: number;
-    pool_consultants: number;
-    users_pool_enlistings: number;
+  special_record: {
+    record: RestrictedRecord;
+    client: FullClient;
+    origin_country: OriginCountry;
+    record_documents: { [id: number]: RecordDocument };
+    record_messages: { [id: number]: RecordMessage };
+    request_state: string;
+  };
+  admin: {
+    record_permission_requests: { [id: number]: RecordPermissionRequest };
+    record_deletion_requests: { [id: number]: RecordDeletionRequest };
+  };
+  records: RestrictedRecord[];
+  consultants: { [id: number]: RestrictedUser };
+  origin_countries: { [id: number]: OriginCountry };
+  record_tags: { [id: number]: Tag };
+  record_document_tags: { [id: number]: Tag };
+  record_states: State[];
+  country_states: State[];
+  possible_clients: { [id: number]: FullClient };
+  pool_records: number;
+  pool_consultants: number;
+  users_pool_enlistings: number;
 }
 
 export const initialState: RecordsState = {
-    special_record: {
-        record: null,
-        client: null,
-        origin_country: null,
-        record_documents: {},
-        record_messages: {},
-        request_state: null
-    },
-    admin: {
-        record_permission_requests: {},
-        record_deletion_requests: {}
-    },
-    records: null,
-    consultants: {},
-    origin_countries: {},
-    record_tags: {},
-    record_document_tags: {},
-    record_states: [],
-    country_states: [],
-    possible_clients: {},
-    pool_records: 0,
-    pool_consultants: 0,
-    users_pool_enlistings: 0
+  special_record: {
+    record: null,
+    client: null,
+    origin_country: null,
+    record_documents: {},
+    record_messages: {},
+    request_state: null,
+  },
+  admin: {
+    record_permission_requests: {},
+    record_deletion_requests: {},
+  },
+  records: null,
+  consultants: {},
+  origin_countries: {},
+  record_tags: {},
+  record_document_tags: {},
+  record_states: [],
+  country_states: [],
+  possible_clients: {},
+  pool_records: 0,
+  pool_consultants: 0,
+  users_pool_enlistings: 0,
 };
 
 export function recordsReducer(state = initialState, action: RecordsActions) {
-    switch (action.type) {
-        case SET_SPECIAL_RECORD:
-            return {
-                ...state,
-                special_record: {
-                    ...state.special_record,
-                    record: action.payload
-                }
-            };
-        case SET_SPECIAL_CLIENT:
-            return {
-                ...state,
-                special_record: {
-                    ...state.special_record,
-                    client: action.payload
-                }
-            };
-        case SET_SPECIAL_ORIGIN_COUNTRY:
-            return {
-                ...state,
-                special_record: {
-                    ...state.special_record,
-                    origin_country: action.payload
-                }
-            };
-        case SET_RECORDS:
-            return {
-                ...state,
-                records: action.payload
-            };
-        case SET_CONSULTANTS:
-            return {
-                ...state,
-                consultants: getIdObjects(action.payload)
-            };
-        case SET_ORIGIN_COUNTRIES:
-            return {
-                ...state,
-                origin_countries: getIdObjects(action.payload)
-            };
-        case SET_RECORD_TAGS:
-            return {
-                ...state,
-                record_tags: getIdObjects(action.payload)
-            };
-        case SET_RECORD_STATES:
-            return {
-                ...state,
-                record_states: getObjectsByField(action.payload, 'abbreviation')
-            };
-        case SET_COUNTRY_STATES:
-            return {
-                ...state,
-                country_states: getObjectsByField(action.payload, 'abbreviation')
-            };
-        case SET_POSSIBLE_CLIENTS:
-            return {
-                ...state,
-                possible_clients: getIdObjects(action.payload)
-            };
-        case RESET_POSSIBLE_CLIENTS:
-            return {
-                ...state,
-                possible_clients: []
-            };
-        case SET_SPECIAL_RECORD_DOCUMENTS:
-            return {
-                ...state,
-                special_record: {
-                    ...state.special_record,
-                    record_documents: getIdObjects(action.payload)
-                }
-            };
-        case ADD_RECORD_DOCUMENT:
-            return {
-                ...state,
-                special_record: {
-                    ...state.special_record,
-                    record_documents: {
-                        ...state.special_record.record_documents,
-                        [action.payload.id]: action.payload
-                    }
-                }
-            };
-        case ADD_RECORD_MESSAGE:
-            return {
-                ...state,
-                special_record: {
-                    ...state.special_record,
-                    record_messages: {
-                        ...state.special_record.record_messages,
-                        [action.payload.id]: action.payload
-                    }
-                }
-            };
-        case SET_SPECIAL_RECORD_MESSAGES:
-            return {
-                ...state,
-                special_record: {
-                    ...state.special_record,
-                    record_messages: getIdObjects(action.payload)
-                }
-            };
-        case RESET_FULL_CLIENT_INFORMATION:
-            return {
-                ...state,
-                special_record: {
-                    record: null,
-                    client: null,
-                    origin_country: null,
-                    record_documents: [],
-                    record_messages: [],
-                    request_state: null
-                }
-            };
-        case SET_RECORD_DOCUMENT_TAGS:
-            return {
-                ...state,
-                record_document_tags: getIdObjects(action.payload)
-            };
-        case SET_RECORD_PERMISSION_REQUESTS:
-            return {
-                ...state,
-                admin: {
-                    ...state.admin,
-                    record_permission_requests: getIdObjects(action.payload)
-                }
-            };
-        case UPDATE_RECORD_PERMISSION_REQUEST:
-            return {
-                ...state,
-                admin: {
-                    ...state.admin,
-                    record_permission_requests: {
-                        ...state.admin.record_permission_requests,
-                        [action.payload.id]: action.payload
-                    }
-                }
-            };
-        case SET_SPECIAL_RECORD_REQUEST_STATE:
-            return {
-                ...state,
-                special_record: {
-                    ...state.special_record,
-                    request_state: action.payload
-                }
-            };
-        case RESET_SPECIAL_RECORD_REQUEST_STATE:
-            return {
-                ...state,
-                special_record: {
-                    ...state.special_record,
-                    request_state: null
-                }
-            };
-        case SET_RECORD_DELETION_REQUESTS:
-            return {
-                ...state,
-                admin: {
-                    ...state.admin,
-                    record_deletion_requests: getIdObjects(action.payload)
-                }
-            };
-        case UPDATE_RECORD_DELETION_REQUEST:
-            return {
-                ...state,
-                admin: {
-                    ...state.admin,
-                    record_deletion_requests: {
-                        ...state.admin.record_deletion_requests,
-                        [action.payload.id]: action.payload
-                    }
-                }
-            };
-        case SET_POOL_CONSULTANTS:
-            return {
-                ...state,
-                pool_consultants: action.payload
-            };
-        case SET_POOL_RECORDS:
-            return {
-                ...state,
-                pool_records: action.payload
-            };
-        case SET_USERS_POOL_ENLISTINGS:
-            return {
-                ...state,
-                users_pool_enlistings: action.payload
-            };
-        default:
-            return state;
-    }
+  switch (action.type) {
+    case SET_RECORD_PERMISSION_REQUESTS:
+      return {
+        ...state,
+        admin: {
+          ...state.admin,
+          record_permission_requests: getIdObjects(action.payload),
+        },
+      };
+
+    case SET_RECORD_DELETION_REQUESTS:
+      return {
+        ...state,
+        admin: {
+          ...state.admin,
+          record_deletion_requests: getIdObjects(action.payload),
+        },
+      };
+    case UPDATE_RECORD_DELETION_REQUEST:
+      return {
+        ...state,
+        admin: {
+          ...state.admin,
+          record_deletion_requests: {
+            ...state.admin.record_deletion_requests,
+            [action.payload.id]: action.payload,
+          },
+        },
+      };
+
+    default:
+      return state;
+  }
 }

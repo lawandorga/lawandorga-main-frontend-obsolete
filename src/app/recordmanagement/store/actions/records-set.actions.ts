@@ -49,136 +49,136 @@ export const SET_POOL_RECORDS = 'SET_POOL_RECORDS';
 export const SET_USERS_POOL_ENLISTINGS = 'SET_USERS_POOL_ENLISTINGS';
 
 export class SetRecords implements Action {
-    readonly type = SET_RECORDS;
+  readonly type = SET_RECORDS;
 
-    constructor(public payload: Array<RestrictedRecord>) {}
+  constructor(public payload: Array<RestrictedRecord>) {}
 }
 
 export class SetSpecialRecordDocuments implements Action {
-    readonly type = SET_SPECIAL_RECORD_DOCUMENTS;
+  readonly type = SET_SPECIAL_RECORD_DOCUMENTS;
 
-    constructor(public payload: RecordDocument[]) {}
+  constructor(public payload: RecordDocument[]) {}
 }
 
 export class SetConsultants implements Action {
-    readonly type = SET_CONSULTANTS;
+  readonly type = SET_CONSULTANTS;
 
-    constructor(public payload: RestrictedUser[]) {}
+  constructor(public payload: RestrictedUser[]) {}
 }
 
 export class SetOriginCountries implements Action {
-    readonly type = SET_ORIGIN_COUNTRIES;
+  readonly type = SET_ORIGIN_COUNTRIES;
 
-    constructor(public payload: OriginCountry[]) {}
+  constructor(public payload: OriginCountry[]) {}
 }
 
 export class SetSpecialClient implements Action {
-    readonly type = SET_SPECIAL_CLIENT;
+  readonly type = SET_SPECIAL_CLIENT;
 
-    constructor(public payload: FullClient) {}
+  constructor(public payload: FullClient) {}
 }
 
 export class SetSpecialOriginCountry implements Action {
-    readonly type = SET_SPECIAL_ORIGIN_COUNTRY;
+  readonly type = SET_SPECIAL_ORIGIN_COUNTRY;
 
-    constructor(public payload: OriginCountry) {}
+  constructor(public payload: OriginCountry) {}
 }
 
 export class SetSpecialRecord implements Action {
-    readonly type = SET_SPECIAL_RECORD;
+  readonly type = SET_SPECIAL_RECORD;
 
-    constructor(public payload: RestrictedRecord) {}
+  constructor(public payload: RestrictedRecord) {}
 }
 
 export class SetRecordTags implements Action {
-    readonly type = SET_RECORD_TAGS;
+  readonly type = SET_RECORD_TAGS;
 
-    constructor(public payload: Tag[]) {}
+  constructor(public payload: Tag[]) {}
 }
 
 export class SetRecordStates implements Action {
-    readonly type = SET_RECORD_STATES;
+  readonly type = SET_RECORD_STATES;
 
-    constructor(public payload: State[]) {}
+  constructor(public payload: State[]) {}
 }
 
 export class SetCountryStates implements Action {
-    readonly type = SET_COUNTRY_STATES;
+  readonly type = SET_COUNTRY_STATES;
 
-    constructor(public payload: State[]) {}
+  constructor(public payload: State[]) {}
 }
 
 export class SetPossibleClients implements Action {
-    readonly type = SET_POSSIBLE_CLIENTS;
+  readonly type = SET_POSSIBLE_CLIENTS;
 
-    constructor(public payload: FullClient[]) {}
+  constructor(public payload: FullClient[]) {}
 }
 
 export class SetRecordDocumentTags implements Action {
-    readonly type = SET_RECORD_DOCUMENT_TAGS;
+  readonly type = SET_RECORD_DOCUMENT_TAGS;
 
-    constructor(public payload: Tag[]) {}
+  constructor(public payload: Tag[]) {}
 }
 
 export class SetRecordMessages implements Action {
-    readonly type = SET_SPECIAL_RECORD_MESSAGES;
+  readonly type = SET_SPECIAL_RECORD_MESSAGES;
 
-    constructor(public payload: RecordMessage[]) {}
+  constructor(public payload: RecordMessage[]) {}
 }
 
 export class SetRecordPermissionRequests implements Action {
-    readonly type = SET_RECORD_PERMISSION_REQUESTS;
+  readonly type = SET_RECORD_PERMISSION_REQUESTS;
 
-    constructor(public payload: RecordPermissionRequest[]) {}
+  constructor(public payload: RecordPermissionRequest[]) {}
 }
 
 export class SetSpecialRecordRequestState implements Action {
-    readonly type = SET_SPECIAL_RECORD_REQUEST_STATE;
+  readonly type = SET_SPECIAL_RECORD_REQUEST_STATE;
 
-    constructor(public payload: string) {}
+  constructor(public payload: string) {}
 }
 
 export class SetRecordDeletionRequests implements Action {
-    readonly type = SET_RECORD_DELETION_REQUESTS;
+  readonly type = SET_RECORD_DELETION_REQUESTS;
 
-    constructor(public payload: RecordDeletionRequest[]) {}
+  constructor(public payload: RecordDeletionRequest[]) {}
 }
 
 export class SetPoolRecords implements Action {
-    readonly type = SET_POOL_RECORDS;
+  readonly type = SET_POOL_RECORDS;
 
-    constructor(public payload: number) {}
+  constructor(public payload: number) {}
 }
 
 export class SetPoolConsultants implements Action {
-    readonly type = SET_POOL_CONSULTANTS;
+  readonly type = SET_POOL_CONSULTANTS;
 
-    constructor(public payload: number) {}
+  constructor(public payload: number) {}
 }
 
 export class SetUsersPoolEnlistings implements Action {
-    readonly type = SET_USERS_POOL_ENLISTINGS;
+  readonly type = SET_USERS_POOL_ENLISTINGS;
 
-    constructor(public payload: number) {}
+  constructor(public payload: number) {}
 }
 
 export type RecordsSetActions =
-    | SetRecords
-    | SetConsultants
-    | SetOriginCountries
-    | SetRecordTags
-    | SetRecordStates
-    | SetSpecialClient
-    | SetSpecialOriginCountry
-    | SetCountryStates
-    | SetPossibleClients
-    | SetSpecialRecord
-    | SetSpecialRecordDocuments
-    | SetRecordMessages
-    | SetRecordDocumentTags
-    | SetRecordPermissionRequests
-    | SetSpecialRecordRequestState
-    | SetRecordDeletionRequests
-    | SetPoolRecords
-    | SetPoolConsultants
-    | SetUsersPoolEnlistings;
+  | SetRecords
+  | SetConsultants
+  | SetOriginCountries
+  | SetRecordTags
+  | SetRecordStates
+  | SetSpecialClient
+  | SetSpecialOriginCountry
+  | SetCountryStates
+  | SetPossibleClients
+  | SetSpecialRecord
+  | SetSpecialRecordDocuments
+  | SetRecordMessages
+  | SetRecordDocumentTags
+  | SetRecordPermissionRequests
+  | SetSpecialRecordRequestState
+  | SetRecordDeletionRequests
+  | SetPoolRecords
+  | SetPoolConsultants
+  | SetUsersPoolEnlistings;

@@ -1,60 +1,84 @@
-/*
- * law&orga - record and organization management software for refugee law clinics
- * Copyright (C) 2019  Dominik Walser
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>
- */
-
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Router } from '@angular/router';
-import { RecordsSandboxService } from '../../services/records-sandbox.service';
 import { RecordPermissionRequest } from '../../models/record_permission.model';
-import { RestrictedUser } from '../../../core/models/user.model';
-import { GetProfileFrontUrl, GetRecordFrontUrl } from '../../../statics/frontend_links.statics';
+import axios, { DjangoError, replaceInArray } from '../../../shared/services/axios';
+import { AxiosError, AxiosResponse } from 'axios';
+import { CoreSandboxService } from 'src/app/core/services/core-sandbox.service';
+import { RecordDeletionRequest } from '../../models/record_deletion_request.model';
 
 @Component({
   selector: 'app-records-permit-requests',
   templateUrl: './records-permit-requests.component.html',
-  styleUrls: ['./records-permit-requests.component.scss'],
 })
 export class RecordsPermitRequestsComponent implements OnInit {
-  recordPermissionRequests: Observable<RecordPermissionRequest[]>;
+  constructor(private coreSB: CoreSandboxService) {}
 
-  constructor(private recordSB: RecordsSandboxService, private router: Router) {}
+  requestsDisplayedColumns = ['requestor', 'record', 'date', 'state', 'processor', 'processDate', 'action'];
+  requests: RecordPermissionRequest[];
+  deletionRequests: RecordDeletionRequest[];
 
-  toProcessColumns = ['request_from', 'record', 'requested', 'state', 'accept'];
-  alreadyProcessedColumns = ['request_from', 'record', 'requested', 'state', 'processor', 'processed_on'];
+  ngOnInit(): void {
+    axios
+      .get('api/records/e_record_permission_requests/')
+      .then((response: AxiosResponse<RecordPermissionRequest[]>) => (this.requests = response.data))
+      .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
 
-  ngOnInit() {
-    this.recordSB.startLoadingRecordPermissionRequests();
-    this.recordPermissionRequests = this.recordSB.getRecordPermissionRequests();
+    axios
+      .get('api/records/record_deletion_requests/')
+      .then((response: AxiosResponse<RecordDeletionRequest[]>) => (this.deletionRequests = response.data))
+      .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
   }
 
-  permitRequest(request: RecordPermissionRequest) {
-    this.recordSB.admitRecordPermissionRequest(request);
+  getRequestState(state: string): string {
+    switch (state) {
+      case 'gr':
+        return 'Granted';
+      case 're':
+        return 'Requested';
+      case 'de':
+        return 'Declined';
+      default:
+        return 'Unknown';
+    }
   }
 
-  declineRequest(request: RecordPermissionRequest) {
-    this.recordSB.declineRecordPermissionRequest(request);
+  getRequestStateColor(state: string): string {
+    switch (state) {
+      case 'gr':
+        return 'darkgreen';
+      case 're':
+        return '';
+      case 'de':
+        return 'darkorange';
+      default:
+        return 'red';
+    }
   }
 
-  onRequestClick(request: RecordPermissionRequest) {
-    this.router.navigateByUrl(GetRecordFrontUrl(request.record));
+  onRequestAction(id: number, action: string): void {
+    const data = {
+      action: action,
+      id: id,
+    };
+    axios
+      .post('api/records/e_record_permission_requests/', data)
+      .then(
+        (response: AxiosResponse<RecordPermissionRequest>) =>
+          (this.requests = replaceInArray(this.requests, response.data) as RecordPermissionRequest[])
+      )
+      .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
   }
 
-  onUserClick(user: RestrictedUser) {
-    this.router.navigateByUrl(GetProfileFrontUrl(user));
+  onDeletionRequestAction(id: number, action: string): void {
+    const data = {
+      action: action,
+      request_id: id,
+    };
+    axios
+      .post('api/records/record_deletion_requests/', data)
+      .then(
+        (response: AxiosResponse<RecordDeletionRequest>) =>
+          (this.deletionRequests = replaceInArray(this.deletionRequests, response.data) as RecordDeletionRequest[])
+      )
+      .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
   }
 }

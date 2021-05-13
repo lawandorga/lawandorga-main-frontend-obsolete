@@ -127,14 +127,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
       icon: 'lock',
       items: [
         {
+          label: 'Records Admin',
+          icon: 'folder',
+          link: RECORDS_PERMIT_REQUEST_FRONT_URL,
+        },
+        {
           label: 'Statistics',
           icon: 'analytics',
           link: STATISTICS_FRONT_URL,
-        },
-        {
-          label: 'Permit Requests',
-          icon: 'offline_pin',
-          link: RECORDS_PERMIT_REQUEST_FRONT_URL,
         },
         {
           label: 'Permissions',

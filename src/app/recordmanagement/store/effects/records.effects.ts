@@ -45,17 +45,10 @@ import { AppSandboxService } from '../../../core/services/app-sandbox.service';
 import { RecordsSandboxService } from '../../services/records-sandbox.service';
 import { RecordPermissionRequest } from '../../models/record_permission.model';
 import { RecordDeletionRequest } from '../../models/record_deletion_request.model';
-import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
 
 @Injectable()
 export class RecordsEffects {
-  constructor(
-    private actions: Actions,
-    private http: HttpClient,
-    private recordSB: RecordsSandboxService,
-    private appSB: AppSandboxService,
-    private coreSB: CoreSandboxService
-  ) {}
+  constructor(private actions: Actions, private http: HttpClient, private recordSB: RecordsSandboxService) {}
 
   @Effect()
   startRequestingRecordPermission = this.actions.pipe(
