@@ -20,8 +20,8 @@ import { FullUser } from '../../models/user.model';
 import { CoreSandboxService } from '../../services/core-sandbox.service';
 import { GetProfilesDetailApiUrl, GetProfilesUnlockApiUrl, PROFILES_API_URL } from '../../../statics/api_urls.statics';
 import { SharedSandboxService } from '../../../shared/services/shared-sandbox.service';
-import axios, { DjangoError, removeFromArray } from '../../../shared/services/axios';
-import { AxiosError, AxiosResponse } from 'axios';
+import { removeFromArray } from '../../../shared/services/axios';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-profiles-list',
@@ -31,17 +31,14 @@ export class ProfilesListComponent implements OnInit {
   displayedColumns: string[] = ['name', 'email', 'phone_number', 'actions'];
   users: FullUser[];
 
-  constructor(private coreSB: CoreSandboxService, private sharedSB: SharedSandboxService) {}
+  constructor(private coreSB: CoreSandboxService, private sharedSB: SharedSandboxService, private http: HttpClient) {}
 
   ngOnInit(): void {
-    axios
-      .get(PROFILES_API_URL)
-      .then((response: AxiosResponse<FullUser[]>) => (this.users = response.data))
-      .catch((err) => console.log(err));
+    this.http.get(PROFILES_API_URL).subscribe((response: FullUser[]) => (this.users = response));
   }
 
-  updateUsers(response: AxiosResponse<FullUser>): void {
-    const user = response.data;
+  updateUsers(response: FullUser): void {
+    const user = response;
     const index = this.users.findIndex((localUser) => localUser.id === user.id);
     if (index !== -1) {
       this.users.splice(index, 1, user);
@@ -50,17 +47,13 @@ export class ProfilesListComponent implements OnInit {
   }
 
   onUnlockClick(id: number): void {
-    axios
-      .post(GetProfilesUnlockApiUrl(id), {})
-      .then((response) => this.updateUsers(response))
-      .catch((err: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(err.response.data.detail));
+    this.http.post(GetProfilesUnlockApiUrl(id), {}).subscribe((response: FullUser) => this.updateUsers(response));
   }
 
   onDeActiveClick(user: FullUser): void {
-    axios
+    this.http
       .patch(GetProfilesDetailApiUrl(parseInt(user.id)), { is_active: !user.is_active })
-      .then((response) => this.updateUsers(response))
-      .catch((err: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(err.response.data.detail));
+      .subscribe((response: FullUser) => this.updateUsers(response));
   }
 
   getUserDetailUrl(id: number): string {
@@ -77,12 +70,9 @@ export class ProfilesListComponent implements OnInit {
       },
       (remove: boolean) => {
         if (remove) {
-          axios
-            .delete(GetProfilesDetailApiUrl(id), {})
-            .then(() => {
-              this.users = removeFromArray(this.users, id) as FullUser[];
-            })
-            .catch((err: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(err.response.data.detail));
+          this.http.delete(GetProfilesDetailApiUrl(id)).subscribe(() => {
+            this.users = removeFromArray(this.users, id) as FullUser[];
+          });
         }
       }
     );

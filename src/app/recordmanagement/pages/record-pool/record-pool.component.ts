@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CoreSandboxService } from 'src/app/core/services/core-sandbox.service';
-import axios, { DjangoError } from '../../../shared/services/axios';
-import { AxiosError, AxiosResponse } from 'axios';
+import { DjangoError } from '../../../shared/services/axios';
 import { NewRestrictedRecord } from '../../models/record.model';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 interface Pool {
   type: string;
@@ -38,47 +38,35 @@ export class RecordPoolComponent implements OnInit {
   ];
   pool: Pool;
 
-  constructor(private coreSB: CoreSandboxService) {}
+  constructor(private coreSB: CoreSandboxService, private http: HttpClient) {}
 
   ngOnInit(): void {
-    axios
-      .get('api/records/records/')
-      .then((response: AxiosResponse<NewRestrictedRecord[]>) => {
-        this.fields[0].options = response.data
-          .filter((record) => record.access)
-          .map((record) => ({ name: record.record_token, id: record.id }));
-      })
-      .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
+    this.http.get('api/records/records/').subscribe((response: NewRestrictedRecord[]) => {
+      this.fields[0].options = response.filter((record) => record.access).map((record) => ({ name: record.record_token, id: record.id }));
+    });
 
     this.getPool();
   }
 
   getPool(): void {
-    axios
-      .get('api/records/record_pool/')
-      .then((response: AxiosResponse<Pool>) => (this.pool = response.data))
-      .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
+    this.http.get('api/records/record_pool/').subscribe((response: Pool) => (this.pool = response));
   }
 
   onEnlistClick(): void {
-    axios
-      .post('api/records/pool_consultants/')
-      .then((response: AxiosResponse<{ action: string }>) => {
-        const message =
-          response.data.action === 'created' ? 'You enlisted successfully into the record pool.' : "You've been given a record";
-        this.coreSB.showSuccessSnackBar(message);
-        this.getPool();
-      })
-      .catch(() => this.coreSB.showErrorSnackBar('Ooops there seems to be an error. Please write an email to it@law-orga.de!'));
+    this.http.post('api/records/pool_consultants/', {}).subscribe((response: { action: string }) => {
+      const message = response.action === 'created' ? 'You enlisted successfully into the record pool.' : "You've been given a record";
+      this.coreSB.showSuccessSnackBar(message);
+      this.getPool();
+    });
   }
 
   onYieldRecord(data: { record: number }): void {
-    axios
-      .post('api/records/pool_records/', { record: data.record })
-      .then(() => {
+    this.http.post('api/records/pool_records/', { record: data.record }).subscribe(
+      () => {
         this.coreSB.showSuccessSnackBar('Record was added to the record pool.');
         this.getPool();
-      })
-      .catch((error: AxiosError<DjangoError>) => (this.errors = error.response.data));
+      },
+      (error: HttpErrorResponse) => (this.errors = error.error as DjangoError)
+    );
   }
 }

@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import axios from '../../../shared/services/axios';
-import { AxiosResponse } from 'axios';
 import { FullUser } from '../../models/user.model';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'add-member',
@@ -12,12 +11,9 @@ export class AddMemberComponent implements OnInit {
   members: FullUser[];
   selectedMember: number;
 
-  constructor(public dialogRef: MatDialogRef<AddMemberComponent>) {}
+  constructor(public dialogRef: MatDialogRef<AddMemberComponent>, public http: HttpClient) {}
 
   ngOnInit(): void {
-    void axios
-      .get('api/profiles/')
-      .then((response: AxiosResponse<FullUser[]>) => (this.members = response.data))
-      .catch();
+    this.http.get('api/profiles/').subscribe((response: FullUser[]) => (this.members = response));
   }
 }

@@ -21,10 +21,10 @@ import { OriginCountry } from '../../models/country.model';
 import { RestrictedUser } from '../../../core/models/user.model';
 import { Tag } from '../../models/tag.model';
 import { DjangoError } from 'src/app/shared/services/axios';
-import axios from '../../../shared/services/axios';
 import { CoreSandboxService } from 'src/app/core/services/core-sandbox.service';
-import { AxiosError, AxiosResponse } from 'axios';
 import { Router } from '@angular/router';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { FullRecord } from '../../models/record.model';
 
 @Component({
   selector: 'app-add-record',
@@ -106,34 +106,23 @@ export class CreateRecordComponent implements OnInit {
     },
   ];
 
-  constructor(private coreSB: CoreSandboxService, private router: Router) {}
+  constructor(private coreSB: CoreSandboxService, private router: Router, private http: HttpClient) {}
 
   ngOnInit(): void {
-    axios
-      .get('api/records/origin_countries/')
-      .then((response: AxiosResponse<OriginCountry[]>) => (this.fields[2].options = response.data))
-      .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
-
-    axios
-      .get('api/records/record_tags/')
-      .then((response: AxiosResponse<OriginCountry[]>) => (this.fields[8].options = response.data))
-      .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
-
-    axios
-      .get('api/records/consultants/')
-      .then((response: AxiosResponse<RestrictedUser[]>) => (this.fields[7].options = response.data))
-      .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
+    this.http.get('api/records/origin_countries/').subscribe((response: OriginCountry[]) => (this.fields[2].options = response));
+    this.http.get('api/records/record_tags/').subscribe((response: OriginCountry[]) => (this.fields[8].options = response));
+    this.http.get('api/records/consultants/').subscribe((response: RestrictedUser[]) => (this.fields[7].options = response));
   }
 
-  onSend(values: Object): void {  // eslint-disable-line
-    axios
-      .post('api/records/records/', values)
-      .then(() => {
+  onSend(values: FullRecord): void {  // eslint-disable-line
+    this.http.post('api/records/records/', values).subscribe(
+      () => {
         this.coreSB.showSuccessSnackBar('Record was created.');
         void this.router.navigate(['/records/']);
-      })
-      .catch((error: AxiosError<DjangoError>) => {
-        this.errors = error.response.data;
-      });
+      },
+      (error: HttpErrorResponse) => {
+        this.errors = error.error as DjangoError;
+      }
+    );
   }
 }

@@ -1,31 +1,29 @@
 import { Component, OnInit } from '@angular/core';
 import { RecordPermissionRequest } from '../../models/record_permission.model';
-import axios, { DjangoError, replaceInArray } from '../../../shared/services/axios';
-import { AxiosError, AxiosResponse } from 'axios';
+import { replaceInArray } from '../../../shared/services/axios';
 import { CoreSandboxService } from 'src/app/core/services/core-sandbox.service';
 import { RecordDeletionRequest } from '../../models/record_deletion_request.model';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-records-permit-requests',
   templateUrl: './records-permit-requests.component.html',
 })
 export class RecordsPermitRequestsComponent implements OnInit {
-  constructor(private coreSB: CoreSandboxService) {}
+  constructor(private coreSB: CoreSandboxService, private http: HttpClient) {}
 
   requestsDisplayedColumns = ['requestor', 'record', 'date', 'state', 'processor', 'processDate', 'action'];
   requests: RecordPermissionRequest[];
   deletionRequests: RecordDeletionRequest[];
 
   ngOnInit(): void {
-    axios
+    this.http
       .get('api/records/e_record_permission_requests/')
-      .then((response: AxiosResponse<RecordPermissionRequest[]>) => (this.requests = response.data))
-      .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
+      .subscribe((response: RecordPermissionRequest[]) => (this.requests = response));
 
-    axios
+    this.http
       .get('api/records/record_deletion_requests/')
-      .then((response: AxiosResponse<RecordDeletionRequest[]>) => (this.deletionRequests = response.data))
-      .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
+      .subscribe((response: RecordDeletionRequest[]) => (this.deletionRequests = response));
   }
 
   getRequestState(state: string): string {
@@ -59,13 +57,11 @@ export class RecordsPermitRequestsComponent implements OnInit {
       action: action,
       id: id,
     };
-    axios
+    this.http
       .post('api/records/e_record_permission_requests/', data)
-      .then(
-        (response: AxiosResponse<RecordPermissionRequest>) =>
-          (this.requests = replaceInArray(this.requests, response.data) as RecordPermissionRequest[])
-      )
-      .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
+      .subscribe(
+        (response: RecordPermissionRequest) => (this.requests = replaceInArray(this.requests, response) as RecordPermissionRequest[])
+      );
   }
 
   onDeletionRequestAction(id: number, action: string): void {
@@ -73,12 +69,11 @@ export class RecordsPermitRequestsComponent implements OnInit {
       action: action,
       request_id: id,
     };
-    axios
-      .post('api/records/record_deletion_requests/', data)
-      .then(
-        (response: AxiosResponse<RecordDeletionRequest>) =>
-          (this.deletionRequests = replaceInArray(this.deletionRequests, response.data) as RecordDeletionRequest[])
-      )
-      .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
+    this.http
+      .post('api/records/process_record_deletion_request/', data)
+      .subscribe(
+        (response: RecordDeletionRequest) =>
+          (this.deletionRequests = replaceInArray(this.deletionRequests, response) as RecordDeletionRequest[])
+      );
   }
 }

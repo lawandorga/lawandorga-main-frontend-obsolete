@@ -43,7 +43,6 @@
     "@typescript-eslint/parser": "^4.22.0",
     "autoprefixer": "^10.2.5",
     "aws-sdk": "^2.889.0",
-    "axios": "^0.21.1",
     "codelyzer": "^6.0.0",
     "core-js": "^3.10.2",
     "env-cmd": "^10.1.0",

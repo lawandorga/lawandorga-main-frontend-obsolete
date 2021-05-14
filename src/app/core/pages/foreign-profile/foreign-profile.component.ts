@@ -20,11 +20,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { CoreSandboxService } from '../../services/core-sandbox.service';
 import { FullUser } from '../../models/user.model';
-import axios, { DjangoError, addToArray, removeFromArray } from '../../../shared/services/axios';
-import { AxiosError, AxiosResponse } from 'axios';
+import { DjangoError, addToArray, removeFromArray } from '../../../shared/services/axios';
 import { HasPermission } from '../../models/permission.model';
 import { AddPermissionComponent } from '../../components/add-permission/add-permission.component';
 import { MatDialog } from '@angular/material/dialog';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-foreign-profile',
@@ -74,31 +74,25 @@ export class ForeignProfileComponent implements OnInit {
     },
   ];
 
-  constructor(private coreSB: CoreSandboxService, private route: ActivatedRoute, public dialog: MatDialog) {}
+  constructor(private coreSB: CoreSandboxService, private route: ActivatedRoute, public dialog: MatDialog, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
       this.id = params['id'] as number;
-      axios
-        .get(`api/profiles/${this.id}/`)
-        .then((response: AxiosResponse<FullUser>) => (this.user = response.data))
-        .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
+      this.http.get(`api/profiles/${this.id}/`).subscribe((response: FullUser) => (this.user = response));
 
-      axios
-        .get(`api/profiles/${this.id}/permissions/`)
-        .then((response: AxiosResponse<HasPermission[]>) => (this.permissions = response.data))
-        .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
+      this.http.get(`api/profiles/${this.id}/permissions/`).subscribe((response: HasPermission[]) => (this.permissions = response));
     });
   }
 
   onSend(values: Object): void { // eslint-disable-line
-    void axios
-      .patch(`api/profiles/${this.id}/`, values)
-      .then((response: AxiosResponse<FullUser>) => {
-        this.user = response.data;
+    void this.http.patch(`api/profiles/${this.id}/`, values).subscribe(
+      (response: FullUser) => {
+        this.user = response;
         this.coreSB.showSuccessSnackBar('User information saved.');
-      })
-      .catch((error: AxiosError) => (this.errors = error.response.data)); // eslint-disable-line
+      },
+      (error: HttpErrorResponse) => (this.errors = error.error as DjangoError)
+    );
   }
 
   getPermissionSource(permission: HasPermission): string {
@@ -113,12 +107,9 @@ export class ForeignProfileComponent implements OnInit {
   }
 
   onRemovePermission(id: number): void {
-    void axios
-      .delete(`api/has_permission/${id}/`)
-      .then(() => {
-        this.permissions = removeFromArray(this.permissions, id) as HasPermission[];
-      })
-      .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
+    void this.http.delete(`api/has_permission/${id}/`).subscribe(() => {
+      this.permissions = removeFromArray(this.permissions, id) as HasPermission[];
+    });
   }
 
   onAddPermission(): void {
@@ -126,12 +117,9 @@ export class ForeignProfileComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: number) => {
       if (result)
-        axios
+        this.http
           .post('api/has_permission/', { permission: result, user_has_permission: this.id })
-          .then(
-            (response: AxiosResponse<HasPermission>) => (this.permissions = addToArray(this.permissions, response.data) as HasPermission[])
-          )
-          .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
+          .subscribe((response: HasPermission) => (this.permissions = addToArray(this.permissions, response) as HasPermission[]));
     });
   }
 }

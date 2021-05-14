@@ -22,57 +22,49 @@ import { AuthState } from '../store/auth/reducers';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { catchError, switchMap, take } from 'rxjs/operators';
-import { AppSandboxService } from './app-sandbox.service';
 import { CoreSandboxService } from './core-sandbox.service';
 import { Logout } from '../store/auth/actions';
+import { environment } from '../../../environments/environment';
+import { DjangoError } from 'src/app/shared/services/axios';
+import { AppState } from 'src/app/app.state';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private store: Store<AuthState>, private appSB: AppSandboxService, private coreSB: CoreSandboxService) {}
+  constructor(private store: Store<AppState>, private coreSB: CoreSandboxService) {}
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return this.store
-      .select((state) => state['auth'])
-      .pipe(
-        take(1),
-        switchMap((authState: AuthState) => {
-          let newHeaders = req.headers;
-          newHeaders = newHeaders.append('Authorization', 'Token ' + authState.token);
-          if (newHeaders.get('private-key')) {
-            newHeaders = newHeaders.delete('private-key');
-            let priv_key = authState.users_private_key;
-            priv_key = priv_key.replace(/(?:\r\n|\r|\n)/g, '<linebreak>');
-            newHeaders = newHeaders.append('private-key', priv_key);
-          }
-          const clonedRequest = req.clone({ headers: newHeaders });
+    return this.store.select('auth').pipe(
+      take(1),
+      switchMap((authState: AuthState) => {
+        let newHeaders = req.headers;
+        if (authState.authenticated && authState.token && authState.users_private_key) {
+          newHeaders = newHeaders.set('Authorization', 'Token ' + authState.token);
+          newHeaders = newHeaders.set('private-key', authState.users_private_key.replace(/(?:\r\n|\r|\n)/g, '<linebreak>'));
+        }
 
-          return next.handle(clonedRequest).pipe(
-            catchError((error: HttpErrorResponse, caught) => {
-              // there is an error with the client's connection
-              if (error.error instanceof ErrorEvent || error.error instanceof ProgressEvent) {
-                this.coreSB.showErrorSnackBar('Error');
-              }
-              // the backend returned an unsuccessful response code
-              else {
-                // if the key is not valid anymore log the user out
-                if (error.status === 401) {
-                  // this.appSB.saveLocation();
-                  this.store.dispatch(Logout());
-                  this.coreSB.showErrorSnackBar('You were logged out, please login again.');
-                }
-                // if the backend returned a message show that message
-                else {
-                  if (error.error.message) {
-                    this.coreSB.showErrorSnackBar(error.error.message);
-                  } else if (error.error.detail) {
-                    this.coreSB.showErrorSnackBar(error.error.detail);
-                  }
-                }
-              }
-              throw error;
-            })
-          );
-        })
-      );
+        const clonedRequest = req.clone({ headers: newHeaders, url: `${environment.apiUrl}${req.url}` });
+
+        return next.handle(clonedRequest).pipe(
+          catchError((error: HttpErrorResponse) => {
+            // check if the backend returned an unsuccessful response code
+            if (error.status === 401) {
+              // the key is not valid anymore log the user out
+              this.store.dispatch(Logout());
+              this.coreSB.showErrorSnackBar('You were logged out, please login again.');
+            }
+            // if the backend returned a message show that message
+            else if (error.status === 400 || error.status === 403 || error.status === 405) {
+              const djangoError = error.error as DjangoError;
+              this.coreSB.showErrorSnackBar(djangoError.detail);
+            } else {
+              this.coreSB.showErrorSnackBar('Error');
+            }
+            // throw the error so that a form might be able to handle it accordingly
+            throw error;
+          })
+        );
+      })
+    );
   }
 }

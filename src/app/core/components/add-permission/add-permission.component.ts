@@ -1,8 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Permission } from '../../models/permission.model';
-import axios from '../../../shared/services/axios';
-import { AxiosResponse } from 'axios';
 
 @Component({
   selector: 'add-permission',
@@ -12,13 +11,10 @@ export class AddPermissionComponent implements OnInit {
   permissions: Permission[];
   selectedPermission: number;
 
-  constructor(public dialogRef: MatDialogRef<AddPermissionComponent>) {}
+  constructor(public dialogRef: MatDialogRef<AddPermissionComponent>, private http: HttpClient) {}
 
   ngOnInit(): void {
-    void axios
-      .get(`api/permissions/`)
-      .then((response: AxiosResponse<Permission[]>) => (this.permissions = response.data))
-      .catch();
+    this.http.get(`api/permissions/`).subscribe((response: Permission[]) => (this.permissions = response));
   }
 
   onNoClick(): void {
