@@ -120,7 +120,7 @@ export class CreateRecordComponent implements OnInit {
       .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
 
     axios
-      .get('api/records/consultants')
+      .get('api/records/consultants/')
       .then((response: AxiosResponse<RestrictedUser[]>) => (this.fields[7].options = response.data))
       .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
   }
