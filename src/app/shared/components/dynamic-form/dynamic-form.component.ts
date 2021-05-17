@@ -25,9 +25,10 @@ import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
   templateUrl: './dynamic-form.component.html',
 })
 export class DynamicFormComponent implements OnInit, OnChanges {
-  @Input() fields: [DynamicField];
+  @Input() fields: DynamicField[];
   @Input() data: Object; // eslint-disable-line
   @Input() errors: Object; // eslint-disable-line
+  @Input() button = 'Save';
   @Output() send = new EventEmitter();
   form: FormGroup;
   controls: { [key: string]: FormControl } = {};
@@ -58,22 +59,4 @@ export class DynamicFormComponent implements OnInit, OnChanges {
     this.errors = null;
     this.send.emit(this.form.value);
   }
-
-  // onFileChange(event) {
-  //   const reader = new FileReader();
-
-  //   if (event.target.files && event.target.files.length) {
-  //     const [file] = event.target.files;
-  //     reader.readAsDataURL(file);
-
-  //     reader.onload = () => {
-  //       this.form.patchValue({
-  //         file: reader.result,
-  //       });
-
-  //       // need to run CD since file load runs outside of zone
-  //       this.cd.markForCheck();
-  //     };
-  //   }
-  // }
 }

@@ -16,39 +16,27 @@
   ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
   -->
 
-<div class="root-container">
-    <div class="app__main-container">
-        <mat-toolbar class="root-toolbar">
-            <div class="root-toolbar_left">
-                <button mat-icon-button (click)="toggleNav()">
-                    <mat-icon>menu</mat-icon>
-                </button>
-                <img src="/assets/img/rlc_intranet_logo.png" alt="RLC App" class="is_clickable"
-                    (click)="redirectToMainPage()" />
-                <h1 (click)="redirectToMainPage()" class="is_clickable root-toolbar_text">
-                    Law & Orga
-                </h1>
-            </div>
-        </mat-toolbar>
 
-        <mat-sidenav-container class="sidenav-container">
-            <mat-sidenav #snav [opened]="'true'" [mode]="'side'" fixedTopGap="56" *ngIf="authenticated">
-                <mat-nav-list>
-                    <app-sidebar></app-sidebar>
-                </mat-nav-list>
-            </mat-sidenav>
-
-            <mat-sidenav-content>
-                <router-outlet></router-outlet>
-            </mat-sidenav-content>
-
-        </mat-sidenav-container>
+<mat-toolbar class="root-toolbar">
+    <div class="root-toolbar_left">
+        <button mat-icon-button (click)="toggleNav()">
+            <mat-icon>menu</mat-icon>
+        </button>
+        <img src="/assets/img/rlc_intranet_logo.png" alt="RLC App" class="is_clickable"
+            (click)="redirectToMainPage()" />
+        <h1 (click)="redirectToMainPage()" class="is_clickable root-toolbar_text">
+            Law & Orga
+        </h1>
     </div>
+</mat-toolbar>
 
-    <div class="app__additional-link-container" *ngIf="!authenticated">
-        <nav class="app__nav-links-container">
-            <a routerLink="{{ legalNoticeUrl }}">Impressum</a>
-            <a href="{{ privacyStatementUrl }}">Datenschutzerklärung</a>
-        </nav>
-    </div>
-</div>
+<mat-sidenav-container style="position: absolute; top: 64px; left: 0; bottom: 0; right:0;">
+    <mat-sidenav #snav [opened]="'true'" [mode]="'side'" fixedTopGap="56" *ngIf="authenticated">
+        <mat-nav-list>
+            <app-sidebar></app-sidebar>
+        </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <router-outlet></router-outlet>
+    </mat-sidenav-content>
+</mat-sidenav-container>

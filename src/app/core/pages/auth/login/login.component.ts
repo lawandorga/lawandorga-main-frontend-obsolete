@@ -18,13 +18,13 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { isDevMode } from '@angular/core';
 import { AppSandboxService } from '../../../services/app-sandbox.service';
-import { FORGOT_PASSWORD_FRONT_URL, MAIN_PAGE_FRONT_URL, REGISTER_FRONT_URL } from '../../../../statics/frontend_links.statics';
+import { MAIN_PAGE_FRONT_URL } from '../../../../statics/frontend_links.statics';
 import { CoreSandboxService } from '../../../services/core-sandbox.service';
 import { Store } from '@ngrx/store';
 import { TryLogin } from '../../../store/auth/actions';
+import { Article } from 'src/app/core/models/article';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -32,48 +32,52 @@ import { TryLogin } from '../../../store/auth/actions';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  loginForm: FormGroup;
+  fields = [
+    {
+      label: 'E-Mail',
+      type: 'email',
+      tag: 'input',
+      name: 'email',
+      required: true,
+    },
+    {
+      label: 'Password',
+      type: 'password',
+      tag: 'input',
+      name: 'password',
+      required: true,
+    },
+  ];
+  articles: Article[];
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private appSB: AppSandboxService,
     private coreSB: CoreSandboxService,
-    private store: Store
+    private store: Store,
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
     if (this.appSB.isAuthenticated()) {
-      this.router.navigate([MAIN_PAGE_FRONT_URL]);
-    }
-
-    this.loginForm = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required]),
-    });
-    if (isDevMode()) {
-      this.loginForm.controls['email'].setValue('dummy@rlcm.de');
-      this.loginForm.controls['password'].setValue('qwe123');
+      void this.router.navigate([MAIN_PAGE_FRONT_URL]);
     }
 
     // if an activation link was used try to activate the user
     // url: activate-user/:id/:token/
     this.route.params.subscribe((params: Params) => {
-      const token: string = params['token'];
-      const userId: number = params['userid'];
+      const token: string = params['token'] as string;
+      const userId: number = params['userid'] as number;
       if (token && userId) this.coreSB.startCheckingUserActivationLink(userId, token);
     });
+
+    this.http.get('api/articles/').subscribe((response: Article[]) => (this.articles = response));
   }
 
-  onLogInClick(): void {
-    this.store.dispatch(TryLogin({ username: this.loginForm.value.email, password: this.loginForm.value.password }));
-  }
+  onSend(data: { email: string; password: string }): void {
+    console.log(data);
 
-  onRegisterClick(): void {
-    this.router.navigate([REGISTER_FRONT_URL]);
-  }
-
-  onForgotPasswordClick(): void {
-    this.router.navigate([FORGOT_PASSWORD_FRONT_URL]);
+    this.store.dispatch(TryLogin({ username: data.email, password: data.password }));
   }
 }

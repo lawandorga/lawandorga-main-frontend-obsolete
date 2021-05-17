@@ -12,7 +12,7 @@
                     </dynamic-input>
                 </div>
             </div>
-            <button type="submit" mat-raised-button color="primary">Save</button>
+            <button type="submit" mat-raised-button color="primary">{{ button }}</button>
         </form>
     </div>
     <div *ngIf="errors" style="margin-top: 8px;">{{ errors | json }}</div>
