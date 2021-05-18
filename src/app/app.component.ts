@@ -28,7 +28,6 @@ import { LEGAL_NOTICE_FRONT_URL, MAIN_PAGE_FRONT_URL, PRIVACY_STATEMENT_FRONT_UR
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
   @ViewChild('snav')
