@@ -234,8 +234,7 @@ export class RecordComponent implements OnInit {
   messageFields = [
     {
       label: 'Message',
-      type: 'text',
-      tag: 'input',
+      tag: 'textarea',
       name: 'message',
       required: false,
     },

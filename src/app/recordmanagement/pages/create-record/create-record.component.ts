@@ -74,14 +74,13 @@ export class CreateRecordComponent implements OnInit {
       type: 'text',
       tag: 'input',
       name: 'record_token',
-      required: false,
+      required: true,
     },
     {
       label: 'Record Contact Date',
       type: 'text',
       tag: 'datepicker',
       name: 'first_contact_date',
-      required: false,
     },
     {
       label: 'Record Consultants',

@@ -30,12 +30,12 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 
 export interface DynamicField {
   label: string;
-  tag: string;
-  type: string;
+  tag?: string;
+  type?: string;
   name: string;
-  value: string | number;
-  required: boolean;
-  options: Array<{ id: number; name: string }>;
+  value?: string | number;
+  required?: boolean;
+  options?: Array<{ id: number; name: string }>;
 }
 
 @Component({
@@ -44,14 +44,14 @@ export interface DynamicField {
 })
 export class DynamicInputComponent {
   @Input() label: DynamicField['label'];
-  @Input() tag: DynamicField['tag'];
-  @Input() type: DynamicField['type'];
-  @Input() value: DynamicField['value'];
+  @Input() tag: DynamicField['tag'] = 'input';
+  @Input() type: DynamicField['type'] = 'text';
+  @Input() value: DynamicField['value'] = null;
   @Input() name: DynamicField['name'];
-  @Input() required: DynamicField['required'];
+  @Input() required: DynamicField['required'] = false;
   @Input() errors: DjangoError;
   @Input() control: FormControl;
-  @Input() options: DynamicField['options'];
+  @Input() options: DynamicField['options'] = [];
 
   matcher = new MyErrorStateMatcher();
 }

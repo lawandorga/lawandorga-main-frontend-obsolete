@@ -5,6 +5,10 @@
     <ng-container *ngIf="tag === 'input'">
         <input matInput [type]="type" [name]="name" [id]="name" [required]="required" [formControl]="control">
     </ng-container>
+    <!-- textarea -->
+    <ng-container *ngIf="tag === 'textarea'">
+        <textarea matInput [name]="name" [id]="name" [required]="required" [formControl]="control"></textarea>
+    </ng-container>
     <!-- file -->
     <ng-container *ngIf="tag === 'file'">
         <ngx-mat-file-input [formControl]="control" [id]="name" [required]="required">

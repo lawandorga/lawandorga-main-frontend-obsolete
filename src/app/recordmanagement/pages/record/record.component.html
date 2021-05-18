@@ -80,7 +80,7 @@
                 <b>{{ message.sender ? message.sender.name : 'Deleted user' }}:</b>
                 <i>{{ message.created_on|date:'dd.MM.yyyy HH:mm' }}</i>
               </div>
-              <p style="margin-top: 2px; margin-bottom: 0;">{{ message.message }}</p>
+              <p class="whitespace-pre" style="margin-top: 2px; margin-bottom: 0;">{{ message.message }}</p>
             </div>
           </mat-list-item>
           <mat-list-item style="height: auto; padding-top: 16px;">
