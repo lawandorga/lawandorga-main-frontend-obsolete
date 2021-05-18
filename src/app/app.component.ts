@@ -19,11 +19,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { AuthState } from './core/store/auth/reducers';
-import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
 import { AppSandboxService } from './core/services/app-sandbox.service';
-import { LEGAL_NOTICE_FRONT_URL, MAIN_PAGE_FRONT_URL, PRIVACY_STATEMENT_FRONT_URL } from './statics/frontend_links.statics';
+import { LEGAL_NOTICE_FRONT_URL, PRIVACY_STATEMENT_FRONT_URL } from './statics/frontend_links.statics';
+import { AppState } from './app.state';
 
 @Component({
   selector: 'app-root',
@@ -32,26 +30,13 @@ import { LEGAL_NOTICE_FRONT_URL, MAIN_PAGE_FRONT_URL, PRIVACY_STATEMENT_FRONT_UR
 export class AppComponent implements OnInit {
   @ViewChild('snav')
   snav;
-
-  authenticated: Observable<boolean>;
-
+  authenticated: boolean;
   privacyStatementUrl = PRIVACY_STATEMENT_FRONT_URL;
   legalNoticeUrl = LEGAL_NOTICE_FRONT_URL;
 
-  constructor(private router: Router, private appSB: AppSandboxService, private store: Store<AuthState>) {
+  constructor(private router: Router, private appSB: AppSandboxService, private store: Store<AppState>) {
     appSB.startApp();
-    store.pipe(select((state: any) => state.auth.authenticated)).subscribe((authenticated) => (this.authenticated = authenticated));
-  }
-
-  isAuthenticated(): boolean {
-    let isAuthenticated = false;
-    this.store
-      .pipe(
-        take(1),
-        select((state: any) => state.auth.authenticated)
-      )
-      .subscribe((authenticated) => (isAuthenticated = authenticated));
-    return isAuthenticated;
+    store.pipe(select((state: AppState) => state.auth.authenticated)).subscribe((authenticated) => (this.authenticated = authenticated));
   }
 
   ngOnInit(): void {
@@ -63,9 +48,5 @@ export class AppComponent implements OnInit {
 
   toggleNav(): void {
     if (this.snav) this.snav.toggle();
-  }
-
-  redirectToMainPage(): void {
-    this.router.navigate([MAIN_PAGE_FRONT_URL]);
   }
 }

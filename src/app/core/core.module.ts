@@ -57,6 +57,7 @@ import { StatisticsPageComponent } from './pages/statistics-page/statistics-page
 import { StatisticsNumberComponent } from './components/statistics-number/statistics-number.component';
 import { AddPermissionComponent } from './components/add-permission/add-permission.component';
 import { AddMemberComponent } from './components/add-member/add-member.component';
+import { ArticleComponent } from './pages/article/article.component';
 
 @NgModule({
   imports: [
@@ -76,6 +77,7 @@ import { AddMemberComponent } from './components/add-member/add-member.component
     RegisterComponent,
     DashboardComponent,
     LoginComponent,
+    ArticleComponent,
     ProfilesListComponent,
     SidebarComponent,
     ForeignProfileComponent,

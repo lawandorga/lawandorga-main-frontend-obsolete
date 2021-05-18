@@ -19,17 +19,15 @@
 import { Injectable } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { take } from 'rxjs/operators';
-import { ForgotPassword, ReloadStaticInformation, ResetPassword, SetUsersPrivateKey, SetToken, TryLogin } from '../store/auth/actions';
+import { ForgotPassword, ReloadStaticInformation, ResetPassword, SetUsersPrivateKey, SetToken } from '../store/auth/actions';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { AuthState } from '../store/auth/reducers';
 import { HttpHeaders } from '@angular/common/http';
 import { MediaMatcher } from '@angular/cdk/layout';
+import { AppState } from 'src/app/app.state';
 
 @Injectable()
 export class AppSandboxService {
   savedLocation = '';
-  toggleNav: Function;
   navbar;
 
   static getPrivateKeyPlaceholder(): any {
@@ -38,14 +36,14 @@ export class AppSandboxService {
     return { headers };
   }
 
-  constructor(private store: Store<AuthState>, private router: Router, private media: MediaMatcher) {}
+  constructor(private store: Store<AppState>, private router: Router, private media: MediaMatcher) {}
 
   isAuthenticated(): boolean {
     let isAuthenticated = false;
     this.store
       .pipe(
         take(1),
-        select((state: any) => state.auth.authenticated)
+        select((state: AppState) => state.auth.authenticated)
       )
       .subscribe((authenticated) => (isAuthenticated = authenticated));
     return isAuthenticated;
@@ -60,10 +58,6 @@ export class AppSandboxService {
     } else {
       // void this.router.navigate(['/login/']);
     }
-  }
-
-  saveLocation() {
-    this.savedLocation = this.router.url;
   }
 
   forgotPassword(email: string): void {
@@ -100,10 +94,6 @@ export class AppSandboxService {
 
   openNavbar(): void {
     if (this.navbar) this.navbar.open();
-  }
-
-  toggleNavbar(): void {
-    if (this.navbar) this.navbar.toggle();
   }
 
   isOnMobile(): boolean {

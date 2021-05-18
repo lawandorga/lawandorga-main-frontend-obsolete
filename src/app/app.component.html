@@ -17,26 +17,25 @@
   -->
 
 
-<mat-toolbar class="root-toolbar">
-    <div class="root-toolbar_left">
-        <button mat-icon-button (click)="toggleNav()">
+<mat-toolbar class="bg-blue text-white" style="background-color: rgba(0, 60, 77, 1); color: white;">
+    <div class="flex space-x-4">
+        <button mat-icon-button (click)="toggleNav()" *ngIf="authenticated">
             <mat-icon>menu</mat-icon>
         </button>
-        <img src="/assets/img/rlc_intranet_logo.png" alt="RLC App" class="is_clickable"
-            (click)="redirectToMainPage()" />
-        <h1 (click)="redirectToMainPage()" class="is_clickable root-toolbar_text">
-            Law & Orga
-        </h1>
+        <a routerLink='/' class="flex space-x-2 items-center">
+            <img src="/assets/img/rlc_intranet_logo.png" alt="Law&Orga Logo" class="w-10 h-10" />
+            <h1>Law & Orga</h1>
+        </a>
     </div>
 </mat-toolbar>
 
 <mat-sidenav-container style="position: absolute; top: 64px; left: 0; bottom: 0; right:0;">
-    <mat-sidenav #snav [opened]="'true'" [mode]="'side'" fixedTopGap="56" *ngIf="authenticated">
-        <mat-nav-list>
+    <mat-sidenav #snav opened mode="side" fixedTopGap="64" *ngIf="authenticated" class="w-64">
+        <mat-nav-list class="p-0" style="padding: 0">
             <app-sidebar></app-sidebar>
         </mat-nav-list>
     </mat-sidenav>
-    <mat-sidenav-content>
+    <mat-sidenav-content class="p-5">
         <router-outlet></router-outlet>
     </mat-sidenav-content>
 </mat-sidenav-container>

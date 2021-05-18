@@ -38,6 +38,7 @@ import { NotificationGroupsListComponent } from './pages/notification-groups-lis
 import { UnsavedGuardService } from './services/unsaved-guard.service';
 import { StatisticsPageComponent } from './pages/statistics-page/statistics-page.component';
 import { STATISTICS_FRONT_URL } from '../statics/frontend_links.statics';
+import { ArticleComponent } from './pages/article/article.component';
 
 const apiRoutes: Routes = [
   {
@@ -102,6 +103,7 @@ const apiRoutes: Routes = [
   // without access control
   { path: 'login', component: LoginComponent },
   { path: '', component: LoginComponent },
+  { path: 'articles/:id', component: ArticleComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'reset-password/:userid/:token', component: ResetPasswordComponent },

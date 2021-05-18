@@ -35,6 +35,7 @@ import { HasPermission, Permission } from '../../models/permission.model';
 import { RestrictedRlc } from '../../models/rlc.model';
 import { AppSandboxService } from '../../services/app-sandbox.service';
 import { LOGIN_FRONT_URL } from '../../../statics/frontend_links.statics';
+import { DjangoError } from 'src/app/shared/services/axios';
 
 @Injectable()
 export class AuthEffects {
@@ -53,7 +54,7 @@ export class AuthEffects {
         this.http.post(LOGIN_API_URL, payload).pipe(
           mergeMap((response: { token: string; users_private_key: string }) => {
             this.appSB.saveTokenAndUsersPrivateKey(response.token, response.users_private_key);
-            void this.router.navigate(['/']);
+            void this.router.navigate(['/dashboard/']);
 
             return [
               SetToken({ token: response.token }),
@@ -62,7 +63,8 @@ export class AuthEffects {
             ];
           }),
           catchError((error: HttpErrorResponse) => {
-            this.coreSB.showErrorSnackBar(error.error.non_field_errors, 5000);
+            const djangoError = error.error as DjangoError;
+            this.coreSB.showErrorSnackBar(djangoError.non_field_errors[0], 5000);
             return [];
           })
         )

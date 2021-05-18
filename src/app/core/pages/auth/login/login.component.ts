@@ -29,7 +29,6 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
   fields = [
@@ -76,8 +75,6 @@ export class LoginComponent implements OnInit {
   }
 
   onSend(data: { email: string; password: string }): void {
-    console.log(data);
-
     this.store.dispatch(TryLogin({ username: data.email, password: data.password }));
   }
 }
