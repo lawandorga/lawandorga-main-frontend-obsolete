@@ -20,7 +20,7 @@ import { environment } from '../../environments/environment';
 import { SearchParamsInterface } from '../shared/interfaces/search_params.interface';
 
 // TODO: check
-export const base = environment.apiUrl;
+export const base = ''; // environment.apiUrl;
 export const LOGIN_API_URL = base + 'api/profiles/login/';
 export const RECORDS_API_URL = base + 'api/records/records/';
 export const CLIENTS_BY_BIRTHDAY_API_URL = base + 'api/records/e_clients_by_birthday/';
@@ -43,8 +43,7 @@ export const LOGOUT_API_URL = base + 'api/profiles/logout/';
 export const INACTIVE_USERS_API_URL = base + 'api/profiles/inactive/';
 export const USER_HAS_PERMISSIONS_API_URL = base + 'api/user_has_permissions/';
 export const RECORD_DELETIONS_API_URL = base + 'api/records/record_deletion_requests/';
-export const PROCESS_RECORD_DELETIONS_API_URL =
-    base + 'api/records/process_record_deletion_request/';
+export const PROCESS_RECORD_DELETIONS_API_URL = base + 'api/records/process_record_deletion_request/';
 export const FOLDER_BASE_API_URL = base + 'api/files/folder/';
 export const FILES_UPLOAD_BASE_API_URL = base + 'api/files/upload/';
 export const FILES_DELETE_BASE_API_URL = base + 'api/files/delete/';
@@ -57,10 +56,8 @@ export const RLC_SETTINGS_API_URL = base + 'api/my_rlc_settings/';
 export const NOTIFICATIONS_API_URL = base + 'api/notifications/';
 export const NOTIFICATION_GROUPS_API_URL = base + 'api/notification_groups/';
 export const UNREAD_NOTIFICATIONS_API_URL = base + 'api/notifications/unread/';
-export const RECORD_DOCUMENT_DELETIONS_API_URL =
-    base + 'api/records/record_document_deletion_requests/';
-export const PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS =
-    base + 'api/records/process_record_document_deletion_request/';
+export const RECORD_DOCUMENT_DELETIONS_API_URL = base + 'api/records/record_document_deletion_requests/';
+export const PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS = base + 'api/records/process_record_document_deletion_request/';
 export const STATISTICS_RECORDS_API_URL = base + 'api/records/statistics/';
 
 export const COLLAB_COLLAB_DOCUMENTS_API_URL = base + 'api/collab/collab_documents/';
@@ -83,187 +80,187 @@ const DOWNLOAD_ENCRYPTED_RECORD_DOCUMENT_BASE_API_URL = base + 'api/records/e_re
 const FILES_FOLDER_PERMISSIONS_BASE_API_URL = base + 'api/files/folder_permissions/';
 
 export const GetProfilesDetailApiUrl = (id: number) => {
-    return `${PROFILES_API_URL}${id}/`;
+  return `${PROFILES_API_URL}${id}/`;
 };
 
 export const GetProfilesUnlockApiUrl = (id: number) => {
-    return `${PROFILES_API_URL}${id}/unlock/`
-}
+  return `${PROFILES_API_URL}${id}/unlock/`;
+};
 
 export const GetSpecialProfileApiURL = (id: string | number) => {
-    return `${PROFILES_API_URL}${id}/`;
+  return `${PROFILES_API_URL}${id}/`;
 };
 
 export const GetRecordsSearchApiURL = (toSearch: string) => {
-    return `${RECORDS_API_URL}?search=${toSearch}`;
+  return `${RECORDS_API_URL}?search=${toSearch}`;
 };
 
 export const GenerateSearchAppendix = (urlPrefix: string, searchParams: SearchParamsInterface) => {
-    let urlAppendix = '';
-    let first = true;
-    if (searchParams.filter) {
-        urlAppendix += `filter=${searchParams.filter}`;
-        first = false;
+  let urlAppendix = '';
+  let first = true;
+  if (searchParams.filter) {
+    urlAppendix += `filter=${searchParams.filter}`;
+    first = false;
+  }
+  if (searchParams.limit) {
+    if (!first) {
+      urlAppendix += '&';
     }
-    if (searchParams.limit) {
-        if (!first) {
-            urlAppendix += '&';
-        }
-        urlAppendix += `limit=${searchParams.limit}`;
-        first = false;
+    urlAppendix += `limit=${searchParams.limit}`;
+    first = false;
+  }
+  if (searchParams.offset) {
+    if (!first) {
+      urlAppendix += '&';
     }
-    if (searchParams.offset) {
-        if (!first) {
-            urlAppendix += '&';
-        }
-        urlAppendix += `offset=${searchParams.offset}`;
-        first = false;
+    urlAppendix += `offset=${searchParams.offset}`;
+    first = false;
+  }
+  if (searchParams.sort) {
+    if (!first) {
+      urlAppendix += '&';
     }
-    if (searchParams.sort) {
-        if (!first) {
-            urlAppendix += '&';
-        }
-        urlAppendix += `sort=${searchParams.sort}`;
-        first = false;
+    urlAppendix += `sort=${searchParams.sort}`;
+    first = false;
+  }
+  if (searchParams.sort_direction) {
+    if (!first) {
+      urlAppendix += '&';
     }
-    if (searchParams.sort_direction) {
-        if (!first) {
-            urlAppendix += '&';
-        }
-        urlAppendix += `sortdirection=${searchParams.sort_direction}`;
-        first = false;
-    }
+    urlAppendix += `sortdirection=${searchParams.sort_direction}`;
+    first = false;
+  }
 
-    return first ? `${urlPrefix}` : `${urlPrefix}?${urlAppendix}`;
+  return first ? `${urlPrefix}` : `${urlPrefix}?${urlAppendix}`;
 };
 
 export const GetFullRecordSearchApiUrl = (searchParams: SearchParamsInterface) => {
-    if (!searchParams.limit) {
-        searchParams = {
-            ...searchParams,
-            limit: 10
-        };
-    }
-    return GenerateSearchAppendix(RECORDS_API_URL, searchParams);
+  if (!searchParams.limit) {
+    searchParams = {
+      ...searchParams,
+      limit: 10,
+    };
+  }
+  return GenerateSearchAppendix(RECORDS_API_URL, searchParams);
 };
 
 export const GetSpecialRecordApiURL = (id: string | number) => {
-    return `${SPECIAL_RECORD_BASE_API_URL}${id}/`;
+  return `${SPECIAL_RECORD_BASE_API_URL}${id}/`;
 };
 
 export const GetDownloadApiUrl = (file: string) => {
-    return `${DOWNLOAD_SIGNING_BASE_API_URL}?file=${file}`;
+  return `${DOWNLOAD_SIGNING_BASE_API_URL}?file=${file}`;
 };
 
 export const GetUploadApiUrl = (file: File, fileDirectory: string = '') => {
-    return `${UPLOAD_SIGNING_BASE_API_URL}?file_name=${file.name}&file_type=${file.type}&file_dir=${fileDirectory}`;
+  return `${UPLOAD_SIGNING_BASE_API_URL}?file_name=${file.name}&file_type=${file.type}&file_dir=${fileDirectory}`;
 };
 
 export const GetCreateRecordDocumentApiUrl = (record_id: string) => {
-    return `${SPECIAL_RECORD_BASE_API_URL}${record_id}/documents`;
+  return `${SPECIAL_RECORD_BASE_API_URL}${record_id}/documents`;
 };
 
 export const GetAddRecordMessageApiUrl = (record_id: string) => {
-    return `${SPECIAL_RECORD_BASE_API_URL}${record_id}/add_message/`;
+  return `${SPECIAL_RECORD_BASE_API_URL}${record_id}/add_message/`;
 };
 
 export const GetRecordDocumentApiUrl = (document_id: string) => {
-    return `${RECORD_DOCUMENT_BASE_API_URL}${document_id}/`;
+  return `${RECORD_DOCUMENT_BASE_API_URL}${document_id}/`;
 };
 
 export const GetRecordPermissionRequestApiUrl = (record_id: string) => {
-    return `${SPECIAL_RECORD_BASE_API_URL}${record_id}/request_permission/`;
+  return `${SPECIAL_RECORD_BASE_API_URL}${record_id}/request_permission/`;
 };
 
 export const GetResetPasswordApiUrl = (userId: number) => {
-    return `${RESET_PASSWORD_API_URL}${userId}/password_reset_confirm/`;
+  return `${RESET_PASSWORD_API_URL}${userId}/password_reset_confirm/`;
 };
 
 export const GetSpecialGroupApiURL = (id: string | number) => {
-    return `${GROUPS_API_URL}${id}/`;
+  return `${GROUPS_API_URL}${id}/`;
 };
 
 export const GetSpecialGroupMemberApiURL = (id: string) => {
-    return `${GetSpecialGroupApiURL(id)}member/`;
+  return `${GetSpecialGroupApiURL(id)}member/`;
 };
 
 export const GetSpecialPermissionApiURL = (id: string | number) => {
-    return `${PERMISSION_API_URL}${id}/`;
+  return `${PERMISSION_API_URL}${id}/`;
 };
 
 export const GetSpecialHasPermissionApiURL = (id: string | number) => {
-    return `${HAS_PERMISSION_API_URL}${id}/`;
+  return `${HAS_PERMISSION_API_URL}${id}/`;
 };
 
 export const GetPermissionsForGroupApiURL = (id: string | number) => {
-    return `${PERMISSION_FOR_GROUP_BASE_API_URL}${id}/`;
+  return `${PERMISSION_FOR_GROUP_BASE_API_URL}${id}/`;
 };
 
 export const GetCheckUserActivationApiUrl = (userId: number, token: string) => {
-    return `${CHECK_USER_ACTIVATION_API_URL}${userId}/activate/${token}/`;
+  return `${CHECK_USER_ACTIVATION_API_URL}${userId}/activate/${token}/`;
 };
 
 export const GetActivateUserApiUrl = (link: string) => {
-    return `${ACTIVATE_USER_ACTIVATION_API_URL}${link}/`;
+  return `${ACTIVATE_USER_ACTIVATION_API_URL}${link}/`;
 };
 
 export const GetDownloadAllRecordDocumentsApiUrl = (record_id: string) => {
-    return GetSpecialRecordUploadDocumentsApiUrl(record_id);
+  return GetSpecialRecordUploadDocumentsApiUrl(record_id);
 };
 
 export const GetSpecialRecordUploadDocumentsApiUrl = (record_id: string) => {
-    return `${SPECIAL_E_RECORD_BASE_API_URL}${record_id}/documents/`;
+  return `${SPECIAL_E_RECORD_BASE_API_URL}${record_id}/documents/`;
 };
 
 export const GetDownloadEncryptedRecordDocumentApiUrl = (document_id: string) => {
-    return `${DOWNLOAD_ENCRYPTED_RECORD_DOCUMENT_BASE_API_URL}${document_id}/`;
+  return `${DOWNLOAD_ENCRYPTED_RECORD_DOCUMENT_BASE_API_URL}${document_id}/`;
 };
 
 export const GetFolderInformationApiUrl = (path: string) => {
-    if (path) return `${FOLDER_BASE_API_URL}?path=${path}`;
-    return `${FOLDER_BASE_API_URL}`;
+  if (path) return `${FOLDER_BASE_API_URL}?path=${path}`;
+  return `${FOLDER_BASE_API_URL}`;
 };
 
 export const GetFolderPermissionsForFolderApiUrl = (id: string) => {
-    return `${FILES_FOLDER_PERMISSIONS_BASE_API_URL}${id}/`;
+  return `${FILES_FOLDER_PERMISSIONS_BASE_API_URL}${id}/`;
 };
 
 export const GetFolderPermissionApiUrl = (id: string) => {
-    return `${FILES_PERMISSION_FOR_FOLDER_BASE_API_URL}${id}/`;
+  return `${FILES_PERMISSION_FOR_FOLDER_BASE_API_URL}${id}/`;
 };
 export const GetCollabTextDocumentApiUrl = (id: number) => {
-    return `${COLLAB_TEXT_DOCUMENTS_API_URL}${id}/`;
+  return `${COLLAB_TEXT_DOCUMENTS_API_URL}${id}/`;
 };
 
 export const GetCollabEditingApiUrl = (id: number) => {
-    return `${GetCollabTextDocumentApiUrl(id)}editing/`;
-    // return `${COLLAB_EDITING_API_URL}${id}/`;
+  return `${GetCollabTextDocumentApiUrl(id)}editing/`;
+  // return `${COLLAB_EDITING_API_URL}${id}/`;
 };
 
 export const GetCollabTextDocumentVersionsApiUrl = (text_document_id: number) => {
-    return `${COLLAB_TEXT_DOCUMENTS_API_URL}${text_document_id}/versions/`;
+  return `${COLLAB_TEXT_DOCUMENTS_API_URL}${text_document_id}/versions/`;
 };
 
 export const GetCollabTextDocumentVersionsModelApiUrl = (text_version_id: number) => {
-    return `${COLLAB_TEXT_DOCUMENT_VERSIONS}${text_version_id}/`;
+  return `${COLLAB_TEXT_DOCUMENT_VERSIONS}${text_version_id}/`;
 };
 
 export const GetSpecialCollabDocumentApiUrl = (id: number) => {
-    return `${COLLAB_COLLAB_DOCUMENTS_API_URL}${id}/`;
+  return `${COLLAB_COLLAB_DOCUMENTS_API_URL}${id}/`;
 };
 
 export const GetCollabDocumentPermissionApiUrl = (id: number) => {
-    return `${GetSpecialCollabDocumentApiUrl(id)}permissions/`;
+  return `${GetSpecialCollabDocumentApiUrl(id)}permissions/`;
 };
 
 export const GetCollabDocumentPermissionForDocumentApiUrl = (id: number) => {
-    return `${COLLAB_PERMISSION_FOR_DOCUMENT_API_URL}${id}/`;
+  return `${COLLAB_PERMISSION_FOR_DOCUMENT_API_URL}${id}/`;
 };
 
 export const GetStaticsApiUrl = (token: string) => {
-    return `${PROFILES_API_URL}statics/${token}/`;
+  return `${PROFILES_API_URL}statics/${token}/`;
 };
 
 export const GetNewUserRequestApiUrl = (id: number) => {
-    return `${NEW_USER_REQUEST_ADMIT_API_URL}${id}/`;
+  return `${NEW_USER_REQUEST_ADMIT_API_URL}${id}/`;
 };

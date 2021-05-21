@@ -28,7 +28,6 @@ import { AuthGuardService } from './core/services/auth-guard.service';
 import { AuthEffects } from './core/store/auth/effects';
 import { CoreSandboxService } from './core/services/core-sandbox.service';
 import { CoreModule } from './core/core.module';
-import { RecordsSandboxService } from './recordmanagement/services/records-sandbox.service';
 import { AuthInterceptor } from './core/services/auth.interceptor';
 import { environment } from '../environments/environment';
 import { AppSandboxService } from './core/services/app-sandbox.service';
@@ -74,7 +73,6 @@ Quill.register('modules/mention', QuillCursors);
     AuthGuardService,
     AppSandboxService,
     CoreSandboxService,
-    RecordsSandboxService,
     FilesSandboxService,
     CollabSandboxService,
     StatisticsSandboxService,

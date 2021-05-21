@@ -29,6 +29,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MaterialFileInputModule } from 'ngx-material-file-input';
 
 @NgModule({
   imports: [
@@ -41,6 +42,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatSelectModule,
     MatIconModule,
     MatInputModule,
+    MaterialFileInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
     MatExpansionModule,
@@ -71,6 +73,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatIconModule,
     MatInputModule,
     MatDatepickerModule,
+    MaterialFileInputModule,
     MatNativeDateModule,
     MatExpansionModule,
     MatListModule,

@@ -20,6 +20,7 @@
 // @import "tailwindcss/components";
 // @import "tailwindcss/utilities";
 
+@import 'styles/tailwind.css';
 @import "styles/basic.scss";
 @import "styles/global.scss";
 
@@ -32,9 +33,9 @@ html,
 body {
   margin: 0;
   padding: 0;
-  min-height: 100%; /* braucht es für die min-height des Containers */
+  height: 100%;
   background-color: $c-background;
-  overflow: hidden;
+  // overflow: hidden;
 }
 
 * {
@@ -49,6 +50,10 @@ button {
   color: $c-on-primary;
   background-color: $c-primary;
   border-radius: 28px !important;
+}
+
+a {
+  border-radius: 28px!important;
 }
 
 mat-nav-list {

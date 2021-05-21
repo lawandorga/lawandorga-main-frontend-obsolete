@@ -16,32 +16,84 @@
   ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
   -->
 
-<div *ngIf="loading; else loaded" class="full_width record__progress-spinner-container">
+<!-- <div *ngIf="loading; else loaded" class="full_width record__progress-spinner-container">
   <mat-spinner></mat-spinner>
 </div>
 <ng-template #loaded>
   <app-full-record-detail *ngIf="type === 'FullRecord'"> </app-full-record-detail>
   <app-restricted-record-detail *ngIf="type === 'RestrictedRecord'">
   </app-restricted-record-detail>
-</ng-template>
+</ng-template> -->
 
 
-<!-- <div style="display: flex;">
+<div class="grid gap-8 lg:grid-cols-2">
 
-  <mat-card style="width: 50%">
+
+  <mat-card class="m-0">
     <mat-card-title>Record</mat-card-title>
     <mat-card-content>
-      <dynamic-form [fields]="recordFields" [errors]="recordErrors" [data]="record"></dynamic-form>
+      <dynamic-form [fields]="recordFields" [errors]="recordErrors" [data]="record" (send)="onRecordSend($event)">
+      </dynamic-form>
     </mat-card-content>
-    {{ record|json }}
   </mat-card>
 
-  <mat-card style="width: 50%;">
-    <mat-card-title>Client</mat-card-title>
-    <mat-card-content>
-      <dynamic-form [fields]="clientFields" [errors]="clientErrors" [data]="client"></dynamic-form>
-    </mat-card-content>
-    {{ client|json }}
-  </mat-card>
 
-</div> -->
+  <div class="flex space-y-8 flex-col">
+
+    <mat-card class="m-0">
+      <mat-card-title>Client</mat-card-title>
+      <mat-card-content>
+        <dynamic-form [fields]="clientFields" [errors]="clientErrors" [data]="client" (send)="onClientSend($event)">
+        </dynamic-form>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="m-0">
+      <mat-card-title>Files</mat-card-title>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item *ngFor="let document of documents">
+            <mat-icon mat-list-icon style="opacity: 0.54; margin-right: 6px;">attach_file</mat-icon>
+            <div mat-line><b>{{ document.name }}</b></div>
+            <div mat-line><i>{{ document.created_on|date:'dd.MM.yyyy HH:mm' }}</i></div>
+            <button mat-button color="primary" (click)="onDownloadClick(document.id, document.name)">Download</button>
+            <button mat-button color="warn" (click)="onDeleteClick(document.id)">Delete</button>
+          </mat-list-item>
+          <mat-list-item style="height: auto; padding-top: 16px;">
+            <dynamic-form style="width: 100%;" [fields]="documentFields" [errors]="documentErrors"
+              (send)="onDocumentSend($event)" [data]="documentData">
+            </dynamic-form>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="m-0">
+      <mat-card-title>Messages</mat-card-title>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item *ngFor="let message of messages">
+            <mat-icon mat-list-icon style="opacity: 0.54; margin-right: 6px;">chat</mat-icon>
+            <div mat-line style="width: 100%;">
+              <div style="width: 100%; display: flex; justify-content: space-between;">
+                <b>{{ message.sender ? message.sender.name : 'Deleted user' }}:</b>
+                <i>{{ message.created_on|date:'dd.MM.yyyy HH:mm' }}</i>
+              </div>
+              <p class="whitespace-pre" style="margin-top: 2px; margin-bottom: 0;">{{ message.message }}</p>
+            </div>
+          </mat-list-item>
+          <mat-list-item style="height: auto; padding-top: 16px;">
+            <dynamic-form style="width: 100%;" [fields]="messageFields" [errors]="messageErrors"
+              (send)="onMessageSend($event)" [data]="messageData"></dynamic-form>
+          </mat-list-item>
+        </mat-list>
+
+      </mat-card-content>
+    </mat-card>
+
+
+  </div>
+
+</div>
+
+<div style="height: 500px;"></div>

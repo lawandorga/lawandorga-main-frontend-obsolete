@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, Input, EventEmitter, Output, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, EventEmitter, Output, OnInit, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { DynamicField } from '../dynamic-input/dynamic-input.component';
 import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
 
@@ -25,14 +25,15 @@ import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
   templateUrl: './dynamic-form.component.html',
 })
 export class DynamicFormComponent implements OnInit, OnChanges {
-  @Input() fields: [DynamicField];
+  @Input() fields: DynamicField[];
   @Input() data: Object; // eslint-disable-line
   @Input() errors: Object; // eslint-disable-line
+  @Input() button = 'Save';
   @Output() send = new EventEmitter();
   form: FormGroup;
   controls: { [key: string]: FormControl } = {};
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.fields.forEach((field) => {

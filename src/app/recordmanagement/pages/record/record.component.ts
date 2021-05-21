@@ -16,30 +16,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { RecordsSandboxService } from '../../services/records-sandbox.service';
-import { FullRecord, RestrictedRecord } from '../../models/record.model';
+import { Component, OnInit } from '@angular/core';
+import { FullRecord } from '../../models/record.model';
 import { ActivatedRoute, Params } from '@angular/router';
-import { HasUnsaved } from '../../../core/services/can-have-unsaved.interface';
-import { FullRecordDetailComponent } from '../../components/records/full-record-detail/full-record-detail.component';
 import { FullClient } from '../../models/client.model';
-import axios, { DjangoError } from 'src/app/shared/services/axios';
+import { addToArray, DjangoError, removeFromArray, SubmitData } from 'src/app/shared/services/axios';
 import { CoreSandboxService } from 'src/app/core/services/core-sandbox.service';
-import { AxiosError, AxiosResponse } from 'axios';
 import { OriginCountry } from '../../models/country.model';
 import { RestrictedUser } from 'src/app/core/models/user.model';
+import { Message } from '../../models/message.model';
+import { RecordDocument } from '../../models/record_document.model';
+import { StorageService } from 'src/app/shared/services/storage.service';
+import { SharedSandboxService } from 'src/app/shared/services/shared-sandbox.service';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-record',
   templateUrl: './record.component.html',
-  styleUrls: ['./record.component.scss'],
 })
-export class RecordComponent implements OnInit, HasUnsaved, OnDestroy {
+export class RecordComponent implements OnInit {
   id: string;
-  type: string;
-  loading = true;
-
-  @ViewChild(FullRecordDetailComponent) child: FullRecordDetailComponent;
 
   record: FullRecord;
   recordErrors: DjangoError;
@@ -73,7 +69,7 @@ export class RecordComponent implements OnInit, HasUnsaved, OnDestroy {
       required: false,
     },
     {
-      label: 'Official Note',
+      label: 'Official Note (Everybody can see this note)',
       type: 'text',
       tag: 'input',
       name: 'official_note',
@@ -235,57 +231,141 @@ export class RecordComponent implements OnInit, HasUnsaved, OnDestroy {
     },
   ];
 
-  constructor(private recordSB: RecordsSandboxService, private route: ActivatedRoute, private coreSB: CoreSandboxService) {}
+  messageFields = [
+    {
+      label: 'Message',
+      tag: 'textarea',
+      name: 'message',
+      required: false,
+    },
+  ];
+  messageErrors: DjangoError;
+  messages: Message[];
+  messageData: { message: string };
 
-  ngOnInit() {
+  documentFields = [
+    {
+      label: 'File',
+      type: 'file',
+      tag: 'file',
+      name: 'file',
+      required: false,
+    },
+  ];
+  documentErrors: DjangoError;
+  documents: RecordDocument[];
+  documentData: { file: string };
+
+  constructor(
+    private sharedSB: SharedSandboxService,
+    private route: ActivatedRoute,
+    private coreSB: CoreSandboxService,
+    private http: HttpClient
+  ) {}
+
+  ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
-      this.loading = true;
       this.id = params['id'] as string;
-      this.recordSB.loadAndGetSpecialRecord(this.id).subscribe((special_record) => {
-        if (special_record.record !== null) {
-          this.loading = false;
-        }
-        if (special_record.client) {
-          this.type = 'FullRecord';
-        } else {
-          this.type = 'RestrictedRecord';
-        }
-      });
     });
 
-    axios
-      .get('api/records/consultants')
-      .then((response: AxiosResponse<RestrictedUser[]>) => (this.recordFields[5].options = response.data))
-      .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
+    this.http.get('api/records/consultants').subscribe((response: RestrictedUser[]) => (this.recordFields[5].options = response));
 
-    axios
-      .get('api/records/record_tags/')
-      .then((response: AxiosResponse<OriginCountry[]>) => (this.recordFields[6].options = response.data))
-      .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
+    this.http.get('api/records/record_tags/').subscribe((response: OriginCountry[]) => (this.recordFields[6].options = response));
 
-    axios
-      .get('api/records/origin_countries/')
-      .then((response: AxiosResponse<OriginCountry[]>) => (this.clientFields[2].options = response.data))
-      .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
+    this.http.get('api/records/origin_countries/').subscribe((response: OriginCountry[]) => (this.clientFields[2].options = response));
 
-    axios
-      .get(`api/records/records/${this.id}/`)
-      .then((response: AxiosResponse) => {
-        this.record = response.data.record;
-        this.client = response.data.client;
-      })
-      .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
+    this.getRecord(this.id);
+
+    this.getMessages(this.id);
+
+    this.getDocuments(this.id);
   }
 
-  ngOnDestroy(): void {
-    this.recordSB.resetFullClientInformation();
+  getMessages(id: string | number): void {
+    this.http.get(`api/records/records/${id}/messages/`).subscribe((response: Message[]) => (this.messages = response));
   }
 
-  hasUnsaved(): boolean {
-    if (this.type === 'FullRecord') {
-      return this.child.hasUnsaved();
-    } else {
-      return false;
-    }
+  getDocuments(id: string | number): void {
+    this.http.get(`api/records/records/${id}/documents/`).subscribe((response: RecordDocument[]) => (this.documents = response));
+  }
+
+  getRecord(id: string | number): void {
+    this.http.get(`api/records/records/${id}/`).subscribe((response: FullRecord) => {
+      this.record = response;
+      this.getClient(response.client);
+    });
+  }
+
+  getClient(id: number): void {
+    void this.http.get(`api/records/e_clients/${id}/`).subscribe((response: FullClient) => (this.client = response));
+  }
+
+  onClientSend(data: SubmitData): void {
+    void this.http.patch(`api/records/e_clients/${this.client.id}/`, data).subscribe(
+      (response: FullClient) => {
+        this.client = response;
+        this.coreSB.showSuccessSnackBar('Client saved successfully.');
+      },
+      (error: HttpErrorResponse) => (this.clientErrors = error.error as DjangoError)
+    );
+  }
+
+  onRecordSend(data: SubmitData): void {
+    void this.http.patch(`api/records/records/${this.record.id}/`, data).subscribe(
+      (response: FullRecord) => {
+        this.record = response;
+        this.coreSB.showSuccessSnackBar('Record saved successfully.');
+      },
+      (error: HttpErrorResponse) => (this.recordErrors = error.error as DjangoError)
+    );
+  }
+
+  onMessageSend(data: SubmitData): void {
+    void this.http.post(`api/records/records/${this.record.id}/add_message/`, data).subscribe(
+      (response: Message) => {
+        this.messages = addToArray(this.messages, response) as Message[];
+        this.messageData = { message: '' };
+        this.coreSB.showSuccessSnackBar('Message saved successfully.');
+      },
+      (error: HttpErrorResponse) => (this.messageErrors = error.error as DjangoError)
+    );
+  }
+
+  onDocumentSend(data: SubmitData): void {
+    const formData = new FormData();
+    // eslint-disable-next-line
+    formData.append('files', data['file']['_files'][0] as File);
+
+    this.http.post(`api/records/e_record/${this.record.id}/documents/`, formData).subscribe(
+      (response: RecordDocument[]) => {
+        this.documents = addToArray(this.documents, response[0]) as RecordDocument[];
+        this.documentData = { file: '' };
+        this.coreSB.showSuccessSnackBar('File saved successfully.');
+      },
+      (error: HttpErrorResponse) => (this.messageErrors = error.error as DjangoError)
+    );
+  }
+
+  onDownloadClick(id: number, name: string): void {
+    this.http.get(`api/records/e_record/documents/${id}/`).subscribe((response) => StorageService.saveFile(response, name));
+  }
+
+  onDeleteClick(id: number): void {
+    this.sharedSB.openConfirmDialog(
+      {
+        title: 'Delete',
+        description: 'Are you sure you want to delete this file?',
+        confirmLabel: 'Delete',
+        cancelLabel: 'Cancel',
+        confirmColor: 'warn',
+      },
+      (remove: boolean) => {
+        if (remove) {
+          this.http
+            .delete(`api/records/record_documents/${id}/`)
+            .subscribe(() => (this.documents = removeFromArray(this.documents, id) as RecordDocument[]));
+        }
+      }
+    );
   }
 }

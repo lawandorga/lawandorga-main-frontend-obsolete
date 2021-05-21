@@ -26,9 +26,7 @@ import { NgMaterialMultilevelMenuModule } from 'ng-material-multilevel-menu';
 import { CdkTableModule } from '@angular/cdk/table';
 import { QuillTestComponent } from './components/quill-test/quill-test.component';
 import { QuillModule } from 'ngx-quill';
-
 import { CoreRoutingModule } from './core-routing.module';
-import { ProfileComponent } from './pages/profile/profile.component';
 import { RegisterComponent } from './pages/auth/register/register.component';
 import { DashboardComponent } from './pages/Dashboard/dashboard.component';
 import { LoginComponent } from './pages/auth/login/login.component';
@@ -42,29 +40,24 @@ import { ForgotPasswordComponent } from './pages/auth/forgot-password/forgot-pas
 import { ResetPasswordComponent } from './pages/auth/reset-password/reset-password.component';
 import { GroupsListComponent } from './pages/groups-list/groups-list.component';
 import { GroupComponent } from './pages/group/group.component';
-import { EditGroupComponent } from './components/edit-group/edit-group.component';
-import { ShowGroupComponent } from './components/show-group/show-group.component';
-import { AddGroupMemberComponent } from './components/add-group-member/add-group-member.component';
 import { PermissionListComponent } from './pages/permission-list/permission-list.component';
 import { EditPermissionComponent } from './pages/edit-permission/edit-permission.component';
 import { AddHasPermissionComponent } from './components/add-has-permission/add-has-permission.component';
-import { HasPermissionsListComponent } from './components/has-permissions-list/has-permissions-list.component';
-import { HasPermissionSideComponent } from './components/has-permission-side/has-permission-side.component';
 import { AddHasPermissionForComponent } from './components/add-has-permission-for/add-has-permission-for.component';
 import { AddGroupComponent } from './components/add-group/add-group.component';
 import { NewUserRequestsComponent } from './pages/new-user-requests/new-user-requests.component';
 import { NewUserRequestProcessedPipe, NewUserRequestRequestedPipe } from '../recordmanagement/pipes/new_user_request.pipe';
 import { LegalNoticeComponent } from './pages/legal-notice/legal-notice.component';
-import { GroupDetailsComponent } from './components/group-details/group-details.component';
 import { InactiveUsersComponent } from './pages/inactive-users/inactive-users.component';
 import { PrivacyStatementComponent } from './pages/privacy-statement/privacy-statement.component';
 import { NotificationGroupsListComponent } from './pages/notification-groups-list/notification-groups-list.component';
 import { NotificationListComponent } from './components/notification-list/notification-list.component';
-import { BaseRequestProcessedPipe, BaseRequestRequestedPipe } from './pipes/request.pipe';
+// import { BaseRequestProcessedPipe, BaseRequestRequestedPipe } from './pipes/request.pipe';
 import { StatisticsPageComponent } from './pages/statistics-page/statistics-page.component';
 import { StatisticsNumberComponent } from './components/statistics-number/statistics-number.component';
 import { AddPermissionComponent } from './components/add-permission/add-permission.component';
 import { AddMemberComponent } from './components/add-member/add-member.component';
+import { ArticleComponent } from './pages/article/article.component';
 
 @NgModule({
   imports: [
@@ -81,10 +74,10 @@ import { AddMemberComponent } from './components/add-member/add-member.component
     QuillModule,
   ],
   declarations: [
-    ProfileComponent,
     RegisterComponent,
     DashboardComponent,
     LoginComponent,
+    ArticleComponent,
     ProfilesListComponent,
     SidebarComponent,
     ForeignProfileComponent,
@@ -92,14 +85,9 @@ import { AddMemberComponent } from './components/add-member/add-member.component
     ResetPasswordComponent,
     GroupsListComponent,
     GroupComponent,
-    EditGroupComponent,
-    ShowGroupComponent,
-    AddGroupMemberComponent,
     PermissionListComponent,
     EditPermissionComponent,
     AddHasPermissionComponent,
-    HasPermissionsListComponent,
-    HasPermissionSideComponent,
     AddHasPermissionForComponent,
     AddPermissionComponent,
     AddMemberComponent,
@@ -108,18 +96,20 @@ import { AddMemberComponent } from './components/add-member/add-member.component
     NewUserRequestRequestedPipe,
     NewUserRequestProcessedPipe,
     LegalNoticeComponent,
-    GroupDetailsComponent,
     InactiveUsersComponent,
     PrivacyStatementComponent,
     NotificationGroupsListComponent,
     NotificationListComponent,
     QuillTestComponent,
-    BaseRequestRequestedPipe,
-    BaseRequestProcessedPipe,
+    // BaseRequestRequestedPipe,
+    // BaseRequestProcessedPipe,
     StatisticsPageComponent,
     StatisticsNumberComponent,
   ],
   providers: [],
-  exports: [SidebarComponent, BaseRequestRequestedPipe, BaseRequestProcessedPipe],
+  exports: [
+    SidebarComponent,
+    // BaseRequestRequestedPipe, BaseRequestProcessedPipe
+  ],
 })
 export class CoreModule {}

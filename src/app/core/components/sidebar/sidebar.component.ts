@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, isDevMode, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppSandboxService } from '../../services/app-sandbox.service';
 import { FullUser } from '../../models/user.model';
@@ -127,14 +127,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
       icon: 'lock',
       items: [
         {
+          label: 'Records Admin',
+          icon: 'folder',
+          link: RECORDS_PERMIT_REQUEST_FRONT_URL,
+        },
+        {
           label: 'Statistics',
           icon: 'analytics',
           link: STATISTICS_FRONT_URL,
-        },
-        {
-          label: 'Permit Requests',
-          icon: 'offline_pin',
-          link: RECORDS_PERMIT_REQUEST_FRONT_URL,
         },
         {
           label: 'Permissions',
@@ -150,11 +150,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
           label: 'Inactive Users',
           icon: 'perm_identity',
           link: INACTIVE_USERS_FRONT_URL,
-        },
-        {
-          label: 'Deletion Requests',
-          icon: 'delete_forever',
-          link: DELETION_REQUESTS_FRONT_URL,
         },
       ],
     },
@@ -322,10 +317,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     // clearInterval(this.timerCheckPermissions);
     // clearInterval(this.timerLoadUnreadNotifications);
     this.store.dispatch(Logout());
-  }
-
-  showProfile() {
-    this.router.navigate([OWN_PROFILE_FRONT_URL]);
   }
 
   selectedItem(event) {

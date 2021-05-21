@@ -30,12 +30,12 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 
 export interface DynamicField {
   label: string;
-  tag: string;
-  type: string;
+  tag?: string;
+  type?: string;
   name: string;
-  value: string | number;
-  required: boolean;
-  options: Array<{ id: number; name: string }>;
+  value?: string | number;
+  required?: boolean;
+  options?: Array<{ id: number; name: string }>;
 }
 
 @Component({
@@ -44,39 +44,14 @@ export interface DynamicField {
 })
 export class DynamicInputComponent {
   @Input() label: DynamicField['label'];
-  @Input() tag: DynamicField['tag'];
-  @Input() type: DynamicField['type'];
-  @Input() value: DynamicField['value'];
+  @Input() tag: DynamicField['tag'] = 'input';
+  @Input() type: DynamicField['type'] = 'text';
+  @Input() value: DynamicField['value'] = null;
   @Input() name: DynamicField['name'];
-  @Input() required: DynamicField['required'];
+  @Input() required: DynamicField['required'] = false;
   @Input() errors: DjangoError;
   @Input() control: FormControl;
-  @Input() options: DynamicField['options'];
+  @Input() options: DynamicField['options'] = [];
 
   matcher = new MyErrorStateMatcher();
-
-  writeValue(obj: string | number): void {
-    if (obj !== undefined) this.value = obj;
-  }
-
-  // eslint-disable-next-line
-  propagateChange = (_: any): void => {
-    // do nothing
-  };
-
-  // eslint-disable-next-line
-  registerOnChange(fn: any): void {
-    // eslint-disable-next-line
-    this.propagateChange = fn;
-  }
-
-  // eslint-disable-next-line
-  registerOnTouched(fn: any): void {
-    // do nothing
-  }
-
-  onChange(event: Event): void {
-    const value = (event.target as HTMLInputElement).value;
-    this.propagateChange(value);
-  }
 }

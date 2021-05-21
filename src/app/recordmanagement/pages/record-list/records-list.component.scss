@@ -15,75 +15,32 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
+ .mat-table-horizontal-scroll {
+    overflow-x: scroll;
+  
 
-@import "~src/styles/basic";
-
-.records-list__container {
-    max-width: 1500px;
-    padding: 15px;
-    //width: 900px;
-    //overflow-y: scroll;
-    //max-height: 93vh;
-    height: 90%;
+.mat-cell,
+.mat-header-cell {
+  word-wrap: initial;
+  display: table-cell;
+  line-break: unset;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  vertical-align: middle;
 }
-mat-card-header {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
+.small-cell {
+    min-width: 320px;
+    padding: 8px 16px;
+    white-space: normal;
+    line-break: normal;
 }
-.records-list__search-input {
-    margin-left: auto;
+.small-cell-head {
+    padding-left: 16px;
+    padding-right: 16px;
 }
-.records-list__table-container {
-    overflow: auto;
-    height: 100%;
-    //overflow-y: scroll;
+.mat-row,
+.mat-header-row {
+  display: table-row;
 }
-
-mat-card-content{
-    height: 90%;
-}
-table {
-    width: 100%;
-}
-
-.records-list__access-container {
-    max-width: 60px;
-}
-
-.records-list__state-container {
-    margin: 5px;
-}
-
-.records-list__mat-column-consultants{
-    width: auto;
-    padding: 2px;
-    max-width: 100px;
-}
-.records-list__mat-column-tags {
-    max-width: 50px;
-}
-.records-list__mat-chip {
-    width: auto !important;
-}
-.records-list__link-button {
-    color: $c-link-color;
-    text-decoration: underline;
-}
-
-.records-list__chip-container{
-    margin: 2px;
-}
-
-.record-list-item__access-indicator {
-    min-width: 4px;
-    min-height: 17px;
-    max-width: 4px;
-    max-height: 17px;
-    border: solid black;
-    margin-right: 20px
-}
-
-.record-list-item__access-indicator--full{
-    background-color: black;
 }

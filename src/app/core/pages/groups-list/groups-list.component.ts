@@ -23,9 +23,9 @@ import { Router } from '@angular/router';
 import { GetGroupFrontUrl } from '../../../statics/frontend_links.statics';
 import { MatDialog } from '@angular/material/dialog';
 import { AddGroupComponent } from '../../components/add-group/add-group.component';
-import { AxiosError, AxiosResponse } from 'axios';
-import axios, { addToArray, DjangoError, removeFromArray } from '../../../shared/services/axios';
+import { addToArray, removeFromArray } from '../../../shared/services/axios';
 import { SharedSandboxService } from 'src/app/shared/services/shared-sandbox.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   templateUrl: './groups-list.component.html',
@@ -38,14 +38,12 @@ export class GroupsListComponent implements OnInit {
     private coreSB: CoreSandboxService,
     private router: Router,
     public dialog: MatDialog,
-    private sharedSB: SharedSandboxService
+    private sharedSB: SharedSandboxService,
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
-    axios
-      .get('api/groups/')
-      .then((response: AxiosResponse<RestrictedGroup[]>) => (this.groups = response.data))
-      .catch((error: AxiosError) => console.log(error.response));
+    this.http.get('api/groups/').subscribe((response: RestrictedGroup[]) => (this.groups = response));
   }
 
   onOpenGroup(id: number): void {
@@ -57,10 +55,9 @@ export class GroupsListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: string) => {
       if (result)
-        axios
+        this.http
           .post(`api/groups/`, { name: result })
-          .then((response: AxiosResponse<RestrictedGroup>) => (this.groups = addToArray(this.groups, response.data) as RestrictedGroup[]))
-          .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
+          .subscribe((response: RestrictedGroup) => (this.groups = addToArray(this.groups, response) as RestrictedGroup[]));
     });
   }
 
@@ -79,10 +76,7 @@ export class GroupsListComponent implements OnInit {
       },
       (remove: boolean) => {
         if (remove) {
-          axios
-            .delete(`api/groups/${id}/`)
-            .then(() => (this.groups = removeFromArray(this.groups, id) as RestrictedGroup[]))
-            .catch((err: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(err.response.data.detail));
+          this.http.delete(`api/groups/${id}/`).subscribe(() => (this.groups = removeFromArray(this.groups, id) as RestrictedGroup[]));
         }
       }
     );

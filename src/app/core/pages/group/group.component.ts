@@ -20,12 +20,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { CoreSandboxService } from '../../services/core-sandbox.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { FullGroup } from '../../models/group.model';
-import axios, { addToArray, DjangoError, removeFromArray } from '../../../shared/services/axios';
-import { AxiosError, AxiosResponse } from 'axios';
+import { addToArray, DjangoError, removeFromArray } from '../../../shared/services/axios';
 import { FullUser } from '../../models/user.model';
 import { HasPermission } from '../../models/permission.model';
 import { AddPermissionComponent } from '../../components/add-permission/add-permission.component';
 import { AddMemberComponent } from '../../components/add-member/add-member.component';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-group',
@@ -65,35 +65,26 @@ export class GroupComponent implements OnInit {
     },
   ];
 
-  constructor(private coreSB: CoreSandboxService, private route: ActivatedRoute, public dialog: MatDialog) {}
+  constructor(private coreSB: CoreSandboxService, private route: ActivatedRoute, public dialog: MatDialog, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => (this.id = String(params['id'])));
 
-    void axios
-      .get(`api/groups/${this.id}/`)
-      .then((response: AxiosResponse<FullGroup>) => (this.group = response.data))
-      .catch();
+    this.http.get(`api/groups/${this.id}/`).subscribe((response: FullGroup) => (this.group = response));
 
-    void axios
-      .get(`api/groups/${this.id}/members/`)
-      .then((response: AxiosResponse<Array<FullUser>>) => (this.members = response.data))
-      .catch();
+    this.http.get(`api/groups/${this.id}/members/`).subscribe((response: FullUser[]) => (this.members = response));
 
-    void axios
-      .get(`api/groups/${this.id}/permissions/`)
-      .then((response: AxiosResponse<Array<HasPermission>>) => (this.permissions = response.data))
-      .catch();
+    this.http.get(`api/groups/${this.id}/permissions/`).subscribe((response: HasPermission[]) => (this.permissions = response));
   }
 
   onSend(values: Object): void { // eslint-disable-line
-    void axios
-      .patch(`api/groups/${this.id}/`, values)
-      .then((response: AxiosResponse<FullGroup>) => {
-        this.group = response.data;
+    this.http.patch(`api/groups/${this.id}/`, values).subscribe(
+      (response: FullGroup) => {
+        this.group = response;
         this.coreSB.showSuccessSnackBar('Group information saved.');
-      })
-      .catch((error: AxiosError<DjangoError>) => (this.errors = error.response.data));
+      },
+      (error: HttpErrorResponse) => (this.errors = error.error as DjangoError)
+    );
   }
 
   onAddPermission(): void {
@@ -101,22 +92,16 @@ export class GroupComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: number) => {
       if (result)
-        axios
+        this.http
           .post('api/has_permission/', { permission: result, group_has_permission: this.id })
-          .then(
-            (response: AxiosResponse<HasPermission>) => (this.permissions = addToArray(this.permissions, response.data) as HasPermission[])
-          )
-          .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
+          .subscribe((response: HasPermission) => (this.permissions = addToArray(this.permissions, response) as HasPermission[]));
     });
   }
 
   onRemovePermission(id: number): void {
-    void axios
-      .delete(`api/has_permission/${id}/`)
-      .then(() => {
-        this.permissions = removeFromArray(this.permissions, id) as HasPermission[];
-      })
-      .catch((error: AxiosError) => console.log(error.response));
+    this.http.delete(`api/has_permission/${id}/`).subscribe(() => {
+      this.permissions = removeFromArray(this.permissions, id) as HasPermission[];
+    });
   }
 
   onAddMember(): void {
@@ -124,19 +109,15 @@ export class GroupComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: number) => {
       if (result)
-        axios
+        this.http
           .post(`api/groups/${this.id}/member/`, { member: result })
-          .then((response: AxiosResponse<FullUser>) => (this.members = addToArray(this.members, response.data) as FullUser[]))
-          .catch((error: AxiosError<DjangoError>) => this.coreSB.showErrorSnackBar(error.response.data.detail));
+          .subscribe((response: FullUser) => (this.members = addToArray(this.members, response) as FullUser[]));
     });
   }
 
   onRemoveMember(id: number): void {
-    void axios
-      .post(`api/groups/${this.id}/remove/`, { member: id })
-      .then(() => {
-        this.members = removeFromArray(this.members, id) as FullUser[];
-      })
-      .catch((error: AxiosError) => console.log(error.response));
+    this.http.post(`api/groups/${this.id}/remove/`, { member: id }).subscribe(() => {
+      this.members = removeFromArray(this.members, id) as FullUser[];
+    });
   }
 }

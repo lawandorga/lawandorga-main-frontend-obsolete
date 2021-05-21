@@ -16,131 +16,124 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { RecordsSandboxService } from '../../services/records-sandbox.service';
-import { Subscription } from 'rxjs';
-import { RestrictedRecord } from '../../models/record.model';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Tag } from '../../models/tag.model';
-import { GetRecordFrontUrl, GetRecordListFrontUrl } from '../../../statics/frontend_links.statics';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NewRestrictedRecord } from '../../models/record.model';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
-import { SearchParamsInterface } from '../../../shared/interfaces/search_params.interface';
+import { MatTableDataSource } from '@angular/material/table';
+import { SharedSandboxService } from 'src/app/shared/services/shared-sandbox.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-records',
   templateUrl: './records-list.component.html',
   styleUrls: ['./records-list.component.scss'],
 })
-export class RecordsListComponent implements OnInit, OnDestroy, AfterViewInit {
-  timeout = 400;
-  timer = null;
+export class RecordsListComponent implements OnInit {
+  displayedColumns = ['token', 'consultants', 'tags', 'note', 'created', 'updated', 'actions'];
+  dataSource: MatTableDataSource<NewRestrictedRecord>;
+  records: NewRestrictedRecord[];
 
-  columns = ['access', 'token', 'state', 'consultants', 'tags'];
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
-  subscriptions: Subscription[] = [];
+  constructor(private coreSB: CoreSandboxService, private sharedSB: SharedSandboxService, private http: HttpClient) {}
 
-  dataSource: RestrictedRecord[] = [];
-  searchValue = '';
-  results_length = 0;
-  searchParams: SearchParamsInterface;
-
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-
-  constructor(
-    private recordsSandbox: RecordsSandboxService,
-    private coreSB: CoreSandboxService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
-
-  ngAfterViewInit() {
-    this.sort.sortChange.subscribe((event) => {
-      this.searchParams = {
-        ...this.searchParams,
-        sort: this.sort.active,
-        sort_direction: this.sort.direction,
+  ngOnInit(): void {
+    this.http.get('api/records/records/').subscribe((response: NewRestrictedRecord[]) => {
+      this.records = response;
+      this.dataSource = new MatTableDataSource(this.records);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      this.dataSource.filterPredicate = (data: NewRestrictedRecord, filter: string) => {
+        return (
+          data.record_token.toLowerCase().includes(filter) ||
+          this.getState(data.state).toLowerCase().includes(filter) ||
+          this.getConsultants(data.working_on_record).toLowerCase().includes(filter) ||
+          this.getTags(data.tagged).toLowerCase().includes(filter)
+        );
       };
-      this.router.navigateByUrl(GetRecordListFrontUrl(this.searchParams));
-    });
-
-    this.paginator.page.subscribe((event) => {
-      this.searchParams = {
-        ...this.searchParams,
-        offset: this.paginator.pageSize * this.paginator.pageIndex,
-        limit: this.paginator.pageSize,
-      };
-      this.router.navigateByUrl(GetRecordListFrontUrl(this.searchParams));
     });
   }
 
-  ngOnInit() {
-    this.subscriptions.push(
-      this.route.queryParamMap.subscribe((queryParams) => {
-        this.searchValue = queryParams.get('filter');
-        this.paginator.pageSize = Number(queryParams.get('limit'));
-        this.searchParams = {
-          filter: queryParams.get('filter'),
-          sort: queryParams.get('sort'),
-          sort_direction: queryParams.get('sortdirection'),
-          limit: Number(queryParams.get('limit')),
-          offset: Number(queryParams.get('offset')),
-        };
-        if (this.searchParams.sort === 'token') {
-          this.searchParams.sort = 'record_token';
-        }
-        this.recordsSandbox.startLoadingRecords(this.searchParams);
-      })
-    );
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
 
-    this.subscriptions.push(
-      this.recordsSandbox.getRecords(false).subscribe((records: RestrictedRecord[]) => {
-        this.dataSource = records;
-      })
-    );
-    this.subscriptions.push(
-      this.coreSB.getResultsLength().subscribe((results_length: number) => {
-        this.results_length = results_length;
-      })
-    );
-  }
-
-  onSearchClick() {
-    if (this.searchValue && this.searchValue !== '') {
-      this.searchParams = {
-        ...this.searchParams,
-        filter: this.searchValue,
-      };
-      this.router.navigateByUrl(GetRecordListFrontUrl(this.searchParams));
-    } else this.router.navigateByUrl(`records`);
-  }
-
-  onSearchChange(searchValue: string) {
-    clearTimeout(this.timer);
-    this.timer = setTimeout(this.fireSearch.bind(this), this.timeout);
-  }
-
-  fireSearch(): void {
-    this.onSearchClick();
-  }
-
-  onRecordSelect(record: RestrictedRecord) {
-    this.router.navigateByUrl(GetRecordFrontUrl(record));
-  }
-
-  onTagClick(tag: Tag) {
-    this.searchParams = {
-      ...this.searchParams,
-      filter: tag.name,
-    };
-    this.router.navigateByUrl(GetRecordListFrontUrl(this.searchParams));
-  }
-
-  ngOnDestroy() {
-    for (const sub of this.subscriptions) {
-      sub.unsubscribe();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
     }
+  }
+
+  getConsultants(consultants: { id: number; name: string; email: string }[]): string {
+    return consultants.map((consultant) => consultant.name).join(', ');
+  }
+
+  getTags(tags: { id: number; name: string }[]): string {
+    return tags.map((tag) => tag.name).join(', ');
+  }
+
+  getState(state: string): string {
+    switch (state) {
+      case 'op':
+        return 'Open';
+      case 'wa':
+        return 'Waiting';
+      case 'cl':
+        return 'Closed';
+      case 'wo':
+        return 'Working';
+      default:
+        return 'Unknown';
+    }
+  }
+
+  getStateColor(state: string): string {
+    switch (state) {
+      case 'op':
+        return 'darkgreen';
+      case 'wa':
+        return 'chocolate';
+      case 'cl':
+        return 'gray';
+      case 'wo':
+        return 'cornflowerblue';
+      default:
+        return 'red';
+    }
+  }
+
+  getRecordDetailUrl(id: number): string {
+    return `/records/${id}/`;
+  }
+
+  requestAccess(id: number): void {
+    this.http
+      .post(`api/records/records/${id}/request_permission/`, {})
+      .subscribe(() => this.coreSB.showSuccessSnackBar('Access application has been made. The admins will be informed.'));
+  }
+
+  onRequestDeletion(id: number): void {
+    this.sharedSB.openConfirmDialog(
+      {
+        title: 'Delete',
+        description: 'Are you sure you want to delete this record?',
+        confirmLabel: 'Delete',
+        cancelLabel: 'Cancel',
+        confirmColor: 'warn',
+      },
+      (remove: boolean) => {
+        if (remove) {
+          const data = {
+            record_id: id,
+            explanation: '',
+          };
+          this.http
+            .post(`api/records/record_deletion_requests/`, data)
+            .subscribe(() => this.coreSB.showSuccessSnackBar('Deletion request has been made. The admins will be informed.'));
+        }
+      }
+    );
   }
 }

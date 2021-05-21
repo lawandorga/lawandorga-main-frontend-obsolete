@@ -1,40 +1,20 @@
-<!--
-  ~ law&orga - record and organization management software for refugee law clinics
-  ~ Copyright (C) 2020  Dominik Walser
-  ~
-  ~ This program is free software: you can redistribute it and/or modify
-  ~ it under the terms of the GNU Affero General Public License as
-  ~ published by the Free Software Foundation, either version 3 of the
-  ~ License, or (at your option) any later version.
-  ~
-  ~ This program is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~ GNU Affero General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU Affero General Public License
-  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
-  -->
-
-<mat-card class="record-pool__card">
+<mat-card style="max-width: 500px;">
+  <mat-card-title>Pool Status</mat-card-title>
   <mat-card-content>
-    <h1>Record Pool</h1>
-    <div *ngIf="records > 0">
-      <h2>{{records}} open records</h2>
-      <button mat-flat-button color="primary" (click)="onEnlistClick()">Take</button>
-    </div>
-    <div *ngIf="consultants > 0">
-      <h2>{{consultants}} consultants enlisted</h2>
-      <h3>you are enlisted {{users_enlistings}} times</h3>
-      <button mat-flat-button color="primary" (click)="onEnlistClick()">
-        {{users_enlistings == 0 ? 'enlist too': 'enlist again'}}
+    <div *ngIf="pool">
+      Enlisted Records: {{ pool.type === 'records' ? pool.entries.length : '-' }} <br>
+      Enlisted Consultants: {{ pool.type === 'consultants' ? pool.entries.length : '-' }} <br>
+      <br>
+      <button (click)="onEnlistClick()" mat-raised-button color="primary">
+        {{ pool.type === 'records' ? 'Take record' : 'Enlist' }}
       </button>
     </div>
-    <div *ngIf="consultants === 0 && records === 0">
-      <h2>No entries in recordpool.</h2>
-      <button mat-flat-button color="primary" (click)="onEnlistClick()">
-        enlist to recordpool
-      </button>
-    </div>
+  </mat-card-content>
+</mat-card>
+
+<mat-card style="max-width: 500px;">
+  <mat-card-title style="margin-bottom: 20px;">Yield Record</mat-card-title>
+  <mat-card-content>
+    <dynamic-form [errors]="errors" [fields]="fields" (send)="onYieldRecord($event)"></dynamic-form>
   </mat-card-content>
 </mat-card>
