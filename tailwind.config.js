@@ -1,6 +1,6 @@
 // tailwind.config.js
 module.exports = {
-  // important: true,
+  important: true,
   // mode: 'jit',
   purge: {
     enabled: process.env.NODE_ENV === "production",

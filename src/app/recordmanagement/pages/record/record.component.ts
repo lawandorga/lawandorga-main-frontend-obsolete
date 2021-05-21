@@ -69,7 +69,7 @@ export class RecordComponent implements OnInit {
       required: false,
     },
     {
-      label: 'Official Note',
+      label: 'Official Note (Everybody can see this note)',
       type: 'text',
       tag: 'input',
       name: 'official_note',

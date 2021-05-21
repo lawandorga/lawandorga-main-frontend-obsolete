@@ -26,22 +26,21 @@
 </ng-template> -->
 
 
-<div style="display: flex;">
+<div class="grid gap-8 lg:grid-cols-2">
 
-  <div style="width: 50%">
-    <mat-card>
-      <mat-card-title>Record</mat-card-title>
-      <mat-card-content>
-        <dynamic-form [fields]="recordFields" [errors]="recordErrors" [data]="record" (send)="onRecordSend($event)">
-        </dynamic-form>
-      </mat-card-content>
-    </mat-card>
-  </div>
 
-  <div style="width: 12px;"></div>
+  <mat-card class="m-0">
+    <mat-card-title>Record</mat-card-title>
+    <mat-card-content>
+      <dynamic-form [fields]="recordFields" [errors]="recordErrors" [data]="record" (send)="onRecordSend($event)">
+      </dynamic-form>
+    </mat-card-content>
+  </mat-card>
 
-  <div style="width: 50%;">
-    <mat-card style="margin-bottom: 12px;">
+
+  <div class="flex space-y-8 flex-col">
+
+    <mat-card class="m-0">
       <mat-card-title>Client</mat-card-title>
       <mat-card-content>
         <dynamic-form [fields]="clientFields" [errors]="clientErrors" [data]="client" (send)="onClientSend($event)">
@@ -49,7 +48,7 @@
       </mat-card-content>
     </mat-card>
 
-    <mat-card style="margin-bottom: 12px;">
+    <mat-card class="m-0">
       <mat-card-title>Files</mat-card-title>
       <mat-card-content>
         <mat-list>
@@ -69,7 +68,7 @@
       </mat-card-content>
     </mat-card>
 
-    <mat-card>
+    <mat-card class="m-0">
       <mat-card-title>Messages</mat-card-title>
       <mat-card-content>
         <mat-list>
@@ -91,6 +90,8 @@
 
       </mat-card-content>
     </mat-card>
+
+
   </div>
 
 </div>

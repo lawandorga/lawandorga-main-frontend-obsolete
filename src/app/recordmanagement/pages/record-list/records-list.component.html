@@ -32,16 +32,23 @@
                 <td mat-cell *matCellDef="let row">
                     <div
                         style="display: flex; justify-content: space-between; align-items: center; padding-right: 24px;">
-                        <a *ngIf="row.access" [routerLink]="getRecordDetailUrl(row.id)">{{ row.record_token }}</a>
-                        <a *ngIf="row.access" [routerLink]="getRecordDetailUrl(row.id)" mat-button
-                            style='margin-left: auto'>
-                            Open
-                        </a>
-                        <span *ngIf="!row.access">{{ row.record_token }}</span>
-                        <button (click)="requestAccess(row.id)" mat-button color="primary" *ngIf="!row.access"
-                            style="margin-left: auto;">
-                            Request Access
-                        </button>
+                        <div class="flex items-center">
+                            <abbr class="inline-block w-4 h-4 rounded-full mr-2" [title]="getState(row.state)"
+                                [style]="'background-color:' + getStateColor(row.state)">
+                            </abbr>
+                            <a *ngIf="row.access" [routerLink]="getRecordDetailUrl(row.id)">{{ row.record_token }}</a>
+                            <span *ngIf="!row.access">{{ row.record_token }}</span>
+                        </div>
+                        <div>
+                            <a *ngIf="row.access" [routerLink]="getRecordDetailUrl(row.id)" mat-button
+                                style='margin-left: auto'>
+                                Open
+                            </a>
+                            <button (click)="requestAccess(row.id)" mat-button color="primary" *ngIf="!row.access"
+                                style="margin-left: auto;">
+                                Request Access
+                            </button>
+                        </div>
                     </div>
 
                 </td>
