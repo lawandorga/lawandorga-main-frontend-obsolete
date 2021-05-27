@@ -268,7 +268,7 @@ export class RecordComponent implements OnInit {
       this.id = params['id'] as string;
     });
 
-    this.http.get('api/records/consultants').subscribe((response: RestrictedUser[]) => (this.recordFields[5].options = response));
+    this.http.get('api/records/consultants/').subscribe((response: RestrictedUser[]) => (this.recordFields[5].options = response));
 
     this.http.get('api/records/record_tags/').subscribe((response: OriginCountry[]) => (this.recordFields[6].options = response));
 
