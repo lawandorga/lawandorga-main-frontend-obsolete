@@ -23,7 +23,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { catchError, switchMap, take } from 'rxjs/operators';
 import { CoreSandboxService } from './core-sandbox.service';
-import { Logout } from '../store/auth/actions';
+import { Logout, ResetTimer } from '../store/auth/actions';
 import { environment } from '../../../environments/environment';
 import { DjangoError } from 'src/app/shared/services/axios';
 import { AppState } from 'src/app/app.state';
@@ -34,6 +34,8 @@ export class AuthInterceptor implements HttpInterceptor {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    this.store.dispatch(ResetTimer());
+
     return this.store.select('auth').pipe(
       take(1),
       switchMap((authState: AuthState) => {

@@ -17,11 +17,9 @@
  */
 
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FilesMainViewComponent } from './components/files-main-view/files-main-view.component';
 import { FilemanagementRoutingModule } from './filemanagement-routing.module';
 import { SharedModule } from '../shared/shared.module';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ListFileItemComponent } from './components/list-file-item/list-file-item.component';
 import { ListFolderItemComponent } from './components/list-folder-item/list-folder-item.component';
 import { PathInformationComponent } from './components/path-information/path-information.component';
@@ -36,22 +34,22 @@ import { TableEntryInformationFolderPermissionComponent } from './components/tab
 import { AddPermissionForFolderComponent } from './components/add-permission-for-folder/add-permission-for-folder.component';
 
 @NgModule({
-    imports: [
-        FilemanagementRoutingModule,
-        SharedModule,
-        StoreModule.forFeature('files', filesReducer),
-        EffectsModule.forFeature([FilesEffects])
-    ],
-    declarations: [
-        FilesMainViewComponent,
-        ListFileItemComponent,
-        ListFolderItemComponent,
-        PathInformationComponent,
-        FolderViewComponent,
-        StorageSizePipe,
-        TableEntryInformationComponent,
-        TableEntryInformationFolderPermissionComponent,
-        AddPermissionForFolderComponent
-    ]
+  imports: [
+    FilemanagementRoutingModule,
+    SharedModule,
+    StoreModule.forFeature('files', filesReducer),
+    EffectsModule.forFeature([FilesEffects]),
+  ],
+  declarations: [
+    FilesMainViewComponent,
+    ListFileItemComponent,
+    ListFolderItemComponent,
+    PathInformationComponent,
+    FolderViewComponent,
+    StorageSizePipe,
+    TableEntryInformationComponent,
+    TableEntryInformationFolderPermissionComponent,
+    AddPermissionForFolderComponent,
+  ],
 })
 export class FilemanagementModule {}

@@ -21,7 +21,7 @@ import { Router } from '@angular/router';
 import { AppSandboxService } from '../../services/app-sandbox.service';
 import { FullUser } from '../../models/user.model';
 import { CoreSandboxService } from '../../services/core-sandbox.service';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import {
   PERMISSION_ACCEPT_NEW_USERS_RLC,
   PERMISSION_ACTIVATE_INACTIVE_USERS,
@@ -40,7 +40,6 @@ import {
   GROUPS_FRONT_URL,
   INACTIVE_USERS_FRONT_URL,
   LEGAL_NOTICE_FRONT_URL,
-  OWN_PROFILE_FRONT_URL,
   PERMISSIONS_FRONT_URL,
   PROFILES_FRONT_URL,
   RECORD_POOL_FRONT_URL,
@@ -52,6 +51,7 @@ import {
 import { RlcSettings } from '../../models/rlc_settings.model';
 import { Subscription } from 'rxjs';
 import { Logout } from '../../store/auth/actions';
+import { selectRemaining, selectRemainingMinutes, selectTimer } from '../../store/auth/selectors';
 
 @Component({
   selector: 'app-sidebar',
@@ -62,6 +62,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   name = '';
   email = '';
+  time = 0;
 
   timerCheckPermissions = null;
   timerLoadUnreadNotifications = null;
@@ -200,7 +201,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.actualSidebarItems = this.sidebarItemsOrg;
   }
 
+  getTimeRemaining(): void {
+    this.store.select(selectRemainingMinutes).subscribe((item) => (this.time = item));
+    setTimeout(() => this.getTimeRemaining(), 10000);
+  }
+
   ngOnInit() {
+    this.getTimeRemaining();
+
     this.coreSB.hasPermissionFromStringForOwnRlc(PERMISSION_CAN_VIEW_RECORDS, (hasPermission) => {
       if (this.show_tab_permissions.records !== hasPermission) {
         this.show_tab_permissions.records = hasPermission;
