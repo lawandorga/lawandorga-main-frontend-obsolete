@@ -27,7 +27,7 @@
     <div class="mat-table-horizontal-scroll">
         <table mat-table [dataSource]="dataSource" matSort>
 
-            <ng-container matColumnDef="token">
+            <ng-container matColumnDef="record_token">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Token </th>
                 <td mat-cell *matCellDef="let row">
                     <div
@@ -61,14 +61,14 @@
                 </td>
             </ng-container>
 
-            <ng-container matColumnDef="created">
+            <ng-container matColumnDef="created_on">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Created </th>
                 <td mat-cell *matCellDef="let row">
                     {{ row.created_on|date:'dd.MM.yyyy' }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </td>
             </ng-container>
 
-            <ng-container matColumnDef="updated">
+            <ng-container matColumnDef="last_edited">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Updated </th>
                 <td mat-cell *matCellDef="let row">
                     {{ row.last_edited|date:'dd.MM.yyyy HH:mm' }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -76,21 +76,21 @@
             </ng-container>
 
             <ng-container matColumnDef="consultants">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="small-cell-head"> Consultants </th>
+                <th mat-header-cell *matHeaderCellDef class="small-cell-head"> Consultants </th>
                 <td mat-cell *matCellDef="let row" class="small-cell">
                     {{ getConsultants(row.working_on_record) }}
                 </td>
             </ng-container>
 
             <ng-container matColumnDef="note">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="small-cell-head"> Note </th>
+                <th mat-header-cell *matHeaderCellDef class="small-cell-head"> Note </th>
                 <td mat-cell *matCellDef="let row" class="small-cell">
                     {{ row.official_note }}
                 </td>
             </ng-container>
 
             <ng-container matColumnDef="tags">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="small-cell-head"> Tags </th>
+                <th mat-header-cell *matHeaderCellDef class="small-cell-head"> Tags </th>
                 <td mat-cell *matCellDef="let row" class="small-cell">
                     {{ getTags(row.tagged) }}
                 </td>

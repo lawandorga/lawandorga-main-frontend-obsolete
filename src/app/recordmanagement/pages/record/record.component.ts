@@ -115,8 +115,7 @@ export class RecordComponent implements OnInit {
     },
     {
       label: 'Note',
-      type: 'text',
-      tag: 'input',
+      tag: 'textarea',
       name: 'note',
       required: false,
     },
@@ -164,15 +163,13 @@ export class RecordComponent implements OnInit {
     },
     {
       label: 'First Correspondence',
-      type: 'text',
-      tag: 'input',
+      tag: 'textarea',
       name: 'first_correspondence',
       required: false,
     },
     {
       label: 'Next Steps',
-      type: 'text',
-      tag: 'input',
+      tag: 'textarea',
       name: 'next_steps',
       required: false,
     },
@@ -186,7 +183,7 @@ export class RecordComponent implements OnInit {
     {
       label: 'Additional Facts',
       type: 'text',
-      tag: 'input',
+      tag: 'textarea',
       name: 'additional_facts',
       required: false,
     },
@@ -224,8 +221,7 @@ export class RecordComponent implements OnInit {
     },
     {
       label: 'Note',
-      type: 'text',
-      tag: 'input',
+      tag: 'textarea',
       name: 'note',
       required: false,
     },

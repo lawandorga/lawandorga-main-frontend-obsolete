@@ -31,7 +31,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./records-list.component.scss'],
 })
 export class RecordsListComponent implements OnInit {
-  displayedColumns = ['token', 'consultants', 'tags', 'note', 'created', 'updated', 'actions'];
+  displayedColumns = ['record_token', 'consultants', 'tags', 'note', 'created_on', 'last_edited', 'actions'];
   dataSource: MatTableDataSource<NewRestrictedRecord>;
   records: NewRestrictedRecord[];
 
