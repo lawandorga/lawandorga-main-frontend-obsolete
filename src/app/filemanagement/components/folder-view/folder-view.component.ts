@@ -24,6 +24,8 @@ import { GetFolderFrontUrlRelative } from '../../../statics/frontend_links.stati
 import { SharedSandboxService } from '../../../shared/services/shared-sandbox.service';
 import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
 import { PERMISSION_WRITE_ALL_FOLDERS_RLC } from '../../../statics/permissions.statics';
+import { DjangoError, SubmitData } from 'src/app/shared/services/axios';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-folder-view',
@@ -45,15 +47,31 @@ export class FolderViewComponent implements OnInit {
 
   columns = ['type', 'name', 'size', 'last_edited', 'more'];
 
+  fileFields = [
+    {
+      label: 'File',
+      type: 'file',
+      tag: 'file',
+      name: 'file',
+      required: false,
+    },
+  ];
+  fileErrors: DjangoError;
+  files: File[];
+  fileData: { file: string };
+
   constructor(
     private route: ActivatedRoute,
     private fileSB: FilesSandboxService,
     private router: Router,
     private sharedSB: SharedSandboxService,
-    private coreSB: CoreSandboxService
+    private coreSB: CoreSandboxService,
+    private http: HttpClient
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.http.get('api/files/file_base/').subscribe((response: File[]) => (this.files = response));
+
     this.route.queryParamMap.subscribe((map) => {
       if (map.get('path')) {
         this.path = map.get('path');
@@ -97,9 +115,25 @@ export class FolderViewComponent implements OnInit {
     }
   }
 
+  onFileSend(data: SubmitData): void {
+    const formData = new FormData();
+    // eslint-disable-next-line
+    formData.append('file', data['file']['_files'][0] as File);
+    formData.append('folder', this.currentFolder.id);
+
+    this.http.post(`api/files/file_base/`, formData).subscribe(
+      (response: File) => {
+        // this.documents = addToArray(this.documents, response[0]) as RecordDocument[];
+        // this.documentData = { file: '' };
+        this.coreSB.showSuccessSnackBar('File saved successfully.');
+      },
+      (error: HttpErrorResponse) => (this.fileErrors = error.error)
+    );
+  }
+
   dropped($event) {
     $event.preventDefault();
-    this.fileSB.upload($event.dataTransfer.items, this.path);
+    this.fileSB.upload($event.dataTransfer.items, this.currentFolder.id);
   }
 
   dragover($event) {
@@ -108,8 +142,16 @@ export class FolderViewComponent implements OnInit {
 
   filesSelected($event) {
     event.preventDefault();
-    this.fileSB.upload(Array.from(this.fileInput.nativeElement.files), this.path);
+    this.fileSB.upload(Array.from(this.fileInput.nativeElement.files), this.currentFolder.id);
     this.fileSB.startLoadingFolderInformation(this.path);
+  }
+
+  onFileDownload(id: number, name: string): void {
+    this.http
+      .get(`api/files/file_base/${id}/`, { observe: 'response', responseType: 'blob' as 'json' })
+      .subscribe((response: HttpResponse<Blob>) => {
+        this.downloadFile(response, name);
+      });
   }
 
   onDeleteClick(entry: TableEntry) {
@@ -139,6 +181,37 @@ export class FolderViewComponent implements OnInit {
 
   onDownloadClick(entry) {
     this.fileSB.startDownloading([entry], this.path);
+  }
+
+  getFileName(response: HttpResponse<Blob>) {
+    let filename: string;
+    try {
+      const contentDisposition: string = response.headers.get('Content-Disposition');
+      console.log(response.headers);
+
+      const r = /(?:filename=")(.+)(?:")/;
+      filename = r.exec(contentDisposition)[1];
+    } catch (e) {
+      filename = 'unknown-filename';
+    }
+    return filename;
+  }
+
+  /**
+   * Method is use to download file.
+   * @param data - Array Buffer data
+   * @param type - type of the document.
+   */
+  downloadFile(response: HttpResponse<Blob>, name: string): void {
+    console.log('download');
+    const filename: string = name;
+    const binaryData = [];
+    binaryData.push(response.body);
+    const downloadLink = document.createElement('a');
+    downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, { type: 'blob' }));
+    downloadLink.setAttribute('download', filename);
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
   }
 
   onCurrentFolderInformation() {

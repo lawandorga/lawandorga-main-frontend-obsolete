@@ -23,13 +23,13 @@ import { SnackbarService } from '../../shared/services/snackbar.service';
 import { FilesState } from '../store/files.reducers';
 import { select, Store } from '@ngrx/store';
 import {
-    StartCreatingFolderPermission,
-    StartCreatingNewFolder,
-    StartDeletingFilesAndFolders,
-    StartDeletingFolderPermission,
-    StartDownloadFilesAndFolders,
-    StartLoadingFolder,
-    StartLoadingFolderPermissions
+  StartCreatingFolderPermission,
+  StartCreatingNewFolder,
+  StartDeletingFilesAndFolders,
+  StartDeletingFolderPermission,
+  StartDownloadFilesAndFolders,
+  StartLoadingFolder,
+  StartLoadingFolderPermissions,
 } from '../store/files.actions';
 import { Observable } from 'rxjs';
 import { TableEntry } from '../models/table-entry.model';
@@ -39,101 +39,101 @@ import { RestrictedGroup } from '../../core/models/group.model';
 import { HasPermission } from '../../core/models/permission.model';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class FilesSandboxService {
-    constructor(
-        private router: Router,
-        private filesStore: Store<FilesState>,
-        private coreSB: CoreSandboxService,
-        private snackbarService: SnackbarService,
-        private storage: StorageService
-    ) {}
+  constructor(
+    private router: Router,
+    private filesStore: Store<FilesState>,
+    private coreSB: CoreSandboxService,
+    private snackbarService: SnackbarService,
+    private storage: StorageService
+  ) {}
 
-    startLoadingFolderInformation(path: string) {
-        this.filesStore.dispatch(new StartLoadingFolder(path));
-    }
+  startLoadingFolderInformation(path: string) {
+    this.filesStore.dispatch(new StartLoadingFolder(path));
+  }
 
-    getFolders(asArray: boolean = true): Observable<TableEntry[]> {
-        return this.filesStore.pipe(
-            select((state: any) => {
-                const values = state.files.folders;
-                return asArray ? Object.values(values) : values;
-            })
-        );
-    }
+  getFolders(asArray: boolean = true): Observable<TableEntry[]> {
+    return this.filesStore.pipe(
+      select((state: any) => {
+        const values = state.files.folders;
+        return asArray ? Object.values(values) : values;
+      })
+    );
+  }
 
-    getFiles(asArray: boolean = true): Observable<TableEntry[]> {
-        return this.filesStore.pipe(
-            select((state: any) => {
-                const values = state.files.files;
-                return asArray ? Object.values(values) : values;
-            })
-        );
-    }
+  getFiles(asArray: boolean = true): Observable<TableEntry[]> {
+    return this.filesStore.pipe(
+      select((state: any) => {
+        const values = state.files.files;
+        return asArray ? Object.values(values) : values;
+      })
+    );
+  }
 
-    getCurrentFolder(): Observable<TableEntry> {
-        return this.filesStore.pipe(
-            select((state: any) => {
-                return state.files.current_folder;
-            })
-        );
-    }
+  getCurrentFolder(): Observable<TableEntry> {
+    return this.filesStore.pipe(
+      select((state: any) => {
+        return state.files.current_folder;
+      })
+    );
+  }
 
-    upload(stuff: any, path: string) {
-        this.storage.upload(stuff, path, () => {
-            this.startLoadingFolderInformation(path);
-            this.snackbarService.showSuccessSnackBar('uploaded sucessfully');
-        });
-    }
+  upload(stuff: any, folder: string): void {
+    this.storage.upload(stuff, folder, () => {
+      //   this.startLoadingFolderInformation(folder);
+      this.snackbarService.showSuccessSnackBar('uploaded sucessfully');
+    });
+  }
 
-    startDeleting(stuff: TableEntry[], path: string) {
-        this.filesStore.dispatch(new StartDeletingFilesAndFolders({ entries: stuff, path }));
-    }
+  startDeleting(stuff: TableEntry[], path: string) {
+    this.filesStore.dispatch(new StartDeletingFilesAndFolders({ entries: stuff, path }));
+  }
 
-    startDownloading(stuff: TableEntry[], path: string) {
-        this.filesStore.dispatch(new StartDownloadFilesAndFolders({ entries: stuff, path }));
-    }
+  startDownloading(stuff: TableEntry[], path: string) {
+    this.filesStore.dispatch(new StartDownloadFilesAndFolders({ entries: stuff, path }));
+  }
 
-    startLoadingFolderPermissions(folder_id: string) {
-        this.filesStore.dispatch(new StartLoadingFolderPermissions(folder_id));
-    }
+  startLoadingFolderPermissions(folder_id: string) {
+    this.filesStore.dispatch(new StartLoadingFolderPermissions(folder_id));
+  }
 
-    getFolderPermissions(asArray: boolean = true): Observable<FolderPermission[]> {
-        return this.filesStore.pipe(
-            select((state: any) => {
-                const values = state.files.folder_permissions;
-                return asArray ? Object.values(values) : values;
-            })
-        );
-    }
+  getFolderPermissions(asArray: boolean = true): Observable<FolderPermission[]> {
+    return this.filesStore.pipe(
+      select((state: any) => {
+        const values = state.files.folder_permissions;
+        return asArray ? Object.values(values) : values;
+      })
+    );
+  }
 
-    getFolderHasPermissions(asArray: boolean = true): Observable<HasPermission[]> {
-        return this.filesStore.pipe(
-            select((state: any) => {
-                const values = state.files.folder_has_permissions;
-                return asArray ? Object.values(values) : values;
-            })
-        );
-    }
+  getFolderHasPermissions(asArray: boolean = true): Observable<HasPermission[]> {
+    return this.filesStore.pipe(
+      select((state: any) => {
+        const values = state.files.folder_has_permissions;
+        return asArray ? Object.values(values) : values;
+      })
+    );
+  }
 
-    startCreatingFolderPermission(folder: TableEntry, group: RestrictedGroup, permission: string) {
-        this.filesStore.dispatch(new StartCreatingFolderPermission({ group, folder, permission }));
-    }
+  startCreatingFolderPermission(folder: TableEntry, group: RestrictedGroup, permission: string) {
+    this.filesStore.dispatch(new StartCreatingFolderPermission({ group, folder, permission }));
+  }
 
-    startDeletingFolderPermission(folder: FolderPermission): void {
-        this.filesStore.dispatch(new StartDeletingFolderPermission(folder));
-    }
+  startDeletingFolderPermission(folder: FolderPermission): void {
+    this.filesStore.dispatch(new StartDeletingFolderPermission(folder));
+  }
 
-    startCreatingNewFolder(name: string, parent: TableEntry): void {
-        this.filesStore.dispatch(new StartCreatingNewFolder({ name, parent }));
-    }
+  startCreatingNewFolder(name: string, parent: TableEntry): void {
+    this.filesStore.dispatch(new StartCreatingNewFolder({ name, parent }));
+  }
 
-    getCurrentFolderWritePermission(): Observable<boolean> {
-        return this.filesStore.pipe(
-            select((state: any) => {
-                return state.files.write_permission;
-            })
-        );
-    }
+  getCurrentFolderWritePermission(): Observable<boolean> {
+    return this.filesStore.pipe(
+      select((state: any) => {
+        return state.files.write_permission;
+      })
+    );
+  }
 }

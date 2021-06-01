@@ -17,7 +17,6 @@
  */
 
 import { NgModule } from '@angular/core';
-import { FilesMainViewComponent } from './components/files-main-view/files-main-view.component';
 import { FilemanagementRoutingModule } from './filemanagement-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { ListFileItemComponent } from './components/list-file-item/list-file-item.component';
@@ -41,7 +40,6 @@ import { AddPermissionForFolderComponent } from './components/add-permission-for
     EffectsModule.forFeature([FilesEffects]),
   ],
   declarations: [
-    FilesMainViewComponent,
     ListFileItemComponent,
     ListFolderItemComponent,
     PathInformationComponent,

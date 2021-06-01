@@ -92,9 +92,9 @@ export class StorageService {
     });
   }
 
-  upload(dataTransferItemList, path: string, callback: (any) => void) {
+  upload(dataTransferItemList, folder: string, callback: (any) => void): void {
     if (Array.isArray(dataTransferItemList)) {
-      this.uploadFiles(dataTransferItemList, path, callback);
+      this.uploadFiles(dataTransferItemList, folder, callback);
       return;
     }
 
@@ -114,7 +114,7 @@ export class StorageService {
           paths.push(entry.fullPath + ';' + fileResult.size);
           if (count === fileEntries.length) {
             formData.append('paths', JSON.stringify(paths));
-            formData.append('path', path);
+            formData.append('folder', JSON.stringify(folder));
 
             this.http.post(FILES_UPLOAD_BASE_API_URL, formData, AppSandboxService.getPrivateKeyPlaceholder()).subscribe((response) => {
               // TODO?
@@ -126,7 +126,7 @@ export class StorageService {
     });
   }
 
-  uploadFiles(files, path, callback) {
+  uploadFiles(files, folder: string, callback): void {
     let count = 0;
     const formData = new FormData();
     const paths = [];
@@ -141,7 +141,7 @@ export class StorageService {
       paths.push(entry.name + ';' + entry.size);
       if (count === files.length) {
         formData.append('paths', JSON.stringify(paths));
-        formData.append('path', path);
+        formData.append('folder', folder);
         this.http.post(FILES_UPLOAD_BASE_API_URL, formData, AppSandboxService.getPrivateKeyPlaceholder()).subscribe((response) => {
           callback(response);
         });
