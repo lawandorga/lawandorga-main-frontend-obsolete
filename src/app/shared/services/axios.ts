@@ -1,6 +1,8 @@
 import { RestrictedGroup } from 'src/app/core/models/group.model';
 import { HasPermission, Permission } from 'src/app/core/models/permission.model';
 import { FullUser } from 'src/app/core/models/user.model';
+import { IFile } from 'src/app/filemanagement/models/file.model';
+import { Folder } from 'src/app/filemanagement/models/folder.model';
 import { Message } from 'src/app/recordmanagement/models/message.model';
 import { RecordDeletionRequest } from 'src/app/recordmanagement/models/record_deletion_request.model';
 import { RecordDocument } from 'src/app/recordmanagement/models/record_document.model';
@@ -26,7 +28,9 @@ export type DjangoModel =
   | Message
   | RecordDocument
   | RecordPermissionRequest
-  | RecordDeletionRequest;
+  | RecordDeletionRequest
+  | IFile
+  | Folder;
 
 export interface SubmitData {
   [key: string]: string | number;

@@ -17,35 +17,36 @@
  */
 
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FilesSandboxService } from '../../services/files-sandbox.service';
-import { FilesTypes, TableEntry } from '../../models/table-entry.model';
-import { GetFolderFrontUrlRelative } from '../../../statics/frontend_links.statics';
+import { ActivatedRoute, Params } from '@angular/router';
 import { SharedSandboxService } from '../../../shared/services/shared-sandbox.service';
-import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
-import { PERMISSION_WRITE_ALL_FOLDERS_RLC } from '../../../statics/permissions.statics';
-import { DjangoError, SubmitData } from 'src/app/shared/services/axios';
+import { addToArray, DjangoError, SubmitData, removeFromArray } from 'src/app/shared/services/axios';
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { Folder } from '../../models/folder.model';
+import { IFile } from '../../models/file.model';
 
 @Component({
   selector: 'app-folder-view',
   templateUrl: './folder-view.component.html',
-  styleUrls: ['./folder-view.component.scss'],
 })
 export class FolderViewComponent implements OnInit {
-  entries: TableEntry[] = [];
-  path: string;
-  informationOpened = false;
-  informationEntry: TableEntry;
+  id: string;
 
-  write_permission = false;
+  permissionColumns = ['type', 'group', 'source', 'actions'];
 
-  currentFolder: TableEntry;
-
-  @ViewChild('fileInput', { static: true })
-  fileInput: ElementRef<HTMLInputElement>;
-
-  columns = ['type', 'name', 'size', 'last_edited', 'more'];
+  folder: Folder;
+  folderFields = [
+    {
+      label: 'Name',
+      type: 'text',
+      tag: 'input',
+      name: 'name',
+      required: false,
+    },
+  ];
+  folderErrors: DjangoError;
+  folderData: { name: string };
 
   fileFields = [
     {
@@ -57,93 +58,111 @@ export class FolderViewComponent implements OnInit {
     },
   ];
   fileErrors: DjangoError;
-  files: File[];
   fileData: { file: string };
 
-  constructor(
-    private route: ActivatedRoute,
-    private fileSB: FilesSandboxService,
-    private router: Router,
-    private sharedSB: SharedSandboxService,
-    private coreSB: CoreSandboxService,
-    private http: HttpClient
-  ) {}
+  items: (IFile | Folder)[];
+  displayedColumns = ['type', 'name', 'created', 'actions'];
+  dataSource: MatTableDataSource<IFile | Folder>;
+
+  permissions = [];
+
+  @ViewChild(MatSort) sort: MatSort;
+
+  constructor(private route: ActivatedRoute, private sharedSB: SharedSandboxService, private http: HttpClient) {}
 
   ngOnInit(): void {
-    this.http.get('api/files/file_base/').subscribe((response: File[]) => (this.files = response));
-
-    this.route.queryParamMap.subscribe((map) => {
-      if (map.get('path')) {
-        this.path = map.get('path');
-      } else {
-        this.path = '';
+    this.route.params.subscribe((params: Params) => {
+      let url = 'api/files/folder/';
+      if ('id' in params) {
+        url = `api/files/folder/${params['id'] as string}/`;
+        this.id = params['id'] as string;
       }
-      this.fileSB.startLoadingFolderInformation(this.path);
-    });
 
-    this.fileSB.getFolders().subscribe((folders) => {
-      folders = folders.sort((a: TableEntry, b: TableEntry) => (a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1));
-      this.entries = this.entries.filter((entry) => {
-        return entry.type !== FilesTypes.Folder;
+      this.http.get(url).subscribe((response: Folder) => {
+        this.folder = response;
+        this.getItems(this.folder.id);
       });
-      this.entries.push(...folders);
-    });
-    this.fileSB.getFiles().subscribe((files) => {
-      files = files.sort((a: TableEntry, b: TableEntry) => (a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1));
-      this.entries = this.entries.filter((entry) => {
-        return entry.type !== FilesTypes.File;
-      });
-      this.entries.push(...files);
-    });
-    this.fileSB.getCurrentFolder().subscribe((currentFolder: TableEntry) => {
-      this.currentFolder = currentFolder;
-      this.informationEntry = this.currentFolder;
-    });
-
-    this.fileSB.getCurrentFolderWritePermission().subscribe((write_permission: boolean) => {
-      this.write_permission = this.write_permission || write_permission;
-    });
-
-    this.coreSB.hasPermissionFromStringForOwnRlc(PERMISSION_WRITE_ALL_FOLDERS_RLC, (hasPermission) => {
-      this.write_permission = this.write_permission || hasPermission;
     });
   }
 
-  onEntryClick(entry: TableEntry): void {
-    if (entry.type === FilesTypes.Folder) {
-      this.router.navigateByUrl(GetFolderFrontUrlRelative(this.path, entry.name)).catch((error) => {});
-    }
+  getItems(id: number): void {
+    this.http.get(`api/files/folder/${id}/items/`).subscribe((response: (IFile | Folder)[]) => {
+      this.items = response;
+      this.dataSource = new MatTableDataSource(this.items);
+      this.dataSource.sort = this.sort;
+    });
+  }
+
+  getFolderUrl(id: number): string {
+    return `/files/${id}/`;
   }
 
   onFileSend(data: SubmitData): void {
     const formData = new FormData();
     // eslint-disable-next-line
     formData.append('file', data['file']['_files'][0] as File);
-    formData.append('folder', this.currentFolder.id);
+    if (this.id) formData.append('folder', this.id);
 
     this.http.post(`api/files/file_base/`, formData).subscribe(
-      (response: File) => {
-        // this.documents = addToArray(this.documents, response[0]) as RecordDocument[];
-        // this.documentData = { file: '' };
-        this.coreSB.showSuccessSnackBar('File saved successfully.');
+      (response: IFile) => {
+        this.items = addToArray(this.items, response) as (IFile | Folder)[];
+        this.dataSource.data = this.items;
+        this.fileData = { file: '' };
       },
-      (error: HttpErrorResponse) => (this.fileErrors = error.error)
+      (error: HttpErrorResponse) => (this.fileErrors = error.error as DjangoError)
     );
   }
 
-  dropped($event) {
-    $event.preventDefault();
-    this.fileSB.upload($event.dataTransfer.items, this.currentFolder.id);
+  onFolderSend(data: SubmitData): void {
+    data['parent'] = this.id;
+    this.http.post(`api/files/folder/`, data).subscribe(
+      (response: Folder) => {
+        this.items = addToArray(this.items, response) as (IFile | Folder)[];
+        this.dataSource.data = this.items;
+        this.folderData = { name: null };
+      },
+      (error: HttpErrorResponse) => (this.folderErrors = error.error as DjangoError)
+    );
   }
 
-  dragover($event) {
-    $event.preventDefault();
+  onFileDelete(id: number): void {
+    this.sharedSB.openConfirmDialog(
+      {
+        title: 'Delete',
+        description: 'Are you sure you want to delete this file?',
+        confirmLabel: 'Delete',
+        cancelLabel: 'Cancel',
+        confirmColor: 'warn',
+      },
+      (remove: boolean) => {
+        if (remove) {
+          this.http.delete(`api/files/file_base/${id}/`).subscribe(() => {
+            this.items = removeFromArray(this.items, id) as (IFile | Folder)[];
+            this.dataSource.data = this.items;
+          });
+        }
+      }
+    );
   }
 
-  filesSelected($event) {
-    event.preventDefault();
-    this.fileSB.upload(Array.from(this.fileInput.nativeElement.files), this.currentFolder.id);
-    this.fileSB.startLoadingFolderInformation(this.path);
+  onFolderDelete(id: number): void {
+    this.sharedSB.openConfirmDialog(
+      {
+        title: 'Delete',
+        description: 'Are you sure you want to delete this folder?',
+        confirmLabel: 'Delete',
+        cancelLabel: 'Cancel',
+        confirmColor: 'warn',
+      },
+      (remove: boolean) => {
+        if (remove) {
+          this.http.delete(`api/files/folder/${id}/`).subscribe(() => {
+            this.items = removeFromArray(this.items, id) as (IFile | Folder)[];
+            this.dataSource.data = this.items;
+          });
+        }
+      }
+    );
   }
 
   onFileDownload(id: number, name: string): void {
@@ -154,56 +173,7 @@ export class FolderViewComponent implements OnInit {
       });
   }
 
-  onDeleteClick(entry: TableEntry) {
-    let desc = 'are you sure you want to delete the ';
-    if (entry.type === 1) {
-      // file
-      desc += 'file ';
-    } else {
-      // folder
-      desc += 'folder ';
-    }
-    desc += entry.name + '?';
-
-    this.sharedSB.openConfirmDialog(
-      {
-        description: desc,
-        confirmLabel: 'delete',
-        confirmColor: 'warn',
-      },
-      (delete_it: boolean) => {
-        if (delete_it) {
-          this.fileSB.startDeleting([entry], this.path);
-        }
-      }
-    );
-  }
-
-  onDownloadClick(entry) {
-    this.fileSB.startDownloading([entry], this.path);
-  }
-
-  getFileName(response: HttpResponse<Blob>) {
-    let filename: string;
-    try {
-      const contentDisposition: string = response.headers.get('Content-Disposition');
-      console.log(response.headers);
-
-      const r = /(?:filename=")(.+)(?:")/;
-      filename = r.exec(contentDisposition)[1];
-    } catch (e) {
-      filename = 'unknown-filename';
-    }
-    return filename;
-  }
-
-  /**
-   * Method is use to download file.
-   * @param data - Array Buffer data
-   * @param type - type of the document.
-   */
   downloadFile(response: HttpResponse<Blob>, name: string): void {
-    console.log('download');
     const filename: string = name;
     const binaryData = [];
     binaryData.push(response.body);
@@ -212,37 +182,5 @@ export class FolderViewComponent implements OnInit {
     downloadLink.setAttribute('download', filename);
     document.body.appendChild(downloadLink);
     downloadLink.click();
-  }
-
-  onCurrentFolderInformation() {
-    this.informationEntry = this.currentFolder;
-    this.informationOpened = !this.informationOpened;
-  }
-
-  onFolderInformation(entry: TableEntry) {
-    this.informationEntry = entry;
-    this.informationOpened = true;
-  }
-
-  onCreateFolderClick() {
-    this.sharedSB.openEditTextDialog(
-      {
-        short: true,
-        descriptionLabel: 'folder name:',
-        cancelLabel: 'back',
-        saveLabel: 'save',
-        saveColor: 'primary',
-        title: 'new folder',
-      },
-      (result: string) => {
-        if (result && result !== '') {
-          if (result.includes('/')) {
-            this.coreSB.showErrorSnackBar("You can't use / in folder names.");
-          } else {
-            this.fileSB.startCreatingNewFolder(result, this.currentFolder);
-          }
-        }
-      }
-    );
   }
 }

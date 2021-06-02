@@ -24,7 +24,10 @@ import { FolderViewComponent } from './components/folder-view/folder-view.compon
 const fileRoutes: Routes = [
   {
     path: '',
-    pathMatch: 'full',
+    component: FolderViewComponent,
+  },
+  {
+    path: ':id',
     component: FolderViewComponent,
   },
 ];
