@@ -176,7 +176,7 @@ export class RecordComponent implements OnInit {
     {
       label: 'Status Described',
       type: 'text',
-      tag: 'input',
+      tag: 'textarea',
       name: 'status_described',
       required: false,
     },
