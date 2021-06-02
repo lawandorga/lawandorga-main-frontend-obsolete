@@ -3,6 +3,7 @@ import { HasPermission, Permission } from 'src/app/core/models/permission.model'
 import { FullUser } from 'src/app/core/models/user.model';
 import { IFile } from 'src/app/filemanagement/models/file.model';
 import { Folder } from 'src/app/filemanagement/models/folder.model';
+import { FolderPermission } from 'src/app/filemanagement/models/folder_permission.model';
 import { Message } from 'src/app/recordmanagement/models/message.model';
 import { RecordDeletionRequest } from 'src/app/recordmanagement/models/record_deletion_request.model';
 import { RecordDocument } from 'src/app/recordmanagement/models/record_document.model';
@@ -30,7 +31,8 @@ export type DjangoModel =
   | RecordPermissionRequest
   | RecordDeletionRequest
   | IFile
-  | Folder;
+  | Folder
+  | FolderPermission;
 
 export interface SubmitData {
   [key: string]: string | number;

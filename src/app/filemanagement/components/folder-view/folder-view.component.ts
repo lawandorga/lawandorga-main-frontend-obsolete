@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { SharedSandboxService } from '../../../shared/services/shared-sandbox.service';
 import { addToArray, DjangoError, SubmitData, removeFromArray } from 'src/app/shared/services/axios';
@@ -25,6 +25,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { Folder } from '../../models/folder.model';
 import { IFile } from '../../models/file.model';
+import { AddPermissionForFolderComponent } from '../add-permission-for-folder/add-permission-for-folder.component';
+import { MatDialog } from '@angular/material/dialog';
+import { FolderPermission } from '../../models/folder_permission.model';
 
 @Component({
   selector: 'app-folder-view',
@@ -64,11 +67,11 @@ export class FolderViewComponent implements OnInit {
   displayedColumns = ['type', 'name', 'created', 'actions'];
   dataSource: MatTableDataSource<IFile | Folder>;
 
-  permissions = [];
+  permissions: FolderPermission[];
 
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private route: ActivatedRoute, private sharedSB: SharedSandboxService, private http: HttpClient) {}
+  constructor(private route: ActivatedRoute, private sharedSB: SharedSandboxService, private http: HttpClient, public dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
@@ -81,7 +84,14 @@ export class FolderViewComponent implements OnInit {
       this.http.get(url).subscribe((response: Folder) => {
         this.folder = response;
         this.getItems(this.folder.id);
+        this.getPermissions(this.folder.id);
       });
+    });
+  }
+
+  getPermissions(id: number): void {
+    this.http.get(`api/files/folder/${id}/permissions/`).subscribe((response: FolderPermission[]) => {
+      this.permissions = response;
     });
   }
 
@@ -182,5 +192,26 @@ export class FolderViewComponent implements OnInit {
     downloadLink.setAttribute('download', filename);
     document.body.appendChild(downloadLink);
     downloadLink.click();
+  }
+
+  onAddPermission(): void {
+    const dialogRef = this.dialog.open(AddPermissionForFolderComponent);
+
+    dialogRef.afterClosed().subscribe((result: { permission: number; group: number }) => {
+      if (result)
+        this.http
+          .post('api/files/permission_for_folder/', {
+            permission: result.permission,
+            group_has_permission: result.group,
+            folder: this.folder.id,
+          })
+          .subscribe((response: FolderPermission) => (this.permissions = addToArray(this.permissions, response) as FolderPermission[]));
+    });
+  }
+
+  onRemovePermission(id: number): void {
+    this.http
+      .delete(`api/files/permission_for_folder/${id}/`)
+      .subscribe(() => (this.permissions = removeFromArray(this.permissions, id) as FolderPermission[]));
   }
 }

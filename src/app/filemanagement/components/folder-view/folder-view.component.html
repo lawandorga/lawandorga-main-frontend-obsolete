@@ -83,7 +83,7 @@
         </dynamic-form>
     </mat-card>
 
-    <mat-card class="m-0 p-0">
+    <mat-card class="m-0 p-0 col-span-2">
         <table mat-table [dataSource]="permissions" class="w-full">
             <ng-container matColumnDef="type">
                 <th mat-header-cell *matHeaderCellDef>Permission</th>
@@ -91,11 +91,11 @@
             </ng-container>
             <ng-container matColumnDef="group">
                 <th mat-header-cell *matHeaderCellDef>Group</th>
-                <td mat-cell *matCellDef="let permission">{{ permission.group }}</td>
+                <td mat-cell *matCellDef="let permission">{{ permission.group_has_permission.name }}</td>
             </ng-container>
             <ng-container matColumnDef="source">
                 <th mat-header-cell *matHeaderCellDef>Source</th>
-                <td mat-cell *matCellDef="let permission">{{ permission.source }}</td>
+                <td mat-cell *matCellDef="let permission">{{ permission.folder.name }}</td>
             </ng-container>
             <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef style="text-align: right;">
@@ -104,7 +104,8 @@
                     </button>
                 </th>
                 <td mat-cell *matCellDef="let permission" style="text-align: right;">
-                    <button mat-button (click)="onRemovePermission(permission.id)" color="warn">
+                    <button *ngIf="permission.source === 'NORMAL'" mat-button
+                        (click)="onRemovePermission(permission.id)" color="warn">
                         Remove
                     </button>
                 </td>

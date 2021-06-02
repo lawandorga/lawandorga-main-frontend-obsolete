@@ -1,33 +1,25 @@
-<!--
-  ~ law&orga - record and organization management software for refugee law clinics
-  ~ Copyright (C) 2020  Dominik Walser
-  ~
-  ~ This program is free software: you can redistribute it and/or modify
-  ~ it under the terms of the GNU Affero General Public License as
-  ~ published by the Free Software Foundation, either version 3 of the
-  ~ License, or (at your option) any later version.
-  ~
-  ~ This program is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~ GNU Affero General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU Affero General Public License
-  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
-  -->
-
-<h3>add permission for folder</h3>
+<h1 mat-dialog-title>Add Permission</h1>
 <div mat-dialog-content>
-  <mat-radio-group  [(ngModel)]="selectedPermission">
-    <mat-radio-button value="read" class="add-permission-for-folder__radio-button">read</mat-radio-button>
-    <mat-radio-button value="write" class="add-permission-for-folder__radio-button">write</mat-radio-button>
-  </mat-radio-group>
-  <app-autocomplete [allValuesObservable]="groups" placeholder="permission for group"
-                    (selectedValueChanged)="selectedGroupChanged($event)" [setSelectedValue]="selectedGroup">
-  </app-autocomplete>
+  <div class="flex flex-col">
+    <mat-form-field>
+      <mat-label>Permission</mat-label>
+      <mat-select [(ngModel)]="selectedPermission" name="permission">
+        <mat-option *ngFor="let permission of permissions" [value]="permission.id">
+          {{permission.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Group</mat-label>
+      <mat-select [(ngModel)]="selectedGroup" name="group">
+        <mat-option *ngFor="let group of groups" [value]="group.id">
+          {{group.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 </div>
 <div mat-dialog-actions>
-  <div class="spacer"></div>
-  <button mat-flat-button (click)="onCloseClick()">close</button>
-  <button mat-flat-button (click)="onAddClick()" color="primary">add</button>
+  <button mat-flat-button color="primary"
+    [mat-dialog-close]="{ permission: selectedPermission, group: selectedGroup }">Add</button>
 </div>
