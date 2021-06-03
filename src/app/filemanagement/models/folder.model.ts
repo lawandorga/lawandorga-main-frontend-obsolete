@@ -64,4 +64,5 @@ export interface Folder {
   creator: number;
   created: string;
   parent: number;
+  path: any[];
 }
