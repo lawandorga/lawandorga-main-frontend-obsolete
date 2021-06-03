@@ -28,7 +28,7 @@ import { Message } from '../../models/message.model';
 import { RecordDocument } from '../../models/record_document.model';
 import { StorageService } from 'src/app/shared/services/storage.service';
 import { SharedSandboxService } from 'src/app/shared/services/shared-sandbox.service';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-record',
@@ -330,20 +330,36 @@ export class RecordComponent implements OnInit {
   onDocumentSend(data: SubmitData): void {
     const formData = new FormData();
     // eslint-disable-next-line
-    formData.append('files', data['file']['_files'][0] as File);
+    formData.append('file', data['file']['_files'][0] as File);
+    formData.append('record', this.record.id.toString());
 
-    this.http.post(`api/records/e_record/${this.record.id}/documents/`, formData).subscribe(
-      (response: RecordDocument[]) => {
-        this.documents = addToArray(this.documents, response[0]) as RecordDocument[];
+    this.http.post(`api/records/record_documents/`, formData).subscribe(
+      (response: RecordDocument) => {
+        this.documents = addToArray(this.documents, response) as RecordDocument[];
         this.documentData = { file: '' };
-        this.coreSB.showSuccessSnackBar('File saved successfully.');
       },
       (error: HttpErrorResponse) => (this.messageErrors = error.error as DjangoError)
     );
   }
 
   onDownloadClick(id: number, name: string): void {
-    this.http.get(`api/records/e_record/documents/${id}/`).subscribe((response) => StorageService.saveFile(response, name));
+    this.http
+      .get(`api/records/record_documents/${id}/`, { observe: 'response', responseType: 'blob' as 'json' })
+      .subscribe((response: HttpResponse<Blob>) => {
+        this.downloadFile(response, name);
+      });
+    // this.http.get(`api/records/e_record/documents/${id}/`).subscribe((response) => StorageService.saveFile(response, name));
+  }
+
+  downloadFile(response: HttpResponse<Blob>, name: string): void {
+    const filename: string = name;
+    const binaryData = [];
+    binaryData.push(response.body);
+    const downloadLink = document.createElement('a');
+    downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, { type: 'blob' }));
+    downloadLink.setAttribute('download', filename);
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
   }
 
   onDeleteClick(id: number): void {
