@@ -32,9 +32,7 @@ import { AuthInterceptor } from './core/services/auth.interceptor';
 import { environment } from '../environments/environment';
 import { AppSandboxService } from './core/services/app-sandbox.service';
 import { StatisticsSandboxService } from './core/services/statistics-sandbox.service';
-import { StorageService } from './shared/services/storage.service';
 import { SnackbarService } from './shared/services/snackbar.service';
-import { FilesSandboxService } from './filemanagement/services/files-sandbox.service';
 import { SharedSandboxService } from './shared/services/shared-sandbox.service';
 import { QuillModule } from 'ngx-quill';
 import Quill from 'quill';
@@ -74,10 +72,8 @@ Quill.register('modules/mention', QuillCursors);
     AuthGuardService,
     AppSandboxService,
     CoreSandboxService,
-    FilesSandboxService,
     CollabSandboxService,
     StatisticsSandboxService,
-    StorageService,
     SnackbarService,
     SharedSandboxService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

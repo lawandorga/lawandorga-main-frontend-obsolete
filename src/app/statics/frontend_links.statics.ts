@@ -17,10 +17,9 @@
  */
 
 import { RestrictedUser } from '../core/models/user.model';
-import { RestrictedRecord, TokenRecord } from '../recordmanagement/models/record.model';
+import { TokenRecord } from '../recordmanagement/models/record.model';
 import { RestrictedGroup } from '../core/models/group.model';
 import { Permission } from '../core/models/permission.model';
-import { FullFolder } from '../filemanagement/models/folder.model';
 import { GenerateSearchAppendix } from './api_urls.statics';
 import { SearchParamsInterface } from '../shared/interfaces/search_params.interface';
 
@@ -73,24 +72,6 @@ export const GetGroupFrontUrl = (group: RestrictedGroup | string): string => {
 export const GetPermissionFrontUrl = (permission: Permission | string): string => {
   if (permission instanceof Permission) return `${PERMISSIONS_FRONT_URL}/${permission.id}`;
   else return `${PERMISSIONS_FRONT_URL}/${permission}`;
-};
-
-export const GetFolderFrontUrlRelative = (currentPath: string, folder: FullFolder | string) => {
-  if (!currentPath.endsWith('/') && currentPath !== '') {
-    currentPath = currentPath + '/';
-  }
-  if (folder instanceof FullFolder) {
-    return `${FILES_FRONT_URL}?path=${currentPath}${folder.name}`;
-  } else {
-    return `${FILES_FRONT_URL}?path=${currentPath}${folder}`;
-  }
-};
-
-export const GetFolderFrontUrlAbsolute = (path: string) => {
-  if (path === '') {
-    return `${FILES_FRONT_URL}`;
-  }
-  return `${FILES_FRONT_URL}?path=${path}`;
 };
 
 export const GetCollabEditFrontUrl = (id: number) => {
