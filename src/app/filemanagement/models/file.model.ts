@@ -3,4 +3,5 @@ export interface IFile {
   type: 'FILE';
   name: string;
   key: string;
+  exists: boolean;
 }
