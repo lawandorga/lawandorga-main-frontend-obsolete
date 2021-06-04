@@ -28,6 +28,8 @@ import { environment } from '../../../environments/environment';
 import { DjangoError } from 'src/app/shared/services/axios';
 import { AppState } from 'src/app/app.state';
 
+const errorCodes = (code) => code === 400 || code === 403 || code === 405;
+
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   constructor(private store: Store<AppState>, private coreSB: CoreSandboxService) {}
@@ -56,9 +58,17 @@ export class AuthInterceptor implements HttpInterceptor {
               this.coreSB.showErrorSnackBar('You were logged out, please login again.');
             }
             // if the backend returned a message show that message
-            else if (error.status === 400 || error.status === 403 || error.status === 405) {
+            else if (errorCodes(error.status) && !(error.error instanceof Blob)) {
               const djangoError = error.error as DjangoError;
               this.coreSB.showErrorSnackBar(djangoError.detail);
+            } else if (errorCodes(error.status) && error.error instanceof Blob) {
+              const reader = new FileReader();
+              const coreSB = this.coreSB;
+              reader.onloadend = function (event) {
+                const djangoError = JSON.parse(event.target.result as string) as DjangoError;
+                coreSB.showErrorSnackBar(djangoError.detail);
+              };
+              reader.readAsText(error.error);
             } else {
               this.coreSB.showErrorSnackBar('Error');
             }
