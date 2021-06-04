@@ -27,24 +27,23 @@ import { CoreSandboxService } from '../../services/core-sandbox.service';
 import { Permission } from '../../models/permission.model';
 
 @Component({
-    selector: 'app-permission-list',
-    templateUrl: './permission-list.component.html',
-    styleUrls: ['./permission-list.component.scss']
+  selector: 'app-permission-list',
+  templateUrl: './permission-list.component.html',
 })
 export class PermissionListComponent implements OnInit {
-    permissions: Observable<Permission[]>;
+  permissions: Observable<Permission[]>;
 
-    constructor(private coreSB: CoreSandboxService, private router: Router) {}
+  constructor(private coreSB: CoreSandboxService, private router: Router) {}
 
-    ngOnInit() {
-        this.permissions = this.coreSB.getAllPermissions().pipe(
-            tap(results => {
-                alphabeticalSorterByField(results, 'name');
-            })
-        );
-    }
+  ngOnInit() {
+    this.permissions = this.coreSB.getAllPermissions().pipe(
+      tap((results) => {
+        alphabeticalSorterByField(results, 'name');
+      })
+    );
+  }
 
-    onPermissionItemClick(permission: Permission) {
-        this.router.navigate([GetPermissionFrontUrl(permission)]);
-    }
+  onPermissionItemClick(permission: Permission) {
+    this.router.navigate([GetPermissionFrontUrl(permission)]);
+  }
 }

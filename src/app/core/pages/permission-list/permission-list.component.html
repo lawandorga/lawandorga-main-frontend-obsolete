@@ -23,11 +23,7 @@
         <div *ngIf="permissions | async as catalog; else loading">
             <ng-container *ngIf="catalog.length; else noItems">
                 <mat-list>
-                    <mat-list-item
-                        *ngFor="let permission of permissions | async"
-                        class="is_clickable"
-                        (click)="onPermissionItemClick(permission)"
-                    >
+                    <mat-list-item *ngFor="let permission of permissions | async">
                         <p>{{ permission.name }}</p>
                     </mat-list-item>
                 </mat-list>

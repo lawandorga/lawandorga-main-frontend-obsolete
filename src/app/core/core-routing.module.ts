@@ -29,7 +29,6 @@ import { ResetPasswordComponent } from './pages/auth/reset-password/reset-passwo
 import { GroupsListComponent } from './pages/groups-list/groups-list.component';
 import { GroupComponent } from './pages/group/group.component';
 import { PermissionListComponent } from './pages/permission-list/permission-list.component';
-import { EditPermissionComponent } from './pages/edit-permission/edit-permission.component';
 import { NewUserRequestsComponent } from './pages/new-user-requests/new-user-requests.component';
 import { LegalNoticeComponent } from './pages/legal-notice/legal-notice.component';
 import { InactiveUsersComponent } from './pages/inactive-users/inactive-users.component';
@@ -73,11 +72,6 @@ const apiRoutes: Routes = [
     path: 'permissions',
     pathMatch: 'full',
     component: PermissionListComponent,
-    canActivate: [AuthGuardService],
-  },
-  {
-    path: 'permissions/:id',
-    component: EditPermissionComponent,
     canActivate: [AuthGuardService],
   },
   {

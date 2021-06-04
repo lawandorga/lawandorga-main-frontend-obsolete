@@ -1,21 +1,3 @@
-/*
- * law&orga - record and organization management software for refugee law clinics
- * Copyright (C) 2019  Dominik Walser
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>
- */
-
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -41,7 +23,6 @@ import { ResetPasswordComponent } from './pages/auth/reset-password/reset-passwo
 import { GroupsListComponent } from './pages/groups-list/groups-list.component';
 import { GroupComponent } from './pages/group/group.component';
 import { PermissionListComponent } from './pages/permission-list/permission-list.component';
-import { EditPermissionComponent } from './pages/edit-permission/edit-permission.component';
 import { AddHasPermissionComponent } from './components/add-has-permission/add-has-permission.component';
 import { AddHasPermissionForComponent } from './components/add-has-permission-for/add-has-permission-for.component';
 import { AddGroupComponent } from './components/add-group/add-group.component';
@@ -52,7 +33,6 @@ import { InactiveUsersComponent } from './pages/inactive-users/inactive-users.co
 import { PrivacyStatementComponent } from './pages/privacy-statement/privacy-statement.component';
 import { NotificationGroupsListComponent } from './pages/notification-groups-list/notification-groups-list.component';
 import { NotificationListComponent } from './components/notification-list/notification-list.component';
-// import { BaseRequestProcessedPipe, BaseRequestRequestedPipe } from './pipes/request.pipe';
 import { StatisticsPageComponent } from './pages/statistics-page/statistics-page.component';
 import { StatisticsNumberComponent } from './components/statistics-number/statistics-number.component';
 import { AddPermissionComponent } from './components/add-permission/add-permission.component';
@@ -86,7 +66,6 @@ import { ArticleComponent } from './pages/article/article.component';
     GroupsListComponent,
     GroupComponent,
     PermissionListComponent,
-    EditPermissionComponent,
     AddHasPermissionComponent,
     AddHasPermissionForComponent,
     AddPermissionComponent,
@@ -101,15 +80,10 @@ import { ArticleComponent } from './pages/article/article.component';
     NotificationGroupsListComponent,
     NotificationListComponent,
     QuillTestComponent,
-    // BaseRequestRequestedPipe,
-    // BaseRequestProcessedPipe,
     StatisticsPageComponent,
     StatisticsNumberComponent,
   ],
   providers: [MultilevelMenuService],
-  exports: [
-    SidebarComponent,
-    // BaseRequestRequestedPipe, BaseRequestProcessedPipe
-  ],
+  exports: [SidebarComponent],
 })
 export class CoreModule {}
