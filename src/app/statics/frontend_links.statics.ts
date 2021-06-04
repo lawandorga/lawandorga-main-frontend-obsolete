@@ -20,9 +20,6 @@ import { RestrictedUser } from '../core/models/user.model';
 import { TokenRecord } from '../recordmanagement/models/record.model';
 import { RestrictedGroup } from '../core/models/group.model';
 import { Permission } from '../core/models/permission.model';
-import { GenerateSearchAppendix } from './api_urls.statics';
-import { SearchParamsInterface } from '../shared/interfaces/search_params.interface';
-
 export const MAIN_PAGE_FRONT_URL = 'dashboard';
 export const REGISTER_FRONT_URL = 'register';
 export const LOGIN_FRONT_URL = 'login';
@@ -49,14 +46,6 @@ export const COLLAB_BASE = 'collab/';
 export const GetProfileFrontUrl = (profile: RestrictedUser | string): string => {
   if (profile instanceof RestrictedUser) return `${PROFILES_FRONT_URL}/${profile.id}`;
   else return `${PROFILES_FRONT_URL}/${profile}`;
-};
-
-export const GetRecordSearchFrontUrl = (searchTerm: string): string => {
-  return `${RECORDS_FRONT_URL}?search=${searchTerm}`;
-};
-
-export const GetRecordListFrontUrl = (searchParams: SearchParamsInterface) => {
-  return GenerateSearchAppendix(RECORDS_FRONT_URL, searchParams);
 };
 
 export const GetRecordFrontUrl = (record: TokenRecord | string): string => {

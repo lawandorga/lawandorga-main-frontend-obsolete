@@ -28,18 +28,9 @@ import {
   START_PATCH_USER,
   StartPatchUser,
   SET_USER,
-  START_LOADING_OTHER_USERS,
   SET_OTHER_USERS,
-  StartLoadingSpecialForeignUser,
-  START_LOADING_SPECIAL_FOREIGN_USER,
-  SET_SPECIAL_FOREIGN_USER,
   START_LOADING_GROUPS,
   SET_GROUPS,
-  START_LOADING_SPECIAL_GROUP,
-  StartLoadingSpecialGroup,
-  SET_SPECIAL_GROUP,
-  START_REMOVING_GROUP_MEMBER,
-  StartRemovingGroupMember,
   START_LOADING_SPECIAL_PERMISSION,
   StartLoadingSpecialPermission,
   SET_SPECIAL_PERMISSION,
@@ -65,7 +56,6 @@ import {
   START_DECLINING_NEW_USER_REQUEST,
   StartDecliningNewUserRequest,
   UPDATE_NEW_USER_REQUEST,
-  START_CHECKING_USER_ACTIVATION_LINK,
   START_SAVING_USER,
   StartSavingUser,
   START_LOADING_INACTIVE_USERS,
@@ -77,17 +67,12 @@ import {
   SET_USER_PERMISSIONS,
   START_LOADING_RLC_SETTINGS,
   SET_RLC_SETTINGS,
-  START_ADDING_GROUP_MEMBERS,
-  StartAddingGroupMembers,
   START_LOADING_UNREAD_NOTIFICATIONS,
   SET_NOTIFICATIONS,
 } from './core.actions';
 import {
   CREATE_PROFILE_API_URL,
-  GetActivateUserApiUrl,
-  GetCheckUserActivationApiUrl,
   GetPermissionsForGroupApiURL,
-  GetSpecialGroupApiURL,
   GetSpecialHasPermissionApiURL,
   GetSpecialPermissionApiURL,
   GetSpecialProfileApiURL,
@@ -95,29 +80,23 @@ import {
   HAS_PERMISSION_API_URL,
   HAS_PERMISSIONS_STATICS_API_URL,
   INACTIVE_USERS_API_URL,
-  LOGIN_API_URL,
   GetNewUserRequestApiUrl,
-  NEW_USER_REQUEST_ADMIT_API_URL,
   NEW_USER_REQUEST_API_URL,
-  PROFILES_API_URL,
   RLC_SETTINGS_API_URL,
   RLCS_API_URL,
   UNREAD_NOTIFICATIONS_API_URL,
   USER_HAS_PERMISSIONS_API_URL,
-  GetSpecialGroupMemberApiURL,
 } from '../../statics/api_urls.statics';
 import { CoreSandboxService } from '../services/core-sandbox.service';
-import { ForeignUser, FullUser, RestrictedUser } from '../models/user.model';
+import { FullUser, RestrictedUser } from '../models/user.model';
 import { SnackbarService } from '../../shared/services/snackbar.service';
-import { FullGroup, RestrictedGroup } from '../models/group.model';
+import { RestrictedGroup } from '../models/group.model';
 import { HasPermission, Permission } from '../models/permission.model';
 import { RestrictedRlc } from '../models/rlc.model';
 import { NewUserRequest } from '../models/new_user_request.model';
 import { AppSandboxService } from '../services/app-sandbox.service';
 import { RlcSettings } from '../models/rlc_settings.model';
-import { alphabeticalSorterByField } from '../../shared/other/sorter-helper';
 import { Router } from '@angular/router';
-import { LOGIN_FRONT_URL } from '../../statics/frontend_links.statics';
 
 @Injectable()
 export class CoreEffects {
@@ -198,152 +177,6 @@ export class CoreEffects {
               {
                 type: SET_GROUPS,
                 payload: groups,
-              },
-            ];
-          })
-        )
-      );
-    })
-  );
-
-  @Effect()
-  startLoadingOtherUsers = this.actions.pipe(
-    ofType(START_LOADING_OTHER_USERS),
-    switchMap(() => {
-      return from(
-        this.http.get(PROFILES_API_URL).pipe(
-          catchError((error) => {
-            this.snackbar.showErrorSnackBar('error at loading profiles: ' + error.error.detail);
-            return [];
-          }),
-          mergeMap((response: any) => {
-            const users = FullUser.getFullUsersFromJsonArray(response.results ? response.results : response);
-            return [{ type: SET_OTHER_USERS, payload: users }];
-          })
-        )
-      );
-    })
-  );
-
-  @Effect()
-  startLoadingSpecialForeignUser = this.actions.pipe(
-    ofType(START_LOADING_SPECIAL_FOREIGN_USER),
-    map((action: StartLoadingSpecialForeignUser) => {
-      return action.payload;
-    }),
-    switchMap((id: string) => {
-      return from(
-        this.http.get(GetSpecialProfileApiURL(id)).pipe(
-          catchError((error) => {
-            this.snackbar.showErrorSnackBar(`error at loading user: ${error.error.detail}`);
-            return [];
-          }),
-          mergeMap((response: any) => {
-            if (!response.error) {
-              const user = ForeignUser.getForeignUserFromJson(response);
-              return [
-                {
-                  type: SET_SPECIAL_FOREIGN_USER,
-                  payload: user,
-                },
-              ];
-            }
-            return [];
-          })
-        )
-      );
-    })
-  );
-
-  @Effect()
-  startLoadingSpecialGroup = this.actions.pipe(
-    ofType(START_LOADING_SPECIAL_GROUP),
-    map((action: StartLoadingSpecialGroup) => {
-      return action.payload;
-    }),
-    switchMap((id: string) => {
-      return from(
-        this.http.get(GetSpecialGroupApiURL(id)).pipe(
-          catchError((error) => {
-            this.snackbar.showErrorSnackBar('error at loading special group: ' + error.error.detail);
-            return [];
-          }),
-          mergeMap((response: any) => {
-            const group = FullGroup.getFullGroupFromJson(response);
-            alphabeticalSorterByField(group.members, 'name');
-            return [
-              {
-                type: SET_SPECIAL_GROUP,
-                payload: group,
-              },
-            ];
-          })
-        )
-      );
-    })
-  );
-
-  @Effect()
-  startAddingGroupMembers = this.actions.pipe(
-    ofType(START_ADDING_GROUP_MEMBERS),
-    map((action: StartAddingGroupMembers) => {
-      return action.payload;
-    }),
-    switchMap((toAdd: { user_ids: string[]; group_id: string }) => {
-      const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
-      return from(
-        this.http
-          .post(
-            GetSpecialGroupMemberApiURL(toAdd.group_id),
-            {
-              member: toAdd.user_ids[0],
-            },
-            privateKeyPlaceholder
-          )
-          .pipe(
-            catchError((error) => {
-              this.snackbar.showErrorSnackBar('error at adding group member: ' + error.error.detail);
-              return [];
-            }),
-            mergeMap((response: any) => {
-              const group = FullGroup.getFullGroupFromJson(response);
-              return [
-                {
-                  type: SET_SPECIAL_GROUP,
-                  payload: group,
-                },
-              ];
-            })
-          )
-      );
-    })
-  );
-
-  @Effect()
-  startRemovingGroupMember = this.actions.pipe(
-    ofType(START_REMOVING_GROUP_MEMBER),
-    map((action: StartRemovingGroupMember) => {
-      return action.payload;
-    }),
-    switchMap((toRemove: { user_id: string; group_id: string }) => {
-      const options = {
-        headers: {},
-        body: {
-          member: toRemove.user_id,
-        },
-      };
-      return from(
-        this.http.delete(GetSpecialGroupMemberApiURL(toRemove.group_id), options).pipe(
-          catchError((error) => {
-            this.snackbar.showErrorSnackBar('error at removing group member: ' + error.error.detail);
-            return [];
-          }),
-          mergeMap((response: any) => {
-            const group = FullGroup.getFullGroupFromJson(response);
-            return [
-              {
-                type: SET_SPECIAL_GROUP,
-                payload: group,
               },
             ];
           })

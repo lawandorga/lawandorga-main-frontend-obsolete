@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { environment } from '../../environments/environment';
 import { SearchParamsInterface } from '../shared/interfaces/search_params.interface';
 
 // TODO: check
@@ -62,7 +61,6 @@ export const STATISTICS_RECORDS_API_URL = base + 'api/records/statistics/';
 
 export const COLLAB_COLLAB_DOCUMENTS_API_URL = base + 'api/collab/collab_documents/';
 const COLLAB_TEXT_DOCUMENTS_API_URL = base + 'api/collab/text_documents/';
-const COLLAB_EDITING_API_URL = base + 'api/collab/editing/';
 export const COLLAB_PERMISSIONS_API_URL = base + 'api/collab/collab_permission/';
 const COLLAB_PERMISSION_FOR_DOCUMENT_API_URL = base + 'api/collab/permission_for_collab_document/';
 const COLLAB_TEXT_DOCUMENT_VERSIONS = base + 'api/collab/text_document_version/';
@@ -71,13 +69,9 @@ const CHECK_USER_ACTIVATION_API_URL = base + 'api/profiles/';
 const ACTIVATE_USER_ACTIVATION_API_URL = base + 'api/activate_user_activation_link/';
 const RESET_PASSWORD_API_URL = base + 'api/profiles/';
 const SPECIAL_RECORD_BASE_API_URL = base + 'api/records/records/'; // deprecated??? is it?
-const SPECIAL_E_RECORD_BASE_API_URL = base + 'api/records/e_record/'; // deprecated??? is it?
 const DOWNLOAD_SIGNING_BASE_API_URL = base + 'api/storage_down/'; // deprecated
 const RECORD_DOCUMENT_BASE_API_URL = base + 'api/records/documents/';
 const PERMISSION_FOR_GROUP_BASE_API_URL = base + 'api/permissions_for_group/';
-const DOWNLOAD_ALL_RECORD_DOCUMENTS_BASE_API_URL = base + 'api/records/documents_download/';
-const DOWNLOAD_ENCRYPTED_RECORD_DOCUMENT_BASE_API_URL = base + 'api/records/e_record/documents/';
-const FILES_FOLDER_PERMISSIONS_BASE_API_URL = base + 'api/files/folder_permissions/';
 
 export const GetProfilesDetailApiUrl = (id: number) => {
   return `${PROFILES_API_URL}${id}/`;
@@ -93,83 +87,6 @@ export const GetSpecialProfileApiURL = (id: string | number) => {
 
 export const GetRecordsSearchApiURL = (toSearch: string) => {
   return `${RECORDS_API_URL}?search=${toSearch}`;
-};
-
-export const GenerateSearchAppendix = (urlPrefix: string, searchParams: SearchParamsInterface) => {
-  let urlAppendix = '';
-  let first = true;
-  if (searchParams.filter) {
-    urlAppendix += `filter=${searchParams.filter}`;
-    first = false;
-  }
-  if (searchParams.limit) {
-    if (!first) {
-      urlAppendix += '&';
-    }
-    urlAppendix += `limit=${searchParams.limit}`;
-    first = false;
-  }
-  if (searchParams.offset) {
-    if (!first) {
-      urlAppendix += '&';
-    }
-    urlAppendix += `offset=${searchParams.offset}`;
-    first = false;
-  }
-  if (searchParams.sort) {
-    if (!first) {
-      urlAppendix += '&';
-    }
-    urlAppendix += `sort=${searchParams.sort}`;
-    first = false;
-  }
-  if (searchParams.sort_direction) {
-    if (!first) {
-      urlAppendix += '&';
-    }
-    urlAppendix += `sortdirection=${searchParams.sort_direction}`;
-    first = false;
-  }
-
-  return first ? `${urlPrefix}` : `${urlPrefix}?${urlAppendix}`;
-};
-
-export const GetFullRecordSearchApiUrl = (searchParams: SearchParamsInterface) => {
-  if (!searchParams.limit) {
-    searchParams = {
-      ...searchParams,
-      limit: 10,
-    };
-  }
-  return GenerateSearchAppendix(RECORDS_API_URL, searchParams);
-};
-
-export const GetSpecialRecordApiURL = (id: string | number) => {
-  return `${SPECIAL_RECORD_BASE_API_URL}${id}/`;
-};
-
-export const GetDownloadApiUrl = (file: string) => {
-  return `${DOWNLOAD_SIGNING_BASE_API_URL}?file=${file}`;
-};
-
-export const GetUploadApiUrl = (file: File, fileDirectory: string = '') => {
-  return `${UPLOAD_SIGNING_BASE_API_URL}?file_name=${file.name}&file_type=${file.type}&file_dir=${fileDirectory}`;
-};
-
-export const GetCreateRecordDocumentApiUrl = (record_id: string) => {
-  return `${SPECIAL_RECORD_BASE_API_URL}${record_id}/documents`;
-};
-
-export const GetAddRecordMessageApiUrl = (record_id: string) => {
-  return `${SPECIAL_RECORD_BASE_API_URL}${record_id}/add_message/`;
-};
-
-export const GetRecordDocumentApiUrl = (document_id: string) => {
-  return `${RECORD_DOCUMENT_BASE_API_URL}${document_id}/`;
-};
-
-export const GetRecordPermissionRequestApiUrl = (record_id: string) => {
-  return `${SPECIAL_RECORD_BASE_API_URL}${record_id}/request_permission/`;
 };
 
 export const GetResetPasswordApiUrl = (userId: number) => {
@@ -204,30 +121,6 @@ export const GetActivateUserApiUrl = (link: string) => {
   return `${ACTIVATE_USER_ACTIVATION_API_URL}${link}/`;
 };
 
-export const GetDownloadAllRecordDocumentsApiUrl = (record_id: string) => {
-  return GetSpecialRecordUploadDocumentsApiUrl(record_id);
-};
-
-export const GetSpecialRecordUploadDocumentsApiUrl = (record_id: string) => {
-  return `${SPECIAL_E_RECORD_BASE_API_URL}${record_id}/documents/`;
-};
-
-export const GetDownloadEncryptedRecordDocumentApiUrl = (document_id: string) => {
-  return `${DOWNLOAD_ENCRYPTED_RECORD_DOCUMENT_BASE_API_URL}${document_id}/`;
-};
-
-export const GetFolderInformationApiUrl = (path: string) => {
-  if (path) return `${FOLDER_BASE_API_URL}?path=${path}`;
-  return `${FOLDER_BASE_API_URL}`;
-};
-
-export const GetFolderPermissionsForFolderApiUrl = (id: string) => {
-  return `${FILES_FOLDER_PERMISSIONS_BASE_API_URL}${id}/`;
-};
-
-export const GetFolderPermissionApiUrl = (id: string) => {
-  return `${FILES_PERMISSION_FOR_FOLDER_BASE_API_URL}${id}/`;
-};
 export const GetCollabTextDocumentApiUrl = (id: number) => {
   return `${COLLAB_TEXT_DOCUMENTS_API_URL}${id}/`;
 };
