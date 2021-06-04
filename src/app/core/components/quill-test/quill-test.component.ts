@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import Quill, { Delta } from 'quill';
+import Quill from 'quill';
 import { EditorChangeContent, EditorChangeSelection, QuillModule, QuillModules } from 'ngx-quill';
 import 'quill-mention';
 import 'quill-cursors';
