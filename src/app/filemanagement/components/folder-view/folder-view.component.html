@@ -17,7 +17,7 @@
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
                 <td mat-cell *matCellDef="let row">
                     <div *ngIf="row.type == 'FILE'">
-                        {{ row.name }}
+                        {{ row.name }} <span *ngIf="!row.exists">(ERROR)</span>
                     </div>
                     <div class="flex justify-between items-center" *ngIf="row.type == 'FOLDER'">
                         <a [routerLink]="getFolderUrl(row.id)">{{ row.name }}</a>
