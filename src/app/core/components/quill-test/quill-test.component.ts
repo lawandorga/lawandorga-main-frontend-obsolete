@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import Quill from 'quill';
 import { EditorChangeContent, EditorChangeSelection, QuillModule, QuillModules } from 'ngx-quill';
-import 'quill-mention';
 import 'quill-cursors';
 import { QuillEditorComponent } from 'ngx-quill';
 import * as Y from 'yjs';
@@ -24,34 +23,6 @@ export class QuillTestComponent implements OnInit, OnDestroy {
 
   @ViewChild(QuillEditorComponent, { static: true }) editor: QuillEditorComponent;
   modules = {
-    mention: {
-      allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
-      onSelect: (item, insertItem) => {
-        const editor = this.editor;
-        insertItem(item);
-        // necessary because quill-mention triggers changes as 'api' instead of 'user'
-        // editor.insertText(editor.getLength() - 1, '', 'user');
-      },
-      source: (searchTerm, renderList) => {
-        const values = [
-          { id: 1, value: 'Fredrik Sundqvist' },
-          { id: 2, value: 'Patrik Sjölin' },
-        ];
-
-        if (searchTerm.length === 0) {
-          renderList(values, searchTerm);
-        } else {
-          const matches = [];
-
-          values.forEach((entry) => {
-            if (entry.value.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1) {
-              matches.push(entry);
-            }
-          });
-          renderList(matches, searchTerm);
-        }
-      },
-    },
     toolbar: [
       ['bold', 'italic', 'underline', 'strike'], // toggled buttons
       ['blockquote'],

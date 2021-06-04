@@ -11,11 +11,22 @@ module.exports = {
     extend: {
       colors: {
         blue: '#003c4d'
+      },
+      typography: {
+        DEFAULT: {
+          css: {
+            'ol[type="A" s]': false,
+            'ol[type="a" s]': false,
+            'ol[type="I" s]': false,
+            'ol[type="i" s]': false,
+          }
+        }
       }
     },
   },
   variants: {
     extend: {},
+    typography: []
   },
   plugins: [
     require('@tailwindcss/typography'),

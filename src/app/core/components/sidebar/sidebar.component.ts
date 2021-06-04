@@ -327,8 +327,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.store.dispatch(Logout());
   }
 
-  selectedItem(event) {
-    this.router.navigate([event.link]);
+  selectedItem(event): void {
+    void this.router.navigate([event.link]);
   }
 
   ngOnDestroy() {

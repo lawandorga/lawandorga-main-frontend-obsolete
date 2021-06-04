@@ -22,7 +22,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { NgModule } from '@angular/core';
-import { NgMaterialMultilevelMenuModule } from 'ng-material-multilevel-menu';
+import { NgMaterialMultilevelMenuModule, MultilevelMenuService } from 'ng-material-multilevel-menu';
 import { CdkTableModule } from '@angular/cdk/table';
 import { QuillTestComponent } from './components/quill-test/quill-test.component';
 import { QuillModule } from 'ngx-quill';
@@ -106,7 +106,7 @@ import { ArticleComponent } from './pages/article/article.component';
     StatisticsPageComponent,
     StatisticsNumberComponent,
   ],
-  providers: [],
+  providers: [MultilevelMenuService],
   exports: [
     SidebarComponent,
     // BaseRequestRequestedPipe, BaseRequestProcessedPipe
