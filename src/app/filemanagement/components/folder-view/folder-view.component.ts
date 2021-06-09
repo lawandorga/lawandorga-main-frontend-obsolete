@@ -168,11 +168,17 @@ export class FolderViewComponent implements OnInit {
     const filename: string = name;
     const binaryData = [];
     binaryData.push(response.body);
-    const downloadLink = document.createElement('a');
-    downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, { type: 'blob' }));
-    downloadLink.setAttribute('download', filename);
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
+    const file = new Blob(binaryData, { type: 'application/pdf' });
+    if (name.split('.').pop() === 'pdf') {
+      const fileUrl = URL.createObjectURL(file);
+      window.open(fileUrl);
+    } else {
+      const downloadLink = document.createElement('a');
+      downloadLink.href = window.URL.createObjectURL(file);
+      downloadLink.setAttribute('download', filename);
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+    }
   }
 
   onEditFolder(id: number): void {
