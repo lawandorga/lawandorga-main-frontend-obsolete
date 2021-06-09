@@ -1,6 +1,6 @@
-<div class="grid grid-cols-2 gap-10">
+<div class="grid lg:grid-cols-2 gap-10">
 
-    <mat-card *ngIf="folder && folder.path.length" class="m-0 col-span-2">
+    <mat-card *ngIf="folder && folder.path.length" class="m-0 lg:col-span-2">
         <div class="flex items-center">
             <div class="flex items-center" *ngFor="let item of folder.path; last as isLast">
                 <a [routerLink]=" getFolderUrl(item.id)" class="">
@@ -11,7 +11,7 @@
         </div>
     </mat-card>
 
-    <mat-card class="p-0 m-0 col-span-2">
+    <mat-card class="p-0 m-0 lg:col-span-2">
         <table mat-table [dataSource]="dataSource" matSort class="w-full">
             <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
@@ -52,6 +52,9 @@
                         (click)="onFileDownload(row.id, row.name)">
                         Download
                     </button>
+                    <button *ngIf="row.type === 'FOLDER'" mat-button (click)="onEditFolder(row.id)" color="primary">
+                        Edit
+                    </button>
                     <button *ngIf="row.type === 'FILE'" color="warn" mat-button (click)="onFileDelete(row.id)">
                         Delete
                     </button>
@@ -83,7 +86,7 @@
         </dynamic-form>
     </mat-card>
 
-    <mat-card class="m-0 p-0 col-span-2">
+    <mat-card class="m-0 p-0 lg:col-span-2">
         <table mat-table [dataSource]="permissions" class="w-full">
             <ng-container matColumnDef="type">
                 <th mat-header-cell *matHeaderCellDef>Permission</th>

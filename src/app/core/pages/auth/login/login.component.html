@@ -75,27 +75,7 @@
     </section>
     <section class="bg-white mx-auto max-w-7xl py-12 px-8">
         <div class="relative max-w-lg mx-auto divide-y-2 divide-gray-200 lg:max-w-7xl">
-            <article class="prose prose-lg">
-                <h2>Aktuelles: Wir freuen uns über alle Nachrichten und Fehlermeldungen!</h2>
-                <p>
-                    Falls euch ein Fehler auffällt, oder etwas nicht funktioniert, schreibt bitte eine E-Mail an <a
-                        href="mailto:it@law-orga.de">it@law-orga.de</a>. Denn nur so können wir der Ursache auf den
-                    Grund gehen und Law&Orga langfristig stark machen.
-                </p>
-                <p>
-                    Auch nochmal vielen Dank an alle die bereits Fehler gemeldet haben.
-                </p>
-                <p>
-                    Als nächstes werden wir folgende Themen angehen:
-                </p>
-                <ul>
-                    <li>Alle Bugs in Files beheben</li>
-                </ul>
-                <p>
-                    Viel Erfolg und gutes Gelingen! <br>
-                    Euer Law&Orga Team
-                </p>
-            </article>
+            <article class="prose prose-lg" [innerHTML]="page.content" *ngIf="page"></article>
         </div>
     </section>
 

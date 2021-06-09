@@ -42,7 +42,6 @@ import { MaterialModule } from './material/material.module';
 import { reducer as authReducer } from './core/store/auth/reducers';
 
 Quill.register('modules/cursors', QuillCursors);
-Quill.register('modules/mention', QuillCursors);
 
 @NgModule({
   declarations: [AppComponent],

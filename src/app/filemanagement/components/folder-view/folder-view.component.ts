@@ -10,6 +10,7 @@ import { IFile } from '../../models/file.model';
 import { AddPermissionForFolderComponent } from '../add-permission-for-folder/add-permission-for-folder.component';
 import { MatDialog } from '@angular/material/dialog';
 import { FolderPermission } from '../../models/folder_permission.model';
+import { EditFolderComponent } from '../edit-folder/edit-folder.component';
 
 @Component({
   selector: 'app-folder-view',
@@ -57,7 +58,7 @@ export class FolderViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
-      let url = 'api/files/folder/';
+      let url = 'api/files/folder/first/';
       if ('id' in params) {
         url = `api/files/folder/${params['id'] as string}/`;
         this.id = params['id'] as string;
@@ -167,11 +168,34 @@ export class FolderViewComponent implements OnInit {
     const filename: string = name;
     const binaryData = [];
     binaryData.push(response.body);
-    const downloadLink = document.createElement('a');
-    downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, { type: 'blob' }));
-    downloadLink.setAttribute('download', filename);
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
+    const file = new Blob(binaryData, { type: 'application/pdf' });
+    if (name.split('.').pop() === 'pdf') {
+      const fileUrl = URL.createObjectURL(file);
+      window.open(fileUrl);
+    } else {
+      const downloadLink = document.createElement('a');
+      downloadLink.href = window.URL.createObjectURL(file);
+      downloadLink.setAttribute('download', filename);
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+    }
+  }
+
+  onEditFolder(id: number): void {
+    const dialogRef = this.dialog.open(EditFolderComponent);
+
+    dialogRef.afterClosed().subscribe((result: { name: string; folder: number }) => {
+      if (result)
+        this.http
+          .patch(`api/files/folder/${id}/`, {
+            name: result.name,
+            parent: result.folder,
+          })
+          .subscribe(() => {
+            this.getItems(this.folder.id);
+            this.getPermissions(this.folder.id);
+          });
+    });
   }
 
   onAddPermission(): void {

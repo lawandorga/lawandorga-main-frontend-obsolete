@@ -24,12 +24,12 @@
         </button>
         <a routerLink='/' class="flex space-x-2 items-center">
             <img src="/assets/img/rlc_intranet_logo.png" alt="Law&Orga Logo" class="w-10 h-10" />
-            <h1>Law & Orga</h1>
+            <h1>Law&Orga</h1>
         </a>
     </div>
 </mat-toolbar>
 
-<mat-sidenav-container style="position: absolute; top: 64px; left: 0; bottom: 0; right:0;">
+<mat-sidenav-container class="absolute inset-0 top-14 md:top-16">
     <mat-sidenav #snav opened mode="side" fixedTopGap="64" *ngIf="authenticated" class="w-64">
         <mat-nav-list class="p-0" style="padding: 0">
             <app-sidebar></app-sidebar>
