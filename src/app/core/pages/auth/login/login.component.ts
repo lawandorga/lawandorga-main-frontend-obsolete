@@ -48,6 +48,9 @@ export class LoginComponent implements OnInit {
     },
   ];
   articles: Article[];
+  page: {
+    content: string;
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -72,6 +75,7 @@ export class LoginComponent implements OnInit {
     });
 
     this.http.get('api/articles/').subscribe((response: Article[]) => (this.articles = response));
+    this.http.get('api/pages/index/').subscribe((response: { content: string }) => (this.page = response));
   }
 
   onSend(data: { email: string; password: string }): void {
