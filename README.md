@@ -1,3 +1,4 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/b1e23168-d035-4878-aa04-150f79480f72/deploy-status)](https://app.netlify.com/sites/law-orga-prod/deploys)
 
 # General
 Frontend of Law&Orga Project for (Refugee) Law Clinics in Germany.
