@@ -52,6 +52,9 @@
                         (click)="onFileDownload(row.id, row.name)">
                         Download
                     </button>
+                    <button *ngIf="row.type === 'FOLDER'" mat-button (click)="onEditFolder(row.id)" color="primary">
+                        Edit
+                    </button>
                     <button *ngIf="row.type === 'FILE'" color="warn" mat-button (click)="onFileDelete(row.id)">
                         Delete
                     </button>
