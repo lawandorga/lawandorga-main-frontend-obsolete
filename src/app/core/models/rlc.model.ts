@@ -18,25 +18,31 @@
 
 import { Filterable } from '../../shared/models/filterable.model';
 
+export interface IRlc {
+  id: number;
+  name: string;
+  use_record_pool: boolean;
+}
+
 export class RestrictedRlc implements Filterable {
-    constructor(public id: string, public name: string) {
-        this.id = id;
-        this.name = name;
-    }
+  constructor(public id: string, public name: string) {
+    this.id = id;
+    this.name = name;
+  }
 
-    static getRestrictedRlcsFromJsonArray(jsonArray) {
-        const restrictedRlcs: Array<RestrictedRlc> = [];
-        Object.values(jsonArray).forEach(restrictedJsonUser => {
-            restrictedRlcs.push(RestrictedRlc.getRestrictedRlcFromJson(restrictedJsonUser));
-        });
-        return restrictedRlcs;
-    }
+  static getRestrictedRlcsFromJsonArray(jsonArray) {
+    const restrictedRlcs: Array<RestrictedRlc> = [];
+    Object.values(jsonArray).forEach((restrictedJsonUser) => {
+      restrictedRlcs.push(RestrictedRlc.getRestrictedRlcFromJson(restrictedJsonUser));
+    });
+    return restrictedRlcs;
+  }
 
-    static getRestrictedRlcFromJson(json) {
-        return new RestrictedRlc(json.id, json.name);
-    }
+  static getRestrictedRlcFromJson(json) {
+    return new RestrictedRlc(json.id, json.name);
+  }
 
-    getFilterableProperty() {
-        return this.name;
-    }
+  getFilterableProperty() {
+    return this.name;
+  }
 }

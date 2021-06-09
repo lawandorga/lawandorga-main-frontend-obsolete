@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { ForeignUser, FullUser, RestrictedUser } from '../models/user.model';
+import { ForeignUser, FullUser } from '../models/user.model';
 import {
   ADD_GROUP,
   ADD_SINGLE_HAS_PERMISSION,
@@ -24,7 +24,6 @@ import {
   DECREMENT_NOTIFICATION_COUNTER,
   INCREMENT_NOTIFICATION_COUNTER,
   REMOVE_ACTUAL_HAS_PERMISSIONS,
-  REMOVE_INACTIVE_USER,
   REMOVE_SINGLE_HAS_PERMISSION,
   RESET_INACTIVE_USERS,
   RESET_RESULTS_LENGTH,
@@ -40,7 +39,6 @@ import {
   SET_OTHER_USERS,
   SET_RESULTS_LENGTH,
   SET_RLC,
-  SET_RLC_SETTINGS,
   SET_RLCS,
   SET_SPECIAL_FOREIGN_USER,
   SET_SPECIAL_GROUP,
@@ -56,7 +54,6 @@ import { RestrictedRlc } from '../models/rlc.model';
 import { getIdObjects, getObjectsByField } from '../../shared/other/reducer-helper';
 import { FullGroup, RestrictedGroup } from '../models/group.model';
 import { NewUserRequest } from '../models/new_user_request.model';
-import { RlcSettings } from '../models/rlc_settings.model';
 
 export interface CoreState {
   user: FullUser;
@@ -68,7 +65,6 @@ export interface CoreState {
   actual_has_permissions: { [id: number]: HasPermission };
   foreign_user: ForeignUser;
   rlc: RestrictedRlc;
-  rlc_settings: RlcSettings;
   user_states: any;
   user_record_states: any;
   special_permission: Permission;
@@ -89,7 +85,6 @@ const initialState: CoreState = {
   actual_has_permissions: {},
   foreign_user: null,
   rlc: null,
-  rlc_settings: null,
   user_states: [],
   user_record_states: [],
   special_permission: null,
@@ -131,14 +126,6 @@ export function coreReducer(state = initialState, action: CoreActions) {
       return {
         ...state,
         actual_has_permissions: hasPermissions,
-      };
-    case REMOVE_INACTIVE_USER:
-      const inactive_users = state.inactive_users;
-      delete inactive_users[action.payload];
-
-      return {
-        ...state,
-        inactive_users: inactive_users,
       };
     case RESET_INACTIVE_USERS:
       return {
@@ -242,11 +229,6 @@ export function coreReducer(state = initialState, action: CoreActions) {
           ...state.new_user_requests,
           [action.payload.id]: action.payload,
         },
-      };
-    case SET_RLC_SETTINGS:
-      return {
-        ...state,
-        rlc_settings: action.payload,
       };
     case SET_NOTIFICATIONS:
       return {

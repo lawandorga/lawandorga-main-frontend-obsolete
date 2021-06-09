@@ -51,7 +51,6 @@ export const FILES_PERMISSION_FOR_FOLDER_BASE_API_URL = base + 'api/files/permis
 export const RECORD_POOL_API_URL = base + 'api/records/record_pool/';
 export const POOL_RECORD_API_URL = base + 'api/records/pool_records/';
 export const POOL_CONSULTANT_API_URL = base + 'api/records/pool_consultants/';
-export const RLC_SETTINGS_API_URL = base + 'api/my_rlc_settings/';
 export const NOTIFICATIONS_API_URL = base + 'api/notifications/';
 export const NOTIFICATION_GROUPS_API_URL = base + 'api/notification_groups/';
 export const UNREAD_NOTIFICATIONS_API_URL = base + 'api/notifications/unread/';

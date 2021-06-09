@@ -45,7 +45,6 @@ import {
   StartLoadingNewUserRequests,
   StartLoadingOtherUsers,
   StartLoadingRlcs,
-  StartLoadingRlcSettings,
   StartLoadingSpecialForeignUser,
   StartLoadingSpecialGroup,
   StartLoadingSpecialGroupHasPermissions,
@@ -59,10 +58,9 @@ import { SnackbarService } from '../../shared/services/snackbar.service';
 import { Observable } from 'rxjs';
 import { HasPermission, Permission } from '../models/permission.model';
 import { FullGroup, RestrictedGroup } from '../models/group.model';
-import { RestrictedRlc } from '../models/rlc.model';
+import { IRlc, RestrictedRlc } from '../models/rlc.model';
 import { NewUserRequest } from '../models/new_user_request.model';
 import { State } from '../models/state.model';
-import { RlcSettings } from '../models/rlc_settings.model';
 import { HttpClient } from '@angular/common/http';
 import { GetCheckUserActivationApiUrl, PROFILES_API_URL } from '../../statics/api_urls.statics';
 
@@ -95,7 +93,7 @@ export class CoreSandboxService {
     return this.coreStateStore.pipe(select((state: any) => state.core.user));
   }
 
-  getRlc(): Observable<RestrictedRlc> {
+  getRlc(): Observable<IRlc> {
     return this.coreStateStore.pipe(select((state: any) => state.core.rlc));
   }
 
@@ -103,7 +101,7 @@ export class CoreSandboxService {
     return this.coreStateStore.pipe(select((state: any) => state.core.special_group));
   }
 
-  getUserPermissions(asArray: boolean = true): Observable<HasPermission[] | any> {
+  getUserPermissions(asArray = true): Observable<HasPermission[] | any> {
     return this.coreStateStore.pipe(
       select((state: any) => {
         const values = state.core.user_permissions;
@@ -162,7 +160,7 @@ export class CoreSandboxService {
     this.coreStateStore.dispatch(new StartCreateUser(user));
   }
 
-  getAllRlcs(asArray: boolean = true): Observable<RestrictedRlc[]> {
+  getAllRlcs(asArray = true): Observable<RestrictedRlc[]> {
     //return this.http.get(RLCS_API_URL);
     return this.coreStateStore.pipe(
       select((state: any) => {
@@ -180,7 +178,7 @@ export class CoreSandboxService {
     this.coreStateStore.dispatch(new StartLoadingGroups());
   }
 
-  getGroups(asArray: boolean = true): Observable<RestrictedGroup[]> | any {
+  getGroups(asArray = true): Observable<RestrictedGroup[]> | any {
     return this.coreStateStore.pipe(
       select((state: any) => {
         const values = state.core.groups;
@@ -189,7 +187,7 @@ export class CoreSandboxService {
     );
   }
 
-  getOtherUsers(asArray: boolean = true): Observable<RestrictedUser[] | any> {
+  getOtherUsers(asArray = true): Observable<RestrictedUser[] | any> {
     return this.coreStateStore.pipe(
       select((state: any) => {
         const values = state.core.other_users;
@@ -198,11 +196,11 @@ export class CoreSandboxService {
     );
   }
 
-  showSuccessSnackBar(message: string, duration: number = 10000) {
+  showSuccessSnackBar(message: string, duration = 10000) {
     this.snackbarService.showSuccessSnackBar(message, duration);
   }
 
-  showErrorSnackBar(message: string, duration: number = 10000) {
+  showErrorSnackBar(message: string, duration = 10000) {
     this.snackbarService.showErrorSnackBar(message, duration);
   }
 
@@ -334,7 +332,7 @@ export class CoreSandboxService {
     this.coreStateStore.dispatch(new StartLoadingSpecialGroupHasPermissions(group_id));
   }
 
-  getActualHasPermissions(asArray: boolean = true): Observable<HasPermission[]> | any {
+  getActualHasPermissions(asArray = true): Observable<HasPermission[]> | any {
     return this.coreStateStore.pipe(
       select((state: any) => {
         const values = state.core.actual_has_permissions;
@@ -355,7 +353,7 @@ export class CoreSandboxService {
     this.coreStateStore.dispatch(new StartLoadingNewUserRequests());
   }
 
-  getNewUserRequests(asArray: boolean = true): Observable<NewUserRequest[]> | any {
+  getNewUserRequests(asArray = true): Observable<NewUserRequest[]> | any {
     return this.coreStateStore.pipe(
       select((state: any) => {
         const values = state.core.new_user_requests;
@@ -387,7 +385,7 @@ export class CoreSandboxService {
     );
   }
 
-  getUserStates(asArray: boolean = true): Observable<State[]> {
+  getUserStates(asArray = true): Observable<State[]> {
     return this.coreStateStore.pipe(
       select((state: any) => {
         const values = state.core.user_states;
@@ -396,7 +394,7 @@ export class CoreSandboxService {
     );
   }
 
-  getUserRecordStates(asArray: boolean = true): Observable<State[]> {
+  getUserRecordStates(asArray = true): Observable<State[]> {
     return this.coreStateStore.pipe(
       select((state: any) => {
         const values = state.core.user_record_states;
@@ -417,7 +415,7 @@ export class CoreSandboxService {
     this.coreStateStore.dispatch(new StartLoadingInactiveUsers());
   }
 
-  getInactiveUsers(asArray: boolean = true): Observable<FullUser[]> {
+  getInactiveUsers(asArray = true): Observable<FullUser[]> {
     return this.coreStateStore.pipe(
       select((state: any) => {
         const values = state.core.inactive_users;
@@ -434,20 +432,8 @@ export class CoreSandboxService {
     this.coreStateStore.dispatch(new StartCheckingUserHasPermissions());
   }
 
-  startLoadingRlcSettings(): void {
-    this.coreStateStore.dispatch(new StartLoadingRlcSettings());
-  }
-
   startLoadingUnreadNotifications(): void {
     this.coreStateStore.dispatch(new StartLoadingUnreadNotifications());
-  }
-
-  getRlcSettings(): Observable<RlcSettings> {
-    return this.coreStateStore.pipe(
-      select((state: any) => {
-        return state.core.rlc_settings;
-      })
-    );
   }
 
   getNotifications(): Observable<number> {

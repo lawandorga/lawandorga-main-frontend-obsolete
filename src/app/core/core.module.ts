@@ -23,8 +23,6 @@ import { ResetPasswordComponent } from './pages/auth/reset-password/reset-passwo
 import { GroupsListComponent } from './pages/groups-list/groups-list.component';
 import { GroupComponent } from './pages/group/group.component';
 import { PermissionListComponent } from './pages/permission-list/permission-list.component';
-import { AddHasPermissionComponent } from './components/add-has-permission/add-has-permission.component';
-import { AddHasPermissionForComponent } from './components/add-has-permission-for/add-has-permission-for.component';
 import { AddGroupComponent } from './components/add-group/add-group.component';
 import { NewUserRequestsComponent } from './pages/new-user-requests/new-user-requests.component';
 import { NewUserRequestProcessedPipe, NewUserRequestRequestedPipe } from '../recordmanagement/pipes/new_user_request.pipe';
@@ -66,8 +64,6 @@ import { ArticleComponent } from './pages/article/article.component';
     GroupsListComponent,
     GroupComponent,
     PermissionListComponent,
-    AddHasPermissionComponent,
-    AddHasPermissionForComponent,
     AddPermissionComponent,
     AddMemberComponent,
     AddGroupComponent,

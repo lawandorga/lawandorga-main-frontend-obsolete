@@ -21,7 +21,7 @@ import { Router } from '@angular/router';
 import { AppSandboxService } from '../../services/app-sandbox.service';
 import { FullUser } from '../../models/user.model';
 import { CoreSandboxService } from '../../services/core-sandbox.service';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import {
   PERMISSION_ACCEPT_NEW_USERS_RLC,
   PERMISSION_ACTIVATE_INACTIVE_USERS,
@@ -48,10 +48,10 @@ import {
   RECORDS_PERMIT_REQUEST_FRONT_URL,
   STATISTICS_FRONT_URL,
 } from '../../../statics/frontend_links.statics';
-import { RlcSettings } from '../../models/rlc_settings.model';
 import { Subscription } from 'rxjs';
 import { Logout } from '../../store/auth/actions';
-import { selectRemaining, selectRemainingMinutes, selectTimer } from '../../store/auth/selectors';
+import { selectRemainingMinutes } from '../../store/auth/selectors';
+import { IRlc } from '../../models/rlc.model';
 
 @Component({
   selector: 'app-sidebar',
@@ -266,8 +266,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
     });
 
     this.coreSB.hasPermissionFromStringForOwnRlc(PERMISSION_CAN_CONSULT, (hasPermission) => {
-      this.coreSB.getRlcSettings().subscribe((settings: RlcSettings) => {
-        if (settings && settings.recordPoolEnabled && hasPermission) {
+      this.coreSB.getRlc().subscribe((rlc: IRlc) => {
+        if (rlc && rlc.use_record_pool && hasPermission) {
           this.show_tab_permissions.record_pool = true;
           this.recheckSidebarItems();
         }

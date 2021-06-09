@@ -22,14 +22,12 @@ import { HasPermission, Permission } from '../models/permission.model';
 import { RestrictedRlc } from '../models/rlc.model';
 import { FullGroup, RestrictedGroup } from '../models/group.model';
 import { NewUserRequest } from '../models/new_user_request.model';
-import { RlcSettings } from '../models/rlc_settings.model';
 
 export const ADD_GROUP = 'ADD_GROUP';
 export const ADD_NOTIFICATIONS = 'ADD_NOTIFICATIONS';
 export const ADD_SINGLE_HAS_PERMISSION = 'ADD_SINGLE_HAS_PERMISSION';
 export const REMOVE_ACTUAL_HAS_PERMISSIONS = 'REMOVE_ACTUAL_HAS_PERMISSIONS';
 export const REMOVE_SINGLE_HAS_PERMISSION = 'REMOVE_SINGLE_HAS_PERMISSION';
-export const REMOVE_INACTIVE_USER = 'REMOVE_INACTIVE_USER';
 export const RESET_INACTIVE_USERS = 'RESET_INACTIVE_USERS';
 export const RESET_SPECIAL_FOREIGN_USER = 'RESET_SPECIAL_FOREIGN_USER';
 export const RESET_SPECIAL_GROUP = 'RESET_SPECIAL_GROUP';
@@ -77,9 +75,7 @@ export const START_REMOVING_HAS_PERMISSION = 'START_REMOVING_HAS_PERMISSION';
 export const START_ACTIVATING_INACTIVE_USER = 'START_ACTIVATING_INACTIVE_USER';
 export const START_SAVING_USER = 'START_SAVING_USER';
 export const UPDATE_NEW_USER_REQUEST = 'UPDATE_NEW_USER_REQUEST';
-export const START_LOADING_RLC_SETTINGS = 'START_LOADING_RLC_SETTINGS';
 export const START_LOADING_UNREAD_NOTIFICATIONS = 'START_LOADING_UNREAD_NOTIFICATIONS';
-export const SET_RLC_SETTINGS = 'SET_RLC_SETTINGS';
 export const DECREMENT_NOTIFICATION_COUNTER = 'DECREMENT_NOTIFICATION_COUNTER';
 export const INCREMENT_NOTIFICATION_COUNTER = 'INCREMENT_NOTIFICATION_COUNTER';
 export const SET_RESULTS_LENGTH = 'SET_RESULTS_LENGTH';
@@ -333,12 +329,6 @@ export class UpdateNewUserRequest implements Action {
   constructor(public payload: NewUserRequest) {}
 }
 
-export class RemoveInactiveUser implements Action {
-  readonly type = REMOVE_INACTIVE_USER;
-
-  constructor(public payload: string) {}
-}
-
 export class StartActivatingInactiveUser implements Action {
   readonly type = START_ACTIVATING_INACTIVE_USER;
 
@@ -347,16 +337,6 @@ export class StartActivatingInactiveUser implements Action {
 
 export class StartCheckingUserHasPermissions implements Action {
   readonly type = START_CHECKING_USER_HAS_PERMISSIONS;
-}
-
-export class StartLoadingRlcSettings implements Action {
-  readonly type = START_LOADING_RLC_SETTINGS;
-}
-
-export class SetRlcSettings implements Action {
-  readonly type = SET_RLC_SETTINGS;
-
-  constructor(public payload: RlcSettings) {}
 }
 
 export class SetNotifications implements Action {
@@ -392,7 +372,6 @@ export type CoreActions =
   | AddSingleHasPermission
   | RemoveActualHasPermissions
   | RemoveSingleHasPermission
-  | RemoveInactiveUser
   | ResetInactiveUsers
   | ResetSpecialForeignUser
   | ResetSpecialGroup
@@ -436,8 +415,6 @@ export type CoreActions =
   | StartSavingUser
   | UpdateNewUserRequest
   | StartCheckingUserHasPermissions
-  | StartLoadingRlcSettings
-  | SetRlcSettings
   | SetNotifications
   | IncrementNotificationCounter
   | DecrementNotificationCounter

@@ -60,13 +60,8 @@ import {
   StartSavingUser,
   START_LOADING_INACTIVE_USERS,
   SET_INACTIVE_USERS,
-  START_ACTIVATING_INACTIVE_USER,
-  StartActivatingInactiveUser,
-  REMOVE_INACTIVE_USER,
   START_CHECKING_USER_HAS_PERMISSIONS,
   SET_USER_PERMISSIONS,
-  START_LOADING_RLC_SETTINGS,
-  SET_RLC_SETTINGS,
   START_LOADING_UNREAD_NOTIFICATIONS,
   SET_NOTIFICATIONS,
 } from './core.actions';
@@ -82,7 +77,6 @@ import {
   INACTIVE_USERS_API_URL,
   GetNewUserRequestApiUrl,
   NEW_USER_REQUEST_API_URL,
-  RLC_SETTINGS_API_URL,
   RLCS_API_URL,
   UNREAD_NOTIFICATIONS_API_URL,
   USER_HAS_PERMISSIONS_API_URL,
@@ -95,7 +89,6 @@ import { HasPermission, Permission } from '../models/permission.model';
 import { RestrictedRlc } from '../models/rlc.model';
 import { NewUserRequest } from '../models/new_user_request.model';
 import { AppSandboxService } from '../services/app-sandbox.service';
-import { RlcSettings } from '../models/rlc_settings.model';
 import { Router } from '@angular/router';
 
 @Injectable()
@@ -107,34 +100,6 @@ export class CoreEffects {
     private snackbar: SnackbarService,
     private router: Router
   ) {}
-
-  @Effect()
-  startPatchUser = this.actions.pipe(
-    ofType(START_PATCH_USER),
-    map((action: StartPatchUser) => {
-      return action.payload;
-    }),
-    switchMap((updates: { id: string; userUpdates: any }) => {
-      return from(
-        this.http.patch(GetSpecialProfileApiURL(updates.id), updates.userUpdates).pipe(
-          catchError((error) => {
-            if (error.status === 400) return of({ error: '1' });
-            else if (error.status === 500) return of({ error: '2' });
-            return of({ error: 'unknown' });
-          }),
-          mergeMap((response: any) => {
-            this.coreSB.showSuccessSnackBar('successfully saved');
-            return [
-              {
-                type: SET_USER,
-                payload: FullUser.getFullUserFromJson(response),
-              },
-            ];
-          })
-        )
-      );
-    })
-  );
 
   @Effect()
   startCreateUser = this.actions.pipe(
@@ -526,42 +491,6 @@ export class CoreEffects {
   );
 
   @Effect()
-  startActivatingInactiveUser = this.actions.pipe(
-    ofType(START_ACTIVATING_INACTIVE_USER),
-    map((action: StartActivatingInactiveUser) => {
-      return action.payload;
-    }),
-    switchMap((id: string) => {
-      const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
-      return from(
-        this.http
-          .post(
-            INACTIVE_USERS_API_URL,
-            {
-              method: 'activate',
-              user_id: id,
-            },
-            privateKeyPlaceholder
-          )
-          .pipe(
-            catchError((error) => {
-              this.snackbar.showErrorSnackBar('error at activating inactive user: ' + error.error.detail);
-              return [];
-            }),
-            mergeMap((response: any) => {
-              return [
-                {
-                  type: REMOVE_INACTIVE_USER,
-                  payload: id,
-                },
-              ];
-            })
-          )
-      );
-    })
-  );
-
-  @Effect()
   startCheckingUserHasPermissions = this.actions.pipe(
     ofType(START_CHECKING_USER_HAS_PERMISSIONS),
     switchMap(() => {
@@ -577,26 +506,6 @@ export class CoreEffects {
               {
                 type: SET_USER_PERMISSIONS,
                 payload: user_permissions,
-              },
-            ];
-          })
-        )
-      );
-    })
-  );
-
-  @Effect()
-  startLoadingRlcSettings = this.actions.pipe(
-    ofType(START_LOADING_RLC_SETTINGS),
-    switchMap(() => {
-      return from(
-        this.http.get(RLC_SETTINGS_API_URL).pipe(
-          mergeMap((response: any) => {
-            const rlc_settings = RlcSettings.getRlcSettingsFromJson(response);
-            return [
-              {
-                type: SET_RLC_SETTINGS,
-                payload: rlc_settings,
               },
             ];
           })
