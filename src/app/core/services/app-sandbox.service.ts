@@ -55,8 +55,6 @@ export class AppSandboxService {
       this.store.dispatch(SetToken({ token: loginInformation.token }));
       this.store.dispatch(SetUsersPrivateKey({ privateKey: loginInformation.users_private_key }));
       this.store.dispatch(ReloadStaticInformation({ token: loginInformation.token }));
-    } else {
-      void this.router.navigate(['/login/']);
     }
   }
 

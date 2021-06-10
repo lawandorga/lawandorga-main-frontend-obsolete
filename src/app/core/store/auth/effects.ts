@@ -25,7 +25,7 @@ import { SET_ALL_PERMISSIONS, SET_NOTIFICATIONS, SET_RLC, SET_USER, SET_USER_PER
 import { FullUser } from '../../models/user.model';
 import { CoreSandboxService } from '../../services/core-sandbox.service';
 import { HasPermission, Permission } from '../../models/permission.model';
-import { IRlc, RestrictedRlc } from '../../models/rlc.model';
+import { IRlc } from '../../models/rlc.model';
 import { AppSandboxService } from '../../services/app-sandbox.service';
 import { LOGIN_FRONT_URL } from '../../../statics/frontend_links.statics';
 import { DjangoError } from 'src/app/shared/services/axios';
@@ -71,7 +71,6 @@ export class AuthEffects {
       mergeMap((payload: { token: string }) =>
         this.http.get(GetStaticsApiUrl(payload.token)).pipe(
           switchMap((response: any) => {
-            console.log(response.user);
             return [
               {
                 type: SET_USER,

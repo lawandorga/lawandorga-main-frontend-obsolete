@@ -79,7 +79,6 @@ export class ProfilesListComponent implements OnInit {
   }
 
   onAcceptClick(id: number): void {
-    // todo
-    this.coreSB.showSuccessSnackBar('This is not implemented yet!');
+    this.http.get(`api/profiles/${id}/accept/`).subscribe((response: FullUser) => this.updateUsers(response));
   }
 }
