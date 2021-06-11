@@ -24,21 +24,18 @@ import { CoreSandboxService } from '../../services/core-sandbox.service';
 import { Store } from '@ngrx/store';
 import {
   PERMISSION_ACCEPT_NEW_USERS_RLC,
-  PERMISSION_ACTIVATE_INACTIVE_USERS,
   PERMISSION_CAN_ADD_RECORD_RLC,
   PERMISSION_CAN_CONSULT,
   PERMISSION_CAN_PERMIT_RECORD_PERMISSION_REQUESTS,
   PERMISSION_CAN_VIEW_PERMISSIONS_RLC,
   PERMISSION_CAN_VIEW_RECORDS,
   PERMISSION_PROCESS_RECORD_DELETION_REQUESTS,
-  PERMISSION_PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS,
 } from '../../../statics/permissions.statics';
 import {
   ACCEPT_NEW_USER_REQUESTS_FRONT_URL,
   DELETION_REQUESTS_FRONT_URL,
   FILES_FRONT_URL,
   GROUPS_FRONT_URL,
-  INACTIVE_USERS_FRONT_URL,
   LEGAL_NOTICE_FRONT_URL,
   PERMISSIONS_FRONT_URL,
   PROFILES_FRONT_URL,
@@ -79,7 +76,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     record_permission_request: false,
     permissions: false,
     accept_new_user: false,
-    activate_inactive_users: false,
     process_deletion_requests: {
       record_documents: false,
       records: false,
@@ -146,11 +142,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
           label: 'New Users',
           icon: 'person_add',
           link: ACCEPT_NEW_USER_REQUESTS_FRONT_URL,
-        },
-        {
-          label: 'Inactive Users',
-          icon: 'perm_identity',
-          link: INACTIVE_USERS_FRONT_URL,
         },
       ],
     },
@@ -244,23 +235,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.coreSB.hasPermissionFromStringForOwnRlc(PERMISSION_ACTIVATE_INACTIVE_USERS, (hasPermission) => {
-      if (this.show_tab_permissions.activate_inactive_users !== hasPermission) {
-        this.show_tab_permissions.activate_inactive_users = hasPermission;
-        this.recheckSidebarItems();
-      }
-    });
-
     this.coreSB.hasPermissionFromStringForOwnRlc(PERMISSION_PROCESS_RECORD_DELETION_REQUESTS, (hasPermission) => {
       if (this.show_tab_permissions.process_deletion_requests.records !== hasPermission) {
         this.show_tab_permissions.process_deletion_requests.records = hasPermission;
-        this.recheckSidebarItems();
-      }
-    });
-
-    this.coreSB.hasPermissionFromStringForOwnRlc(PERMISSION_PROCESS_RECORD_DOCUMENT_DELETION_REQUESTS, (hasPermission) => {
-      if (this.show_tab_permissions.process_deletion_requests.record_documents !== hasPermission) {
-        this.show_tab_permissions.process_deletion_requests.record_documents = hasPermission;
         this.recheckSidebarItems();
       }
     });
@@ -307,8 +284,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
       newSidebarItems = SidebarComponent.removeLink(RECORDS_PERMIT_REQUEST_FRONT_URL, newSidebarItems).newItems;
     if (!this.show_tab_permissions.permissions)
       newSidebarItems = SidebarComponent.removeLink(PERMISSIONS_FRONT_URL, newSidebarItems).newItems;
-    if (!this.show_tab_permissions.activate_inactive_users)
-      newSidebarItems = SidebarComponent.removeLink(INACTIVE_USERS_FRONT_URL, newSidebarItems).newItems;
     if (!this.show_tab_permissions.accept_new_user)
       newSidebarItems = SidebarComponent.removeLink(ACCEPT_NEW_USER_REQUESTS_FRONT_URL, newSidebarItems).newItems;
     if (
@@ -321,9 +296,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.actualSidebarItems = newSidebarItems;
   }
 
-  logout() {
-    // clearInterval(this.timerCheckPermissions);
-    // clearInterval(this.timerLoadUnreadNotifications);
+  logout(): void {
     this.store.dispatch(Logout());
   }
 
@@ -331,11 +304,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
     void this.router.navigate([event.link]);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       sub.unsubscribe();
     }
-    // clearInterval(this.timerCheckPermissions);
-    // clearInterval(this.timerLoadUnreadNotifications);
   }
 }

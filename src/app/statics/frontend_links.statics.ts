@@ -35,7 +35,6 @@ export const PERMISSIONS_FRONT_URL = 'permissions';
 export const ACCEPT_NEW_USER_REQUESTS_FRONT_URL = 'new_user_requests';
 export const LEGAL_NOTICE_FRONT_URL = 'legal_notice';
 export const PRIVACY_STATEMENT_FRONT_URL = 'privacy_statement';
-export const INACTIVE_USERS_FRONT_URL = 'inactive_users';
 export const DELETION_REQUESTS_FRONT_URL = 'records/deletion_requests';
 export const FILES_FRONT_URL = 'files';
 export const RECORD_POOL_FRONT_URL = 'records/record_pool';
