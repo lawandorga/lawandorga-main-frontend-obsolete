@@ -17,9 +17,7 @@ export class RecordsPermitRequestsComponent implements OnInit {
   deletionRequests: RecordDeletionRequest[];
 
   ngOnInit(): void {
-    this.http
-      .get('api/records/e_record_permission_requests/')
-      .subscribe((response: RecordPermissionRequest[]) => (this.requests = response));
+    this.http.get('api/records/record_permission_requests/').subscribe((response: RecordPermissionRequest[]) => (this.requests = response));
 
     this.http
       .get('api/records/record_deletion_requests/')
@@ -54,11 +52,10 @@ export class RecordsPermitRequestsComponent implements OnInit {
 
   onRequestAction(id: number, action: string): void {
     const data = {
-      action: action,
-      id: id,
+      state: action,
     };
     this.http
-      .post('api/records/e_record_permission_requests/', data)
+      .patch(`api/records/record_permission_requests/${id}/`, data)
       .subscribe(
         (response: RecordPermissionRequest) => (this.requests = replaceInArray(this.requests, response) as RecordPermissionRequest[])
       );
