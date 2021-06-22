@@ -12,7 +12,6 @@ import {
   SET_NOTIFICATIONS,
   SET_RLC,
   SET_RLCS,
-  SET_SPECIAL_PERMISSION,
   SET_USER,
   SET_USER_PERMISSIONS,
 } from './core.actions';
@@ -28,7 +27,6 @@ export interface CoreState {
   groups: { [id: number]: RestrictedGroup };
   actual_has_permissions: { [id: number]: HasPermission };
   rlc: RestrictedRlc;
-  special_permission: Permission;
   rlcs: { [id: number]: RestrictedRlc };
   notifications: number;
 }
@@ -40,7 +38,6 @@ const initialState: CoreState = {
   groups: {},
   actual_has_permissions: {},
   rlc: null,
-  special_permission: null,
   rlcs: {},
   notifications: 0,
 };
@@ -95,12 +92,6 @@ export function coreReducer(state = initialState, action: CoreActions) {
       return {
         ...state,
         rlcs: getIdObjects(action.payload),
-      };
-
-    case SET_SPECIAL_PERMISSION:
-      return {
-        ...state,
-        special_permission: action.payload,
       };
     case SET_USER:
       return {

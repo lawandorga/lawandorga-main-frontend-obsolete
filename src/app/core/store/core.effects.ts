@@ -26,9 +26,6 @@ import {
   START_CREATE_USER,
   StartCreateUser,
   SET_GROUPS,
-  START_LOADING_SPECIAL_PERMISSION,
-  StartLoadingSpecialPermission,
-  SET_SPECIAL_PERMISSION,
   START_LOADING_RLCS,
   SET_RLCS,
   START_LOADING_HAS_PERMISSION_STATICS,
@@ -42,8 +39,6 @@ import {
 } from './core.actions';
 import {
   CREATE_PROFILE_API_URL,
-  GetPermissionsForGroupApiURL,
-  GetSpecialPermissionApiURL,
   GetSpecialProfileApiURL,
   HAS_PERMISSIONS_STATICS_API_URL,
   RLCS_API_URL,
@@ -51,7 +46,7 @@ import {
   USER_HAS_PERMISSIONS_API_URL,
 } from '../../statics/api_urls.statics';
 import { CoreSandboxService } from '../services/core-sandbox.service';
-import { FullUser, RestrictedUser } from '../models/user.model';
+import { FullUser } from '../models/user.model';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { RestrictedGroup } from '../models/group.model';
 import { HasPermission, Permission } from '../models/permission.model';
@@ -87,38 +82,6 @@ export class CoreEffects {
               this.coreSB.router.navigate(['login']);
             }
             return [];
-          })
-        )
-      );
-    })
-  );
-
-  @Effect()
-  startLoadingSpecialPermission = this.actions.pipe(
-    ofType(START_LOADING_SPECIAL_PERMISSION),
-    map((action: StartLoadingSpecialPermission) => {
-      return action.payload;
-    }),
-    switchMap((id: string) => {
-      return from(
-        this.http.get(GetSpecialPermissionApiURL(id)).pipe(
-          catchError((error) => {
-            this.snackbar.showErrorSnackBar('error at loading special permission: ' + error.error.detail);
-            return [];
-          }),
-          mergeMap((response: any) => {
-            const permission = Permission.getPermissionFromJson(response);
-            const hasPermissions = HasPermission.getPermissionsFromJsonArray(response.has_permissions);
-            return [
-              {
-                type: SET_SPECIAL_PERMISSION,
-                payload: permission,
-              },
-              {
-                type: SET_ACTUAL_HAS_PERMISSIONS,
-                payload: hasPermissions,
-              },
-            ];
           })
         )
       );

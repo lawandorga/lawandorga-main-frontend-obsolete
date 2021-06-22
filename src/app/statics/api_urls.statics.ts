@@ -97,10 +97,6 @@ export const GetSpecialGroupMemberApiURL = (id: string) => {
   return `${GetSpecialGroupApiURL(id)}member/`;
 };
 
-export const GetSpecialPermissionApiURL = (id: string | number) => {
-  return `${PERMISSION_API_URL}${id}/`;
-};
-
 export const GetSpecialHasPermissionApiURL = (id: string | number) => {
   return `${HAS_PERMISSION_API_URL}${id}/`;
 };

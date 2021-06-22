@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { FullUser, RestrictedUser } from '../models/user.model';
+import { FullUser } from '../models/user.model';
 import { HasPermission, Permission } from '../models/permission.model';
 import { RestrictedRlc } from '../models/rlc.model';
 import { RestrictedGroup } from '../models/group.model';
@@ -14,7 +14,6 @@ export const SET_GROUPS = 'SET_GROUPS';
 export const SET_NOTIFICATIONS = 'SET_NOTIFICATIONS';
 export const SET_RLC = 'SET_RLC';
 export const SET_RLCS = 'SET_RLCS';
-export const SET_SPECIAL_PERMISSION = 'SET_SPECIAL_PERMISSION';
 export const SET_USER = 'SET_USER';
 export const SET_USER_PERMISSIONS = 'SET_USER_PERMISSIONS';
 export const START_CHECKING_USER_ACTIVATION_LINK = 'START_CHECKING_USER_ACTIVATION_LINK';
@@ -23,7 +22,6 @@ export const START_CREATE_USER = 'START_CREATE_USER';
 export const START_LOADING_GROUPS = 'START_LOADING_GROUPS';
 export const START_LOADING_HAS_PERMISSION_STATICS = 'START_LOADING_HAS_PERMISSION_STATICS';
 export const START_LOADING_RLCS = 'START_LOADING_RLCS';
-export const START_LOADING_SPECIAL_PERMISSION = 'START_LOADING_SPECIAL_PERMISSION';
 export const START_PATCH_USER = 'START_PATCH_USER';
 export const START_SAVING_USER = 'START_SAVING_USER';
 export const START_LOADING_UNREAD_NOTIFICATIONS = 'START_LOADING_UNREAD_NOTIFICATIONS';
@@ -76,12 +74,6 @@ export class SetRlcs implements Action {
   constructor(public payload: RestrictedRlc[]) {}
 }
 
-export class SetSpecialPermission implements Action {
-  readonly type = SET_SPECIAL_PERMISSION;
-
-  constructor(public payload: Permission) {}
-}
-
 export class SetUser implements Action {
   readonly type = SET_USER;
 
@@ -110,12 +102,6 @@ export class StartLoadingHasPermissionStatics implements Action {
 
 export class StartLoadingRlcs implements Action {
   readonly type = START_LOADING_RLCS;
-}
-
-export class StartLoadingSpecialPermission implements Action {
-  readonly type = START_LOADING_SPECIAL_PERMISSION;
-
-  constructor(public payload: string) {}
 }
 
 export class StartPatchUser implements Action {
@@ -161,14 +147,12 @@ export type CoreActions =
   | SetGroups
   | SetRlc
   | SetRlcs
-  | SetSpecialPermission
   | SetUser
   | SetUserPermissions
   | StartCreateUser
   | StartLoadingGroups
   | StartLoadingHasPermissionStatics
   | StartLoadingRlcs
-  | StartLoadingSpecialPermission
   | StartPatchUser
   | StartSavingUser
   | StartCheckingUserHasPermissions
