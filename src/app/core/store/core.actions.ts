@@ -182,18 +182,6 @@ export class StartAcceptingUser implements Action {
   constructor(public payload: string) {}
 }
 
-export class StartAddingGroup implements Action {
-  readonly type = START_ADDING_GROUP;
-
-  constructor(public payload: any) {}
-}
-
-export class StartAddingGroupMembers implements Action {
-  readonly type = START_ADDING_GROUP_MEMBERS;
-
-  constructor(public payload: { user_ids: string[]; group_id: string }) {}
-}
-
 export class StartAddingHasPermission implements Action {
   readonly type = START_ADDING_HAS_PERMISSION;
 
@@ -323,8 +311,6 @@ export type CoreActions =
   | SetUserRecordStates
   | SetUserStates
   | StartAcceptingUser
-  | StartAddingGroup
-  | StartAddingGroupMembers
   | StartAddingHasPermission
   | StartCreateUser
   | StartLoadingGroups

@@ -31,8 +31,6 @@ import {
   ResetSpecialGroup,
   ResetSpecialPermission,
   SetSpecialForeignUser,
-  StartAddingGroup,
-  StartAddingGroupMembers,
   StartAddingHasPermission,
   StartCheckingUserHasPermissions,
   StartCreateUser,
@@ -227,10 +225,6 @@ export class CoreSandboxService {
     return this.coreStateStore.dispatch(new ResetSpecialGroup());
   }
 
-  addGroupMembers(user_ids: string[], group_id: string): void {
-    return this.coreStateStore.dispatch(new StartAddingGroupMembers({ user_ids, group_id }));
-  }
-
   removeGroupMember(user_id: string, group_id: string): void {
     return this.coreStateStore.dispatch(new StartRemovingGroupMember({ user_id, group_id }));
   }
@@ -337,10 +331,6 @@ export class CoreSandboxService {
 
   startLoadingPermissionStatics(): void {
     this.coreStateStore.dispatch(new StartLoadingHasPermissionStatics());
-  }
-
-  startAddingGroup(newGroup: any): void {
-    this.coreStateStore.dispatch(new StartAddingGroup(newGroup));
   }
 
   startCheckingUserActivationLink(userId: number, token: string): void {
