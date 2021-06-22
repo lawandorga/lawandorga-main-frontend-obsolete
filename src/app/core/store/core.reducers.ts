@@ -4,9 +4,7 @@ import {
   CoreActions,
   DECREMENT_NOTIFICATION_COUNTER,
   INCREMENT_NOTIFICATION_COUNTER,
-  REMOVE_ACTUAL_HAS_PERMISSIONS,
   REMOVE_SINGLE_HAS_PERMISSION,
-  SET_ACTUAL_HAS_PERMISSIONS,
   SET_ALL_PERMISSIONS,
   SET_GROUPS,
   SET_NOTIFICATIONS,
@@ -25,7 +23,6 @@ export interface CoreState {
   all_permissions: { [id: number]: Permission };
   user_permissions: { [id: number]: HasPermission };
   groups: { [id: number]: RestrictedGroup };
-  actual_has_permissions: { [id: number]: HasPermission };
   rlc: RestrictedRlc;
   rlcs: { [id: number]: RestrictedRlc };
   notifications: number;
@@ -36,7 +33,6 @@ const initialState: CoreState = {
   all_permissions: {},
   user_permissions: {},
   groups: {},
-  actual_has_permissions: {},
   rlc: null,
   rlcs: {},
   notifications: 0,
@@ -44,34 +40,6 @@ const initialState: CoreState = {
 
 export function coreReducer(state = initialState, action: CoreActions) {
   switch (action.type) {
-    case ADD_SINGLE_HAS_PERMISSION:
-      const hasPerm: HasPermission = action.payload;
-      return {
-        ...state,
-        actual_has_permissions: {
-          ...state.actual_has_permissions,
-          [hasPerm.id]: hasPerm,
-        },
-      };
-    case REMOVE_ACTUAL_HAS_PERMISSIONS:
-      return {
-        ...state,
-        actual_has_permissions: {},
-      };
-    case REMOVE_SINGLE_HAS_PERMISSION:
-      const hasPermissions = state.actual_has_permissions;
-      delete hasPermissions[action.payload];
-
-      return {
-        ...state,
-        actual_has_permissions: hasPermissions,
-      };
-
-    case SET_ACTUAL_HAS_PERMISSIONS:
-      return {
-        ...state,
-        actual_has_permissions: getIdObjects(action.payload),
-      };
     case SET_ALL_PERMISSIONS:
       return {
         ...state,

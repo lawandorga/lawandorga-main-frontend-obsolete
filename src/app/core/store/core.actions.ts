@@ -6,9 +6,7 @@ import { RestrictedGroup } from '../models/group.model';
 
 export const ADD_NOTIFICATIONS = 'ADD_NOTIFICATIONS';
 export const ADD_SINGLE_HAS_PERMISSION = 'ADD_SINGLE_HAS_PERMISSION';
-export const REMOVE_ACTUAL_HAS_PERMISSIONS = 'REMOVE_ACTUAL_HAS_PERMISSIONS';
 export const REMOVE_SINGLE_HAS_PERMISSION = 'REMOVE_SINGLE_HAS_PERMISSION';
-export const SET_ACTUAL_HAS_PERMISSIONS = 'SET_ACTUAL_HAS_PERMISSIONS';
 export const SET_ALL_PERMISSIONS = 'SET_ALL_PERMISSIONS';
 export const SET_GROUPS = 'SET_GROUPS';
 export const SET_NOTIFICATIONS = 'SET_NOTIFICATIONS';
@@ -34,20 +32,10 @@ export class AddSingleHasPermission implements Action {
   constructor(public payload: HasPermission) {}
 }
 
-export class RemoveActualHasPermissions implements Action {
-  readonly type = REMOVE_ACTUAL_HAS_PERMISSIONS;
-}
-
 export class RemoveSingleHasPermission implements Action {
   readonly type = REMOVE_SINGLE_HAS_PERMISSION;
 
   constructor(public payload: string) {}
-}
-
-export class SetActualHasPermissions implements Action {
-  readonly type = SET_ACTUAL_HAS_PERMISSIONS;
-
-  constructor(public payload: HasPermission[]) {}
 }
 
 export class SetAllPermissions implements Action {
@@ -140,9 +128,7 @@ export class StartLoadingUnreadNotifications implements Action {
 
 export type CoreActions =
   | AddSingleHasPermission
-  | RemoveActualHasPermissions
   | RemoveSingleHasPermission
-  | SetActualHasPermissions
   | SetAllPermissions
   | SetGroups
   | SetRlc
