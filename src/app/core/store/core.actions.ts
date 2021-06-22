@@ -23,7 +23,6 @@ export const SET_USER = 'SET_USER';
 export const SET_USER_PERMISSIONS = 'SET_USER_PERMISSIONS';
 export const SET_USER_RECORD_STATES = 'SET_USER_RECORD_STATES';
 export const SET_USER_STATES = 'SET_USER_STATES';
-export const START_ACCEPTING_USER = 'START_ACCEPTING_USER';
 export const START_ADDING_GROUP = 'START_ADDING_GROUP';
 export const START_ADDING_GROUP_MEMBERS = 'START_ADDING_GROUP_MEMBERS';
 export const START_ADDING_HAS_PERMISSION = 'START_ADDING_HAS_PERMISSION';
@@ -140,12 +139,6 @@ export class SetUserStates implements Action {
   constructor(public payload: any) {}
 }
 
-export class StartAcceptingUser implements Action {
-  readonly type = START_ACCEPTING_USER;
-
-  constructor(public payload: string) {}
-}
-
 export class StartAddingHasPermission implements Action {
   readonly type = START_ADDING_HAS_PERMISSION;
 
@@ -255,7 +248,6 @@ export type CoreActions =
   | SetUserPermissions
   | SetUserRecordStates
   | SetUserStates
-  | StartAcceptingUser
   | StartAddingHasPermission
   | StartCreateUser
   | StartLoadingGroups
