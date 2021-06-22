@@ -1,7 +1,7 @@
 <mat-card style="max-width: 500px;">
     <mat-card-title>Create a new record</mat-card-title>
     <mat-card-content>
-        <dynamic-form (send)="onSend($event)" [errors]="errors" [fields]="fields">
+        <dynamic-form (send)="onSend($event)" [errors]="errors" [fields]="fields" [processing]="processing">
         </dynamic-form>
     </mat-card-content>
 </mat-card>

@@ -104,6 +104,7 @@ export class CreateRecordComponent implements OnInit {
       required: false,
     },
   ];
+  processing = false;
 
   constructor(private coreSB: CoreSandboxService, private router: Router, private http: HttpClient) {}
 
@@ -114,12 +115,14 @@ export class CreateRecordComponent implements OnInit {
   }
 
   onSend(values: FullRecord): void {  // eslint-disable-line
+    this.processing = true;
     this.http.post('api/records/records/', values).subscribe(
       () => {
         this.coreSB.showSuccessSnackBar('Record was created.');
         void this.router.navigate(['/records/']);
       },
       (error: HttpErrorResponse) => {
+        this.processing = false;
         this.errors = error.error as DjangoError;
       }
     );

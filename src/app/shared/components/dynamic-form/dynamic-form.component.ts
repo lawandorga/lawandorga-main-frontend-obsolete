@@ -29,6 +29,7 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   @Input() data: Object; // eslint-disable-line
   @Input() errors: Object; // eslint-disable-line
   @Input() button = 'Save';
+  @Input() processing = false;
   @Output() send = new EventEmitter();
   form: FormGroup;
   controls: { [key: string]: FormControl } = {};
