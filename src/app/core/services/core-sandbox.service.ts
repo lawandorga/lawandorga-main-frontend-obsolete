@@ -1,59 +1,23 @@
-/*
- * law&orga - record and organization management software for refugee law clinics
- * Copyright (C) 2019  Dominik Walser
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>
- */
-
 import moment from 'moment';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { take } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { CoreState } from '../store/core.reducers';
-import { ForeignUser, FullUser, RestrictedUser } from '../models/user.model';
+import { FullUser, RestrictedUser } from '../models/user.model';
 import {
   DecrementNotificationCounter,
   IncrementNotificationCounter,
-  RemoveActualHasPermissions,
-  ResetSpecialForeignUser,
-  ResetSpecialGroup,
-  ResetSpecialPermission,
-  SetSpecialForeignUser,
-  StartAddingHasPermission,
-  StartCheckingUserHasPermissions,
   StartCreateUser,
   StartLoadingGroups,
-  StartLoadingHasPermissionStatics,
-  StartLoadingOtherUsers,
   StartLoadingRlcs,
-  StartLoadingSpecialForeignUser,
-  StartLoadingSpecialGroup,
-  StartLoadingSpecialGroupHasPermissions,
-  StartLoadingSpecialPermission,
-  StartLoadingUnreadNotifications,
-  StartRemovingHasPermission,
-  StartSavingUser,
 } from '../store/core.actions';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { Observable } from 'rxjs';
 import { HasPermission, Permission } from '../models/permission.model';
-import { FullGroup, RestrictedGroup } from '../models/group.model';
+import { RestrictedGroup } from '../models/group.model';
 import { IRlc, RestrictedRlc } from '../models/rlc.model';
-import { State } from '../models/state.model';
 import { HttpClient } from '@angular/common/http';
-import { GetCheckUserActivationApiUrl, PROFILES_API_URL } from '../../statics/api_urls.statics';
+import { GetCheckUserActivationApiUrl } from '../../statics/api_urls.statics';
 
 @Injectable()
 export class CoreSandboxService {
@@ -88,10 +52,6 @@ export class CoreSandboxService {
     return this.coreStateStore.pipe(select((state: any) => state.core.rlc));
   }
 
-  getGroup(): Observable<FullGroup> {
-    return this.coreStateStore.pipe(select((state: any) => state.core.special_group));
-  }
-
   getUserPermissions(asArray = true): Observable<HasPermission[] | any> {
     return this.coreStateStore.pipe(
       select((state: any) => {
@@ -112,10 +72,6 @@ export class CoreSandboxService {
 
   hasPermissionFromStringForOwnRlc(permission: string, subscriberCallback): void {
     this.hasPermissionFromString(permission, subscriberCallback);
-  }
-
-  getResultsLength(): Observable<number> {
-    return this.coreStateStore.pipe(select((state: any) => state.core.results_length));
   }
 
   hasPermissionFromString(permission: string, subscriberCallback, permission_for: any = null): void {
@@ -143,10 +99,6 @@ export class CoreSandboxService {
     });
   }
 
-  startSavingUser(user: FullUser) {
-    this.coreStateStore.dispatch(new StartSavingUser(user));
-  }
-
   registerUser(user: any) {
     this.coreStateStore.dispatch(new StartCreateUser(user));
   }
@@ -159,10 +111,6 @@ export class CoreSandboxService {
         return asArray ? Object.values(values) : values;
       })
     );
-  }
-
-  startLoadingOtherUsers() {
-    this.coreStateStore.dispatch(new StartLoadingOtherUsers());
   }
 
   startLoadingGroups() {
@@ -178,15 +126,6 @@ export class CoreSandboxService {
     );
   }
 
-  getOtherUsers(asArray = true): Observable<RestrictedUser[] | any> {
-    return this.coreStateStore.pipe(
-      select((state: any) => {
-        const values = state.core.other_users;
-        return asArray ? Object.values(values) : values;
-      })
-    );
-  }
-
   showSuccessSnackBar(message: string, duration = 10000) {
     this.snackbarService.showSuccessSnackBar(message, duration);
   }
@@ -195,37 +134,8 @@ export class CoreSandboxService {
     this.snackbarService.showErrorSnackBar(message, duration);
   }
 
-  relogUser() {
-    this.router.navigate(['login']);
-  }
-
-  setForeignUser(foreignUser: ForeignUser) {
-    this.coreStateStore.dispatch(new SetSpecialForeignUser(foreignUser));
-  }
-
-  resetForeignUser() {
-    this.coreStateStore.dispatch(new ResetSpecialForeignUser());
-  }
-
-  getSpecialForeignUser(): Observable<ForeignUser | any> {
-    return this.coreStateStore.pipe(select((state: any) => state.core.foreign_user));
-  }
-
-  loadAndGetSpecialForeignUser(id: string): Observable<ForeignUser | any> {
-    this.coreStateStore.dispatch(new StartLoadingSpecialForeignUser(id));
-    return this.getSpecialForeignUser();
-  }
-
-  startLoadingSpecialGroup(id: string): void {
-    this.coreStateStore.dispatch(new StartLoadingSpecialGroup(id));
-  }
-
   startLoadingRlcs(): void {
     return this.coreStateStore.dispatch(new StartLoadingRlcs());
-  }
-
-  startLoadingPermissionStatics(): void {
-    this.coreStateStore.dispatch(new StartLoadingHasPermissionStatics());
   }
 
   startCheckingUserActivationLink(userId: number, token: string): void {
@@ -243,40 +153,6 @@ export class CoreSandboxService {
     );
   }
 
-  getUserStates(asArray = true): Observable<State[]> {
-    return this.coreStateStore.pipe(
-      select((state: any) => {
-        const values = state.core.user_states;
-        return asArray ? Object.values(values) : values;
-      })
-    );
-  }
-
-  getUserRecordStates(asArray = true): Observable<State[]> {
-    return this.coreStateStore.pipe(
-      select((state: any) => {
-        const values = state.core.user_record_states;
-        return asArray ? Object.values(values) : values;
-      })
-    );
-  }
-
-  getUserStateByAbbreviation(abb: string): Observable<State> {
-    return this.coreStateStore.pipe(select((state: any) => state.core.user_states[abb]));
-  }
-
-  getUserRecordStateByAbbreviation(abb: string): Observable<State> {
-    return this.coreStateStore.pipe(select((state: any) => state.core.user_record_states[abb]));
-  }
-
-  startCheckingUserHasPermissions(): void {
-    this.coreStateStore.dispatch(new StartCheckingUserHasPermissions());
-  }
-
-  startLoadingUnreadNotifications(): void {
-    this.coreStateStore.dispatch(new StartLoadingUnreadNotifications());
-  }
-
   getNotifications(): Observable<number> {
     return this.coreStateStore.pipe(
       select((state: any) => {
@@ -291,23 +167,5 @@ export class CoreSandboxService {
 
   incrementNotificationCounter(): void {
     this.coreStateStore.dispatch(new IncrementNotificationCounter());
-  }
-
-  getOtherUserDirect(): Observable<any> {
-    // this.http.get(PROFILES_API_URL).subscribe(
-    //     catchError(error => {
-    //         this.showErrorSnackBar(
-    //             'error at loading profiles: ' + error.error.detail
-    //         );
-    //         return [];
-    //     }),
-    //     mergeMap((response: any) => {
-    //         const users = FullUser.getFullUsersFromJsonArray(
-    //             response.results ? response.results : response
-    //         );
-    //
-    //     })
-    // )
-    return this.http.get(PROFILES_API_URL);
   }
 }
