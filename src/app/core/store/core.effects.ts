@@ -25,7 +25,6 @@ import { from } from 'rxjs';
 import {
   START_CREATE_USER,
   StartCreateUser,
-  SET_OTHER_USERS,
   SET_GROUPS,
   START_LOADING_SPECIAL_PERMISSION,
   StartLoadingSpecialPermission,
@@ -164,13 +163,8 @@ export class CoreEffects {
             return [];
           }),
           mergeMap((response: any) => {
-            const otherUsers = RestrictedUser.getRestrictedUsersFromJsonArray(response.users);
             const groups = RestrictedGroup.getRestrictedGroupsFromJsonArray(response.groups);
             return [
-              {
-                type: SET_OTHER_USERS,
-                payload: otherUsers,
-              },
               {
                 type: SET_GROUPS,
                 payload: groups,

@@ -1,8 +1,8 @@
 import { Action } from '@ngrx/store';
-import { ForeignUser, FullUser, RestrictedUser } from '../models/user.model';
+import { FullUser, RestrictedUser } from '../models/user.model';
 import { HasPermission, Permission } from '../models/permission.model';
 import { RestrictedRlc } from '../models/rlc.model';
-import { FullGroup, RestrictedGroup } from '../models/group.model';
+import { RestrictedGroup } from '../models/group.model';
 
 export const ADD_NOTIFICATIONS = 'ADD_NOTIFICATIONS';
 export const ADD_SINGLE_HAS_PERMISSION = 'ADD_SINGLE_HAS_PERMISSION';
@@ -12,7 +12,6 @@ export const SET_ACTUAL_HAS_PERMISSIONS = 'SET_ACTUAL_HAS_PERMISSIONS';
 export const SET_ALL_PERMISSIONS = 'SET_ALL_PERMISSIONS';
 export const SET_GROUPS = 'SET_GROUPS';
 export const SET_NOTIFICATIONS = 'SET_NOTIFICATIONS';
-export const SET_OTHER_USERS = 'SET_OTHER_USERS';
 export const SET_RLC = 'SET_RLC';
 export const SET_RLCS = 'SET_RLCS';
 export const SET_SPECIAL_PERMISSION = 'SET_SPECIAL_PERMISSION';
@@ -23,7 +22,6 @@ export const START_CHECKING_USER_HAS_PERMISSIONS = 'START_CHECKING_USER_HAS_PERM
 export const START_CREATE_USER = 'START_CREATE_USER';
 export const START_LOADING_GROUPS = 'START_LOADING_GROUPS';
 export const START_LOADING_HAS_PERMISSION_STATICS = 'START_LOADING_HAS_PERMISSION_STATICS';
-export const START_LOADING_OTHER_USERS = 'START_LOADING_OTHER_USERS';
 export const START_LOADING_RLCS = 'START_LOADING_RLCS';
 export const START_LOADING_SPECIAL_PERMISSION = 'START_LOADING_SPECIAL_PERMISSION';
 export const START_PATCH_USER = 'START_PATCH_USER';
@@ -64,12 +62,6 @@ export class SetGroups implements Action {
   readonly type = SET_GROUPS;
 
   constructor(public payload: RestrictedGroup[]) {}
-}
-
-export class SetOtherUsers implements Action {
-  readonly type = SET_OTHER_USERS;
-
-  constructor(public payload: RestrictedUser[]) {}
 }
 
 export class SetRlc implements Action {
@@ -114,10 +106,6 @@ export class StartLoadingGroups implements Action {
 
 export class StartLoadingHasPermissionStatics implements Action {
   readonly type = START_LOADING_HAS_PERMISSION_STATICS;
-}
-
-export class StartLoadingOtherUsers implements Action {
-  readonly type = START_LOADING_OTHER_USERS;
 }
 
 export class StartLoadingRlcs implements Action {
@@ -171,7 +159,6 @@ export type CoreActions =
   | SetActualHasPermissions
   | SetAllPermissions
   | SetGroups
-  | SetOtherUsers
   | SetRlc
   | SetRlcs
   | SetSpecialPermission
@@ -180,7 +167,6 @@ export type CoreActions =
   | StartCreateUser
   | StartLoadingGroups
   | StartLoadingHasPermissionStatics
-  | StartLoadingOtherUsers
   | StartLoadingRlcs
   | StartLoadingSpecialPermission
   | StartPatchUser

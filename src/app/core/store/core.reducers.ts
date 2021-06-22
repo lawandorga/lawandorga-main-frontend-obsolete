@@ -10,7 +10,6 @@ import {
   SET_ALL_PERMISSIONS,
   SET_GROUPS,
   SET_NOTIFICATIONS,
-  SET_OTHER_USERS,
   SET_RLC,
   SET_RLCS,
   SET_SPECIAL_PERMISSION,
@@ -24,7 +23,6 @@ import { RestrictedGroup } from '../models/group.model';
 
 export interface CoreState {
   user: FullUser;
-  other_users: { [id: number]: FullUser };
   all_permissions: { [id: number]: Permission };
   user_permissions: { [id: number]: HasPermission };
   groups: { [id: number]: RestrictedGroup };
@@ -37,7 +35,6 @@ export interface CoreState {
 
 const initialState: CoreState = {
   user: null,
-  other_users: {},
   all_permissions: {},
   user_permissions: {},
   groups: {},
@@ -88,11 +85,7 @@ export function coreReducer(state = initialState, action: CoreActions) {
         ...state,
         groups: getIdObjects(action.payload),
       };
-    case SET_OTHER_USERS:
-      return {
-        ...state,
-        other_users: getIdObjects(action.payload),
-      };
+
     case SET_RLC:
       return {
         ...state,
