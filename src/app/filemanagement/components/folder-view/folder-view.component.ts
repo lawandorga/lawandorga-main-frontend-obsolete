@@ -47,7 +47,7 @@ export class FolderViewComponent implements OnInit {
   fileData: { file: string };
 
   items: (IFile | Folder)[];
-  displayedColumns = ['type', 'name', 'created', 'actions'];
+  displayedColumns = ['type', 'name', 'last_edited', 'created', 'actions'];
   dataSource: MatTableDataSource<IFile | Folder>;
 
   permissions: FolderPermission[];
