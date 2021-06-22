@@ -31,7 +31,6 @@ import {
   SET_OTHER_USERS,
   SET_RLC,
   SET_RLCS,
-  SET_SPECIAL_FOREIGN_USER,
   SET_SPECIAL_GROUP,
   SET_SPECIAL_PERMISSION,
   SET_USER,
@@ -52,7 +51,6 @@ export interface CoreState {
   groups: { [id: number]: RestrictedGroup };
   special_group: FullGroup;
   actual_has_permissions: { [id: number]: HasPermission };
-  foreign_user: ForeignUser;
   rlc: RestrictedRlc;
   user_states: any;
   user_record_states: any;
@@ -69,7 +67,6 @@ const initialState: CoreState = {
   groups: {},
   special_group: null,
   actual_has_permissions: {},
-  foreign_user: null,
   rlc: null,
   user_states: [],
   user_record_states: [],
@@ -132,11 +129,6 @@ export function coreReducer(state = initialState, action: CoreActions) {
       return {
         ...state,
         rlcs: getIdObjects(action.payload),
-      };
-    case SET_SPECIAL_FOREIGN_USER:
-      return {
-        ...state,
-        foreign_user: action.payload,
       };
     case SET_SPECIAL_GROUP:
       return {

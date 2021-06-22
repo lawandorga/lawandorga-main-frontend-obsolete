@@ -15,7 +15,6 @@ export const SET_NOTIFICATIONS = 'SET_NOTIFICATIONS';
 export const SET_OTHER_USERS = 'SET_OTHER_USERS';
 export const SET_RLC = 'SET_RLC';
 export const SET_RLCS = 'SET_RLCS';
-export const SET_SPECIAL_FOREIGN_USER = 'SET_SPECIAL_FOREIGN_USER';
 export const SET_SPECIAL_GROUP = 'SET_SPECIAL_GROUP';
 export const SET_SPECIAL_GROUP_HAS_PERMISSIONS = 'SET_SPECIAL_GROUP_HAS_PERMISSIONS';
 export const SET_SPECIAL_PERMISSION = 'SET_SPECIAL_PERMISSION';
@@ -30,7 +29,6 @@ export const START_LOADING_GROUPS = 'START_LOADING_GROUPS';
 export const START_LOADING_HAS_PERMISSION_STATICS = 'START_LOADING_HAS_PERMISSION_STATICS';
 export const START_LOADING_OTHER_USERS = 'START_LOADING_OTHER_USERS';
 export const START_LOADING_RLCS = 'START_LOADING_RLCS';
-export const START_LOADING_SPECIAL_FOREIGN_USER = 'START_LOADING_SPECIAL_FOREIGN_USER';
 export const START_LOADING_SPECIAL_GROUP = 'START_LOADING_SPECIAL_GROUP';
 export const START_LOADING_SPECIAL_GROUP_HAS_PERMISSIONS = 'START_LOADING_SPECIAL_GROUP_HAS_PERMISSIONS';
 export const START_LOADING_SPECIAL_PERMISSION = 'START_LOADING_SPECIAL_PERMISSION';
@@ -92,12 +90,6 @@ export class SetRlcs implements Action {
   constructor(public payload: RestrictedRlc[]) {}
 }
 
-export class SetSpecialForeignUser implements Action {
-  readonly type = SET_SPECIAL_FOREIGN_USER;
-
-  constructor(public payload: ForeignUser) {}
-}
-
 export class SetSpecialGroup implements Action {
   readonly type = SET_SPECIAL_GROUP;
 
@@ -154,12 +146,6 @@ export class StartLoadingOtherUsers implements Action {
 
 export class StartLoadingRlcs implements Action {
   readonly type = START_LOADING_RLCS;
-}
-
-export class StartLoadingSpecialForeignUser implements Action {
-  readonly type = START_LOADING_SPECIAL_FOREIGN_USER;
-
-  constructor(public payload: string) {}
 }
 
 export class StartLoadingSpecialGroup implements Action {
@@ -224,7 +210,6 @@ export type CoreActions =
   | SetOtherUsers
   | SetRlc
   | SetRlcs
-  | SetSpecialForeignUser
   | SetSpecialGroup
   | SetSpecialPermission
   | SetUser
@@ -236,7 +221,6 @@ export type CoreActions =
   | StartLoadingHasPermissionStatics
   | StartLoadingOtherUsers
   | StartLoadingRlcs
-  | StartLoadingSpecialForeignUser
   | StartLoadingSpecialGroup
   | StartLoadingSpecialGroupHasPermissions
   | StartLoadingSpecialPermission
