@@ -25,9 +25,6 @@ import {
   REMOVE_ACTUAL_HAS_PERMISSIONS,
   REMOVE_SINGLE_HAS_PERMISSION,
   RESET_RESULTS_LENGTH,
-  RESET_SPECIAL_FOREIGN_USER,
-  RESET_SPECIAL_GROUP,
-  RESET_SPECIAL_PERMISSION,
   SET_ACTUAL_HAS_PERMISSIONS,
   SET_ALL_PERMISSIONS,
   SET_GROUPS,
@@ -109,21 +106,7 @@ export function coreReducer(state = initialState, action: CoreActions) {
         ...state,
         actual_has_permissions: hasPermissions,
       };
-    case RESET_SPECIAL_FOREIGN_USER:
-      return {
-        ...state,
-        foreign_user: null,
-      };
-    case RESET_SPECIAL_GROUP:
-      return {
-        ...state,
-        special_group: null,
-      };
-    case RESET_SPECIAL_PERMISSION:
-      return {
-        ...state,
-        special_permission: null,
-      };
+
     case SET_ACTUAL_HAS_PERMISSIONS:
       return {
         ...state,

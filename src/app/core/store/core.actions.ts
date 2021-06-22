@@ -8,10 +8,6 @@ export const ADD_NOTIFICATIONS = 'ADD_NOTIFICATIONS';
 export const ADD_SINGLE_HAS_PERMISSION = 'ADD_SINGLE_HAS_PERMISSION';
 export const REMOVE_ACTUAL_HAS_PERMISSIONS = 'REMOVE_ACTUAL_HAS_PERMISSIONS';
 export const REMOVE_SINGLE_HAS_PERMISSION = 'REMOVE_SINGLE_HAS_PERMISSION';
-export const RESET_SPECIAL_FOREIGN_USER = 'RESET_SPECIAL_FOREIGN_USER';
-export const RESET_SPECIAL_GROUP = 'RESET_SPECIAL_GROUP';
-export const RESET_SPECIAL_GROUP_HAS_PERMISSIONS = 'RESET_SPECIAL_GROUP_HAS_PERMISSIONS';
-export const RESET_SPECIAL_PERMISSION = 'RESET_SPECIAL_PERMISSION';
 export const SET_ACTUAL_HAS_PERMISSIONS = 'SET_ACTUAL_HAS_PERMISSIONS';
 export const SET_ALL_PERMISSIONS = 'SET_ALL_PERMISSIONS';
 export const SET_GROUPS = 'SET_GROUPS';
@@ -66,18 +62,6 @@ export class RemoveSingleHasPermission implements Action {
   readonly type = REMOVE_SINGLE_HAS_PERMISSION;
 
   constructor(public payload: string) {}
-}
-
-export class ResetSpecialForeignUser implements Action {
-  readonly type = RESET_SPECIAL_FOREIGN_USER;
-}
-
-export class ResetSpecialGroup implements Action {
-  readonly type = RESET_SPECIAL_GROUP;
-}
-
-export class ResetSpecialPermission implements Action {
-  readonly type = RESET_SPECIAL_PERMISSION;
 }
 
 export class SetActualHasPermissions implements Action {
@@ -270,9 +254,6 @@ export type CoreActions =
   | AddSingleHasPermission
   | RemoveActualHasPermissions
   | RemoveSingleHasPermission
-  | ResetSpecialForeignUser
-  | ResetSpecialGroup
-  | ResetSpecialPermission
   | SetActualHasPermissions
   | SetAllPermissions
   | SetGroups
