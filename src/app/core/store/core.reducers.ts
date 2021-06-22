@@ -24,13 +24,11 @@ import {
   INCREMENT_NOTIFICATION_COUNTER,
   REMOVE_ACTUAL_HAS_PERMISSIONS,
   REMOVE_SINGLE_HAS_PERMISSION,
-  RESET_RESULTS_LENGTH,
   SET_ACTUAL_HAS_PERMISSIONS,
   SET_ALL_PERMISSIONS,
   SET_GROUPS,
   SET_NOTIFICATIONS,
   SET_OTHER_USERS,
-  SET_RESULTS_LENGTH,
   SET_RLC,
   SET_RLCS,
   SET_SPECIAL_FOREIGN_USER,
@@ -61,7 +59,6 @@ export interface CoreState {
   special_permission: Permission;
   rlcs: { [id: number]: RestrictedRlc };
   notifications: number;
-  results_length: number;
 }
 
 const initialState: CoreState = {
@@ -79,7 +76,6 @@ const initialState: CoreState = {
   special_permission: null,
   rlcs: {},
   notifications: 0,
-  results_length: 0,
 };
 
 export function coreReducer(state = initialState, action: CoreActions) {
@@ -186,16 +182,6 @@ export function coreReducer(state = initialState, action: CoreActions) {
       return {
         ...state,
         notifications: state.notifications - 1,
-      };
-    case RESET_RESULTS_LENGTH:
-      return {
-        ...state,
-        results_length: 0,
-      };
-    case SET_RESULTS_LENGTH:
-      return {
-        ...state,
-        results_length: action.payload,
       };
     default:
       return state;

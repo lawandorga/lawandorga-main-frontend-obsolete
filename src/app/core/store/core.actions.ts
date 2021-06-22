@@ -45,8 +45,6 @@ export const START_SAVING_USER = 'START_SAVING_USER';
 export const START_LOADING_UNREAD_NOTIFICATIONS = 'START_LOADING_UNREAD_NOTIFICATIONS';
 export const DECREMENT_NOTIFICATION_COUNTER = 'DECREMENT_NOTIFICATION_COUNTER';
 export const INCREMENT_NOTIFICATION_COUNTER = 'INCREMENT_NOTIFICATION_COUNTER';
-export const SET_RESULTS_LENGTH = 'SET_RESULTS_LENGTH';
-export const RESET_RESULTS_LENGTH = 'RESET_RESULTS_LENGTH';
 
 export class AddSingleHasPermission implements Action {
   readonly type = ADD_SINGLE_HAS_PERMISSION;
@@ -240,16 +238,6 @@ export class StartLoadingUnreadNotifications implements Action {
   readonly type = START_LOADING_UNREAD_NOTIFICATIONS;
 }
 
-export class SetResultsLength implements Action {
-  readonly type = SET_RESULTS_LENGTH;
-
-  constructor(public payload: number) {}
-}
-
-export class ResetResultsLength implements Action {
-  readonly type = RESET_RESULTS_LENGTH;
-}
-
 export type CoreActions =
   | AddSingleHasPermission
   | RemoveActualHasPermissions
@@ -285,6 +273,4 @@ export type CoreActions =
   | SetNotifications
   | IncrementNotificationCounter
   | DecrementNotificationCounter
-  | StartLoadingUnreadNotifications
-  | SetResultsLength
-  | ResetResultsLength;
+  | StartLoadingUnreadNotifications;
