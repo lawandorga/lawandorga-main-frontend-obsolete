@@ -32,7 +32,6 @@ import {
   SET_ACTUAL_HAS_PERMISSIONS,
   SET_ALL_PERMISSIONS,
   SET_GROUPS,
-  SET_NEW_USER_REQUESTS,
   SET_NOTIFICATIONS,
   SET_OTHER_USERS,
   SET_RESULTS_LENGTH,
@@ -45,7 +44,6 @@ import {
   SET_USER_PERMISSIONS,
   SET_USER_RECORD_STATES,
   SET_USER_STATES,
-  UPDATE_NEW_USER_REQUEST,
 } from './core.actions';
 import { HasPermission, Permission } from '../models/permission.model';
 import { RestrictedRlc } from '../models/rlc.model';
@@ -84,7 +82,6 @@ const initialState: CoreState = {
   user_record_states: [],
   special_permission: null,
   rlcs: {},
-  new_user_requests: {},
   notifications: 0,
   results_length: 0,
 };
@@ -151,11 +148,6 @@ export function coreReducer(state = initialState, action: CoreActions) {
         ...state,
         groups: getIdObjects(action.payload),
       };
-    case SET_NEW_USER_REQUESTS:
-      return {
-        ...state,
-        new_user_requests: getIdObjects(action.payload),
-      };
     case SET_OTHER_USERS:
       return {
         ...state,
@@ -205,14 +197,6 @@ export function coreReducer(state = initialState, action: CoreActions) {
       return {
         ...state,
         user_states: getObjectsByField(action.payload, 'abbreviation'),
-      };
-    case UPDATE_NEW_USER_REQUEST:
-      return {
-        ...state,
-        new_user_requests: {
-          ...state.new_user_requests,
-          [action.payload.id]: action.payload,
-        },
       };
     case SET_NOTIFICATIONS:
       return {
