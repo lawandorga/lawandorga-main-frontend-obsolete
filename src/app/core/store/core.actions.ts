@@ -23,9 +23,6 @@ export const SET_USER = 'SET_USER';
 export const SET_USER_PERMISSIONS = 'SET_USER_PERMISSIONS';
 export const SET_USER_RECORD_STATES = 'SET_USER_RECORD_STATES';
 export const SET_USER_STATES = 'SET_USER_STATES';
-export const START_ADDING_GROUP = 'START_ADDING_GROUP';
-export const START_ADDING_GROUP_MEMBERS = 'START_ADDING_GROUP_MEMBERS';
-export const START_ADDING_HAS_PERMISSION = 'START_ADDING_HAS_PERMISSION';
 export const START_CHECKING_USER_ACTIVATION_LINK = 'START_CHECKING_USER_ACTIVATION_LINK';
 export const START_CHECKING_USER_HAS_PERMISSIONS = 'START_CHECKING_USER_HAS_PERMISSIONS';
 export const START_CREATE_USER = 'START_CREATE_USER';
@@ -139,12 +136,6 @@ export class SetUserStates implements Action {
   constructor(public payload: any) {}
 }
 
-export class StartAddingHasPermission implements Action {
-  readonly type = START_ADDING_HAS_PERMISSION;
-
-  constructor(public payload: any) {}
-}
-
 export class StartCreateUser implements Action {
   readonly type = START_CREATE_USER;
 
@@ -248,7 +239,6 @@ export type CoreActions =
   | SetUserPermissions
   | SetUserRecordStates
   | SetUserStates
-  | StartAddingHasPermission
   | StartCreateUser
   | StartLoadingGroups
   | StartLoadingHasPermissionStatics
