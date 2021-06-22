@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import { ForeignUser, FullUser } from '../models/user.model';
+import { FullUser } from '../models/user.model';
 import {
   ADD_SINGLE_HAS_PERMISSION,
   CoreActions,
@@ -31,7 +31,6 @@ import {
   SET_OTHER_USERS,
   SET_RLC,
   SET_RLCS,
-  SET_SPECIAL_GROUP,
   SET_SPECIAL_PERMISSION,
   SET_USER,
   SET_USER_PERMISSIONS,
@@ -49,7 +48,6 @@ export interface CoreState {
   all_permissions: { [id: number]: Permission };
   user_permissions: { [id: number]: HasPermission };
   groups: { [id: number]: RestrictedGroup };
-  special_group: FullGroup;
   actual_has_permissions: { [id: number]: HasPermission };
   rlc: RestrictedRlc;
   user_states: any;
@@ -65,7 +63,6 @@ const initialState: CoreState = {
   all_permissions: {},
   user_permissions: {},
   groups: {},
-  special_group: null,
   actual_has_permissions: {},
   rlc: null,
   user_states: [],
@@ -130,11 +127,7 @@ export function coreReducer(state = initialState, action: CoreActions) {
         ...state,
         rlcs: getIdObjects(action.payload),
       };
-    case SET_SPECIAL_GROUP:
-      return {
-        ...state,
-        special_group: action.payload,
-      };
+
     case SET_SPECIAL_PERMISSION:
       return {
         ...state,

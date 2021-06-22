@@ -15,8 +15,6 @@ export const SET_NOTIFICATIONS = 'SET_NOTIFICATIONS';
 export const SET_OTHER_USERS = 'SET_OTHER_USERS';
 export const SET_RLC = 'SET_RLC';
 export const SET_RLCS = 'SET_RLCS';
-export const SET_SPECIAL_GROUP = 'SET_SPECIAL_GROUP';
-export const SET_SPECIAL_GROUP_HAS_PERMISSIONS = 'SET_SPECIAL_GROUP_HAS_PERMISSIONS';
 export const SET_SPECIAL_PERMISSION = 'SET_SPECIAL_PERMISSION';
 export const SET_USER = 'SET_USER';
 export const SET_USER_PERMISSIONS = 'SET_USER_PERMISSIONS';
@@ -29,8 +27,6 @@ export const START_LOADING_GROUPS = 'START_LOADING_GROUPS';
 export const START_LOADING_HAS_PERMISSION_STATICS = 'START_LOADING_HAS_PERMISSION_STATICS';
 export const START_LOADING_OTHER_USERS = 'START_LOADING_OTHER_USERS';
 export const START_LOADING_RLCS = 'START_LOADING_RLCS';
-export const START_LOADING_SPECIAL_GROUP = 'START_LOADING_SPECIAL_GROUP';
-export const START_LOADING_SPECIAL_GROUP_HAS_PERMISSIONS = 'START_LOADING_SPECIAL_GROUP_HAS_PERMISSIONS';
 export const START_LOADING_SPECIAL_PERMISSION = 'START_LOADING_SPECIAL_PERMISSION';
 export const START_PATCH_USER = 'START_PATCH_USER';
 export const START_SAVING_USER = 'START_SAVING_USER';
@@ -90,12 +86,6 @@ export class SetRlcs implements Action {
   constructor(public payload: RestrictedRlc[]) {}
 }
 
-export class SetSpecialGroup implements Action {
-  readonly type = SET_SPECIAL_GROUP;
-
-  constructor(public payload: FullGroup) {}
-}
-
 export class SetSpecialPermission implements Action {
   readonly type = SET_SPECIAL_PERMISSION;
 
@@ -148,18 +138,6 @@ export class StartLoadingRlcs implements Action {
   readonly type = START_LOADING_RLCS;
 }
 
-export class StartLoadingSpecialGroup implements Action {
-  readonly type = START_LOADING_SPECIAL_GROUP;
-
-  constructor(public payload: string) {}
-}
-
-export class StartLoadingSpecialGroupHasPermissions implements Action {
-  readonly type = START_LOADING_SPECIAL_GROUP_HAS_PERMISSIONS;
-
-  constructor(public payload: string) {}
-}
-
 export class StartLoadingSpecialPermission implements Action {
   readonly type = START_LOADING_SPECIAL_PERMISSION;
 
@@ -210,7 +188,6 @@ export type CoreActions =
   | SetOtherUsers
   | SetRlc
   | SetRlcs
-  | SetSpecialGroup
   | SetSpecialPermission
   | SetUser
   | SetUserPermissions
@@ -221,8 +198,6 @@ export type CoreActions =
   | StartLoadingHasPermissionStatics
   | StartLoadingOtherUsers
   | StartLoadingRlcs
-  | StartLoadingSpecialGroup
-  | StartLoadingSpecialGroupHasPermissions
   | StartLoadingSpecialPermission
   | StartPatchUser
   | StartSavingUser

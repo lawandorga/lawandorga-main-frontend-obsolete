@@ -32,8 +32,6 @@ import {
   SET_SPECIAL_PERMISSION,
   START_LOADING_RLCS,
   SET_RLCS,
-  START_LOADING_SPECIAL_GROUP_HAS_PERMISSIONS,
-  StartLoadingSpecialGroupHasPermissions,
   START_LOADING_HAS_PERMISSION_STATICS,
   SET_ACTUAL_HAS_PERMISSIONS,
   START_SAVING_USER,
@@ -147,33 +145,6 @@ export class CoreEffects {
               {
                 type: SET_RLCS,
                 payload: rlcs,
-              },
-            ];
-          })
-        )
-      );
-    })
-  );
-
-  @Effect()
-  startLoadingSpecialGroupHasPermissions = this.actions.pipe(
-    ofType(START_LOADING_SPECIAL_GROUP_HAS_PERMISSIONS),
-    map((action: StartLoadingSpecialGroupHasPermissions) => {
-      return action.payload;
-    }),
-    switchMap((id: string) => {
-      return from(
-        this.http.get(GetPermissionsForGroupApiURL(id)).pipe(
-          catchError((error) => {
-            this.snackbar.showErrorSnackBar('error at loading special group has permissions: ' + error.error.detail);
-            return [];
-          }),
-          mergeMap((response: any) => {
-            const hasPermissions: HasPermission[] = HasPermission.getPermissionsFromJsonArray(response);
-            return [
-              {
-                type: SET_ACTUAL_HAS_PERMISSIONS,
-                payload: hasPermissions,
               },
             ];
           })
