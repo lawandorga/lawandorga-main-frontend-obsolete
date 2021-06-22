@@ -39,7 +39,6 @@ export const HAS_PERMISSIONS_STATICS_API_URL = base + 'api/has_permission_static
 export const NEW_USER_REQUEST_API_URL = base + 'api/new_user_request/';
 export const NEW_USER_REQUEST_ADMIT_API_URL = base + 'api/new_user_request/';
 export const LOGOUT_API_URL = base + 'api/profiles/logout/';
-export const INACTIVE_USERS_API_URL = base + 'api/profiles/inactive/';
 export const USER_HAS_PERMISSIONS_API_URL = base + 'api/user_has_permissions/';
 export const RECORD_DELETIONS_API_URL = base + 'api/records/record_deletion_requests/';
 export const PROCESS_RECORD_DELETIONS_API_URL = base + 'api/records/process_record_deletion_request/';

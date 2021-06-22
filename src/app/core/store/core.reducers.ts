@@ -25,7 +25,6 @@ import {
   INCREMENT_NOTIFICATION_COUNTER,
   REMOVE_ACTUAL_HAS_PERMISSIONS,
   REMOVE_SINGLE_HAS_PERMISSION,
-  RESET_INACTIVE_USERS,
   RESET_RESULTS_LENGTH,
   RESET_SPECIAL_FOREIGN_USER,
   RESET_SPECIAL_GROUP,
@@ -33,7 +32,6 @@ import {
   SET_ACTUAL_HAS_PERMISSIONS,
   SET_ALL_PERMISSIONS,
   SET_GROUPS,
-  SET_INACTIVE_USERS,
   SET_NEW_USER_REQUESTS,
   SET_NOTIFICATIONS,
   SET_OTHER_USERS,
@@ -70,7 +68,6 @@ export interface CoreState {
   special_permission: Permission;
   rlcs: { [id: number]: RestrictedRlc };
   new_user_requests: { [id: number]: NewUserRequest };
-  inactive_users: { [id: number]: FullUser };
   notifications: number;
   results_length: number;
 }
@@ -90,7 +87,6 @@ const initialState: CoreState = {
   special_permission: null,
   rlcs: {},
   new_user_requests: {},
-  inactive_users: {},
   notifications: 0,
   results_length: 0,
 };
@@ -127,11 +123,6 @@ export function coreReducer(state = initialState, action: CoreActions) {
         ...state,
         actual_has_permissions: hasPermissions,
       };
-    case RESET_INACTIVE_USERS:
-      return {
-        ...state,
-        inactive_users: {},
-      };
     case RESET_SPECIAL_FOREIGN_USER:
       return {
         ...state,
@@ -161,11 +152,6 @@ export function coreReducer(state = initialState, action: CoreActions) {
       return {
         ...state,
         groups: getIdObjects(action.payload),
-      };
-    case SET_INACTIVE_USERS:
-      return {
-        ...state,
-        inactive_users: getIdObjects(action.payload),
       };
     case SET_NEW_USER_REQUESTS:
       return {

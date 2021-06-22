@@ -28,7 +28,6 @@ export const ADD_NOTIFICATIONS = 'ADD_NOTIFICATIONS';
 export const ADD_SINGLE_HAS_PERMISSION = 'ADD_SINGLE_HAS_PERMISSION';
 export const REMOVE_ACTUAL_HAS_PERMISSIONS = 'REMOVE_ACTUAL_HAS_PERMISSIONS';
 export const REMOVE_SINGLE_HAS_PERMISSION = 'REMOVE_SINGLE_HAS_PERMISSION';
-export const RESET_INACTIVE_USERS = 'RESET_INACTIVE_USERS';
 export const RESET_SPECIAL_FOREIGN_USER = 'RESET_SPECIAL_FOREIGN_USER';
 export const RESET_SPECIAL_GROUP = 'RESET_SPECIAL_GROUP';
 export const RESET_SPECIAL_GROUP_HAS_PERMISSIONS = 'RESET_SPECIAL_GROUP_HAS_PERMISSIONS';
@@ -36,7 +35,6 @@ export const RESET_SPECIAL_PERMISSION = 'RESET_SPECIAL_PERMISSION';
 export const SET_ACTUAL_HAS_PERMISSIONS = 'SET_ACTUAL_HAS_PERMISSIONS';
 export const SET_ALL_PERMISSIONS = 'SET_ALL_PERMISSIONS';
 export const SET_GROUPS = 'SET_GROUPS';
-export const SET_INACTIVE_USERS = 'SET_INACTIVE_USERS';
 export const SET_NEW_USER_REQUESTS = 'SET_NEW_USER_REQUESTS';
 export const SET_NOTIFICATIONS = 'SET_NOTIFICATIONS';
 export const SET_OTHER_USERS = 'SET_OTHER_USERS';
@@ -61,7 +59,6 @@ export const START_CREATE_USER = 'START_CREATE_USER';
 export const START_DECLINING_NEW_USER_REQUEST = 'START_DECLINING_NEW_USER_REQUEST';
 export const START_LOADING_GROUPS = 'START_LOADING_GROUPS';
 export const START_LOADING_HAS_PERMISSION_STATICS = 'START_LOADING_HAS_PERMISSION_STATICS';
-export const START_LOADING_INACTIVE_USERS = 'START_LOADING_INACTIVE_USERS';
 export const START_LOADING_NEW_USER_REQUESTS = 'START_LOADING_NEW_USER_REQUESTS';
 export const START_LOADING_OTHER_USERS = 'START_LOADING_OTHER_USERS';
 export const START_LOADING_RLCS = 'START_LOADING_RLCS';
@@ -72,7 +69,6 @@ export const START_LOADING_SPECIAL_PERMISSION = 'START_LOADING_SPECIAL_PERMISSIO
 export const START_PATCH_USER = 'START_PATCH_USER';
 export const START_REMOVING_GROUP_MEMBER = 'START_REMOVING_GROUP_MEMBER';
 export const START_REMOVING_HAS_PERMISSION = 'START_REMOVING_HAS_PERMISSION';
-export const START_ACTIVATING_INACTIVE_USER = 'START_ACTIVATING_INACTIVE_USER';
 export const START_SAVING_USER = 'START_SAVING_USER';
 export const UPDATE_NEW_USER_REQUEST = 'UPDATE_NEW_USER_REQUEST';
 export const START_LOADING_UNREAD_NOTIFICATIONS = 'START_LOADING_UNREAD_NOTIFICATIONS';
@@ -105,9 +101,6 @@ export class RemoveSingleHasPermission implements Action {
   constructor(public payload: string) {}
 }
 
-export class ResetInactiveUsers implements Action {
-  readonly type = RESET_INACTIVE_USERS;
-}
 export class ResetSpecialForeignUser implements Action {
   readonly type = RESET_SPECIAL_FOREIGN_USER;
 }
@@ -136,12 +129,6 @@ export class SetGroups implements Action {
   readonly type = SET_GROUPS;
 
   constructor(public payload: RestrictedGroup[]) {}
-}
-
-export class SetInactiveUsers implements Action {
-  readonly type = SET_INACTIVE_USERS;
-
-  constructor(public payload: FullUser[]) {}
 }
 
 export class SetNewUserRequests implements Action {
@@ -259,10 +246,6 @@ export class StartLoadingHasPermissionStatics implements Action {
   readonly type = START_LOADING_HAS_PERMISSION_STATICS;
 }
 
-export class StartLoadingInactiveUsers implements Action {
-  readonly type = START_LOADING_INACTIVE_USERS;
-}
-
 export class StartLoadingNewUserRequests implements Action {
   readonly type = START_LOADING_NEW_USER_REQUESTS;
 }
@@ -329,12 +312,6 @@ export class UpdateNewUserRequest implements Action {
   constructor(public payload: NewUserRequest) {}
 }
 
-export class StartActivatingInactiveUser implements Action {
-  readonly type = START_ACTIVATING_INACTIVE_USER;
-
-  constructor(public payload: string) {}
-}
-
 export class StartCheckingUserHasPermissions implements Action {
   readonly type = START_CHECKING_USER_HAS_PERMISSIONS;
 }
@@ -372,14 +349,12 @@ export type CoreActions =
   | AddSingleHasPermission
   | RemoveActualHasPermissions
   | RemoveSingleHasPermission
-  | ResetInactiveUsers
   | ResetSpecialForeignUser
   | ResetSpecialGroup
   | ResetSpecialPermission
   | SetActualHasPermissions
   | SetAllPermissions
   | SetGroups
-  | SetInactiveUsers
   | SetNewUserRequests
   | SetOtherUsers
   | SetRlc
@@ -396,12 +371,10 @@ export type CoreActions =
   | StartAddingGroupMembers
   | StartAddingHasPermission
   | StartAdmittingNewUserRequest
-  | StartActivatingInactiveUser
   | StartCreateUser
   | StartDecliningNewUserRequest
   | StartLoadingGroups
   | StartLoadingHasPermissionStatics
-  | StartLoadingInactiveUsers
   | StartLoadingNewUserRequests
   | StartLoadingOtherUsers
   | StartLoadingRlcs

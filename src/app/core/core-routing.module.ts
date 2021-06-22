@@ -31,7 +31,6 @@ import { GroupComponent } from './pages/group/group.component';
 import { PermissionListComponent } from './pages/permission-list/permission-list.component';
 import { NewUserRequestsComponent } from './pages/new-user-requests/new-user-requests.component';
 import { LegalNoticeComponent } from './pages/legal-notice/legal-notice.component';
-import { InactiveUsersComponent } from './pages/inactive-users/inactive-users.component';
 import { PrivacyStatementComponent } from './pages/privacy-statement/privacy-statement.component';
 import { NotificationGroupsListComponent } from './pages/notification-groups-list/notification-groups-list.component';
 import { UnsavedGuardService } from './services/unsaved-guard.service';
@@ -77,11 +76,6 @@ const apiRoutes: Routes = [
   {
     path: 'new_user_requests',
     component: NewUserRequestsComponent,
-    canActivate: [AuthGuardService],
-  },
-  {
-    path: 'inactive_users',
-    component: InactiveUsersComponent,
     canActivate: [AuthGuardService],
   },
   {

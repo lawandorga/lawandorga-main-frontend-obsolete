@@ -20,14 +20,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
-import { from, of } from 'rxjs';
+import { from } from 'rxjs';
 
 import {
   START_CREATE_USER,
   StartCreateUser,
-  START_PATCH_USER,
-  StartPatchUser,
-  SET_USER,
   SET_OTHER_USERS,
   START_LOADING_GROUPS,
   SET_GROUPS,
@@ -58,8 +55,6 @@ import {
   UPDATE_NEW_USER_REQUEST,
   START_SAVING_USER,
   StartSavingUser,
-  START_LOADING_INACTIVE_USERS,
-  SET_INACTIVE_USERS,
   START_CHECKING_USER_HAS_PERMISSIONS,
   SET_USER_PERMISSIONS,
   START_LOADING_UNREAD_NOTIFICATIONS,
@@ -74,7 +69,6 @@ import {
   GROUPS_API_URL,
   HAS_PERMISSION_API_URL,
   HAS_PERMISSIONS_STATICS_API_URL,
-  INACTIVE_USERS_API_URL,
   GetNewUserRequestApiUrl,
   NEW_USER_REQUEST_API_URL,
   RLCS_API_URL,
@@ -460,30 +454,6 @@ export class CoreEffects {
           mergeMap((response: any) => {
             this.snackbar.showSuccessSnackBar('successfully saved profile');
             return [];
-          })
-        )
-      );
-    })
-  );
-
-  @Effect()
-  startLoadingInactiveUsers = this.actions.pipe(
-    ofType(START_LOADING_INACTIVE_USERS),
-    switchMap(() => {
-      return from(
-        this.http.get(INACTIVE_USERS_API_URL).pipe(
-          catchError((error) => {
-            this.snackbar.showErrorSnackBar('error at loading inactive users: ' + error.error.detail);
-            return [];
-          }),
-          mergeMap((response: any) => {
-            const inactive_users = FullUser.getFullUsersFromJsonArray(response);
-            return [
-              {
-                type: SET_INACTIVE_USERS,
-                payload: inactive_users,
-              },
-            ];
           })
         )
       );

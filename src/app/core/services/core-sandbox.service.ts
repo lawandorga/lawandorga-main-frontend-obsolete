@@ -31,7 +31,6 @@ import {
   ResetSpecialGroup,
   ResetSpecialPermission,
   SetSpecialForeignUser,
-  StartActivatingInactiveUser,
   StartAddingGroup,
   StartAddingGroupMembers,
   StartAddingHasPermission,
@@ -41,7 +40,6 @@ import {
   StartDecliningNewUserRequest,
   StartLoadingGroups,
   StartLoadingHasPermissionStatics,
-  StartLoadingInactiveUsers,
   StartLoadingNewUserRequests,
   StartLoadingOtherUsers,
   StartLoadingRlcs,
@@ -409,23 +407,6 @@ export class CoreSandboxService {
 
   getUserRecordStateByAbbreviation(abb: string): Observable<State> {
     return this.coreStateStore.pipe(select((state: any) => state.core.user_record_states[abb]));
-  }
-
-  startLoadingInactiveUsers(): void {
-    this.coreStateStore.dispatch(new StartLoadingInactiveUsers());
-  }
-
-  getInactiveUsers(asArray = true): Observable<FullUser[]> {
-    return this.coreStateStore.pipe(
-      select((state: any) => {
-        const values = state.core.inactive_users;
-        return asArray ? Object.values(values) : values;
-      })
-    );
-  }
-
-  startActivatingInactiveUser(user: FullUser): void {
-    this.coreStateStore.dispatch(new StartActivatingInactiveUser(user.id));
   }
 
   startCheckingUserHasPermissions(): void {
