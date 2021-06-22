@@ -18,7 +18,6 @@
 
 import { ForeignUser, FullUser } from '../models/user.model';
 import {
-  ADD_GROUP,
   ADD_SINGLE_HAS_PERMISSION,
   CoreActions,
   DECREMENT_NOTIFICATION_COUNTER,
@@ -88,14 +87,6 @@ const initialState: CoreState = {
 
 export function coreReducer(state = initialState, action: CoreActions) {
   switch (action.type) {
-    case ADD_GROUP:
-      return {
-        ...state,
-        groups: {
-          ...state.groups,
-          [action.payload.id]: action.payload,
-        },
-      };
     case ADD_SINGLE_HAS_PERMISSION:
       const hasPerm: HasPermission = action.payload;
       return {

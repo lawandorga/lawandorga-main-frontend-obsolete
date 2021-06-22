@@ -22,7 +22,6 @@ import { HasPermission, Permission } from '../models/permission.model';
 import { RestrictedRlc } from '../models/rlc.model';
 import { FullGroup, RestrictedGroup } from '../models/group.model';
 
-export const ADD_GROUP = 'ADD_GROUP';
 export const ADD_NOTIFICATIONS = 'ADD_NOTIFICATIONS';
 export const ADD_SINGLE_HAS_PERMISSION = 'ADD_SINGLE_HAS_PERMISSION';
 export const REMOVE_ACTUAL_HAS_PERMISSIONS = 'REMOVE_ACTUAL_HAS_PERMISSIONS';
@@ -71,14 +70,6 @@ export const INCREMENT_NOTIFICATION_COUNTER = 'INCREMENT_NOTIFICATION_COUNTER';
 export const SET_RESULTS_LENGTH = 'SET_RESULTS_LENGTH';
 export const RESET_RESULTS_LENGTH = 'RESET_RESULTS_LENGTH';
 
-// export const AddGroup = createAction(ADD_GROUP, props<{payload: RestrictedGroup}>());
-// export const AddSingleHasPermission = createAction(ADD_SINGLE_HAS_PERMISSION, props<{payload: HasPermission}>());
-
-export class AddGroup implements Action {
-  readonly type = ADD_GROUP;
-
-  constructor(public payload: RestrictedGroup) {}
-}
 export class AddSingleHasPermission implements Action {
   readonly type = ADD_SINGLE_HAS_PERMISSION;
 
@@ -312,7 +303,6 @@ export class ResetResultsLength implements Action {
 }
 
 export type CoreActions =
-  | AddGroup
   | AddSingleHasPermission
   | RemoveActualHasPermissions
   | RemoveSingleHasPermission
