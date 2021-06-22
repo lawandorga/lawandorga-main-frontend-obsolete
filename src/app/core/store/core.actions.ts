@@ -18,7 +18,6 @@ export const SET_RLCS = 'SET_RLCS';
 export const SET_SPECIAL_PERMISSION = 'SET_SPECIAL_PERMISSION';
 export const SET_USER = 'SET_USER';
 export const SET_USER_PERMISSIONS = 'SET_USER_PERMISSIONS';
-export const SET_USER_RECORD_STATES = 'SET_USER_RECORD_STATES';
 export const START_CHECKING_USER_ACTIVATION_LINK = 'START_CHECKING_USER_ACTIVATION_LINK';
 export const START_CHECKING_USER_HAS_PERMISSIONS = 'START_CHECKING_USER_HAS_PERMISSIONS';
 export const START_CREATE_USER = 'START_CREATE_USER';
@@ -103,12 +102,6 @@ export class SetUserPermissions implements Action {
   constructor(public payload: HasPermission[]) {}
 }
 
-export class SetUserRecordStates implements Action {
-  readonly type = SET_USER_RECORD_STATES;
-
-  constructor(public payload: any) {}
-}
-
 export class StartCreateUser implements Action {
   readonly type = START_CREATE_USER;
 
@@ -184,7 +177,6 @@ export type CoreActions =
   | SetSpecialPermission
   | SetUser
   | SetUserPermissions
-  | SetUserRecordStates
   | StartCreateUser
   | StartLoadingGroups
   | StartLoadingHasPermissionStatics

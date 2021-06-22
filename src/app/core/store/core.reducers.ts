@@ -16,11 +16,10 @@ import {
   SET_SPECIAL_PERMISSION,
   SET_USER,
   SET_USER_PERMISSIONS,
-  SET_USER_RECORD_STATES,
 } from './core.actions';
 import { HasPermission, Permission } from '../models/permission.model';
 import { RestrictedRlc } from '../models/rlc.model';
-import { getIdObjects, getObjectsByField } from '../../shared/other/reducer-helper';
+import { getIdObjects } from '../../shared/other/reducer-helper';
 import { RestrictedGroup } from '../models/group.model';
 
 export interface CoreState {
@@ -31,7 +30,6 @@ export interface CoreState {
   groups: { [id: number]: RestrictedGroup };
   actual_has_permissions: { [id: number]: HasPermission };
   rlc: RestrictedRlc;
-  user_record_states: any;
   special_permission: Permission;
   rlcs: { [id: number]: RestrictedRlc };
   notifications: number;
@@ -45,7 +43,6 @@ const initialState: CoreState = {
   groups: {},
   actual_has_permissions: {},
   rlc: null,
-  user_record_states: [],
   special_permission: null,
   rlcs: {},
   notifications: 0,
@@ -121,11 +118,6 @@ export function coreReducer(state = initialState, action: CoreActions) {
       return {
         ...state,
         user_permissions: getIdObjects(action.payload),
-      };
-    case SET_USER_RECORD_STATES:
-      return {
-        ...state,
-        user_record_states: getObjectsByField(action.payload, 'abbreviation'),
       };
 
     case SET_NOTIFICATIONS:
