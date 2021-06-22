@@ -43,7 +43,6 @@ import {
   StartLoadingSpecialGroupHasPermissions,
   StartLoadingSpecialPermission,
   StartLoadingUnreadNotifications,
-  StartRemovingGroupMember,
   StartRemovingHasPermission,
   StartSavingUser,
 } from '../store/core.actions';
@@ -221,112 +220,8 @@ export class CoreSandboxService {
     this.coreStateStore.dispatch(new StartLoadingSpecialGroup(id));
   }
 
-  resetSpecialGroup(): void {
-    return this.coreStateStore.dispatch(new ResetSpecialGroup());
-  }
-
-  removeGroupMember(user_id: string, group_id: string): void {
-    return this.coreStateStore.dispatch(new StartRemovingGroupMember({ user_id, group_id }));
-  }
-
-  startLoadingSpecialPermission(id: string): void {
-    return this.coreStateStore.dispatch(new StartLoadingSpecialPermission(id));
-  }
-
-  getSpecialPermission(): Observable<Permission> {
-    return this.coreStateStore.pipe(select((state: any) => state.core.special_permission));
-  }
-
-  resetSpecialPermission(): void {
-    this.coreStateStore.dispatch(new ResetSpecialPermission());
-    this.coreStateStore.dispatch(new RemoveActualHasPermissions());
-  }
-
   startLoadingRlcs(): void {
     return this.coreStateStore.dispatch(new StartLoadingRlcs());
-  }
-
-  startRemovingHasPermission(id: string): void {
-    return this.coreStateStore.dispatch(new StartRemovingHasPermission(id));
-  }
-
-  startCreatingHasPermission(
-    permissionId: string,
-    userHas: RestrictedUser,
-    groupHas: RestrictedGroup,
-    rlcHas: RestrictedRlc,
-    forUser: RestrictedUser,
-    forGroup: RestrictedGroup,
-    forRlc: RestrictedRlc
-  ): void {
-    const toAdd = {
-      permission: permissionId,
-      user_has_permission: userHas ? userHas.id : null,
-      group_has_permission: groupHas ? groupHas.id : null,
-      rlc_has_permission: rlcHas ? rlcHas.id : null,
-      permission_for_user: forUser ? forUser.id : null,
-      permission_for_group: forGroup ? forGroup.id : null,
-      permission_for_rlc: forRlc ? forRlc.id : null,
-    };
-
-    return this.coreStateStore.dispatch(new StartAddingHasPermission(toAdd));
-  }
-
-  getOtherUserById(id: string): RestrictedUser {
-    let user: RestrictedUser = null;
-    this.coreStateStore
-      .pipe(
-        take(1),
-        select((state: any) => state.core.other_users[id])
-      )
-      .subscribe((actualUser) => (user = actualUser));
-    return user;
-  }
-
-  getGroupById(id: string): RestrictedGroup {
-    let group: RestrictedGroup = null;
-    this.coreStateStore
-      .pipe(
-        take(1),
-        select((state: any) => state.core.groups[id])
-      )
-      .subscribe((actualGroup) => (group = actualGroup));
-    return group;
-  }
-
-  getRlcById(id: string): RestrictedRlc {
-    let rlc: RestrictedRlc = null;
-    this.coreStateStore
-      .pipe(
-        take(1),
-        select((state: any) => state.core.rlcs[id])
-      )
-      .subscribe((actualRlc) => (rlc = actualRlc));
-    return rlc;
-  }
-
-  getPermissionById(id: string): Permission {
-    let permission: Permission = null;
-    this.coreStateStore
-      .pipe(
-        take(1),
-        select((state: any) => state.core.all_permissions[id])
-      )
-      .subscribe((actualPermission) => (permission = actualPermission));
-    return permission;
-  }
-
-  startLoadingGroupHasPermissions(group_id: string): void {
-    this.coreStateStore.dispatch(new StartLoadingSpecialGroupHasPermissions(group_id));
-  }
-
-  getActualHasPermissions(asArray = true): Observable<HasPermission[]> | any {
-    return this.coreStateStore.pipe(
-      select((state: any) => {
-        const values = state.core.actual_has_permissions;
-        return asArray ? Object.values(values) : values;
-      })
-    );
   }
 
   startLoadingPermissionStatics(): void {
