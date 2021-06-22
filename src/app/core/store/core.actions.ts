@@ -21,7 +21,6 @@ import { ForeignUser, FullUser, RestrictedUser } from '../models/user.model';
 import { HasPermission, Permission } from '../models/permission.model';
 import { RestrictedRlc } from '../models/rlc.model';
 import { FullGroup, RestrictedGroup } from '../models/group.model';
-import { NewUserRequest } from '../models/new_user_request.model';
 
 export const ADD_GROUP = 'ADD_GROUP';
 export const ADD_NOTIFICATIONS = 'ADD_NOTIFICATIONS';
@@ -131,11 +130,6 @@ export class SetGroups implements Action {
   constructor(public payload: RestrictedGroup[]) {}
 }
 
-export class SetNewUserRequests implements Action {
-  readonly type = SET_NEW_USER_REQUESTS;
-
-  constructor(public payload: NewUserRequest[]) {}
-}
 export class SetOtherUsers implements Action {
   readonly type = SET_OTHER_USERS;
 
@@ -220,22 +214,10 @@ export class StartAddingHasPermission implements Action {
   constructor(public payload: any) {}
 }
 
-export class StartAdmittingNewUserRequest implements Action {
-  readonly type = START_ADMITTING_NEW_USER_REQUEST;
-
-  constructor(public payload: NewUserRequest) {}
-}
-
 export class StartCreateUser implements Action {
   readonly type = START_CREATE_USER;
 
   constructor(public payload: any) {}
-}
-
-export class StartDecliningNewUserRequest implements Action {
-  readonly type = START_DECLINING_NEW_USER_REQUEST;
-
-  constructor(public payload: NewUserRequest) {}
 }
 
 export class StartLoadingGroups implements Action {
@@ -244,10 +226,6 @@ export class StartLoadingGroups implements Action {
 
 export class StartLoadingHasPermissionStatics implements Action {
   readonly type = START_LOADING_HAS_PERMISSION_STATICS;
-}
-
-export class StartLoadingNewUserRequests implements Action {
-  readonly type = START_LOADING_NEW_USER_REQUESTS;
 }
 
 export class StartLoadingOtherUsers implements Action {
@@ -306,12 +284,6 @@ export class StartSavingUser implements Action {
   constructor(public payload: FullUser) {}
 }
 
-export class UpdateNewUserRequest implements Action {
-  readonly type = UPDATE_NEW_USER_REQUEST;
-
-  constructor(public payload: NewUserRequest) {}
-}
-
 export class StartCheckingUserHasPermissions implements Action {
   readonly type = START_CHECKING_USER_HAS_PERMISSIONS;
 }
@@ -355,7 +327,6 @@ export type CoreActions =
   | SetActualHasPermissions
   | SetAllPermissions
   | SetGroups
-  | SetNewUserRequests
   | SetOtherUsers
   | SetRlc
   | SetRlcs
@@ -370,12 +341,9 @@ export type CoreActions =
   | StartAddingGroup
   | StartAddingGroupMembers
   | StartAddingHasPermission
-  | StartAdmittingNewUserRequest
   | StartCreateUser
-  | StartDecliningNewUserRequest
   | StartLoadingGroups
   | StartLoadingHasPermissionStatics
-  | StartLoadingNewUserRequests
   | StartLoadingOtherUsers
   | StartLoadingRlcs
   | StartLoadingSpecialForeignUser
@@ -386,7 +354,6 @@ export type CoreActions =
   | StartRemovingGroupMember
   | StartRemovingHasPermission
   | StartSavingUser
-  | UpdateNewUserRequest
   | StartCheckingUserHasPermissions
   | SetNotifications
   | IncrementNotificationCounter

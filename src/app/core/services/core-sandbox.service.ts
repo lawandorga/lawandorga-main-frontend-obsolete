@@ -34,13 +34,10 @@ import {
   StartAddingGroup,
   StartAddingGroupMembers,
   StartAddingHasPermission,
-  StartAdmittingNewUserRequest,
   StartCheckingUserHasPermissions,
   StartCreateUser,
-  StartDecliningNewUserRequest,
   StartLoadingGroups,
   StartLoadingHasPermissionStatics,
-  StartLoadingNewUserRequests,
   StartLoadingOtherUsers,
   StartLoadingRlcs,
   StartLoadingSpecialForeignUser,
@@ -57,7 +54,6 @@ import { Observable } from 'rxjs';
 import { HasPermission, Permission } from '../models/permission.model';
 import { FullGroup, RestrictedGroup } from '../models/group.model';
 import { IRlc, RestrictedRlc } from '../models/rlc.model';
-import { NewUserRequest } from '../models/new_user_request.model';
 import { State } from '../models/state.model';
 import { HttpClient } from '@angular/common/http';
 import { GetCheckUserActivationApiUrl, PROFILES_API_URL } from '../../statics/api_urls.statics';
@@ -345,27 +341,6 @@ export class CoreSandboxService {
 
   startAddingGroup(newGroup: any): void {
     this.coreStateStore.dispatch(new StartAddingGroup(newGroup));
-  }
-
-  startLoadingNewUserRequests(): void {
-    this.coreStateStore.dispatch(new StartLoadingNewUserRequests());
-  }
-
-  getNewUserRequests(asArray = true): Observable<NewUserRequest[]> | any {
-    return this.coreStateStore.pipe(
-      select((state: any) => {
-        const values = state.core.new_user_requests;
-        return asArray ? Object.values(values) : values;
-      })
-    );
-  }
-
-  startAdmittingNewUserRequest(newUserRequest: NewUserRequest): void {
-    this.coreStateStore.dispatch(new StartAdmittingNewUserRequest(newUserRequest));
-  }
-
-  startDecliningNewUserRequest(newUserRequest: NewUserRequest): void {
-    this.coreStateStore.dispatch(new StartDecliningNewUserRequest(newUserRequest));
   }
 
   startCheckingUserActivationLink(userId: number, token: string): void {

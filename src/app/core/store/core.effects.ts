@@ -26,33 +26,16 @@ import {
   START_CREATE_USER,
   StartCreateUser,
   SET_OTHER_USERS,
-  START_LOADING_GROUPS,
   SET_GROUPS,
   START_LOADING_SPECIAL_PERMISSION,
   StartLoadingSpecialPermission,
   SET_SPECIAL_PERMISSION,
   START_LOADING_RLCS,
   SET_RLCS,
-  START_REMOVING_HAS_PERMISSION,
-  StartRemovingHasPermission,
-  REMOVE_SINGLE_HAS_PERMISSION,
-  START_ADDING_HAS_PERMISSION,
-  StartAddingHasPermission,
-  ADD_SINGLE_HAS_PERMISSION,
   START_LOADING_SPECIAL_GROUP_HAS_PERMISSIONS,
   StartLoadingSpecialGroupHasPermissions,
   START_LOADING_HAS_PERMISSION_STATICS,
   SET_ACTUAL_HAS_PERMISSIONS,
-  START_ADDING_GROUP,
-  StartAddingGroup,
-  ADD_GROUP,
-  START_LOADING_NEW_USER_REQUESTS,
-  SET_NEW_USER_REQUESTS,
-  START_ADMITTING_NEW_USER_REQUEST,
-  StartAdmittingNewUserRequest,
-  START_DECLINING_NEW_USER_REQUEST,
-  StartDecliningNewUserRequest,
-  UPDATE_NEW_USER_REQUEST,
   START_SAVING_USER,
   StartSavingUser,
   START_CHECKING_USER_HAS_PERMISSIONS,
@@ -63,14 +46,9 @@ import {
 import {
   CREATE_PROFILE_API_URL,
   GetPermissionsForGroupApiURL,
-  GetSpecialHasPermissionApiURL,
   GetSpecialPermissionApiURL,
   GetSpecialProfileApiURL,
-  GROUPS_API_URL,
-  HAS_PERMISSION_API_URL,
   HAS_PERMISSIONS_STATICS_API_URL,
-  GetNewUserRequestApiUrl,
-  NEW_USER_REQUEST_API_URL,
   RLCS_API_URL,
   UNREAD_NOTIFICATIONS_API_URL,
   USER_HAS_PERMISSIONS_API_URL,
@@ -81,8 +59,6 @@ import { SnackbarService } from '../../shared/services/snackbar.service';
 import { RestrictedGroup } from '../models/group.model';
 import { HasPermission, Permission } from '../models/permission.model';
 import { RestrictedRlc } from '../models/rlc.model';
-import { NewUserRequest } from '../models/new_user_request.model';
-import { AppSandboxService } from '../services/app-sandbox.service';
 import { Router } from '@angular/router';
 
 @Injectable()
@@ -114,30 +90,6 @@ export class CoreEffects {
               this.coreSB.router.navigate(['login']);
             }
             return [];
-          })
-        )
-      );
-    })
-  );
-
-  @Effect()
-  startLoadingGroups = this.actions.pipe(
-    ofType(START_LOADING_GROUPS),
-    switchMap(() => {
-      return from(
-        this.http.get(GROUPS_API_URL).pipe(
-          catchError((error) => {
-            this.snackbar.showErrorSnackBar('error at loading groups: ' + error.error.detail);
-            return [];
-          }),
-          mergeMap((response: any) => {
-            const groups = RestrictedGroup.getRestrictedGroupsFromJsonArray(response.results ? response.results : response);
-            return [
-              {
-                type: SET_GROUPS,
-                payload: groups,
-              },
-            ];
           })
         )
       );
@@ -204,66 +156,6 @@ export class CoreEffects {
   );
 
   @Effect()
-  startRemovingHasPermission = this.actions.pipe(
-    ofType(START_REMOVING_HAS_PERMISSION),
-    map((action: StartRemovingHasPermission) => {
-      return action.payload;
-    }),
-    switchMap((id: string) => {
-      return from(
-        this.http.delete(GetSpecialHasPermissionApiURL(id)).pipe(
-          catchError((error) => {
-            this.snackbar.showErrorSnackBar('error at deleting hasPermission: ' + error.error.detail);
-            return [];
-          }),
-          mergeMap((response: any) => {
-            return [
-              {
-                type: REMOVE_SINGLE_HAS_PERMISSION,
-                payload: id,
-              },
-              {
-                type: START_CHECKING_USER_HAS_PERMISSIONS,
-              },
-            ];
-          })
-        )
-      );
-    })
-  );
-
-  @Effect()
-  startAddingHasPermission = this.actions.pipe(
-    ofType(START_ADDING_HAS_PERMISSION),
-    map((action: StartAddingHasPermission) => {
-      return action.payload;
-    }),
-    switchMap((toAdd: any) => {
-      const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
-      return from(
-        this.http.post(HAS_PERMISSION_API_URL, toAdd, privateKeyPlaceholder).pipe(
-          catchError((error) => {
-            this.snackbar.showErrorSnackBar('error at creating hasPermission: ' + error.error.detail);
-            return [];
-          }),
-          mergeMap((response: any) => {
-            const hasPermission = HasPermission.getHasPermissionFromJson(response);
-            return [
-              {
-                type: ADD_SINGLE_HAS_PERMISSION,
-                payload: hasPermission,
-              },
-              {
-                type: START_CHECKING_USER_HAS_PERMISSIONS,
-              },
-            ];
-          })
-        )
-      );
-    })
-  );
-
-  @Effect()
   startLoadingSpecialGroupHasPermissions = this.actions.pipe(
     ofType(START_LOADING_SPECIAL_GROUP_HAS_PERMISSIONS),
     map((action: StartLoadingSpecialGroupHasPermissions) => {
@@ -315,125 +207,6 @@ export class CoreEffects {
             ];
           })
         )
-      );
-    })
-  );
-
-  @Effect()
-  startAddingGroup = this.actions.pipe(
-    ofType(START_ADDING_GROUP),
-    map((action: StartAddingGroup) => {
-      return action.payload;
-    }),
-    switchMap((newGroup: { name: string; visible: boolean }) => {
-      return from(
-        this.http.post(GROUPS_API_URL, newGroup).pipe(
-          catchError((error) => {
-            this.snackbar.showErrorSnackBar('error at adding new group: ' + error.error.detail);
-            return [];
-          }),
-          mergeMap((response: any) => {
-            const group = RestrictedGroup.getRestrictedUserFromJson(response);
-            return [
-              {
-                type: ADD_GROUP,
-                payload: group,
-              },
-            ];
-          })
-        )
-      );
-    })
-  );
-
-  @Effect()
-  startLoadingNewUserRequests = this.actions.pipe(
-    ofType(START_LOADING_NEW_USER_REQUESTS),
-    switchMap(() => {
-      return from(
-        this.http.get(NEW_USER_REQUEST_API_URL).pipe(
-          catchError((error) => {
-            this.snackbar.showErrorSnackBar('error at loading new user requests: ' + error.error.detail);
-            return [];
-          }),
-          mergeMap((response: any) => {
-            const requests = NewUserRequest.getNewUserRequestFromJsonArray(response);
-            return [
-              {
-                type: SET_NEW_USER_REQUESTS,
-                payload: requests,
-              },
-            ];
-          })
-        )
-      );
-    })
-  );
-
-  @Effect()
-  startAdmittingNewUserRequest = this.actions.pipe(
-    ofType(START_ADMITTING_NEW_USER_REQUEST),
-    map((action: StartAdmittingNewUserRequest) => {
-      return action.payload;
-    }),
-    switchMap((newUserRequest: NewUserRequest) => {
-      const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
-      return from(
-        this.http
-          .put(
-            GetNewUserRequestApiUrl(Number(newUserRequest.id)),
-            {
-              state: 'gr',
-            },
-            privateKeyPlaceholder
-          )
-          .pipe(
-            catchError((error) => {
-              this.snackbar.showErrorSnackBar('error at accepting new user request: ' + error.error.detail);
-              return [];
-            }),
-            mergeMap((response: any) => {
-              const request = NewUserRequest.getNewUserRequestFromJson(response);
-              return [
-                {
-                  type: UPDATE_NEW_USER_REQUEST,
-                  payload: request,
-                },
-              ];
-            })
-          )
-      );
-    })
-  );
-
-  @Effect()
-  startDecliningNewUserRequest = this.actions.pipe(
-    ofType(START_DECLINING_NEW_USER_REQUEST),
-    map((action: StartDecliningNewUserRequest) => {
-      return action.payload;
-    }),
-    switchMap((newUserRequest: NewUserRequest) => {
-      return from(
-        this.http
-          .put(GetNewUserRequestApiUrl(Number(newUserRequest.id)), {
-            id: newUserRequest.id,
-            state: 'de',
-          })
-          .pipe(
-            catchError((error) => {
-              this.snackbar.showErrorSnackBar('error at accepting new user request: ' + error.error.detail);
-              return [];
-            }),
-            mergeMap((response: any) => {
-              const request = NewUserRequest.getNewUserRequestFromJson(response);
-              return [
-                {
-                  type: UPDATE_NEW_USER_REQUEST,
-                  payload: request,
-                },
-              ];
-            })
-          )
       );
     })
   );

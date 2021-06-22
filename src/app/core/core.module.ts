@@ -25,7 +25,6 @@ import { GroupComponent } from './pages/group/group.component';
 import { PermissionListComponent } from './pages/permission-list/permission-list.component';
 import { AddGroupComponent } from './components/add-group/add-group.component';
 import { NewUserRequestsComponent } from './pages/new-user-requests/new-user-requests.component';
-import { NewUserRequestProcessedPipe, NewUserRequestRequestedPipe } from '../recordmanagement/pipes/new_user_request.pipe';
 import { LegalNoticeComponent } from './pages/legal-notice/legal-notice.component';
 import { PrivacyStatementComponent } from './pages/privacy-statement/privacy-statement.component';
 import { NotificationGroupsListComponent } from './pages/notification-groups-list/notification-groups-list.component';
@@ -67,8 +66,6 @@ import { ArticleComponent } from './pages/article/article.component';
     AddMemberComponent,
     AddGroupComponent,
     NewUserRequestsComponent,
-    NewUserRequestRequestedPipe,
-    NewUserRequestProcessedPipe,
     LegalNoticeComponent,
     PrivacyStatementComponent,
     NotificationGroupsListComponent,

@@ -151,7 +151,3 @@ export const GetCollabDocumentPermissionForDocumentApiUrl = (id: number) => {
 export const GetStaticsApiUrl = (token: string) => {
   return `${PROFILES_API_URL}statics/${token}/`;
 };
-
-export const GetNewUserRequestApiUrl = (id: number) => {
-  return `${NEW_USER_REQUEST_ADMIT_API_URL}${id}/`;
-};

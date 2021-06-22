@@ -51,7 +51,6 @@ import { HasPermission, Permission } from '../models/permission.model';
 import { RestrictedRlc } from '../models/rlc.model';
 import { getIdObjects, getObjectsByField } from '../../shared/other/reducer-helper';
 import { FullGroup, RestrictedGroup } from '../models/group.model';
-import { NewUserRequest } from '../models/new_user_request.model';
 
 export interface CoreState {
   user: FullUser;
@@ -67,7 +66,6 @@ export interface CoreState {
   user_record_states: any;
   special_permission: Permission;
   rlcs: { [id: number]: RestrictedRlc };
-  new_user_requests: { [id: number]: NewUserRequest };
   notifications: number;
   results_length: number;
 }
