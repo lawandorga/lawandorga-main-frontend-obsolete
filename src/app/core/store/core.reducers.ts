@@ -1,21 +1,3 @@
-/*
- * law&orga - record and organization management software for refugee law clinics
- * Copyright (C) 2019  Dominik Walser
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>
- */
-
 import { FullUser } from '../models/user.model';
 import {
   ADD_SINGLE_HAS_PERMISSION,
@@ -35,12 +17,11 @@ import {
   SET_USER,
   SET_USER_PERMISSIONS,
   SET_USER_RECORD_STATES,
-  SET_USER_STATES,
 } from './core.actions';
 import { HasPermission, Permission } from '../models/permission.model';
 import { RestrictedRlc } from '../models/rlc.model';
 import { getIdObjects, getObjectsByField } from '../../shared/other/reducer-helper';
-import { FullGroup, RestrictedGroup } from '../models/group.model';
+import { RestrictedGroup } from '../models/group.model';
 
 export interface CoreState {
   user: FullUser;
@@ -50,7 +31,6 @@ export interface CoreState {
   groups: { [id: number]: RestrictedGroup };
   actual_has_permissions: { [id: number]: HasPermission };
   rlc: RestrictedRlc;
-  user_states: any;
   user_record_states: any;
   special_permission: Permission;
   rlcs: { [id: number]: RestrictedRlc };
@@ -65,7 +45,6 @@ const initialState: CoreState = {
   groups: {},
   actual_has_permissions: {},
   rlc: null,
-  user_states: [],
   user_record_states: [],
   special_permission: null,
   rlcs: {},
@@ -148,11 +127,7 @@ export function coreReducer(state = initialState, action: CoreActions) {
         ...state,
         user_record_states: getObjectsByField(action.payload, 'abbreviation'),
       };
-    case SET_USER_STATES:
-      return {
-        ...state,
-        user_states: getObjectsByField(action.payload, 'abbreviation'),
-      };
+
     case SET_NOTIFICATIONS:
       return {
         ...state,
