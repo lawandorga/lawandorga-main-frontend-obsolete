@@ -35,8 +35,6 @@ export const START_LOADING_SPECIAL_GROUP = 'START_LOADING_SPECIAL_GROUP';
 export const START_LOADING_SPECIAL_GROUP_HAS_PERMISSIONS = 'START_LOADING_SPECIAL_GROUP_HAS_PERMISSIONS';
 export const START_LOADING_SPECIAL_PERMISSION = 'START_LOADING_SPECIAL_PERMISSION';
 export const START_PATCH_USER = 'START_PATCH_USER';
-export const START_REMOVING_GROUP_MEMBER = 'START_REMOVING_GROUP_MEMBER';
-export const START_REMOVING_HAS_PERMISSION = 'START_REMOVING_HAS_PERMISSION';
 export const START_SAVING_USER = 'START_SAVING_USER';
 export const START_LOADING_UNREAD_NOTIFICATIONS = 'START_LOADING_UNREAD_NOTIFICATIONS';
 export const DECREMENT_NOTIFICATION_COUNTER = 'DECREMENT_NOTIFICATION_COUNTER';
@@ -188,12 +186,6 @@ export class StartPatchUser implements Action {
   constructor(public payload: { id: string; userUpdates: any }) {}
 }
 
-export class StartRemovingHasPermission implements Action {
-  readonly type = START_REMOVING_HAS_PERMISSION;
-
-  constructor(public payload: string) {}
-}
-
 export class StartSavingUser implements Action {
   readonly type = START_SAVING_USER;
 
@@ -249,7 +241,6 @@ export type CoreActions =
   | StartLoadingSpecialGroupHasPermissions
   | StartLoadingSpecialPermission
   | StartPatchUser
-  | StartRemovingHasPermission
   | StartSavingUser
   | StartCheckingUserHasPermissions
   | SetNotifications
