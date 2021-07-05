@@ -25,6 +25,7 @@ import { Store } from '@ngrx/store';
 import { TryLogin } from '../../../store/auth/actions';
 import { Article } from 'src/app/core/models/article';
 import { HttpClient } from '@angular/common/http';
+import { RoadmapItem } from 'src/app/core/models/roadmapItem';
 
 @Component({
   selector: 'app-login',
@@ -51,6 +52,9 @@ export class LoginComponent implements OnInit {
   page: {
     content: string;
   };
+  roadmapItems: RoadmapItem[];
+
+  activityItems = [{ id: 1, person: 'Lindsay Walton', project: 'Workcation', commit: '2d89f0c8', environment: 'production', time: '1h' }];
 
   constructor(
     private route: ActivatedRoute,
@@ -76,6 +80,7 @@ export class LoginComponent implements OnInit {
 
     this.http.get('api/articles/').subscribe((response: Article[]) => (this.articles = response));
     this.http.get('api/pages/index/').subscribe((response: { content: string }) => (this.page = response));
+    this.http.get('api/roadmap-items/').subscribe((response: RoadmapItem[]) => (this.roadmapItems = response));
   }
 
   onSend(data: { email: string; password: string }): void {
