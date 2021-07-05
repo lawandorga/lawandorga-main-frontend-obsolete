@@ -117,19 +117,21 @@
                 </h2>
             </div>
             <div class="pt-10">
-                <ul class="divide-y divide-gray-200">
-                    <li *ngFor="let roadmapItem of roadmapItems" class="py-4">
-                        <div class="flex-1 space-y-1">
-                            <div class="flex items-center justify-between max-w-2xl">
-                                <h3 class="text-sm font-semibold">{{ roadmapItem.title }}</h3>
-                                <p class="text-sm text-gray-500">{{ roadmapItem.date|date:'MMM y' }}</p>
+                <div class="max-w-2xl">
+                    <ul class="divide-y divide-gray-200">
+                        <li *ngFor="let roadmapItem of roadmapItems" class="py-4">
+                            <div class="flex-1 space-y-1">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-sm font-semibold">{{ roadmapItem.title }}</h3>
+                                    <p class="text-sm text-gray-500">{{ roadmapItem.date|date:'MMM yyyy' }}</p>
+                                </div>
+                                <p class="text-sm text-gray-500">
+                                    {{ roadmapItem.description }}
+                                </p>
                             </div>
-                            <p class="text-sm text-gray-500">
-                                {{ roadmapItem.description }}
-                            </p>
-                        </div>
-                    </li>
-                </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </section>
