@@ -18,7 +18,10 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.json",
-            "assets": ["src/favicon.ico", "src/assets"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
             "styles": [
               "node_modules/quill/dist/quill.core.css",
               "node_modules/quill/dist/quill.bubble.css",
@@ -26,8 +29,12 @@
               "src/styles.scss",
               "src/styles/themes.scss"
             ],
-            "scripts": ["node_modules/quill/dist/quill.min.js"],
-            "allowedCommonJsDependencies": ["simple-peer/simplepeer.min.js"]
+            "scripts": [
+              "node_modules/quill/dist/quill.min.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "simple-peer/simplepeer.min.js"
+            ],
           },
           "configurations": {
             "prod": {
@@ -66,9 +73,17 @@
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.dev.ts"
                 }
-              ]
+              ],
+              "aot": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "buildOptimizer": false,
+              "sourceMap": true,
+              "optimization": false,
+              "namedChunks": true
             }
-          }
+          },
+          "defaultConfiguration": ""
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
