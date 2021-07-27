@@ -21,7 +21,7 @@
             <th mat-header-cell *matHeaderCellDef> Group </th>
             <td mat-cell *matCellDef="let group">
                 <div style="display: flex; align-items: center; justify-content: space-between; padding-right: 24px;">
-                    <a [routerLink]="groupDetailUrl(group.id)">{{ group.name }}</a>
+                    <a [routerLink]="groupDetailUrl(group.id)" class="underline">{{ group.name }}</a>
                     <a [routerLink]="groupDetailUrl(group.id)" mat-button style='margin-left: auto'>Open</a>
                 </div>
             </td>

@@ -36,7 +36,8 @@
                             <abbr class="inline-block w-4 h-4 rounded-full mr-2" [title]="getState(row.state)"
                                 [style]="'background-color:' + getStateColor(row.state)">
                             </abbr>
-                            <a *ngIf="row.access" [routerLink]="getRecordDetailUrl(row.id)">{{ row.record_token }}</a>
+                            <a *ngIf="row.access" [routerLink]="getRecordDetailUrl(row.id)" class="underline">{{
+                                row.record_token }}</a>
                             <span *ngIf="!row.access">{{ row.record_token }}</span>
                         </div>
                         <div>
