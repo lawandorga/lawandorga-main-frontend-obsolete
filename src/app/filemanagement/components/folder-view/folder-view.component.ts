@@ -11,6 +11,7 @@ import { AddPermissionForFolderComponent } from '../add-permission-for-folder/ad
 import { MatDialog } from '@angular/material/dialog';
 import { FolderPermission } from '../../models/folder_permission.model';
 import { EditFolderComponent } from '../edit-folder/edit-folder.component';
+import downloadFile from 'src/app/shared/other/download';
 
 @Component({
   selector: 'app-folder-view',
@@ -160,25 +161,8 @@ export class FolderViewComponent implements OnInit {
 
   onFileDownload(id: number, name: string): void {
     this.http.get(`api/files/file_base/${id}/`, { observe: 'response', responseType: 'blob' }).subscribe((response: HttpResponse<Blob>) => {
-      this.downloadFile(response, name);
+      downloadFile(response, name);
     });
-  }
-
-  downloadFile(response: HttpResponse<Blob>, name: string): void {
-    const filename: string = name;
-    const binaryData = [];
-    binaryData.push(response.body);
-    const file = new Blob(binaryData, { type: 'application/pdf' });
-    if (name.split('.').pop() === 'pdf') {
-      const fileUrl = URL.createObjectURL(file);
-      window.open(fileUrl);
-    } else {
-      const downloadLink = document.createElement('a');
-      downloadLink.href = window.URL.createObjectURL(file);
-      downloadLink.setAttribute('download', filename);
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-    }
   }
 
   onEditFolder(id: number): void {

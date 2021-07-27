@@ -20,8 +20,6 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
-
-import { GetPermissionFrontUrl } from '../../../statics/frontend_links.statics';
 import { alphabeticalSorterByField } from '../../../shared/other/sorter-helper';
 import { CoreSandboxService } from '../../services/core-sandbox.service';
 import { Permission } from '../../models/permission.model';
@@ -41,9 +39,5 @@ export class PermissionListComponent implements OnInit {
         alphabeticalSorterByField(results, 'name');
       })
     );
-  }
-
-  onPermissionItemClick(permission: Permission) {
-    this.router.navigate([GetPermissionFrontUrl(permission)]);
   }
 }

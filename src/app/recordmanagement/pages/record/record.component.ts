@@ -28,6 +28,7 @@ import { Message } from '../../models/message.model';
 import { RecordDocument } from '../../models/record_document.model';
 import { SharedSandboxService } from 'src/app/shared/services/shared-sandbox.service';
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import downloadFile from 'src/app/shared/other/download';
 
 @Component({
   selector: 'app-record',
@@ -343,22 +344,10 @@ export class RecordComponent implements OnInit {
 
   onDownloadClick(id: number, name: string): void {
     this.http
-      .get(`api/records/record_documents/${id}/`, { observe: 'response', responseType: 'blob' as 'json' })
+      .get(`api/records/record_documents/${id}/`, { observe: 'response', responseType: 'blob' })
       .subscribe((response: HttpResponse<Blob>) => {
-        this.downloadFile(response, name);
+        downloadFile(response, name);
       });
-    // this.http.get(`api/records/e_record/documents/${id}/`).subscribe((response) => StorageService.saveFile(response, name));
-  }
-
-  downloadFile(response: HttpResponse<Blob>, name: string): void {
-    const filename: string = name;
-    const binaryData = [];
-    binaryData.push(response.body);
-    const downloadLink = document.createElement('a');
-    downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, { type: 'blob' }));
-    downloadLink.setAttribute('download', filename);
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
   }
 
   onDeleteClick(id: number): void {
