@@ -34,16 +34,12 @@ import {
 import {
   ACCEPT_NEW_USER_REQUESTS_FRONT_URL,
   DELETION_REQUESTS_FRONT_URL,
-  FILES_FRONT_URL,
-  GROUPS_FRONT_URL,
   LEGAL_NOTICE_FRONT_URL,
   PERMISSIONS_FRONT_URL,
-  PROFILES_FRONT_URL,
   RECORD_POOL_FRONT_URL,
   RECORDS_ADD_FRONT_URL,
   RECORDS_FRONT_URL,
   RECORDS_PERMIT_REQUEST_FRONT_URL,
-  STATISTICS_FRONT_URL,
 } from '../../../statics/frontend_links.statics';
 import { Subscription } from 'rxjs';
 import { Logout } from '../../store/auth/actions';
@@ -87,32 +83,32 @@ export class SidebarComponent implements OnInit, OnDestroy {
     {
       label: 'Records',
       icon: 'folder',
-      link: RECORDS_FRONT_URL,
+      link: '/records/',
     },
     {
       label: 'Create Record',
       icon: 'create_new_folder',
-      link: RECORDS_ADD_FRONT_URL,
+      link: '/records/add/',
     },
     {
       label: 'Record Pool',
       icon: 'library_books',
-      link: RECORD_POOL_FRONT_URL,
+      link: '/records/record_pool/',
     },
     {
       label: 'Profiles',
       icon: 'people_outline',
-      link: PROFILES_FRONT_URL,
+      link: '/profiles/',
     },
     {
       label: 'Groups',
       icon: 'group',
-      link: GROUPS_FRONT_URL,
+      link: '/groups/',
     },
     {
       label: 'Files',
       icon: 'folder_open',
-      link: FILES_FRONT_URL,
+      link: '/files/',
     },
     {
       label: 'Collab',
@@ -126,22 +122,22 @@ export class SidebarComponent implements OnInit, OnDestroy {
         {
           label: 'Records Admin',
           icon: 'folder',
-          link: RECORDS_PERMIT_REQUEST_FRONT_URL,
+          link: '/records/permit_requests',
         },
         {
           label: 'Statistics',
           icon: 'analytics',
-          link: STATISTICS_FRONT_URL,
+          link: '/statistics/',
         },
         {
           label: 'Permissions',
           icon: 'vpn_key',
-          link: PERMISSIONS_FRONT_URL,
+          link: '/permissions/',
         },
         {
           label: 'New Users',
           icon: 'person_add',
-          link: ACCEPT_NEW_USER_REQUESTS_FRONT_URL,
+          link: '/new_user_requests/',
         },
       ],
     },

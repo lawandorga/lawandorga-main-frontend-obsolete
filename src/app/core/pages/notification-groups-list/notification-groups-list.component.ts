@@ -1,34 +1,15 @@
-/*
- * law&orga - record and organization management software for refugee law clinics
- * Copyright (C) 2019  Dominik Walser
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>
- */
-
 import { AfterViewInit, Component, EventEmitter, ViewChild } from '@angular/core';
 import { merge, Observable, of } from 'rxjs';
 import { CoreSandboxService } from '../../services/core-sandbox.service';
 import { Router } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { catchError, filter, map, startWith, switchMap } from 'rxjs/operators';
+import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { NOTIFICATION_GROUPS_API_URL } from '../../../statics/api_urls.statics';
 import { NotificationGroup } from '../../models/notification_group.model';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { NotificationGroupType } from '../../models/notification.enum';
-import { GetRecordFrontUrl } from '../../../statics/frontend_links.statics';
 import { Filterable } from '../../../shared/models/filterable.model';
 
 @Component({
@@ -120,17 +101,6 @@ export class NotificationGroupsListComponent implements AfterViewInit {
       }
       notificationGroup.read = !notificationGroup.read;
     });
-  }
-
-  onNotificationGroupClick(event, notificationGroup: NotificationGroup): void {
-    event.stopPropagation();
-    if (
-      notificationGroup.type === NotificationGroupType.RECORD ||
-      notificationGroup.type === NotificationGroupType.RECORD_DELETION_REQUEST ||
-      notificationGroup.type === NotificationGroupType.RECORD_PERMISSION_REQUEST
-    ) {
-      this.router.navigateByUrl(GetRecordFrontUrl(notificationGroup.ref_id));
-    }
   }
 
   generateFilterableTypes(): Observable<FilterableTypes[]> {

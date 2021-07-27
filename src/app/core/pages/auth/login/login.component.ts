@@ -1,25 +1,6 @@
-/*
- * law&orga - record and organization management software for refugee law clinics
- * Copyright (C) 2019  Dominik Walser
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>
- */
-
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { AppSandboxService } from '../../../services/app-sandbox.service';
-import { MAIN_PAGE_FRONT_URL } from '../../../../statics/frontend_links.statics';
 import { CoreSandboxService } from '../../../services/core-sandbox.service';
 import { Store } from '@ngrx/store';
 import { TryLogin } from '../../../store/auth/actions';
@@ -67,7 +48,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.appSB.isAuthenticated()) {
-      void this.router.navigate([MAIN_PAGE_FRONT_URL]);
+      void this.router.navigate(['/dashboard/']);
     }
 
     // if an activation link was used try to activate the user

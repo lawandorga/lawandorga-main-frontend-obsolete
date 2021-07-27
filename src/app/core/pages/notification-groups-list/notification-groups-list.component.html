@@ -1,55 +1,21 @@
-<!--
-  ~ law&orga - record and organization management software for refugee law clinics
-  ~ Copyright (C) 2019  Dominik Walser
-  ~
-  ~ This program is free software: you can redistribute it and/or modify
-  ~ it under the terms of the GNU Affero General Public License as
-  ~ published by the Free Software Foundation, either version 3 of the
-  ~ License, or (at your option) any later version.
-  ~
-  ~ This program is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~ GNU Affero General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU Affero General Public License
-  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>
-  -->
-
 <mat-card class="notification-groups-list__card">
     <mat-card-header>
         <h2>Notifications</h2>
     </mat-card-header>
     <mat-card-content>
-        <app-chip-autocomplete
-            [allValuesObservable]="filterValuesObservable"
-            placeholder="filter types"
-            (selectedValuesChanged)="selectedFilterChanged($event)"
-        ></app-chip-autocomplete>
-        <table
-            mat-table
-            [dataSource]="data"
-            matSort
-            matSortActive="last_activity"
-            matSortDisableClear
-            matSortDirection="desc"
-            class="notification-groups-list__table"
-            multiTemplateDataRows
-        >
+        <app-chip-autocomplete [allValuesObservable]="filterValuesObservable" placeholder="filter types"
+            (selectedValuesChanged)="selectedFilterChanged($event)"></app-chip-autocomplete>
+        <table mat-table [dataSource]="data" matSort matSortActive="last_activity" matSortDisableClear
+            matSortDirection="desc" class="notification-groups-list__table" multiTemplateDataRows>
             <ng-container matColumnDef="read">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>status</th>
                 <td mat-cell *matCellDef="let element">
                     <div *ngIf="element.read; else noNotification">
-                        <mat-icon (click)="onReadClick($event, element)"
-                            >notifications_none</mat-icon
-                        >
+                        <mat-icon (click)="onReadClick($event, element)">notifications_none</mat-icon>
                     </div>
                     <ng-template #noNotification>
-                        <mat-icon
-                            class="notification-groups-list__unread"
-                            (click)="onReadClick($event, element)"
-                            >notifications_active</mat-icon
-                        >
+                        <mat-icon class="notification-groups-list__unread" (click)="onReadClick($event, element)">
+                            notifications_active</mat-icon>
                     </ng-template>
                 </td>
             </ng-container>
@@ -65,64 +31,37 @@
                 <th mat-header-cell *matHeaderCellDef class="notifications-list__created-column">
                     description
                 </th>
-                <td
-                    mat-cell
-                    *matCellDef="let notificationGroup"
-                    class="notification-groups-list__created-column"
-                >
+                <td mat-cell *matCellDef="let notificationGroup" class="notification-groups-list__created-column">
                     {{
-                        notificationGroup.type
-                            .toLowerCase()
-                            .split('_')
-                            .join(' ')
+                    notificationGroup.type
+                    .toLowerCase()
+                    .split('_')
+                    .join(' ')
                     }}
-                    <span
-                        (click)="onNotificationGroupClick($event, notificationGroup)"
-                        class="is_clickable"
-                    >
-                        {{ notificationGroup.ref_text }}</span
-                    >
+                    <span>
+                        {{ notificationGroup.ref_text }}</span>
                 </td>
             </ng-container>
 
             <ng-container matColumnDef="expandedDetail">
                 <td mat-cell *matCellDef="let element" [attr.colspan]="columns.length">
-                    <div
-                        class="notification-groups-list__group-detail"
-                        [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'"
-                    >
-                        <div
-                            *ngIf="element === expandedElement"
-                            class="notification-groups-list__temp"
-                        >
-                            <app-notification-list
-                                class="notification-groups-list__temp"
-                                [notificationGroup]="element"
-                            ></app-notification-list>
+                    <div class="notification-groups-list__group-detail"
+                        [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                        <div *ngIf="element === expandedElement" class="notification-groups-list__temp">
+                            <app-notification-list class="notification-groups-list__temp" [notificationGroup]="element">
+                            </app-notification-list>
                         </div>
                     </div>
                 </td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
-            <tr
-                mat-row
-                *matRowDef="let row; columns: columns"
-                class="example-element-row"
+            <tr mat-row *matRowDef="let row; columns: columns" class="example-element-row"
                 [class.example-expanded-row]="expandedElement === row"
-                (click)="expandedElement = expandedElement === row ? null : row"
-            ></tr>
-            <tr
-                mat-row
-                *matRowDef="let row; columns: ['expandedDetail']"
-                class="example-detail-row"
-            ></tr>
+                (click)="expandedElement = expandedElement === row ? null : row"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
         </table>
 
-        <mat-paginator
-            [length]="results_length"
-            [pageSizeOptions]="[10, 25, 50]"
-            showFirstLastButtons
-        ></mat-paginator>
+        <mat-paginator [length]="results_length" [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons></mat-paginator>
     </mat-card-content>
 </mat-card>
