@@ -75,7 +75,7 @@ export class RecordComponent implements OnInit {
       options: [],
     },
     {
-      label: 'Record Tags',
+      label: 'Tags',
       tag: 'select-multiple',
       name: 'tags',
       required: true,

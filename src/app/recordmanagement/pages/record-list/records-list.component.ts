@@ -51,7 +51,7 @@ export class RecordsListComponent implements OnInit {
           data.record_token.toLowerCase().includes(filter) ||
           this.getState(data.state).toLowerCase().includes(filter) ||
           this.getConsultants(data.working_on_record).toLowerCase().includes(filter) ||
-          this.getTags(data.tagged).toLowerCase().includes(filter)
+          this.getTags(data.tags).toLowerCase().includes(filter)
         );
       };
     });

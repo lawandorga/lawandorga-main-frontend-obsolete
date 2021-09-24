@@ -90,9 +90,9 @@ export class CreateRecordComponent implements OnInit {
       options: [],
     },
     {
-      label: 'Record Tags',
+      label: 'Tags',
       tag: 'select-multiple',
-      name: 'tagged',
+      name: 'tags',
       required: true,
       options: [],
     },
@@ -110,7 +110,7 @@ export class CreateRecordComponent implements OnInit {
 
   ngOnInit(): void {
     this.http.get('api/records/origin_countries/').subscribe((response: OriginCountry[]) => (this.fields[2].options = response));
-    this.http.get('api/records/record_tags/').subscribe((response: OriginCountry[]) => (this.fields[8].options = response));
+    this.http.get('api/records/tags/').subscribe((response: Tag[]) => (this.fields[8].options = response));
     this.http.get('api/records/consultants/').subscribe((response: RestrictedUser[]) => (this.fields[7].options = response));
   }
 

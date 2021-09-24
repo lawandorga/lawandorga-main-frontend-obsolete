@@ -40,6 +40,7 @@ export interface NewRestrictedRecord {
   last_edited: string;
   record_token: string;
   tagged: { id: number; name: string }[];
+  tags: { id: number; name: string }[];
   working_on_record: { id: number; name: string; email: string }[];
   official_note: string;
   access: boolean;
