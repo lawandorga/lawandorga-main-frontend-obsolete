@@ -56,7 +56,7 @@
     "rxjs": "^7.1.0",
     "tailwindcss": "^2.1.4",
     "tslib": "^2.0.0",
-    "typescript": "^4.2.4",
+    "typescript": "4.3.*",
     "y-protocols": "^1.0.5",
     "y-quill": "^0.1.4",
     "y-webrtc": "^10.2.0",
