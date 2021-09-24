@@ -1,21 +1,3 @@
-/*
- * law&orga - record and organization management software for refugee law clinics
- * Copyright (C) 2019  Dominik Walser
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>
- */
-
 import { Component, OnInit } from '@angular/core';
 import { FullRecord } from '../../models/record.model';
 import { ActivatedRoute, Params } from '@angular/router';
@@ -29,6 +11,16 @@ import { RecordDocument } from '../../models/record_document.model';
 import { SharedSandboxService } from 'src/app/shared/services/shared-sandbox.service';
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import downloadFile from 'src/app/shared/other/download';
+import { Tag } from '../../models/tag.model';
+
+interface Field {
+  label: string;
+  type?: string;
+  tag: string;
+  name: string;
+  required: boolean;
+  options?: { id: string; name: string }[] | { id: number; name: string }[] | [];
+}
 
 @Component({
   selector: 'app-record',
@@ -39,7 +31,7 @@ export class RecordComponent implements OnInit {
 
   record: FullRecord;
   recordErrors: DjangoError;
-  recordFields = [
+  recordFields: Field[] = [
     {
       label: 'Token',
       type: 'text',
@@ -85,7 +77,7 @@ export class RecordComponent implements OnInit {
     {
       label: 'Record Tags',
       tag: 'select-multiple',
-      name: 'tagged',
+      name: 'tags',
       required: true,
       options: [],
     },
@@ -266,7 +258,7 @@ export class RecordComponent implements OnInit {
 
     this.http.get('api/records/consultants/').subscribe((response: RestrictedUser[]) => (this.recordFields[5].options = response));
 
-    this.http.get('api/records/record_tags/').subscribe((response: OriginCountry[]) => (this.recordFields[6].options = response));
+    this.http.get('api/records/tags/').subscribe((response: Tag[]) => (this.recordFields[6].options = response));
 
     this.http.get('api/records/origin_countries/').subscribe((response: OriginCountry[]) => (this.clientFields[2].options = response));
 

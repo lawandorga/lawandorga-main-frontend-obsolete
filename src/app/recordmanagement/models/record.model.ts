@@ -73,20 +73,6 @@ export class RestrictedRecord extends TokenRecord {
     this.official_note = official_note;
     this.is_restricted = is_restricted;
   }
-
-  static getRestrictedRecordFromJson(json: any): RestrictedRecord {
-    return new RestrictedRecord(
-      json.id,
-      json.record_token,
-      new Date(json.last_contact_date),
-      json.state,
-      json.record_token,
-      Tag.getTagsFromJsonArray(json.tagged),
-      json.working_on_record,
-      json.official_note,
-      true
-    );
-  }
 }
 
 export class FullRecord extends RestrictedRecord {
@@ -137,38 +123,4 @@ export class FullRecord extends RestrictedRecord {
     this.status_described = status_described;
     this.additional_facts = additional_facts;
   }
-
-  static getFullRecordFromJson(json) {
-    return new FullRecord(
-      json.id,
-      json.record_token,
-      new Date(json.last_contact_date),
-      json.state,
-      Tag.getTagsFromJsonArray(json.tagged),
-      json.working_on_record,
-      json.official_note,
-      new Date(json.created_on),
-      new Date(json.last_edited),
-      new Date(json.first_contact_date),
-      json.note,
-      json.from_rlc,
-      json.client,
-      new Date(json.first_consultation),
-      json.consultant_team,
-      json.lawyer,
-      json.related_persons,
-      json.contact,
-      json.bamf_token,
-      json.foreign_token,
-      json.first_correspondence,
-      json.circumstances,
-      json.next_steps,
-      json.status_described,
-      json.additional_facts
-    );
-  }
 }
-
-export const isRestrictedRecord = (record): boolean => {
-  return !('note' in record);
-};

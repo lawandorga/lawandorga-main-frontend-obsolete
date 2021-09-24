@@ -19,56 +19,29 @@
 import { Tag } from './tag.model';
 
 export class NameRecordDocument {
-    constructor(public id: number, public name: string) {
-        this.id = id;
-        this.name = name;
-    }
-
-    static getNameRecordDocumentFromJson(json) {
-        if (!json) {
-            return new NameRecordDocument(-1, 'DELETED');
-        }
-        return new NameRecordDocument(json.id, json.name);
-    }
+  constructor(public id: number, public name: string) {
+    this.id = id;
+    this.name = name;
+  }
 }
 
 export class RecordDocument extends NameRecordDocument {
-    constructor(
-        id: number,
-        name: string,
-        public creator: string,
-        public created_on: Date,
-        public last_edited: Date,
-        public file_size: number,
-        public tags: Tag[]
-    ) {
-        super(id, name);
-        this.id = id;
-        this.name = name;
-        this.creator = creator;
-        this.created_on = created_on;
-        this.last_edited = last_edited;
-        this.file_size = file_size;
-        this.tags = tags;
-    }
-
-    static getRecordDocumentsFromJsonArray(jsonArray) {
-        const recordDocuments: RecordDocument[] = [];
-        Object.values(jsonArray).map(jsonRecordDocument => {
-            recordDocuments.push(RecordDocument.getRecordDocumentFromJson(jsonRecordDocument));
-        });
-        return recordDocuments;
-    }
-
-    static getRecordDocumentFromJson(json) {
-        return new RecordDocument(
-            json.id,
-            json.name,
-            json.creator,
-            json.created_on,
-            json.last_edited,
-            json.file_size,
-            Tag.getTagsFromJsonArray(json.tagged)
-        );
-    }
+  constructor(
+    id: number,
+    name: string,
+    public creator: string,
+    public created_on: Date,
+    public last_edited: Date,
+    public file_size: number,
+    public tags: Tag[]
+  ) {
+    super(id, name);
+    this.id = id;
+    this.name = name;
+    this.creator = creator;
+    this.created_on = created_on;
+    this.last_edited = last_edited;
+    this.file_size = file_size;
+    this.tags = tags;
+  }
 }
