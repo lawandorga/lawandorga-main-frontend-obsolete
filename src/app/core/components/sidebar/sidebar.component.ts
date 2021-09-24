@@ -95,16 +95,16 @@ export class SidebarComponent implements OnInit, OnDestroy {
       icon: 'library_books',
       link: '/records/record_pool/',
     },
-    {
-      label: 'Profiles',
-      icon: 'people_outline',
-      link: '/profiles/',
-    },
-    {
-      label: 'Groups',
-      icon: 'group',
-      link: '/groups/',
-    },
+    // {
+    //   label: 'Profiles',
+    //   icon: 'people_outline',
+    //   link: '/profiles/',
+    // },
+    // {
+    //   label: 'Groups',
+    //   icon: 'group',
+    //   link: '/groups/',
+    // },
     {
       label: 'Files',
       icon: 'folder_open',
@@ -140,6 +140,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
           link: '/new_user_requests/',
         },
       ],
+    },
+    {
+      label: 'Settings',
+      icon: 'settings',
+      link: '/settings/',
     },
   ];
   actualSidebarItems = [];

@@ -37,12 +37,19 @@ import { UnsavedGuardService } from './services/unsaved-guard.service';
 import { StatisticsPageComponent } from './pages/statistics-page/statistics-page.component';
 import { STATISTICS_FRONT_URL } from '../statics/frontend_links.statics';
 import { ArticleComponent } from './pages/article/article.component';
+import { SettingsComponent } from './pages/settings/settings.component';
 
 const apiRoutes: Routes = [
   {
     path: 'profiles',
     pathMatch: 'full',
     component: ProfilesListComponent,
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'settings',
+    pathMatch: 'full',
+    component: SettingsComponent,
     canActivate: [AuthGuardService],
   },
   {

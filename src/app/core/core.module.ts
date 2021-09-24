@@ -34,6 +34,7 @@ import { StatisticsNumberComponent } from './components/statistics-number/statis
 import { AddPermissionComponent } from './components/add-permission/add-permission.component';
 import { AddMemberComponent } from './components/add-member/add-member.component';
 import { ArticleComponent } from './pages/article/article.component';
+import { SettingsComponent } from './pages/settings/settings.component';
 
 @NgModule({
   imports: [
@@ -71,6 +72,7 @@ import { ArticleComponent } from './pages/article/article.component';
     NotificationGroupsListComponent,
     NotificationListComponent,
     QuillTestComponent,
+    SettingsComponent,
     StatisticsPageComponent,
     StatisticsNumberComponent,
   ],

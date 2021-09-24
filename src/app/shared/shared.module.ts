@@ -29,6 +29,7 @@ import { AutoExpandDirective } from './directives/auto-expand.directive';
 import { EditTextComponent } from './components/edit-text/edit-text.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { FormDialogComponent } from './components/form-dialog/form-dialog.component';
 
 @NgModule({
   imports: [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule, NgxChartsModule],
@@ -41,6 +42,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     DynamicInputComponent,
     EditTextComponent,
     ConfirmationDialogComponent,
+    FormDialogComponent,
   ],
   exports: [
     CommonModule,
@@ -50,6 +52,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     NgxChartsModule,
     DynamicInputComponent,
     DynamicFormComponent,
+    FormDialogComponent,
     ChipAutocompleteComponent,
     AutocompleteComponent,
     GetColorOnHoverDirective,

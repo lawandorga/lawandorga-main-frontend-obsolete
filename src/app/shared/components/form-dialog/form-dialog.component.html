@@ -1,0 +1,5 @@
+<h1 mat-dialog-title>{{ data.title }}</h1>
+<div mat-dialog-content>
+    <dynamic-form [fields]="data.fields" [data]="data.data" (send)="onSend($event)" [button]="data.submit">
+    </dynamic-form>
+</div>

@@ -8,6 +8,7 @@ import { Message } from 'src/app/recordmanagement/models/message.model';
 import { RecordDeletionRequest } from 'src/app/recordmanagement/models/record_deletion_request.model';
 import { RecordDocument } from 'src/app/recordmanagement/models/record_document.model';
 import { RecordPermissionRequest } from 'src/app/recordmanagement/models/record_permission.model';
+import { Tag } from 'src/app/recordmanagement/models/tag.model';
 
 // types
 export interface DjangoError {
@@ -32,7 +33,8 @@ export type DjangoModel =
   | RecordDeletionRequest
   | IFile
   | Folder
-  | FolderPermission;
+  | FolderPermission
+  | Tag;
 
 export interface SubmitData {
   [key: string]: string | number;

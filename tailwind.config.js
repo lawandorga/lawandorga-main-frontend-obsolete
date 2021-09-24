@@ -10,7 +10,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        blue: '#003c4d'
+        lorgablue: '#003c4d'
       },
       typography: {
         DEFAULT: {
@@ -25,7 +25,9 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      backgroundColor: ['odd', 'even']
+    },
     typography: []
   },
   plugins: [
