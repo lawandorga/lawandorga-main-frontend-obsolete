@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 import { Component, OnInit } from '@angular/core';
-import { FullUser } from '../../models/user.model';
+import { IUser } from '../../models/user.model';
 import { CoreSandboxService } from '../../services/core-sandbox.service';
 import { GetProfilesDetailApiUrl, GetProfilesUnlockApiUrl, PROFILES_API_URL } from '../../../statics/api_urls.statics';
 import { SharedSandboxService } from '../../../shared/services/shared-sandbox.service';
@@ -29,15 +29,15 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ProfilesListComponent implements OnInit {
   displayedColumns: string[] = ['name', 'email', 'phone_number', 'actions'];
-  users: FullUser[];
+  users: IUser[];
 
   constructor(private coreSB: CoreSandboxService, private sharedSB: SharedSandboxService, private http: HttpClient) {}
 
   ngOnInit(): void {
-    this.http.get(PROFILES_API_URL).subscribe((response: FullUser[]) => (this.users = response));
+    this.http.get(PROFILES_API_URL).subscribe((response: IUser[]) => (this.users = response));
   }
 
-  updateUsers(response: FullUser): void {
+  updateUsers(response: IUser): void {
     const user = response;
     const index = this.users.findIndex((localUser) => localUser.id === user.id);
     if (index !== -1) {
@@ -47,13 +47,13 @@ export class ProfilesListComponent implements OnInit {
   }
 
   onUnlockClick(id: number): void {
-    this.http.post(GetProfilesUnlockApiUrl(id), {}).subscribe((response: FullUser) => this.updateUsers(response));
+    this.http.post(GetProfilesUnlockApiUrl(id), {}).subscribe((response: IUser) => this.updateUsers(response));
   }
 
-  onDeActiveClick(user: FullUser): void {
+  onDeActiveClick(user: IUser): void {
     this.http
       .patch(GetProfilesDetailApiUrl(parseInt(user.id)), { is_active: !user.is_active })
-      .subscribe((response: FullUser) => this.updateUsers(response));
+      .subscribe((response: IUser) => this.updateUsers(response));
   }
 
   getUserDetailUrl(id: number): string {
@@ -71,7 +71,7 @@ export class ProfilesListComponent implements OnInit {
       (remove: boolean) => {
         if (remove) {
           this.http.delete(GetProfilesDetailApiUrl(id)).subscribe(() => {
-            this.users = removeFromArray(this.users, id) as FullUser[];
+            this.users = removeFromArray(this.users, id) as IUser[];
           });
         }
       }
@@ -79,6 +79,6 @@ export class ProfilesListComponent implements OnInit {
   }
 
   onAcceptClick(id: number): void {
-    this.http.get(`api/profiles/${id}/accept/`).subscribe((response: FullUser) => this.updateUsers(response));
+    this.http.get(`api/profiles/${id}/accept/`).subscribe((response: IUser) => this.updateUsers(response));
   }
 }

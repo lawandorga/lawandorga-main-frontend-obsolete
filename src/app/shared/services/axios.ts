@@ -1,6 +1,6 @@
 import { RestrictedGroup } from 'src/app/core/models/group.model';
 import { HasPermission, Permission } from 'src/app/core/models/permission.model';
-import { FullUser } from 'src/app/core/models/user.model';
+import { IUser } from 'src/app/core/models/user.model';
 import { IFile } from 'src/app/filemanagement/models/file.model';
 import { Folder } from 'src/app/filemanagement/models/folder.model';
 import { FolderPermission } from 'src/app/filemanagement/models/folder_permission.model';
@@ -23,7 +23,7 @@ export interface BaseModel {
 }
 export type DjangoModel =
   | BaseModel
-  | FullUser
+  | IUser
   | HasPermission
   | Permission
   | RestrictedGroup

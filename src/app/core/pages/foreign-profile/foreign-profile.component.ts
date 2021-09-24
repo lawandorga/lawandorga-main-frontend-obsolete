@@ -19,7 +19,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { CoreSandboxService } from '../../services/core-sandbox.service';
-import { FullUser } from '../../models/user.model';
+import { IUser } from '../../models/user.model';
 import { DjangoError, addToArray, removeFromArray } from '../../../shared/services/axios';
 import { HasPermission } from '../../models/permission.model';
 import { AddPermissionComponent } from '../../components/add-permission/add-permission.component';
@@ -31,7 +31,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
   templateUrl: './foreign-profile.component.html',
 })
 export class ForeignProfileComponent implements OnInit {
-  user: FullUser;
+  user: IUser;
   id: number;
   permissions: HasPermission[];
   permissionsDisplayedColumns: string[] = ['permission', 'source', 'action'];
@@ -79,7 +79,7 @@ export class ForeignProfileComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
       this.id = params['id'] as number;
-      this.http.get(`api/profiles/${this.id}/`).subscribe((response: FullUser) => (this.user = response));
+      this.http.get(`api/profiles/${this.id}/`).subscribe((response: IUser) => (this.user = response));
 
       this.http.get(`api/profiles/${this.id}/permissions/`).subscribe((response: HasPermission[]) => (this.permissions = response));
     });
@@ -87,7 +87,7 @@ export class ForeignProfileComponent implements OnInit {
 
   onSend(values: Object): void { // eslint-disable-line
     void this.http.patch(`api/profiles/${this.id}/`, values).subscribe(
-      (response: FullUser) => {
+      (response: IUser) => {
         this.user = response;
         this.coreSB.showSuccessSnackBar('User information saved.');
       },

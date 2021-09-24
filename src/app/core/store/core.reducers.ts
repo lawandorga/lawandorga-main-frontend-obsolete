@@ -1,35 +1,32 @@
-import { FullUser } from '../models/user.model';
+import { IUser } from '../models/user.model';
 import {
   CoreActions,
   DECREMENT_NOTIFICATION_COUNTER,
   INCREMENT_NOTIFICATION_COUNTER,
   SET_ALL_PERMISSIONS,
-  SET_GROUPS,
   SET_NOTIFICATIONS,
-  SET_RLC,
-  SET_RLCS,
   SET_USER,
   SET_USER_PERMISSIONS,
 } from './core.actions';
 import { HasPermission, Permission } from '../models/permission.model';
-import { RestrictedRlc } from '../models/rlc.model';
+import { Rlc } from '../models/rlc.model';
 import { getIdObjects } from '../../shared/other/reducer-helper';
 import { RestrictedGroup } from '../models/group.model';
 
 export interface CoreState {
-  user: FullUser;
+  user: IUser;
   all_permissions: { [id: number]: Permission };
-  user_permissions: { [id: number]: HasPermission };
+  user_permissions: HasPermission[];
   groups: { [id: number]: RestrictedGroup };
-  rlc: RestrictedRlc;
-  rlcs: { [id: number]: RestrictedRlc };
+  rlc: Rlc;
+  rlcs: { [id: number]: Rlc };
   notifications: number;
 }
 
 const initialState: CoreState = {
   user: null,
   all_permissions: {},
-  user_permissions: {},
+  user_permissions: [],
   groups: {},
   rlc: null,
   rlcs: {},
@@ -43,22 +40,6 @@ export function coreReducer(state = initialState, action: CoreActions) {
         ...state,
         all_permissions: getIdObjects(action.payload),
       };
-    case SET_GROUPS:
-      return {
-        ...state,
-        groups: getIdObjects(action.payload),
-      };
-
-    case SET_RLC:
-      return {
-        ...state,
-        rlc: action.payload,
-      };
-    case SET_RLCS:
-      return {
-        ...state,
-        rlcs: getIdObjects(action.payload),
-      };
     case SET_USER:
       return {
         ...state,
@@ -67,7 +48,7 @@ export function coreReducer(state = initialState, action: CoreActions) {
     case SET_USER_PERMISSIONS:
       return {
         ...state,
-        user_permissions: getIdObjects(action.payload),
+        user_permissions: action.payload,
       };
 
     case SET_NOTIFICATIONS:

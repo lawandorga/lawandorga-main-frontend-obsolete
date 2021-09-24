@@ -88,18 +88,14 @@ export class NotificationGroupsListComponent implements AfterViewInit {
   onReadClick(event, notificationGroup: NotificationGroup): void {
     event.stopPropagation();
     const toPost = {
-      read: !notificationGroup.read,
+      read: true,
     };
     this.httpClient.patch(`${NOTIFICATION_GROUPS_API_URL}${notificationGroup.id}/`, toPost).subscribe((response) => {
-      if (notificationGroup.read) {
-        this.coreSB.incrementNotificationCounter();
-      } else {
-        this.coreSB.decrementNotificationCounter();
-        for (const notification of notificationGroup.notifications) {
-          notification.read = true;
-        }
+      this.coreSB.decrementNotificationCounter();
+      for (const notification of notificationGroup.notifications) {
+        notification.read = true;
       }
-      notificationGroup.read = !notificationGroup.read;
+      notificationGroup.read = true;
     });
   }
 

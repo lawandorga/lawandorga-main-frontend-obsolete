@@ -4,7 +4,7 @@ import { CoreSandboxService } from '../../services/core-sandbox.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { FullGroup } from '../../models/group.model';
 import { addToArray, DjangoError, removeFromArray } from '../../../shared/services/axios';
-import { FullUser } from '../../models/user.model';
+import { IUser } from '../../models/user.model';
 import { HasPermission } from '../../models/permission.model';
 import { AddPermissionComponent } from '../../components/add-permission/add-permission.component';
 import { AddMemberComponent } from '../../components/add-member/add-member.component';
@@ -19,7 +19,7 @@ export class GroupComponent implements OnInit {
   can_edit = false;
   group: FullGroup;
   errors: DjangoError;
-  members: FullUser[];
+  members: IUser[];
   permissions: HasPermission[];
   membersDisplayedColumns: string[] = ['member', 'email', 'action'];
   permissionsDisplayedColumns: string[] = ['permission', 'action'];
@@ -47,7 +47,7 @@ export class GroupComponent implements OnInit {
 
     this.http.get(`api/groups/${this.id}/`).subscribe((response: FullGroup) => (this.group = response));
 
-    this.http.get(`api/groups/${this.id}/members/`).subscribe((response: FullUser[]) => (this.members = response));
+    this.http.get(`api/groups/${this.id}/members/`).subscribe((response: IUser[]) => (this.members = response));
 
     this.http.get(`api/groups/${this.id}/permissions/`).subscribe((response: HasPermission[]) => (this.permissions = response));
   }
@@ -86,13 +86,13 @@ export class GroupComponent implements OnInit {
       if (result)
         this.http
           .post(`api/groups/${this.id}/member/`, { member: result })
-          .subscribe((response: FullUser) => (this.members = addToArray(this.members, response) as FullUser[]));
+          .subscribe((response: IUser) => (this.members = addToArray(this.members, response) as IUser[]));
     });
   }
 
   onRemoveMember(id: number): void {
     this.http.post(`api/groups/${this.id}/remove/`, { member: id }).subscribe(() => {
-      this.members = removeFromArray(this.members, id) as FullUser[];
+      this.members = removeFromArray(this.members, id) as IUser[];
     });
   }
 }

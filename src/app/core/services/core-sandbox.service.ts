@@ -2,22 +2,17 @@ import moment from 'moment';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { CoreState } from '../store/core.reducers';
-import { FullUser, RestrictedUser } from '../models/user.model';
-import {
-  DecrementNotificationCounter,
-  IncrementNotificationCounter,
-  StartCreateUser,
-  StartLoadingGroups,
-  StartLoadingRlcs,
-} from '../store/core.actions';
+import { DecrementNotificationCounter } from '../store/core.actions';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { Observable } from 'rxjs';
 import { HasPermission, Permission } from '../models/permission.model';
 import { RestrictedGroup } from '../models/group.model';
-import { IRlc, RestrictedRlc } from '../models/rlc.model';
+import { Rlc } from '../models/rlc.model';
 import { HttpClient } from '@angular/common/http';
 import { GetCheckUserActivationApiUrl } from '../../statics/api_urls.statics';
+import { AppState } from 'src/app/app.state';
+import { IUser } from '../models/user.model';
+import { selectRemainingMinutes } from '../store/auth/selectors';
 
 @Injectable()
 export class CoreSandboxService {
@@ -26,7 +21,7 @@ export class CoreSandboxService {
   constructor(
     public router: Router,
     private snackbarService: SnackbarService,
-    private coreStateStore: Store<CoreState>,
+    private coreStateStore: Store<AppState>,
     private http: HttpClient
   ) {}
 
@@ -40,16 +35,8 @@ export class CoreSandboxService {
     else return new Date(moment(date).format('YYYY-MM-DD'));
   }
 
-  getUser(): Observable<FullUser> {
-    return this.coreStateStore.pipe(select((state: any) => state.core.user));
-  }
-
-  getUserRestricted(): Observable<RestrictedUser> {
-    return this.coreStateStore.pipe(select((state: any) => state.core.user));
-  }
-
-  getRlc(): Observable<IRlc> {
-    return this.coreStateStore.pipe(select((state: any) => state.core.rlc));
+  getRlc(): Observable<Rlc> {
+    return this.coreStateStore.select((state) => state.core.rlc);
   }
 
   getUserPermissions(asArray = true): Observable<HasPermission[] | any> {
@@ -99,24 +86,6 @@ export class CoreSandboxService {
     });
   }
 
-  registerUser(user: any) {
-    this.coreStateStore.dispatch(new StartCreateUser(user));
-  }
-
-  getAllRlcs(asArray = true): Observable<RestrictedRlc[]> {
-    //return this.http.get(RLCS_API_URL);
-    return this.coreStateStore.pipe(
-      select((state: any) => {
-        const values = state.core.rlcs;
-        return asArray ? Object.values(values) : values;
-      })
-    );
-  }
-
-  startLoadingGroups() {
-    this.coreStateStore.dispatch(new StartLoadingGroups());
-  }
-
   getGroups(asArray = true): Observable<RestrictedGroup[]> | any {
     return this.coreStateStore.pipe(
       select((state: any) => {
@@ -132,10 +101,6 @@ export class CoreSandboxService {
 
   showErrorSnackBar(message: string, duration = 10000) {
     this.snackbarService.showErrorSnackBar(message, duration);
-  }
-
-  startLoadingRlcs(): void {
-    return this.coreStateStore.dispatch(new StartLoadingRlcs());
   }
 
   startCheckingUserActivationLink(userId: number, token: string): void {
@@ -154,18 +119,22 @@ export class CoreSandboxService {
   }
 
   getNotifications(): Observable<number> {
-    return this.coreStateStore.pipe(
-      select((state: any) => {
-        return state.core.notifications;
-      })
-    );
+    return this.coreStateStore.select((state) => state.core.notifications);
+  }
+
+  getUser(): Observable<IUser> {
+    return this.coreStateStore.select((state) => state.core.user);
+  }
+
+  getPermissions(): Observable<HasPermission[]> {
+    return this.coreStateStore.select((state) => state.core.user_permissions);
+  }
+
+  getTimeRemaining(): Observable<number> {
+    return this.coreStateStore.select(selectRemainingMinutes);
   }
 
   decrementNotificationCounter(): void {
     this.coreStateStore.dispatch(new DecrementNotificationCounter());
-  }
-
-  incrementNotificationCounter(): void {
-    this.coreStateStore.dispatch(new IncrementNotificationCounter());
   }
 }

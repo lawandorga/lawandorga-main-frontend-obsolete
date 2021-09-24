@@ -49,7 +49,6 @@ export class CollabDocumentPermissionsComponent implements OnInit {
 
   ngOnInit(): void {
     this.collabSB.startLoadingCollabPermissions();
-    this.coreSB.startLoadingGroups();
 
     this.general_permissions = this.collabSB.getDocumentPermissionsGeneral();
     this.collab_document_permissions = this.collabSB.getDocumentPermissionsCollab();

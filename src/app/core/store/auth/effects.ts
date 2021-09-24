@@ -21,8 +21,8 @@ import {
   LOGIN_API_URL,
   GetStaticsApiUrl,
 } from '../../../statics/api_urls.statics';
-import { SET_ALL_PERMISSIONS, SET_NOTIFICATIONS, SET_RLC, SET_USER, SET_USER_PERMISSIONS } from '../core.actions';
-import { FullUser } from '../../models/user.model';
+import { SET_ALL_PERMISSIONS, SET_NOTIFICATIONS, SET_USER, SET_USER_PERMISSIONS } from '../core.actions';
+import { IUser } from '../../models/user.model';
 import { CoreSandboxService } from '../../services/core-sandbox.service';
 import { HasPermission, Permission } from '../../models/permission.model';
 import { IRlc } from '../../models/rlc.model';
@@ -74,7 +74,7 @@ export class AuthEffects {
             return [
               {
                 type: SET_USER,
-                payload: FullUser.getFullUserFromJson(response.user),
+                payload: response.user,
               },
               {
                 type: SET_ALL_PERMISSIONS,
@@ -82,11 +82,7 @@ export class AuthEffects {
               },
               {
                 type: SET_USER_PERMISSIONS,
-                payload: HasPermission.getPermissionsFromJsonArray(response.permissions),
-              },
-              {
-                type: SET_RLC,
-                payload: response.rlc as IRlc,
+                payload: response.permissions,
               },
               {
                 type: SET_NOTIFICATIONS,

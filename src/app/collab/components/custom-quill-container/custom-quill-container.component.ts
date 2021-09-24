@@ -92,20 +92,6 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
 
   ngOnInit(): void {
     this.appSB.closeNavbar();
-    if (this.editingMode === undefined) {
-      throw new Error('editingMode must be specified');
-    }
-    if (!this.editingMode) {
-      // this.modules = {};
-    }
-    if (this.editingMode) {
-      this.coreSB.getUserRestricted().subscribe((user: RestrictedUser) => {
-        this.user = user;
-        if (this.provider && this.editingMode) {
-          this.setUser();
-        }
-      });
-    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {

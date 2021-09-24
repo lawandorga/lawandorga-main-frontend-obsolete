@@ -19,7 +19,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CoreSandboxService } from '../../../services/core-sandbox.service';
-import { RestrictedRlc } from '../../../models/rlc.model';
+import { Rlc } from '../../../models/rlc.model';
 import { dateInPastValidator, matchValidator, passwordValidator } from '../../../../statics/validators.statics';
 import { CustomErrorStateMatcher } from '../../../../statics/errror_state_matcher.statics';
 
@@ -31,13 +31,12 @@ import { CustomErrorStateMatcher } from '../../../../statics/errror_state_matche
 export class RegisterComponent implements OnInit {
   // TODO: refactor this
   userForm: FormGroup;
-  allRlcs: RestrictedRlc[] = [];
+  allRlcs: Rlc[] = [];
   errorStateMatcher = new CustomErrorStateMatcher();
 
   constructor(private coreSB: CoreSandboxService) {}
 
   ngOnInit() {
-    this.coreSB.startLoadingRlcs();
     const date = new Date();
     date.setFullYear(date.getFullYear() - 20);
     this.userForm = new FormGroup(
@@ -55,39 +54,9 @@ export class RegisterComponent implements OnInit {
       },
       matchValidator('password', 'password_confirm')
     );
-
-    this.coreSB.getAllRlcs().subscribe((rlcs: RestrictedRlc[]) => {
-      if (rlcs) {
-        this.allRlcs = rlcs;
-      }
-    });
   }
 
   onRegisterClick() {
-    if (this.userForm.errors && this.userForm.errors.mismatch) {
-      this.userForm.controls['password_confirm'].setErrors({
-        mismatch: 'true',
-      });
-    }
-
-    if (this.userForm.valid) {
-      const values = this.userForm.value;
-      const user = {
-        name: values.name,
-        email: values.email,
-        password: values.password,
-        rlc: values.rlc,
-      };
-      const date = CoreSandboxService.transformDateToString(values.birthday);
-      if (date !== 'Invalid date') {
-        user['birthday'] = date;
-      }
-      if (values.phone_number !== '') user['phone_number'] = values.phone_number;
-      if (values.street !== '') user['street'] = values.street;
-      if (values.postal_code !== '') user['postal_code'] = values.postal_code;
-      if (values.city !== '') user['city'] = values.city;
-
-      this.coreSB.registerUser(user);
-    }
+    // nada
   }
 }

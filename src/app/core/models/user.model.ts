@@ -1,21 +1,3 @@
-/*
- * law&orga - record and organization management software for refugee law clinics
- * Copyright (C) 2019  Dominik Walser
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>
- */
-
 import { Filterable } from '../../shared/models/filterable.model';
 
 export class RestrictedUser implements Filterable {
@@ -42,81 +24,19 @@ export class RestrictedUser implements Filterable {
   }
 }
 
-export class ForeignUser extends RestrictedUser {
-  /**
-   * ForeignUser represents a user from the own rlc but not the user himself -> contact information,
-   * RestrictedUser < foreign < full
-   */
-  constructor(id: string = '', public email: string = '', name: string = '', public phone_number: string = '') {
-    super(id, name);
-    this.email = email;
-    this.phone_number = phone_number;
-  }
-
-  static getForeignUserFromJson(json): ForeignUser {
-    if (json) return new ForeignUser(json.id, json.email, json.name, json.phone_number);
-    return null;
-  }
-}
-
-export class FullUser extends RestrictedUser {
-  constructor(
-    id: string = '',
-    public email: string = '',
-    name: string = '',
-    public birthday: Date = new Date(),
-    public phone_number: string = '',
-    public street: string = '',
-    public city: string = '',
-    public postal_code: string = '',
-    public user_state: string = '',
-    public user_record_state: string = '',
-    public locked: boolean = false,
-    public email_confirmed: boolean = true,
-    public is_active: boolean = true,
-    public accepted: boolean = true
-  ) {
-    super(id, name);
-    this.email = email;
-    this.birthday = birthday;
-    this.phone_number = phone_number;
-    this.street = street;
-    this.city = city;
-    this.postal_code = postal_code;
-    this.user_state = user_state;
-    this.user_record_state = user_record_state;
-    this.locked = locked;
-    this.email_confirmed = email_confirmed;
-    this.is_active = is_active;
-    this.accepted = accepted;
-  }
-
-  static getFullUserFromJson(json): FullUser {
-    if (json)
-      return new FullUser(
-        json.id,
-        json.email,
-        json.name,
-        new Date(json.birthday),
-        json.phone_number,
-        json.street,
-        json.city,
-        json.postal_code,
-        json.user_state,
-        json.user_record_state,
-        json.locked,
-        json.email_confirmed,
-        json.is_active,
-        json.accepted
-      );
-    return null;
-  }
-
-  static getFullUsersFromJsonArray(jsonArray): FullUser[] {
-    const fullUsers: FullUser[] = [];
-    Object.values(jsonArray).map((fullJsonUser) => {
-      fullUsers.push(FullUser.getFullUserFromJson(fullJsonUser));
-    });
-    return fullUsers;
-  }
+export interface IUser {
+  id?: string;
+  email: string;
+  name: string;
+  birthday?: string;
+  phone_number?: string;
+  street?: string;
+  city?: string;
+  postal_code?: string;
+  user_state?: string;
+  user_record_state?: string;
+  locked?: boolean;
+  email_confirmed?: boolean;
+  is_active?: boolean;
+  accepted?: boolean;
 }

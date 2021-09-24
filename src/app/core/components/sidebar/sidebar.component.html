@@ -1,11 +1,11 @@
 <div class="drawer-header">
-    <span>{{ name }}</span>
-    <span>{{ email }}</span>
+    <span>{{ user ? user.name : '' }}</span>
+    <span>{{ user ? user.email : '' }}</span>
 </div>
 <mat-divider></mat-divider>
 <div class="sidebar__nav-holder">
     <div>
-        <ng-material-multilevel-menu [items]="actualSidebarItems" (selectedItem)="selectedItem($event)"
+        <ng-material-multilevel-menu [items]="sidebarItems" (selectedItem)="selectedItem($event)"
             [configuration]="config">
         </ng-material-multilevel-menu>
         <mat-list disableRipple="True" class="sidebar__list">
@@ -25,7 +25,7 @@
 
     <div class="sidebar__other-links">
         <ul>
-            <li class="is_clickable sidebar__other-links__items" [routerLink]="legalNoticeUrl">
+            <li class="is_clickable sidebar__other-links__items" routerLink="/legal_notice">
                 Imprint
             </li>
             <li class="is_clickable sidebar__other-links__items">

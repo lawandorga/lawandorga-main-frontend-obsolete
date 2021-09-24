@@ -28,7 +28,6 @@ export class AddCollabDocumentPermissionComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.coreSB.startLoadingGroups();
     this.groups = this.coreSB.getGroups().pipe(
       tap((results) => {
         alphabeticalSorterByField(results, 'name');
