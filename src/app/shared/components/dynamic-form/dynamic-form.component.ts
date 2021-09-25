@@ -1,6 +1,8 @@
-import { Component, Input, EventEmitter, Output, OnInit, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, EventEmitter, Output, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { DynamicField } from '../dynamic-input/dynamic-input.component';
 import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
+import { DjangoError, SubmitData } from '../../services/axios';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'dynamic-form',
@@ -8,15 +10,17 @@ import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
 })
 export class DynamicFormComponent implements OnInit, OnChanges {
   @Input() fields: DynamicField[];
+  @Input() url: string;
   @Input() data: Object; // eslint-disable-line
   @Input() errors: Object; // eslint-disable-line
   @Input() button = 'Save';
   @Input() processing = false;
   @Output() send = new EventEmitter();
+  @Output() successful = new EventEmitter();
   form: FormGroup;
   controls: { [key: string]: FormControl } = {};
 
-  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef) {}
+  constructor(private fb: FormBuilder, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.fields.forEach((field) => {
@@ -29,9 +33,6 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.data && changes.data.currentValue && this.form) this.form.patchValue(changes.data.currentValue);
     if (changes.errors && changes.errors.currentValue) {
-      // for debug
-      // Object.keys(this.controls).forEach((key) => this.controls[key].setErrors({ incorrect: true }));
-      // end debug
       Object.keys(changes.errors.currentValue).forEach((key) => {
         if (key in this.controls) this.controls[key].setErrors({ incorrect: true });
       });
@@ -41,5 +42,17 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   onSubmit(): void {
     this.errors = null;
     this.send.emit(this.form.value);
+    if (this.url) {
+      this.processing = true;
+      this.http
+        .request(this.data ? 'PATCH' : 'POST', this.url, { body: this.form.value as SubmitData })
+        .subscribe({
+          next: () => this.successful.emit(),
+          error: (error: HttpErrorResponse) => {
+            this.errors = error.error as DjangoError;
+          },
+        })
+        .add(() => (this.processing = false));
+    }
   }
 }

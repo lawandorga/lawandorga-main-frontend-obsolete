@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { passwordValidator, matchValidator } from '../../../../statics/validators.statics';
 import { AppSandboxService } from '../../../services/app-sandbox.service';
 import { ActivatedRoute, Params } from '@angular/router';
 
@@ -15,13 +14,10 @@ export class ResetPasswordComponent implements OnInit {
   token: string;
 
   constructor(private appSB: AppSandboxService, private route: ActivatedRoute) {
-    this.resetPasswordForm = new FormGroup(
-      {
-        new_password: new FormControl('', [Validators.required, passwordValidator]),
-        new_password_confirm: new FormControl('', [Validators.required]),
-      },
-      matchValidator('new_password', 'new_password_confirm')
-    );
+    this.resetPasswordForm = new FormGroup({
+      new_password: new FormControl('', [Validators.required]),
+      new_password_confirm: new FormControl('', [Validators.required]),
+    });
   }
 
   ngOnInit() {
