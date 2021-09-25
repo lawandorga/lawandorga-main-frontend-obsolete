@@ -1,22 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AppSandboxService } from '../../services/app-sandbox.service';
 import { CoreSandboxService } from '../../services/core-sandbox.service';
 import { Store } from '@ngrx/store';
 import {
   PERMISSION_ACCESS_TO_FILES_RLC,
   PERMISSION_CAN_ADD_RECORD_RLC,
   PERMISSION_CAN_CONSULT,
-  PERMISSION_CAN_PERMIT_RECORD_PERMISSION_REQUESTS,
   PERMISSION_CAN_VIEW_RECORDS,
 } from '../../../statics/permissions.statics';
-import { RECORD_POOL_FRONT_URL, RECORDS_ADD_FRONT_URL, RECORDS_FRONT_URL } from '../../../statics/frontend_links.statics';
 import { Subscription } from 'rxjs';
 import { Logout } from '../../store/auth/actions';
 import { Rlc } from '../../models/rlc.model';
 import { IUser } from '../../models/user.model';
-import { HasPermission } from '../../models/permission.model';
-import { StringMapWithRename } from '@angular/compiler/src/compiler_facade_interface';
 
 interface SidebarItem {
   label: string;

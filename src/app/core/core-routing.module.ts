@@ -15,7 +15,6 @@ import { LegalNoticeComponent } from './pages/legal-notice/legal-notice.componen
 import { PrivacyStatementComponent } from './pages/privacy-statement/privacy-statement.component';
 import { NotificationGroupsListComponent } from './pages/notification-groups-list/notification-groups-list.component';
 import { StatisticsPageComponent } from './pages/statistics-page/statistics-page.component';
-import { STATISTICS_FRONT_URL } from '../statics/frontend_links.statics';
 import { ArticleComponent } from './pages/article/article.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 
@@ -62,7 +61,7 @@ const apiRoutes: Routes = [
     component: NotificationGroupsListComponent,
   },
   {
-    path: STATISTICS_FRONT_URL,
+    path: 'statistics',
     component: StatisticsPageComponent,
   },
   // without access control

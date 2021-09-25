@@ -20,7 +20,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { AppSandboxService } from './core/services/app-sandbox.service';
-import { LEGAL_NOTICE_FRONT_URL, PRIVACY_STATEMENT_FRONT_URL } from './statics/frontend_links.statics';
 import { AppState } from './app.state';
 
 @Component({
@@ -31,8 +30,6 @@ export class AppComponent implements OnInit {
   @ViewChild('snav')
   snav;
   authenticated: boolean;
-  privacyStatementUrl = PRIVACY_STATEMENT_FRONT_URL;
-  legalNoticeUrl = LEGAL_NOTICE_FRONT_URL;
 
   constructor(private router: Router, private appSB: AppSandboxService, private store: Store<AppState>) {
     appSB.startApp();
