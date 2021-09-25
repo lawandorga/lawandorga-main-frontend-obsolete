@@ -1,22 +1,22 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { DashboardComponent } from './pages/Dashboard/dashboard.component';
-import { LoginComponent } from './pages/auth/login/login.component';
-import { RegisterComponent } from './pages/auth/register/register.component';
-import { ProfilesListComponent } from './pages/profiles-list/profiles-list.component';
-import { ForeignProfileComponent } from './pages/foreign-profile/foreign-profile.component';
-import { ForgotPasswordComponent } from './pages/auth/forgot-password/forgot-password.component';
-import { ResetPasswordComponent } from './pages/auth/reset-password/reset-password.component';
-import { GroupsListComponent } from './pages/groups-list/groups-list.component';
-import { GroupComponent } from './pages/group/group.component';
-import { PermissionListComponent } from './pages/permission-list/permission-list.component';
-import { NewUserRequestsComponent } from './pages/new-user-requests/new-user-requests.component';
-import { LegalNoticeComponent } from './pages/legal-notice/legal-notice.component';
-import { PrivacyStatementComponent } from './pages/privacy-statement/privacy-statement.component';
-import { NotificationGroupsListComponent } from './pages/notification-groups-list/notification-groups-list.component';
-import { StatisticsPageComponent } from './pages/statistics-page/statistics-page.component';
-import { ArticleComponent } from './pages/article/article.component';
-import { SettingsComponent } from './pages/settings/settings.component';
+import { DashboardComponent } from './components/Dashboard/dashboard.component';
+import { LoginComponent } from './components/auth/login/login.component';
+import { RegisterComponent } from './components/auth/register/register.component';
+import { ProfilesListComponent } from './components/profiles-list/profiles-list.component';
+import { ForeignProfileComponent } from './components/foreign-profile/foreign-profile.component';
+import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
+import { GroupsListComponent } from './components/groups-list/groups-list.component';
+import { GroupComponent } from './components/group/group.component';
+import { PermissionListComponent } from './components/permission-list/permission-list.component';
+import { NewUserRequestsComponent } from './components/new-user-requests/new-user-requests.component';
+import { LegalNoticeComponent } from './components/legal-notice/legal-notice.component';
+import { PrivacyStatementComponent } from './components/privacy-statement/privacy-statement.component';
+import { NotificationGroupsListComponent } from './components/notification-groups-list/notification-groups-list.component';
+import { StatisticsPageComponent } from './components/statistics-page/statistics-page.component';
+import { ArticleComponent } from './components/article/article.component';
+import { SettingsComponent } from './components/settings/settings.component';
 
 const apiRoutes: Routes = [
   {
