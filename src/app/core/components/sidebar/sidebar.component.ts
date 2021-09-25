@@ -28,7 +28,6 @@ interface SidebarItem {
 export class SidebarComponent implements OnInit {
   subscriptions: Subscription[] = [];
   user: IUser = { name: '', email: '' };
-  time = 0;
 
   number_of_notifications = '0';
 
@@ -118,7 +117,6 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit(): void {
     this.sidebarItems = this.allSidebarItems;
-    this.coreSB.getTimeRemaining().subscribe((time) => (this.time = time));
     this.coreSB
       .getNotifications()
       .subscribe((number_of_notifications: number) => (this.number_of_notifications = number_of_notifications.toString()));

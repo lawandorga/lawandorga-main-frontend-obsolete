@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 import { IUser } from '../models/user.model';
-import { HasPermission, Permission } from '../models/permission.model';
+import { Permission } from '../models/permission.model';
 import { Rlc } from '../models/rlc.model';
 export const ADD_NOTIFICATIONS = 'ADD_NOTIFICATIONS';
 export const SET_ALL_PERMISSIONS = 'SET_ALL_PERMISSIONS';
@@ -36,7 +36,7 @@ export class SetUser implements Action {
 export class SetUserPermissions implements Action {
   readonly type = SET_USER_PERMISSIONS;
 
-  constructor(public payload: HasPermission[]) {}
+  constructor(public payload: string[]) {}
 }
 
 export class StartLoadingHasPermissionStatics implements Action {

@@ -2,7 +2,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
 import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
 import { NgModule } from '@angular/core';
 import { NgMaterialMultilevelMenuModule, MultilevelMenuService } from 'ng-material-multilevel-menu';
 import { CdkTableModule } from '@angular/cdk/table';
@@ -13,7 +12,6 @@ import { RegisterComponent } from './components/auth/register/register.component
 import { DashboardComponent } from './components/Dashboard/dashboard.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { coreReducer } from './store/core.reducers';
-import { CoreEffects } from './store/core.effects';
 import { SharedModule } from '../shared/shared.module';
 import { ProfilesListComponent } from './components/profiles-list/profiles-list.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
@@ -43,7 +41,6 @@ import { SettingsComponent } from './components/settings/settings.component';
     FormsModule,
     ReactiveFormsModule,
     StoreModule.forFeature('core', coreReducer),
-    EffectsModule.forFeature([CoreEffects]),
     MatTabsModule,
     MatProgressSpinnerModule,
     NgMaterialMultilevelMenuModule,

@@ -9,18 +9,15 @@ import {
   SET_USER,
   SET_USER_PERMISSIONS,
 } from './core.actions';
-import { HasPermission, Permission } from '../models/permission.model';
+import { Permission } from '../models/permission.model';
 import { Rlc } from '../models/rlc.model';
 import { getIdObjects } from '../../shared/other/reducer-helper';
-import { RestrictedGroup } from '../models/group.model';
 
 export interface CoreState {
   user: IUser;
   all_permissions: { [id: number]: Permission };
-  user_permissions: HasPermission[];
-  groups: { [id: number]: RestrictedGroup };
+  user_permissions: string[];
   rlc: Rlc;
-  rlcs: { [id: number]: Rlc };
   notifications: number;
 }
 
@@ -28,9 +25,7 @@ const initialState: CoreState = {
   user: null,
   all_permissions: {},
   user_permissions: [],
-  groups: {},
   rlc: null,
-  rlcs: {},
   notifications: 0,
 };
 

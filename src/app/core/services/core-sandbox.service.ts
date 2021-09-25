@@ -1,18 +1,16 @@
-import moment from 'moment';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { DecrementNotificationCounter } from '../store/core.actions';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { Observable } from 'rxjs';
-import { HasPermission, Permission } from '../models/permission.model';
+import { Permission } from '../models/permission.model';
 import { RestrictedGroup } from '../models/group.model';
 import { Rlc } from '../models/rlc.model';
 import { HttpClient } from '@angular/common/http';
 import { GetCheckUserActivationApiUrl } from '../../statics/api_urls.statics';
 import { AppState } from 'src/app/app.state';
 import { IUser } from '../models/user.model';
-import { selectRemainingMinutes } from '../store/auth/selectors';
 
 @Injectable()
 export class CoreSandboxService {
@@ -25,65 +23,28 @@ export class CoreSandboxService {
     private http: HttpClient
   ) {}
 
-  static transformDateToString(date: Date | string): string {
-    if (typeof date === 'string') return moment(new Date(date)).format('YYYY-MM-DD');
-    return moment(date).format('YYYY-MM-DD');
-  }
-
-  static transformDate(date: Date | string): Date {
-    if (typeof date === 'string') return new Date(moment(new Date(date)).format('YYYY-MM-DD'));
-    else return new Date(moment(date).format('YYYY-MM-DD'));
-  }
-
   getRlc(): Observable<Rlc> {
     return this.coreStateStore.select((state) => state.core.rlc);
   }
 
-  getUserPermissions(asArray = true): Observable<HasPermission[] | any> {
-    return this.coreStateStore.pipe(
-      select((state: any) => {
-        const values = state.core.user_permissions;
-        return asArray ? Object.values(values) : values;
-      })
-    );
+  getUserPermissions(): Observable<string[]> {
+    return this.coreStateStore.select((state) => state.core.user_permissions);
   }
 
   getAllPermissions(): Observable<Permission[] | any> {
-    return this.coreStateStore.pipe(
-      select((state: any) => {
-        const values = state.core.all_permissions;
-        return Object.values(values);
-      })
-    );
+    return this.coreStateStore.select((state) => state.core.all_permissions);
   }
 
   hasPermissionFromStringForOwnRlc(permission: string, subscriberCallback): void {
-    this.hasPermissionFromString(permission, subscriberCallback);
-  }
-
-  hasPermissionFromString(permission: string, subscriberCallback, permission_for: any = null): void {
-    /*
-        checks if the user has permission and returns to subscriberCallback true or false
-         */
-    this.getAllPermissions().subscribe((all_permissions: Permission[]) => {
-      if (all_permissions.length > 0) {
-        try {
-          const id = Number(all_permissions.filter((single_permission) => single_permission.name === permission)[0].id);
-          this.hasPermissionFromId(id, subscriberCallback, permission_for);
-        } catch (e) {
+    this.coreStateStore
+      .select((state) => state.core.user_permissions)
+      .subscribe((permissions: string[]) => {
+        if (permissions.includes(permission)) {
+          subscriberCallback(true);
+        } else {
           subscriberCallback(false);
         }
-      }
-    });
-  }
-
-  hasPermissionFromId(permission: number, subscriberCallback, permission_for: any = null): void {
-    /*
-        checks if the user has permission and returns to subscriberCallback true or false
-         */
-    this.getUserPermissions().subscribe((user_permissions: HasPermission[]) => {
-      subscriberCallback(HasPermission.checkPermissionMet(user_permissions, permission, permission_for));
-    });
+      });
   }
 
   getGroups(asArray = true): Observable<RestrictedGroup[]> | any {
@@ -126,12 +87,8 @@ export class CoreSandboxService {
     return this.coreStateStore.select((state) => state.core.user);
   }
 
-  getPermissions(): Observable<HasPermission[]> {
+  getPermissions(): Observable<string[]> {
     return this.coreStateStore.select((state) => state.core.user_permissions);
-  }
-
-  getTimeRemaining(): Observable<number> {
-    return this.coreStateStore.select(selectRemainingMinutes);
   }
 
   decrementNotificationCounter(): void {
