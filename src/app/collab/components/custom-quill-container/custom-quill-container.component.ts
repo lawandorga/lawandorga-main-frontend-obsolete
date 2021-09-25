@@ -1,26 +1,7 @@
-/*
- * law&orga - record and organization management software for refugee law clinics
- * Copyright (C) 2020  Dominik Walser
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>
- */
-
 import { Component, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { TextDocument } from '../../models/text-document.model';
 import Quill from 'quill';
 import { QuillEditorComponent } from 'ngx-quill';
-import { HasUnsaved } from '../../../core/services/can-have-unsaved.interface';
 import { CollabSandboxService } from '../../services/collab-sandbox.service';
 import { EditingRoom } from '../../models/editing-room.model';
 import * as Y from 'yjs';
@@ -38,7 +19,7 @@ const hash = require('object-hash');
   templateUrl: './custom-quill-container.component.html',
   styleUrls: ['./custom-quill-container.component.scss'],
 })
-export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestroy, HasUnsaved {
+export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestroy {
   @Input()
   text_document: TextDocument;
 

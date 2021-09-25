@@ -17,7 +17,6 @@
  */
 
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { HasUnsaved } from '../../../core/services/can-have-unsaved.interface';
 import { TextDocument } from '../../models/text-document.model';
 import { CollabSandboxService } from '../../services/collab-sandbox.service';
 import { ActivatedRoute, Params } from '@angular/router';
@@ -29,7 +28,7 @@ import { EditingRoom } from '../../models/editing-room.model';
   templateUrl: './collab-edit.component.html',
   styleUrls: ['./collab-edit.component.scss'],
 })
-export class CollabEditComponent implements OnInit, HasUnsaved {
+export class CollabEditComponent implements OnInit {
   text_document: TextDocument;
   editing_room: EditingRoom;
   editing_room_was_created: boolean;

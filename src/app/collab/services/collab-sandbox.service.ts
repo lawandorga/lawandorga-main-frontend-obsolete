@@ -39,8 +39,6 @@ import {
   GetCollabTextDocumentVersionsApiUrl,
   GetCollabTextDocumentVersionsModelApiUrl,
 } from '../../statics/api_urls.statics';
-import { AppSandboxService } from '../../core/services/app-sandbox.service';
-import { EditingRoom } from '../models/editing-room.model';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { HasPermission, Permission } from '../../core/models/permission.model';
 import { CollabPermission } from '../models/collab_permission.model';
@@ -103,27 +101,23 @@ export class CollabSandboxService {
   }
 
   fetchTextDocument(id: number): Observable<any> {
-    const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
-    return this.http.get(GetCollabTextDocumentApiUrl(id), privateKeyPlaceholder);
+    return this.http.get(GetCollabTextDocumentApiUrl(id));
   }
 
   fetchTextDocumentVersions(id: number): Observable<any> {
-    const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
-    return this.http.get(GetCollabTextDocumentVersionsApiUrl(id), privateKeyPlaceholder);
+    return this.http.get(GetCollabTextDocumentVersionsApiUrl(id));
   }
 
   fetchTextDocumentVersion(version_id: number): Observable<any> {
-    const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
-    return this.http.get(GetCollabTextDocumentVersionsModelApiUrl(version_id), privateKeyPlaceholder);
+    return this.http.get(GetCollabTextDocumentVersionsModelApiUrl(version_id));
   }
 
   startDeletingCollabDocument(id: number): void {
     this.collabStore.dispatch(new StartDeletingCollabDocument({ id }));
   }
 
-  saveTextDocument(id: number, content: string, is_draft: boolean = false): void {
-    const privateKeyPlaceholder = AppSandboxService.getPrivateKeyPlaceholder();
-    this.http.post(GetCollabTextDocumentVersionsApiUrl(id), { content, is_draft }, privateKeyPlaceholder).subscribe((response) => {
+  saveTextDocument(id: number, content: string, is_draft = false): void {
+    this.http.post(GetCollabTextDocumentVersionsApiUrl(id), { content, is_draft }).subscribe((response) => {
       // check response?
       if (is_draft) {
         this.snackbackService.showSuccessSnackBar('document draft saved');
