@@ -24,8 +24,6 @@ import { DynamicInputComponent } from './components/dynamic-input/dynamic-input.
 import { MaterialModule } from '../material/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AutocompleteComponent } from './components/autocomplete/autocomplete.component';
-import { GetColorOnHoverDirective } from './directives/get-color-on-hover.directive';
-import { AutoExpandDirective } from './directives/auto-expand.directive';
 import { EditTextComponent } from './components/edit-text/edit-text.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -36,8 +34,6 @@ import { FormDialogComponent } from './components/form-dialog/form-dialog.compon
   declarations: [
     ChipAutocompleteComponent,
     AutocompleteComponent,
-    GetColorOnHoverDirective,
-    AutoExpandDirective,
     DynamicFormComponent,
     DynamicInputComponent,
     EditTextComponent,
@@ -55,8 +51,6 @@ import { FormDialogComponent } from './components/form-dialog/form-dialog.compon
     FormDialogComponent,
     ChipAutocompleteComponent,
     AutocompleteComponent,
-    GetColorOnHoverDirective,
-    AutoExpandDirective,
     ReactiveFormsModule,
     EditTextComponent,
     ConfirmationDialogComponent,
