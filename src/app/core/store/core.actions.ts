@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
 import { IUser } from '../models/user.model';
 import { HasPermission, Permission } from '../models/permission.model';
+import { Rlc } from '../models/rlc.model';
 export const ADD_NOTIFICATIONS = 'ADD_NOTIFICATIONS';
 export const SET_ALL_PERMISSIONS = 'SET_ALL_PERMISSIONS';
 export const SET_NOTIFICATIONS = 'SET_NOTIFICATIONS';
@@ -12,11 +13,18 @@ export const START_LOADING_HAS_PERMISSION_STATICS = 'START_LOADING_HAS_PERMISSIO
 export const START_LOADING_UNREAD_NOTIFICATIONS = 'START_LOADING_UNREAD_NOTIFICATIONS';
 export const DECREMENT_NOTIFICATION_COUNTER = 'DECREMENT_NOTIFICATION_COUNTER';
 export const INCREMENT_NOTIFICATION_COUNTER = 'INCREMENT_NOTIFICATION_COUNTER';
+export const SET_RLC = 'SET_RLC';
 
 export class SetAllPermissions implements Action {
   readonly type = SET_ALL_PERMISSIONS;
 
   constructor(public payload: Permission[]) {}
+}
+
+export class SetRlc implements Action {
+  readonly type = SET_RLC;
+
+  constructor(public payload: Rlc) {}
 }
 
 export class SetUser implements Action {
@@ -60,6 +68,7 @@ export class StartLoadingUnreadNotifications implements Action {
 export type CoreActions =
   | SetAllPermissions
   | SetUser
+  | SetRlc
   | SetUserPermissions
   | StartLoadingHasPermissionStatics
   | StartCheckingUserHasPermissions

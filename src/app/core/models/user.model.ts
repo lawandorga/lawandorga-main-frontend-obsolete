@@ -6,14 +6,6 @@ export class RestrictedUser implements Filterable {
     this.name = name;
   }
 
-  static getRestrictedUsersFromJsonArray(jsonArray): RestrictedUser[] {
-    const restrictedUsers: RestrictedUser[] = [];
-    Object.values(jsonArray).map((restrictedJsonUser) => {
-      restrictedUsers.push(RestrictedUser.getRestrictedUserFromJson(restrictedJsonUser));
-    });
-    return restrictedUsers;
-  }
-
   static getRestrictedUserFromJson(json): RestrictedUser {
     if (json) return new RestrictedUser(json.id, json.name);
     return new RestrictedUser('-1', 'DELETED');

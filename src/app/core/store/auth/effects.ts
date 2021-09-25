@@ -21,11 +21,11 @@ import {
   LOGIN_API_URL,
   GetStaticsApiUrl,
 } from '../../../statics/api_urls.statics';
-import { SET_ALL_PERMISSIONS, SET_NOTIFICATIONS, SET_USER, SET_USER_PERMISSIONS } from '../core.actions';
+import { SET_ALL_PERMISSIONS, SET_NOTIFICATIONS, SET_RLC, SET_USER, SET_USER_PERMISSIONS } from '../core.actions';
 import { IUser } from '../../models/user.model';
 import { CoreSandboxService } from '../../services/core-sandbox.service';
 import { HasPermission, Permission } from '../../models/permission.model';
-import { IRlc } from '../../models/rlc.model';
+import { IRlc, Rlc } from '../../models/rlc.model';
 import { AppSandboxService } from '../../services/app-sandbox.service';
 import { LOGIN_FRONT_URL } from '../../../statics/frontend_links.statics';
 import { DjangoError } from 'src/app/shared/services/axios';
@@ -70,26 +70,32 @@ export class AuthEffects {
       ofType(TRY_RELOAD_STATIC_INFORMATION),
       mergeMap((payload: { token: string }) =>
         this.http.get(GetStaticsApiUrl(payload.token)).pipe(
-          switchMap((response: any) => {
-            return [
-              {
-                type: SET_USER,
-                payload: response.user,
-              },
-              {
-                type: SET_ALL_PERMISSIONS,
-                payload: Permission.getPermissionsFromJsonArray(response.all_permissions),
-              },
-              {
-                type: SET_USER_PERMISSIONS,
-                payload: response.permissions,
-              },
-              {
-                type: SET_NOTIFICATIONS,
-                payload: response.notifications,
-              },
-            ];
-          }),
+          switchMap(
+            (response: { user: IUser; rlc: Rlc; all_permissions: Permission[]; permissions: string[]; notifications: Notification[] }) => {
+              return [
+                {
+                  type: SET_USER,
+                  payload: response.user,
+                },
+                {
+                  type: SET_RLC,
+                  payload: response.rlc,
+                },
+                {
+                  type: SET_ALL_PERMISSIONS,
+                  payload: Permission.getPermissionsFromJsonArray(response.all_permissions),
+                },
+                {
+                  type: SET_USER_PERMISSIONS,
+                  payload: response.permissions,
+                },
+                {
+                  type: SET_NOTIFICATIONS,
+                  payload: response.notifications,
+                },
+              ];
+            }
+          ),
           catchError(() => {
             return [];
           })

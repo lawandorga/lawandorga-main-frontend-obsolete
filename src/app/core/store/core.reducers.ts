@@ -5,6 +5,7 @@ import {
   INCREMENT_NOTIFICATION_COUNTER,
   SET_ALL_PERMISSIONS,
   SET_NOTIFICATIONS,
+  SET_RLC,
   SET_USER,
   SET_USER_PERMISSIONS,
 } from './core.actions';
@@ -33,7 +34,7 @@ const initialState: CoreState = {
   notifications: 0,
 };
 
-export function coreReducer(state = initialState, action: CoreActions) {
+export function coreReducer(state = initialState, action: CoreActions): CoreState {
   switch (action.type) {
     case SET_ALL_PERMISSIONS:
       return {
@@ -44,6 +45,11 @@ export function coreReducer(state = initialState, action: CoreActions) {
       return {
         ...state,
         user: action.payload,
+      };
+    case SET_RLC:
+      return {
+        ...state,
+        rlc: action.payload,
       };
     case SET_USER_PERMISSIONS:
       return {
