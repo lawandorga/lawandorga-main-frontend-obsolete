@@ -21,7 +21,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CoreSandboxService } from '../../../services/core-sandbox.service';
 import { Rlc } from '../../../models/rlc.model';
 import { dateInPastValidator, matchValidator, passwordValidator } from '../../../../statics/validators.statics';
-import { CustomErrorStateMatcher } from '../../../../statics/errror_state_matcher.statics';
 
 @Component({
   selector: 'app-register',
@@ -32,7 +31,6 @@ export class RegisterComponent implements OnInit {
   // TODO: refactor this
   userForm: FormGroup;
   allRlcs: Rlc[] = [];
-  errorStateMatcher = new CustomErrorStateMatcher();
 
   constructor(private coreSB: CoreSandboxService) {}
 
