@@ -4,6 +4,10 @@ import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 const appRoutes: Routes = [
   {
     path: '',
+    loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
+  },
+  {
+    path: '',
     loadChildren: () => import('./core/core.module').then((m) => m.CoreModule),
   },
   {

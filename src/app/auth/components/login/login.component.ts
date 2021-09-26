@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { AppSandboxService } from '../../../services/app-sandbox.service';
+import { AppSandboxService } from '../../../core/services/app-sandbox.service';
 import { Store } from '@ngrx/store';
-import { TryLogin } from '../../../store/auth/actions';
+import { TryLogin } from 'src/app/auth/store/actions';
 import { Article } from 'src/app/core/models/article';
 import { HttpClient } from '@angular/common/http';
 import { RoadmapItem } from 'src/app/core/models/roadmapItem';

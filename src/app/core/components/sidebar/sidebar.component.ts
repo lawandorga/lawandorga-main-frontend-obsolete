@@ -9,7 +9,7 @@ import {
   PERMISSION_CAN_VIEW_RECORDS,
 } from '../../../statics/permissions.statics';
 import { Subscription } from 'rxjs';
-import { Logout } from '../../store/auth/actions';
+import { Logout } from 'src/app/auth/store/actions';
 import { Rlc } from '../../models/rlc.model';
 import { IUser } from '../../models/user.model';
 

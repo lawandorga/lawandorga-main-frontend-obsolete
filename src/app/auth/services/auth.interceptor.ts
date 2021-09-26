@@ -18,15 +18,15 @@
 
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { AuthState } from '../store/auth/reducers';
+import { AuthState } from 'src/app/auth/store/reducers';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { catchError, switchMap, take } from 'rxjs/operators';
-import { AppSandboxService } from './app-sandbox.service';
-import { Logout, ResetTimer } from '../store/auth/actions';
+import { AppSandboxService } from '../../core/services/app-sandbox.service';
 import { environment } from '../../../environments/environment';
 import { DjangoError } from 'src/app/shared/services/axios';
 import { AppState } from 'src/app/app.state';
+import { ResetTimer, Logout } from 'src/app/auth/store/actions';
 
 const errorCodes = (code) => code === 400 || code === 403 || code === 405;
 

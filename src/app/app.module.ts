@@ -7,9 +7,8 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AuthEffects } from './core/store/auth/effects';
 import { CoreModule } from './core/core.module';
-import { AuthInterceptor } from './core/services/auth.interceptor';
+import { AuthInterceptor } from './auth/services/auth.interceptor';
 import { environment } from '../environments/environment';
 import { AppSandboxService } from './core/services/app-sandbox.service';
 import { SharedSandboxService } from './shared/services/shared-sandbox.service';
@@ -18,7 +17,8 @@ import Quill from 'quill';
 import QuillCursors from 'quill-cursors';
 import { CollabSandboxService } from './collab/services/collab-sandbox.service';
 import { MaterialModule } from './material/material.module';
-import { reducer as authReducer } from './core/store/auth/reducers';
+import { AuthModule } from './auth/auth.module';
+import { SharedModule } from './shared/shared.module';
 
 Quill.register('modules/cursors', QuillCursors);
 
@@ -29,11 +29,11 @@ Quill.register('modules/cursors', QuillCursors);
     BrowserAnimationsModule,
     HttpClientModule,
     MaterialModule,
-    BrowserAnimationsModule,
+    AuthModule,
     CoreModule,
-    AppRoutingModule,
-    StoreModule.forRoot({ auth: authReducer }),
-    EffectsModule.forRoot([AuthEffects]),
+    SharedModule,
+    StoreModule.forRoot({}),
+    EffectsModule.forRoot(),
     StoreDevtoolsModule.instrument({
       maxAge: 24,
       logOnly: environment.production,
@@ -45,6 +45,7 @@ Quill.register('modules/cursors', QuillCursors);
         tableUI: true,
       },
     }),
+    AppRoutingModule,
   ],
   providers: [
     AppSandboxService,

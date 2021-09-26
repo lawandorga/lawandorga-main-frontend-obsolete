@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AppSandboxService } from '../../../services/app-sandbox.service';
+import { AppSandboxService } from '../../../core/services/app-sandbox.service';
 import { ActivatedRoute, Params } from '@angular/router';
 
 @Component({

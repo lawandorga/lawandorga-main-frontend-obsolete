@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from './auth/services/auth.service';
 import { AppSandboxService } from './core/services/app-sandbox.service';
 
 @Component({
@@ -8,10 +9,10 @@ import { AppSandboxService } from './core/services/app-sandbox.service';
 export class AppComponent implements OnInit {
   authenticated: boolean;
 
-  constructor(private appSB: AppSandboxService) {}
+  constructor(private appSB: AppSandboxService, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.appSB.startApp();
-    this.appSB.getAuthenticated().subscribe((authenticated) => (this.authenticated = authenticated));
+    this.authService.getAuthenticated().subscribe((authenticated) => (this.authenticated = authenticated));
   }
 }

@@ -41,9 +41,6 @@ import { AddCollabDocumentPermissionComponent } from './components/add-collab-do
 import { CollabSandboxService } from './services/collab-sandbox.service';
 
 Quill.register('modules/cursors', QuillCursors);
-// const bold = Quill.import('formats/bold');
-// bold.tagName = 'b';
-// Quill.register(bold, true);
 
 const quillConfig: QuillConfig = {
   modules: {

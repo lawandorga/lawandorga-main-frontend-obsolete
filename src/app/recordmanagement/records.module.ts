@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RecordsRoutingModule } from './records-routing.module';
 import { RecordsListComponent } from './components/record-list/records-list.component';
 import { CreateRecordComponent } from './components/create-record/create-record.component';
@@ -11,7 +10,7 @@ import { CoreModule } from '../core/core.module';
 import { TagsComponent } from './components/tags/tags.component';
 
 @NgModule({
-  imports: [RecordsRoutingModule, SharedModule, FormsModule, ReactiveFormsModule, CoreModule],
+  imports: [RecordsRoutingModule, SharedModule, CoreModule],
   declarations: [
     RecordsListComponent,
     CreateRecordComponent,

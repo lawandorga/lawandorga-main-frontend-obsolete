@@ -1,4 +1,4 @@
-import { AuthState } from './core/store/auth/reducers';
+import { AuthState } from './auth/store/reducers';
 import { CoreState } from './core/store/core.reducers';
 
 export interface AppState {

@@ -14,20 +14,21 @@ import {
   SetToken,
   SetUsersPrivateKey,
 } from './actions';
+
+import { DjangoError } from 'src/app/shared/services/axios';
 import {
   FORGOT_PASSWORD_API_URL,
   GetResetPasswordApiUrl,
-  LOGOUT_API_URL,
-  LOGIN_API_URL,
   GetStaticsApiUrl,
-} from '../../../statics/api_urls.statics';
-import { SET_ALL_PERMISSIONS, SET_NOTIFICATIONS, SET_RLC, SET_USER, SET_USER_PERMISSIONS } from '../core.actions';
-import { IUser } from '../../models/user.model';
-import { AppSandboxService } from '../../services/app-sandbox.service';
-import { Permission } from '../../models/permission.model';
-import { Rlc } from '../../models/rlc.model';
-import { LOGIN_FRONT_URL } from '../../../statics/frontend_links.statics';
-import { DjangoError } from 'src/app/shared/services/axios';
+  LOGIN_API_URL,
+  LOGOUT_API_URL,
+} from 'src/app/statics/api_urls.statics';
+import { AppSandboxService } from 'src/app/core/services/app-sandbox.service';
+import { SET_ALL_PERMISSIONS, SET_NOTIFICATIONS, SET_RLC, SET_USER, SET_USER_PERMISSIONS } from 'src/app/core/store/core.actions';
+import { LOGIN_FRONT_URL } from 'src/app/statics/frontend_links.statics';
+import { Permission } from 'src/app/core/models/permission.model';
+import { Rlc } from 'src/app/core/models/rlc.model';
+import { IUser } from 'src/app/core/models/user.model';
 
 @Injectable()
 export class AuthEffects {
@@ -76,7 +77,7 @@ export class AuthEffects {
                 },
                 {
                   type: SET_ALL_PERMISSIONS,
-                  payload: Permission.getPermissionsFromJsonArray(response.all_permissions),
+                  payload: response.all_permissions,
                 },
                 {
                   type: SET_USER_PERMISSIONS,
@@ -117,7 +118,7 @@ export class AuthEffects {
           }),
           mergeMap((response) => {
             this.appSB.showSuccessSnackBar('a reactivation email was sent to the given email address');
-            this.router.navigate([LOGIN_FRONT_URL]);
+            void this.router.navigate([LOGIN_FRONT_URL]);
             return [];
           })
         )
@@ -141,7 +142,7 @@ export class AuthEffects {
             }),
             mergeMap((response) => {
               this.appSB.showSuccessSnackBar('Your password was successfully reset. An admin needs to admit you back into the team, now.');
-              this.router.navigate([LOGIN_FRONT_URL]);
+              void this.router.navigate([LOGIN_FRONT_URL]);
               return [];
             })
           )
