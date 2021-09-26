@@ -3,7 +3,7 @@ import { FullRecord } from '../../models/record.model';
 import { ActivatedRoute, Params } from '@angular/router';
 import { FullClient } from '../../models/client.model';
 import { addToArray, DjangoError, removeFromArray, SubmitData } from 'src/app/shared/services/axios';
-import { CoreSandboxService } from 'src/app/core/services/core-sandbox.service';
+import { AppSandboxService } from 'src/app/core/services/app-sandbox.service';
 import { OriginCountry } from '../../models/country.model';
 import { RestrictedUser } from 'src/app/core/models/user.model';
 import { Message } from '../../models/message.model';
@@ -247,7 +247,7 @@ export class RecordComponent implements OnInit {
   constructor(
     private sharedSB: SharedSandboxService,
     private route: ActivatedRoute,
-    private coreSB: CoreSandboxService,
+    private appSB: AppSandboxService,
     private http: HttpClient
   ) {}
 
@@ -292,7 +292,7 @@ export class RecordComponent implements OnInit {
     void this.http.patch(`api/records/e_clients/${this.client.id}/`, data).subscribe(
       (response: FullClient) => {
         this.client = response;
-        this.coreSB.showSuccessSnackBar('Client saved successfully.');
+        this.appSB.showSuccessSnackBar('Client saved successfully.');
       },
       (error: HttpErrorResponse) => (this.clientErrors = error.error as DjangoError)
     );
@@ -302,7 +302,7 @@ export class RecordComponent implements OnInit {
     void this.http.patch(`api/records/records/${this.record.id}/`, data).subscribe(
       (response: FullRecord) => {
         this.record = response;
-        this.coreSB.showSuccessSnackBar('Record saved successfully.');
+        this.appSB.showSuccessSnackBar('Record saved successfully.');
       },
       (error: HttpErrorResponse) => (this.recordErrors = error.error as DjangoError)
     );
@@ -313,7 +313,7 @@ export class RecordComponent implements OnInit {
       (response: Message) => {
         this.messages = addToArray(this.messages, response) as Message[];
         this.messageData = { message: '' };
-        this.coreSB.showSuccessSnackBar('Message saved successfully.');
+        this.appSB.showSuccessSnackBar('Message saved successfully.');
       },
       (error: HttpErrorResponse) => (this.messageErrors = error.error as DjangoError)
     );

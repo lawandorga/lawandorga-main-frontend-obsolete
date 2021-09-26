@@ -1,6 +1,6 @@
 <mat-toolbar class="bg-lorgablue text-white" style="background-color: rgba(0, 60, 77, 1); color: white;">
     <div class="flex space-x-4">
-        <button mat-icon-button (click)="toggleNav()" *ngIf="authenticated">
+        <button mat-icon-button (click)="drawer.toggle()" *ngIf="authenticated">
             <mat-icon>menu</mat-icon>
         </button>
         <a routerLink='/' class="flex space-x-2 items-center">
@@ -10,13 +10,14 @@
     </div>
 </mat-toolbar>
 
-<mat-sidenav-container class="absolute inset-0 top-14 md:top-16">
-    <mat-sidenav #snav opened mode="side" fixedTopGap="64" *ngIf="authenticated" class="w-64">
+<mat-drawer-container class="absolute inset-0 top-14 md:top-16">
+    <mat-drawer #drawer [opened]="authenticated" mode="side" fixedTopGap="64" [hidden]="!authenticated" class="w-64">
         <mat-nav-list class="p-0" style="padding: 0">
             <app-sidebar></app-sidebar>
         </mat-nav-list>
-    </mat-sidenav>
-    <mat-sidenav-content class="p-5">
+    </mat-drawer>
+    <mat-drawer-content class="p-5">
         <router-outlet></router-outlet>
-    </mat-sidenav-content>
-</mat-sidenav-container>
+    </mat-drawer-content>
+
+</mat-drawer-container>

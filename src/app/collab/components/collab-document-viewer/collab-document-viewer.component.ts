@@ -16,15 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import {
-    Component,
-    Input,
-    OnChanges,
-    OnDestroy,
-    OnInit,
-    SimpleChanges,
-    ViewChild
-} from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { CollabSandboxService } from '../../services/collab-sandbox.service';
 import { TextDocument } from '../../models/text-document.model';
 import Quill from 'quill';
@@ -35,126 +27,124 @@ import { CustomQuillContainerComponent } from '../custom-quill-container/custom-
 import { SharedSandboxService } from '../../../shared/services/shared-sandbox.service';
 import { NameCollabDocument } from '../../models/collab-document.model';
 import { PERMISSION_MANAGE_COLLAB_DOCUMENT_PERMISSIONS_RLC } from '../../../statics/permissions.statics';
-import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
+import { AppSandboxService } from '../../../core/services/app-sandbox.service';
 
 @Component({
-    selector: 'app-collab-document-viewer',
-    templateUrl: './collab-document-viewer.component.html',
-    styleUrls: ['./collab-document-viewer.component.scss']
+  selector: 'app-collab-document-viewer',
+  templateUrl: './collab-document-viewer.component.html',
+  styleUrls: ['./collab-document-viewer.component.scss'],
 })
 export class CollabDocumentViewerComponent implements OnInit, OnChanges, OnDestroy {
-    @Input()
-    document_id: number;
+  @Input()
+  document_id: number;
 
-    current_id: number;
+  current_id: number;
 
-    text_document: TextDocument;
-    collab_document: NameCollabDocument;
+  text_document: TextDocument;
+  collab_document: NameCollabDocument;
 
-    quillRef: Quill;
+  quillRef: Quill;
 
-    loading = true;
+  loading = true;
 
-    versionsOpened = false;
-    infoOpened = false;
+  versionsOpened = false;
+  infoOpened = false;
 
-    numberOfChildren = 0;
+  numberOfChildren = 0;
 
-    showPermissions = false;
+  showPermissions = false;
 
-    @ViewChild(CustomQuillContainerComponent) quillEditor: CustomQuillContainerComponent;
+  @ViewChild(CustomQuillContainerComponent) quillEditor: CustomQuillContainerComponent;
 
-    constructor(
-        private collabSB: CollabSandboxService,
-        private coreSB: CoreSandboxService,
-        private router: Router,
-        public sharedSB: SharedSandboxService
-    ) {
-        this.current_id = undefined;
-        this.text_document = undefined;
+  constructor(
+    private collabSB: CollabSandboxService,
+    private appSB: AppSandboxService,
+    private router: Router,
+    public sharedSB: SharedSandboxService
+  ) {
+    this.current_id = undefined;
+    this.text_document = undefined;
+  }
+
+  ngOnInit(): void {
+    this.fetchIfNewDocumentId();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.fetchIfNewDocumentId();
+  }
+
+  ngOnDestroy(): void {
+    this.text_document = undefined;
+  }
+
+  fetchIfNewDocumentId() {
+    if (this.document_id && this.showPermissions) {
+      this.collabSB.startLoadingCollabDocumentPermission(this.document_id);
     }
-
-    ngOnInit(): void {
-        this.fetchIfNewDocumentId();
+    if (this.document_id && this.current_id !== this.document_id) {
+      this.current_id = this.document_id;
+      this.loading = true;
+      this.collabSB.fetchTextDocument(this.document_id).subscribe((response) => {
+        const received_document = TextDocument.getTextDocumentFromJson(response);
+        received_document.content = received_document.versions[0].is_draft
+          ? received_document.versions[1].content
+          : received_document.versions[0].content;
+        this.text_document = received_document;
+        this.loading = false;
+      });
+      this.collabSB.getSingleDocumentById(this.document_id).subscribe((document: NameCollabDocument) => {
+        this.collab_document = document;
+        if (document) this.numberOfChildren = document.getTotalCountOfChildren();
+      });
     }
+    // this.appSB.hasPermissionFromStringForOwnRlc(
+    //     PERMISSION_MANAGE_COLLAB_DOCUMENT_PERMISSIONS_RLC,
+    //     hasPermission => {
+    //         if (this.showPermissions !== hasPermission) {
+    //             this.showPermissions = hasPermission;
+    //         }
+    //     }
+    // );
+  }
 
-    ngOnChanges(changes: SimpleChanges) {
-        this.fetchIfNewDocumentId();
-    }
+  created(event: Quill) {
+    this.quillRef = event;
+    this.quillRef.enable(false);
+  }
 
-    ngOnDestroy(): void {
-        this.text_document = undefined;
-    }
+  onEditClick(): void {
+    this.router.navigateByUrl(GetCollabEditFrontUrl(this.current_id));
+  }
 
-    fetchIfNewDocumentId() {
-        if (this.document_id && this.showPermissions) {
-            this.collabSB.startLoadingCollabDocumentPermission(this.document_id);
+  onMenuHistoryClick(): void {
+    this.versionsOpened = !this.versionsOpened;
+    this.infoOpened = false;
+  }
+
+  onDeleteClick(): void {
+    this.sharedSB.openConfirmDialog(
+      {
+        description: 'are you sure you want to delete this document?',
+        confirmLabel: 'remove',
+        confirmColor: 'warn',
+      },
+      (remove: boolean) => {
+        if (remove) {
+          this.collabSB.startDeletingCollabDocument(this.current_id);
+          this.router.navigateByUrl(COLLAB_BASE);
         }
-        if (this.document_id && this.current_id !== this.document_id) {
-            this.current_id = this.document_id;
-            this.loading = true;
-            this.collabSB.fetchTextDocument(this.document_id).subscribe(response => {
-                const received_document = TextDocument.getTextDocumentFromJson(response);
-                received_document.content = received_document.versions[0].is_draft
-                    ? received_document.versions[1].content
-                    : received_document.versions[0].content;
-                this.text_document = received_document;
-                this.loading = false;
-            });
-            this.collabSB
-                .getSingleDocumentById(this.document_id)
-                .subscribe((document: NameCollabDocument) => {
-                    this.collab_document = document;
-                    if (document) this.numberOfChildren = document.getTotalCountOfChildren();
-                });
-        }
-        this.coreSB.hasPermissionFromStringForOwnRlc(
-            PERMISSION_MANAGE_COLLAB_DOCUMENT_PERMISSIONS_RLC,
-            hasPermission => {
-                if (this.showPermissions !== hasPermission) {
-                    this.showPermissions = hasPermission;
-                }
-            }
-        );
-    }
+      }
+    );
+  }
 
-    created(event: Quill) {
-        this.quillRef = event;
-        this.quillRef.enable(false);
-    }
+  onInfoClick(): void {
+    this.infoOpened = !this.infoOpened;
+    this.versionsOpened = false;
+  }
 
-    onEditClick(): void {
-        this.router.navigateByUrl(GetCollabEditFrontUrl(this.current_id));
-    }
-
-    onMenuHistoryClick(): void {
-        this.versionsOpened = !this.versionsOpened;
-        this.infoOpened = false;
-    }
-
-    onDeleteClick(): void {
-        this.sharedSB.openConfirmDialog(
-            {
-                description: 'are you sure you want to delete this document?',
-                confirmLabel: 'remove',
-                confirmColor: 'warn'
-            },
-            (remove: boolean) => {
-                if (remove) {
-                    this.collabSB.startDeletingCollabDocument(this.current_id);
-                    this.router.navigateByUrl(COLLAB_BASE);
-                }
-            }
-        );
-    }
-
-    onInfoClick(): void {
-        this.infoOpened = !this.infoOpened;
-        this.versionsOpened = false;
-    }
-
-    onChangedVersion(text_document_version: TextDocumentVersion): void {
-        this.text_document.content = text_document_version.content;
-        this.quillEditor.initQuill();
-    }
+  onChangedVersion(text_document_version: TextDocumentVersion): void {
+    this.text_document.content = text_document_version.content;
+    this.quillEditor.initQuill();
+  }
 }

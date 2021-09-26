@@ -22,7 +22,7 @@ import { AuthState } from '../store/auth/reducers';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { catchError, switchMap, take } from 'rxjs/operators';
-import { CoreSandboxService } from './core-sandbox.service';
+import { AppSandboxService } from './app-sandbox.service';
 import { Logout, ResetTimer } from '../store/auth/actions';
 import { environment } from '../../../environments/environment';
 import { DjangoError } from 'src/app/shared/services/axios';
@@ -32,7 +32,7 @@ const errorCodes = (code) => code === 400 || code === 403 || code === 405;
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private store: Store<AppState>, private coreSB: CoreSandboxService) {}
+  constructor(private store: Store<AppState>, private appSB: AppSandboxService) {}
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -55,22 +55,22 @@ export class AuthInterceptor implements HttpInterceptor {
             if (error.status === 401) {
               // the key is not valid anymore log the user out
               this.store.dispatch(Logout());
-              this.coreSB.showErrorSnackBar('You were logged out, please login again.');
+              this.appSB.showErrorSnackBar('You were logged out, please login again.');
             }
             // if the backend returned a message show that message
             else if (errorCodes(error.status) && !(error.error instanceof Blob)) {
               const djangoError = error.error as DjangoError;
-              this.coreSB.showErrorSnackBar(djangoError.detail);
+              this.appSB.showErrorSnackBar(djangoError.detail);
             } else if (errorCodes(error.status) && error.error instanceof Blob) {
               const reader = new FileReader();
-              const coreSB = this.coreSB;
+              const appSB = this.appSB;
               reader.onloadend = function (event) {
                 const djangoError = JSON.parse(event.target.result as string) as DjangoError;
-                coreSB.showErrorSnackBar(djangoError.detail);
+                appSB.showErrorSnackBar(djangoError.detail);
               };
               reader.readAsText(error.error);
             } else {
-              this.coreSB.showErrorSnackBar('Error');
+              this.appSB.showErrorSnackBar('Error');
             }
             // throw the error so that a form might be able to handle it accordingly
             throw error;

@@ -18,7 +18,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { AppSandboxService } from '../../services/app-sandbox.service';
 import { IUser } from '../../models/user.model';
 import { DjangoError, addToArray, removeFromArray } from '../../../shared/services/axios';
 import { HasPermission } from '../../models/permission.model';
@@ -74,7 +74,7 @@ export class ForeignProfileComponent implements OnInit {
     },
   ];
 
-  constructor(private coreSB: CoreSandboxService, private route: ActivatedRoute, public dialog: MatDialog, private http: HttpClient) {}
+  constructor(private appSB: AppSandboxService, private route: ActivatedRoute, public dialog: MatDialog, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
@@ -89,7 +89,7 @@ export class ForeignProfileComponent implements OnInit {
     void this.http.patch(`api/profiles/${this.id}/`, values).subscribe(
       (response: IUser) => {
         this.user = response;
-        this.coreSB.showSuccessSnackBar('User information saved.');
+        this.appSB.showSuccessSnackBar('User information saved.');
       },
       (error: HttpErrorResponse) => (this.errors = error.error as DjangoError)
     );

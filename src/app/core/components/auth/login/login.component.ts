@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { AppSandboxService } from '../../../services/app-sandbox.service';
-import { CoreSandboxService } from '../../../services/core-sandbox.service';
 import { Store } from '@ngrx/store';
 import { TryLogin } from '../../../store/auth/actions';
 import { Article } from 'src/app/core/models/article';
 import { HttpClient } from '@angular/common/http';
 import { RoadmapItem } from 'src/app/core/models/roadmapItem';
+import { GetCheckUserActivationApiUrl } from 'src/app/statics/api_urls.statics';
 
 @Component({
   selector: 'app-login',
@@ -41,7 +41,6 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private appSB: AppSandboxService,
-    private coreSB: CoreSandboxService,
     private store: Store,
     private http: HttpClient
   ) {}
@@ -56,7 +55,20 @@ export class LoginComponent implements OnInit {
     this.route.params.subscribe((params: Params) => {
       const token: string = params['token'] as string;
       const userId: number = params['userid'] as number;
-      if (token && userId) this.coreSB.startCheckingUserActivationLink(userId, token);
+      if (token && userId) {
+        this.http.get(GetCheckUserActivationApiUrl(userId, token)).subscribe(
+          () => {
+            this.appSB.showSuccessSnackBar('Your email was confirmed.');
+          },
+          (error) => {
+            if (error.status === 400) {
+              this.appSB.showErrorSnackBar(error.error.message);
+            } else {
+              this.appSB.showErrorSnackBar('Your activation link is invalid.');
+            }
+          }
+        );
+      }
     });
 
     this.http.get('api/articles/').subscribe((response: Article[]) => (this.articles = response));

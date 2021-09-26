@@ -39,20 +39,19 @@ import {
   GetCollabTextDocumentVersionsApiUrl,
   GetCollabTextDocumentVersionsModelApiUrl,
 } from '../../statics/api_urls.statics';
-import { SnackbarService } from '../../shared/services/snackbar.service';
 import { HasPermission, Permission } from '../../core/models/permission.model';
 import { CollabPermission } from '../models/collab_permission.model';
+import { AppSandboxService } from 'src/app/core/services/app-sandbox.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CollabSandboxService {
   constructor(
-    private router: Router,
     private collabStore: Store<CollabState>,
     private http: HttpClient,
-    private sharedSB: SharedSandboxService,
-    private snackbackService: SnackbarService
+    private appSB: AppSandboxService,
+    private sharedSB: SharedSandboxService
   ) {}
 
   startLoadingAllDocuments(): void {
@@ -70,7 +69,7 @@ export class CollabSandboxService {
       (result) => {
         if (result) {
           if (result.includes('/')) {
-            this.snackbackService.showErrorSnackBar("document name can't contain /");
+            this.appSB.showErrorSnackBar("document name can't contain /");
             return;
           }
           if (id) {
@@ -120,9 +119,9 @@ export class CollabSandboxService {
     this.http.post(GetCollabTextDocumentVersionsApiUrl(id), { content, is_draft }).subscribe((response) => {
       // check response?
       if (is_draft) {
-        this.snackbackService.showSuccessSnackBar('document draft saved');
+        this.appSB.showSuccessSnackBar('document draft saved');
       } else {
-        this.snackbackService.showSuccessSnackBar('document saved');
+        this.appSB.showSuccessSnackBar('document saved');
       }
     });
   }

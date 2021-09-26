@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { AppSandboxService } from '../../services/app-sandbox.service';
 import { Store } from '@ngrx/store';
 import {
   PERMISSION_ACCESS_TO_FILES_RLC,
@@ -113,19 +113,19 @@ export class SidebarComponent implements OnInit {
     highlightOnSelect: true,
   };
 
-  constructor(private router: Router, private coreSB: CoreSandboxService, private store: Store) {}
+  constructor(private router: Router, private appSB: AppSandboxService, private store: Store) {}
 
   ngOnInit(): void {
     this.sidebarItems = this.allSidebarItems;
-    this.coreSB
+    this.appSB
       .getNotifications()
       .subscribe((number_of_notifications: number) => (this.number_of_notifications = number_of_notifications.toString()));
-    this.coreSB.getUser().subscribe((user: IUser) => (this.user = user));
-    this.coreSB.getRlc().subscribe((rlc: Rlc) => {
+    this.appSB.getUser().subscribe((user: IUser) => (this.user = user));
+    this.appSB.getRlc().subscribe((rlc: Rlc) => {
       this.rlc = rlc;
       this.recheckSidebarItems();
     });
-    this.coreSB.getUserPermissions().subscribe((permissions: string[]) => {
+    this.appSB.getUserPermissions().subscribe((permissions: string[]) => {
       this.permissions = permissions;
       this.recheckSidebarItems();
     });

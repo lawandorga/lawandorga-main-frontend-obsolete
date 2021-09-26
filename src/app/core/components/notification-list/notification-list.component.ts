@@ -3,7 +3,10 @@ import { Notification } from '../../models/notification.model';
 import { NOTIFICATIONS_API_URL } from '../../../statics/api_urls.statics';
 import { HttpClient } from '@angular/common/http';
 import { NotificationGroup } from '../../models/notification_group.model';
-import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { AppSandboxService } from '../../services/app-sandbox.service';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/app.state';
+import { DecrementNotificationCounter } from '../../store/core.actions';
 
 @Component({
   selector: 'app-notification-list',
@@ -16,7 +19,7 @@ export class NotificationListComponent implements OnInit {
   @Input()
   notificationGroup: NotificationGroup;
 
-  constructor(private httpClient: HttpClient, private coreSB: CoreSandboxService) {}
+  constructor(private httpClient: HttpClient, private appSB: AppSandboxService, private store: Store<AppState>) {}
 
   ngOnInit() {
     this.columns = ['read1', 'created1', 'text1'];
@@ -37,7 +40,7 @@ export class NotificationListComponent implements OnInit {
           }
         }
         this.notificationGroup.read = true;
-        this.coreSB.decrementNotificationCounter();
+        this.store.dispatch(new DecrementNotificationCounter());
       }
     });
   }

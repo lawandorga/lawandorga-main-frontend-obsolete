@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CoreSandboxService } from 'src/app/core/services/core-sandbox.service';
+import { AppSandboxService } from 'src/app/core/services/app-sandbox.service';
 import { DjangoError } from '../../../shared/services/axios';
 import { NewRestrictedRecord } from '../../models/record.model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -38,7 +38,7 @@ export class RecordPoolComponent implements OnInit {
   ];
   pool: Pool;
 
-  constructor(private coreSB: CoreSandboxService, private http: HttpClient) {}
+  constructor(private appSB: AppSandboxService, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.http.get('api/records/records/').subscribe((response: NewRestrictedRecord[]) => {
@@ -55,7 +55,7 @@ export class RecordPoolComponent implements OnInit {
   onEnlistClick(): void {
     this.http.post('api/records/pool_consultants/', {}).subscribe((response: { action: string }) => {
       const message = response.action === 'created' ? 'You enlisted successfully into the record pool.' : "You've been given a record";
-      this.coreSB.showSuccessSnackBar(message);
+      this.appSB.showSuccessSnackBar(message);
       this.getPool();
     });
   }
@@ -63,7 +63,7 @@ export class RecordPoolComponent implements OnInit {
   onYieldRecord(data: { record: number }): void {
     this.http.post('api/records/pool_records/', { record: data.record }).subscribe(
       () => {
-        this.coreSB.showSuccessSnackBar('Record was added to the record pool.');
+        this.appSB.showSuccessSnackBar('Record was added to the record pool.');
         this.getPool();
       },
       (error: HttpErrorResponse) => (this.errors = error.error as DjangoError)

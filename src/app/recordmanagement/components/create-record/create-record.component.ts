@@ -21,7 +21,7 @@ import { OriginCountry } from '../../models/country.model';
 import { RestrictedUser } from '../../../core/models/user.model';
 import { Tag } from '../../models/tag.model';
 import { DjangoError } from 'src/app/shared/services/axios';
-import { CoreSandboxService } from 'src/app/core/services/core-sandbox.service';
+import { AppSandboxService } from 'src/app/core/services/app-sandbox.service';
 import { Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { FullRecord } from '../../models/record.model';
@@ -106,7 +106,7 @@ export class CreateRecordComponent implements OnInit {
   ];
   processing = false;
 
-  constructor(private coreSB: CoreSandboxService, private router: Router, private http: HttpClient) {}
+  constructor(private appSB: AppSandboxService, private router: Router, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.http.get('api/records/origin_countries/').subscribe((response: OriginCountry[]) => (this.fields[2].options = response));
@@ -118,7 +118,7 @@ export class CreateRecordComponent implements OnInit {
     this.processing = true;
     this.http.post('api/records/records/', values).subscribe(
       () => {
-        this.coreSB.showSuccessSnackBar('Record was created.');
+        this.appSB.showSuccessSnackBar('Record was created.');
         void this.router.navigate(['/records/']);
       },
       (error: HttpErrorResponse) => {

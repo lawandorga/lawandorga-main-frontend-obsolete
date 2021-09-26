@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RecordPermissionRequest } from '../../models/record_permission.model';
 import { replaceInArray } from '../../../shared/services/axios';
-import { CoreSandboxService } from 'src/app/core/services/core-sandbox.service';
+import { AppSandboxService } from 'src/app/core/services/app-sandbox.service';
 import { RecordDeletionRequest } from '../../models/record_deletion_request.model';
 import { HttpClient } from '@angular/common/http';
 
@@ -10,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './records-permit-requests.component.html',
 })
 export class RecordsPermitRequestsComponent implements OnInit {
-  constructor(private coreSB: CoreSandboxService, private http: HttpClient) {}
+  constructor(private appSB: AppSandboxService, private http: HttpClient) {}
 
   requestsDisplayedColumns = ['requestor', 'record', 'date', 'state', 'processor', 'processDate', 'action'];
   requests: RecordPermissionRequest[];

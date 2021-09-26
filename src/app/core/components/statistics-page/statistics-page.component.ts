@@ -16,8 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { StatisticsSandboxService } from '../../services/statistics-sandbox.service';
+import { STATISTICS_RECORDS_API_URL } from 'src/app/statics/api_urls.statics';
 
 @Component({
   selector: 'app-statistics-page',
@@ -45,10 +46,10 @@ export class StatisticsPageComponent implements OnInit {
     },
   };
 
-  constructor(private statisticsSB: StatisticsSandboxService) {}
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-    this.statisticsSB.getRecordStatistics().subscribe((response) => {
+    this.http.get<any>(STATISTICS_RECORDS_API_URL).subscribe((response) => {
       this.statistics.record_tags.values = response.tags.filter((entry: any) => entry.value > 0);
       this.statistics.record_tags.empty = response.tags.filter((entry: any) => entry.value === 0);
 

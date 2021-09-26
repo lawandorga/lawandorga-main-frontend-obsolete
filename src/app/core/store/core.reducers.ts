@@ -11,11 +11,10 @@ import {
 } from './core.actions';
 import { Permission } from '../models/permission.model';
 import { Rlc } from '../models/rlc.model';
-import { getIdObjects } from '../../shared/other/reducer-helper';
 
 export interface CoreState {
   user: IUser;
-  all_permissions: { [id: number]: Permission };
+  all_permissions: Permission[];
   user_permissions: string[];
   rlc: Rlc;
   notifications: number;
@@ -23,7 +22,7 @@ export interface CoreState {
 
 const initialState: CoreState = {
   user: null,
-  all_permissions: {},
+  all_permissions: [],
   user_permissions: [],
   rlc: null,
   notifications: 0,
@@ -34,7 +33,7 @@ export function coreReducer(state = initialState, action: CoreActions): CoreStat
     case SET_ALL_PERMISSIONS:
       return {
         ...state,
-        all_permissions: getIdObjects(action.payload),
+        all_permissions: action.payload,
       };
     case SET_USER:
       return {

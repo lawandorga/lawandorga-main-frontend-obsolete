@@ -7,9 +7,7 @@ import { EditingRoom } from '../../models/editing-room.model';
 import * as Y from 'yjs';
 import { WebrtcProvider } from 'y-webrtc';
 import { QuillBinding } from 'y-quill';
-import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
 import { RestrictedUser } from '../../../core/models/user.model';
-import { AppSandboxService } from '../../../core/services/app-sandbox.service';
 import { Router } from '@angular/router';
 import { GetCollabViewFrontUrl } from '../../../statics/frontend_links.statics';
 const hash = require('object-hash');
@@ -19,7 +17,7 @@ const hash = require('object-hash');
   templateUrl: './custom-quill-container.component.html',
   styleUrls: ['./custom-quill-container.component.scss'],
 })
-export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestroy {
+export class CustomQuillContainerComponent implements OnChanges, OnDestroy {
   @Input()
   text_document: TextDocument;
 
@@ -64,16 +62,7 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
     cursors: true,
   };
 
-  constructor(
-    private collabSB: CollabSandboxService,
-    private coreSB: CoreSandboxService,
-    private appSB: AppSandboxService,
-    private router: Router
-  ) {}
-
-  ngOnInit(): void {
-    this.appSB.closeNavbar();
-  }
+  constructor(private collabSB: CollabSandboxService, private router: Router) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if ('text_document' in changes) {
@@ -90,7 +79,6 @@ export class CustomQuillContainerComponent implements OnInit, OnChanges, OnDestr
       this.provider.destroy();
     }
     this.closeConnection();
-    this.appSB.openNavbar();
   }
 
   closeConnection(): void {

@@ -22,46 +22,48 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { CollabSandboxService } from '../../services/collab-sandbox.service';
 import { AppSandboxService } from '../../../core/services/app-sandbox.service';
 import { SharedSandboxService } from '../../../shared/services/shared-sandbox.service';
+import { MediaMatcher } from '@angular/cdk/layout';
 
 @Component({
-    selector: 'app-page-view',
-    templateUrl: './page-view.component.html',
-    styleUrls: ['./page-view.component.scss']
+  selector: 'app-page-view',
+  templateUrl: './page-view.component.html',
+  styleUrls: ['./page-view.component.scss'],
 })
 export class PageViewComponent implements OnInit {
-    id: number;
+  id: number;
 
-    constructor(
-        private route: ActivatedRoute,
-        private collabSB: CollabSandboxService,
-        private appSB: AppSandboxService,
-        private sharedSB: SharedSandboxService,
-        private location: Location
-    ) {}
+  constructor(
+    private route: ActivatedRoute,
+    private collabSB: CollabSandboxService,
+    private appSB: AppSandboxService,
+    private sharedSB: SharedSandboxService,
+    private location: Location,
+    private media: MediaMatcher
+  ) {}
 
-    ngOnInit(): void {
-        this.route.params.subscribe((params: Params) => {
-            this.id = params['id'];
-        });
-        if (this.appSB.isOnMobile()) {
-            this.sharedSB.openConfirmDialog(
-                {
-                    cancelLabel: 'back',
-                    confirmColor: 'warn',
-                    confirmLabel: 'I want to suffer',
-                    description: "Opening this on a smartphone doesn't make any sense",
-                    title: 'are you sure you want to do this?'
-                },
-                result => {
-                    if (!result) {
-                        this.location.back();
-                    }
-                }
-            );
+  ngOnInit(): void {
+    this.route.params.subscribe((params: Params) => {
+      this.id = params['id'];
+    });
+    if (this.media.matchMedia('(max-width: 600px)').matches) {
+      this.sharedSB.openConfirmDialog(
+        {
+          cancelLabel: 'back',
+          confirmColor: 'warn',
+          confirmLabel: 'I want to suffer',
+          description: "Opening this on a smartphone doesn't make any sense",
+          title: 'are you sure you want to do this?',
+        },
+        (result) => {
+          if (!result) {
+            this.location.back();
+          }
         }
+      );
     }
+  }
 
-    onAddDocumentClick(): void {
-        this.collabSB.addNewCollabDocument(this.id);
-    }
+  onAddDocumentClick(): void {
+    this.collabSB.addNewCollabDocument(this.id);
+  }
 }

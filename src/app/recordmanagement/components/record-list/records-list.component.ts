@@ -20,7 +20,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NewRestrictedRecord } from '../../models/record.model';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
+import { AppSandboxService } from '../../../core/services/app-sandbox.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { SharedSandboxService } from 'src/app/shared/services/shared-sandbox.service';
 import { HttpClient } from '@angular/common/http';
@@ -38,7 +38,7 @@ export class RecordsListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private coreSB: CoreSandboxService, private sharedSB: SharedSandboxService, private http: HttpClient) {}
+  constructor(private appSB: AppSandboxService, private sharedSB: SharedSandboxService, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.http.get('api/records/records/').subscribe((response: NewRestrictedRecord[]) => {
@@ -111,7 +111,7 @@ export class RecordsListComponent implements OnInit {
   requestAccess(id: number): void {
     this.http
       .post(`api/records/records/${id}/request_permission/`, {})
-      .subscribe(() => this.coreSB.showSuccessSnackBar('Access application has been made. The admins will be informed.'));
+      .subscribe(() => this.appSB.showSuccessSnackBar('Access application has been made. The admins will be informed.'));
   }
 
   onRequestDeletion(id: number): void {
@@ -131,7 +131,7 @@ export class RecordsListComponent implements OnInit {
           };
           this.http
             .post(`api/records/record_deletion_requests/`, data)
-            .subscribe(() => this.coreSB.showSuccessSnackBar('Deletion request has been made. The admins will be informed.'));
+            .subscribe(() => this.appSB.showSuccessSnackBar('Deletion request has been made. The admins will be informed.'));
         }
       }
     );

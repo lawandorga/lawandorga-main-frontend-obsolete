@@ -2,14 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Rlc } from 'src/app/core/models/rlc.model';
 import { DynamicField } from 'src/app/shared/components/dynamic-input/dynamic-input.component';
-import { CoreSandboxService } from '../../../services/core-sandbox.service';
+import { AppSandboxService } from '../../../services/app-sandbox.service';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
 })
 export class RegisterComponent implements OnInit {
-  constructor(private coreSB: CoreSandboxService, private http: HttpClient) {}
+  constructor(private appSB: AppSandboxService, private http: HttpClient) {}
 
   registerFields: DynamicField[] = [
     {

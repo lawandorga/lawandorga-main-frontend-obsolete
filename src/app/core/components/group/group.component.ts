@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { AppSandboxService } from '../../services/app-sandbox.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { FullGroup } from '../../models/group.model';
 import { addToArray, DjangoError, removeFromArray } from '../../../shared/services/axios';
@@ -40,7 +40,7 @@ export class GroupComponent implements OnInit {
     },
   ];
 
-  constructor(private coreSB: CoreSandboxService, private route: ActivatedRoute, public dialog: MatDialog, private http: HttpClient) {}
+  constructor(private appSB: AppSandboxService, private route: ActivatedRoute, public dialog: MatDialog, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => (this.id = String(params['id'])));
@@ -56,7 +56,7 @@ export class GroupComponent implements OnInit {
     this.http.patch(`api/groups/${this.id}/`, values).subscribe(
       (response: FullGroup) => {
         this.group = response;
-        this.coreSB.showSuccessSnackBar('Group information saved.');
+        this.appSB.showSuccessSnackBar('Group information saved.');
       },
       (error: HttpErrorResponse) => (this.errors = error.error as DjangoError)
     );

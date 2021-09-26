@@ -23,22 +23,15 @@ import {
 } from '../../../statics/api_urls.statics';
 import { SET_ALL_PERMISSIONS, SET_NOTIFICATIONS, SET_RLC, SET_USER, SET_USER_PERMISSIONS } from '../core.actions';
 import { IUser } from '../../models/user.model';
-import { CoreSandboxService } from '../../services/core-sandbox.service';
-import { HasPermission, Permission } from '../../models/permission.model';
-import { IRlc, Rlc } from '../../models/rlc.model';
 import { AppSandboxService } from '../../services/app-sandbox.service';
+import { Permission } from '../../models/permission.model';
+import { Rlc } from '../../models/rlc.model';
 import { LOGIN_FRONT_URL } from '../../../statics/frontend_links.statics';
 import { DjangoError } from 'src/app/shared/services/axios';
 
 @Injectable()
 export class AuthEffects {
-  constructor(
-    private actions: Actions,
-    private http: HttpClient,
-    private router: Router,
-    private coreSB: CoreSandboxService,
-    private appSB: AppSandboxService
-  ) {}
+  constructor(private actions: Actions, private http: HttpClient, private router: Router, private appSB: AppSandboxService) {}
 
   login = createEffect(() =>
     this.actions.pipe(
@@ -57,7 +50,7 @@ export class AuthEffects {
           }),
           catchError((error: HttpErrorResponse) => {
             const djangoError = error.error as DjangoError;
-            this.coreSB.showErrorSnackBar(djangoError.non_field_errors[0], 5000);
+            this.appSB.showErrorSnackBar(djangoError.non_field_errors[0], 5000);
             return [];
           })
         )
@@ -119,11 +112,11 @@ export class AuthEffects {
       mergeMap((payload: { email: string }) =>
         this.http.post(FORGOT_PASSWORD_API_URL, { email: payload.email }).pipe(
           catchError((error) => {
-            this.coreSB.showErrorSnackBar(error.error.detail);
+            this.appSB.showErrorSnackBar(error.error.detail);
             return [];
           }),
           mergeMap((response) => {
-            this.coreSB.showSuccessSnackBar('a reactivation email was sent to the given email address');
+            this.appSB.showSuccessSnackBar('a reactivation email was sent to the given email address');
             this.router.navigate([LOGIN_FRONT_URL]);
             return [];
           })
@@ -143,11 +136,11 @@ export class AuthEffects {
           })
           .pipe(
             catchError((error) => {
-              this.coreSB.showErrorSnackBar(error.error.detail);
+              this.appSB.showErrorSnackBar(error.error.detail);
               return [];
             }),
             mergeMap((response) => {
-              this.coreSB.showSuccessSnackBar('Your password was successfully reset. An admin needs to admit you back into the team, now.');
+              this.appSB.showSuccessSnackBar('Your password was successfully reset. An admin needs to admit you back into the team, now.');
               this.router.navigate([LOGIN_FRONT_URL]);
               return [];
             })
@@ -167,7 +160,7 @@ export class AuthEffects {
             return [];
           }),
           catchError((error) => {
-            this.coreSB.showErrorSnackBar(error.error.detail);
+            this.appSB.showErrorSnackBar(error.error.detail);
             return [];
           })
         )

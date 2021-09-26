@@ -4,14 +4,16 @@ import { take } from 'rxjs/operators';
 import { ForgotPassword, ReloadStaticInformation, ResetPassword, SetUsersPrivateKey, SetToken } from '../store/auth/actions';
 import { Router } from '@angular/router';
 import { MediaMatcher } from '@angular/cdk/layout';
+import { Observable } from 'rxjs';
+import { Permission } from '../models/permission.model';
+import { Rlc } from '../models/rlc.model';
 import { AppState } from 'src/app/app.state';
+import { IUser } from '../models/user.model';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 @Injectable()
 export class AppSandboxService {
-  savedLocation = '';
-  navbar;
-
-  constructor(private store: Store<AppState>, private router: Router, private media: MediaMatcher) {}
+  constructor(private store: Store<AppState>, private router: Router, private media: MediaMatcher, private snackBar: MatSnackBar) {}
 
   isAuthenticated(): boolean {
     let isAuthenticated = false;
@@ -57,19 +59,47 @@ export class AppSandboxService {
     localStorage.clear();
   }
 
-  setNavbar(navbar) {
-    this.navbar = navbar;
+  getRlc(): Observable<Rlc> {
+    return this.store.select((state) => state.core.rlc);
   }
 
-  closeNavbar(): void {
-    if (this.navbar) this.navbar.close();
+  getUserPermissions(): Observable<string[]> {
+    return this.store.select((state) => state.core.user_permissions);
   }
 
-  openNavbar(): void {
-    if (this.navbar) this.navbar.open();
+  getAllPermissions(): Observable<Permission[]> {
+    return this.store.select((state) => state.core.all_permissions);
   }
 
-  isOnMobile(): boolean {
-    return this.media.matchMedia('(max-width: 600px)').matches;
+  getAuthenticated(): Observable<boolean> {
+    return this.store.select((state) => state.auth.authenticated);
+  }
+
+  getNotifications(): Observable<number> {
+    return this.store.select((state) => state.core.notifications);
+  }
+
+  getUser(): Observable<IUser> {
+    return this.store.select((state) => state.core.user);
+  }
+
+  getPermissions(): Observable<string[]> {
+    return this.store.select((state) => state.core.user_permissions);
+  }
+
+  showSuccessSnackBar(message: string, duration = 10000): void {
+    const config = new MatSnackBarConfig();
+    config.panelClass = ['snackbar__success'];
+    config.duration = duration;
+    config.verticalPosition = 'top';
+    this.snackBar.open(message, '', config);
+  }
+
+  showErrorSnackBar(message: string, duration = 10000): void {
+    const config = new MatSnackBarConfig();
+    config.panelClass = ['snackbar__error'];
+    config.duration = duration;
+    config.verticalPosition = 'top';
+    this.snackBar.open(message, '', config);
   }
 }

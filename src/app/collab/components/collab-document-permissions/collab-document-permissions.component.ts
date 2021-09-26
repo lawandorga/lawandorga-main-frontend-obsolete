@@ -13,7 +13,7 @@ import {
   PERMISSION_READ_ALL_COLLAB_DOCUMENTS_RLC,
   PERMISSION_WRITE_ALL_COLLAB_DOCUMENTS_RLC,
 } from '../../../statics/permissions.statics';
-import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
+import { AppSandboxService } from '../../../core/services/app-sandbox.service';
 
 @Component({
   selector: 'app-collab-document-permissions',
@@ -40,12 +40,7 @@ export class CollabDocumentPermissionsComponent implements OnInit {
 
   groups: any;
 
-  constructor(
-    private collabSB: CollabSandboxService,
-    private router: Router,
-    private coreSB: CoreSandboxService,
-    public dialog: MatDialog
-  ) {}
+  constructor(private collabSB: CollabSandboxService, private router: Router, private appSB: AppSandboxService, public dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.collabSB.startLoadingCollabPermissions();
@@ -63,7 +58,7 @@ export class CollabDocumentPermissionsComponent implements OnInit {
       }
     });
 
-    this.coreSB.getAllPermissions().subscribe((permissions: Permission[]) => {
+    this.appSB.getAllPermissions().subscribe((permissions: Permission[]) => {
       for (const permission of permissions) {
         if (permission.name === PERMISSION_WRITE_ALL_COLLAB_DOCUMENTS_RLC) {
           this.PERMISSION_WRITE_ALL_ID = permission.id;
@@ -74,9 +69,9 @@ export class CollabDocumentPermissionsComponent implements OnInit {
         }
       }
     });
-    this.coreSB.getGroups(false).subscribe((groups: any) => {
-      this.groups = groups;
-    });
+    // this.appSB.getGroups(false).subscribe((groups: any) => {
+    //   this.groups = groups;
+    // });
   }
 
   onAddPermission(): void {

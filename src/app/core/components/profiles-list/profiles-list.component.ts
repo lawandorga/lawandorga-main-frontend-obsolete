@@ -17,7 +17,7 @@
  */
 import { Component, OnInit } from '@angular/core';
 import { IUser } from '../../models/user.model';
-import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { AppSandboxService } from '../../services/app-sandbox.service';
 import { GetProfilesDetailApiUrl, GetProfilesUnlockApiUrl, PROFILES_API_URL } from '../../../statics/api_urls.statics';
 import { SharedSandboxService } from '../../../shared/services/shared-sandbox.service';
 import { removeFromArray } from '../../../shared/services/axios';
@@ -31,7 +31,7 @@ export class ProfilesListComponent implements OnInit {
   displayedColumns: string[] = ['name', 'email', 'phone_number', 'actions'];
   users: IUser[];
 
-  constructor(private coreSB: CoreSandboxService, private sharedSB: SharedSandboxService, private http: HttpClient) {}
+  constructor(private appSB: AppSandboxService, private sharedSB: SharedSandboxService, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.http.get(PROFILES_API_URL).subscribe((response: IUser[]) => (this.users = response));

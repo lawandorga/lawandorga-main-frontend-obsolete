@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { alphabeticalSorterByField } from '../../../shared/other/sorter-helper';
-import { CoreSandboxService } from '../../../core/services/core-sandbox.service';
+import { AppSandboxService } from '../../../core/services/app-sandbox.service';
 import { RestrictedGroup } from '../../../core/models/group.model';
 import { CollabSandboxService } from '../../services/collab-sandbox.service';
 import { Permission } from '../../../core/models/permission.model';
@@ -21,18 +21,18 @@ export class AddCollabDocumentPermissionComponent implements OnInit {
   selectedPermission: string;
 
   constructor(
-    private coreSB: CoreSandboxService,
+    private appSB: AppSandboxService,
     private collabSB: CollabSandboxService,
     public dialogRef: MatDialogRef<AddCollabDocumentPermissionComponent>,
     @Inject(MAT_DIALOG_DATA) public data: number
   ) {}
 
   ngOnInit(): void {
-    this.groups = this.coreSB.getGroups().pipe(
-      tap((results) => {
-        alphabeticalSorterByField(results, 'name');
-      })
-    );
+    // this.groups = this.appSB.getGroups().pipe(
+    //   tap((results) => {
+    //     alphabeticalSorterByField(results, 'name');
+    //   })
+    // );
     // this.collabSB.getCollab
     this.collabSB.getCollabPermissions().subscribe((permissions: Permission[]) => {
       this.collabPermissions = permissions;
@@ -56,7 +56,7 @@ export class AddCollabDocumentPermissionComponent implements OnInit {
       this.collabSB.startAddingCollabDocumentPermission(this.data, this.selectedGroup.id, collab_permission_id);
       this.dialogRef.close();
     } else {
-      this.coreSB.showErrorSnackBar('please select a permission');
+      this.appSB.showErrorSnackBar('please select a permission');
     }
   }
 }

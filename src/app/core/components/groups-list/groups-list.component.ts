@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { AppSandboxService } from '../../services/app-sandbox.service';
 import { RestrictedGroup } from '../../models/group.model';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,7 +16,7 @@ export class GroupsListComponent implements OnInit {
   groupsDisplayedColumns = ['group', 'description', 'action'];
 
   constructor(
-    private coreSB: CoreSandboxService,
+    private appSB: AppSandboxService,
     private router: Router,
     public dialog: MatDialog,
     private sharedSB: SharedSandboxService,

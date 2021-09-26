@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, EventEmitter, ViewChild } from '@angular/core';
 import { merge, Observable, of } from 'rxjs';
-import { CoreSandboxService } from '../../services/core-sandbox.service';
+import { AppSandboxService } from '../../services/app-sandbox.service';
 import { Router } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -11,6 +11,9 @@ import { NotificationGroup } from '../../models/notification_group.model';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { NotificationGroupType } from '../../models/notification.enum';
 import { Filterable } from '../../../shared/models/filterable.model';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/app.state';
+import { DecrementNotificationCounter } from '../../store/core.actions';
 
 @Component({
   selector: 'app-notification-groups-list',
@@ -41,7 +44,7 @@ export class NotificationGroupsListComponent implements AfterViewInit {
 
   change = new EventEmitter(); // TODO: maybe reload with timer? every x seconds, last updated
 
-  constructor(private coreSB: CoreSandboxService, private router: Router, private httpClient: HttpClient) {}
+  constructor(private appSB: AppSandboxService, private router: Router, private httpClient: HttpClient, private store: Store<AppState>) {}
 
   ngAfterViewInit() {
     merge(this.sort.sortChange, this.paginator.page, this.change)
@@ -91,7 +94,8 @@ export class NotificationGroupsListComponent implements AfterViewInit {
       read: true,
     };
     this.httpClient.patch(`${NOTIFICATION_GROUPS_API_URL}${notificationGroup.id}/`, toPost).subscribe((response) => {
-      this.coreSB.decrementNotificationCounter();
+      this.store.dispatch(new DecrementNotificationCounter());
+
       for (const notification of notificationGroup.notifications) {
         notification.read = true;
       }
