@@ -10,7 +10,8 @@ import { NewUserRequestsComponent } from './components/new-user-requests/new-use
 import { NotificationGroupsListComponent } from './components/notification-groups-list/notification-groups-list.component';
 import { StatisticsPageComponent } from './components/statistics-page/statistics-page.component';
 import { ArticleComponent } from './components/article/article.component';
-import { SettingsComponent } from './components/settings/settings.component';
+import { AdminComponent } from './components/admin/admin.component';
+import { HelpComponent } from './components/help/help.component';
 
 const routes: Routes = [
   {
@@ -19,9 +20,13 @@ const routes: Routes = [
     component: ProfilesListComponent,
   },
   {
-    path: 'settings',
+    path: 'admin',
     pathMatch: 'full',
-    component: SettingsComponent,
+    component: AdminComponent,
+  },
+  {
+    path: 'help',
+    component: HelpComponent,
   },
   {
     path: 'dashboard',

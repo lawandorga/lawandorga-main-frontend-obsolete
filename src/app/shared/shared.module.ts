@@ -10,6 +10,7 @@ import { EditTextComponent } from './components/edit-text/edit-text.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { FormDialogComponent } from './components/form-dialog/form-dialog.component';
+import { SharedSandboxService } from './services/shared-sandbox.service';
 
 @NgModule({
   imports: [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule, NgxChartsModule],
@@ -37,5 +38,6 @@ import { FormDialogComponent } from './components/form-dialog/form-dialog.compon
     EditTextComponent,
     ConfirmationDialogComponent,
   ],
+  providers: [SharedSandboxService],
 })
 export class SharedModule {}

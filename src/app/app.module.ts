@@ -10,8 +10,6 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { AuthInterceptor } from './auth/services/auth.interceptor';
 import { environment } from '../environments/environment';
-import { AppSandboxService } from './core/services/app-sandbox.service';
-import { SharedSandboxService } from './shared/services/shared-sandbox.service';
 import { QuillModule } from 'ngx-quill';
 import Quill from 'quill';
 import QuillCursors from 'quill-cursors';
@@ -47,12 +45,7 @@ Quill.register('modules/cursors', QuillCursors);
     }),
     AppRoutingModule,
   ],
-  providers: [
-    AppSandboxService,
-    CollabSandboxService,
-    SharedSandboxService,
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-  ],
+  providers: [CollabSandboxService, { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

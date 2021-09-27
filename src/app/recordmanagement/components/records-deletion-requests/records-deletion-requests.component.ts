@@ -1,20 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { RecordPermissionRequest } from '../../models/record_permission.model';
 import { replaceInArray } from '../../../shared/services/axios';
+import { RecordDeletionRequest } from '../../models/record_deletion_request.model';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'app-records-permit-requests',
-  templateUrl: './records-permit-requests.component.html',
+  selector: 'app-records-deletion-requests',
+  templateUrl: './records-deletion-requests.component.html',
 })
-export class RecordsPermitRequestsComponent implements OnInit {
+export class RecordsDeletionRequestsComponent implements OnInit {
   constructor(private http: HttpClient) {}
 
   requestsDisplayedColumns = ['requestor', 'record', 'date', 'state', 'processor', 'processDate', 'action'];
-  requests: RecordPermissionRequest[];
+  deletionRequests: RecordDeletionRequest[];
 
   ngOnInit(): void {
-    this.http.get('api/records/record_permission_requests/').subscribe((response: RecordPermissionRequest[]) => (this.requests = response));
+    this.http
+      .get('api/records/record_deletion_requests/')
+      .subscribe((response: RecordDeletionRequest[]) => (this.deletionRequests = response));
   }
 
   getRequestState(state: string): string {
@@ -43,14 +45,16 @@ export class RecordsPermitRequestsComponent implements OnInit {
     }
   }
 
-  onRequestAction(id: number, action: string): void {
+  onDeletionRequestAction(id: number, action: string): void {
     const data = {
-      state: action,
+      action: action,
+      request_id: id,
     };
     this.http
-      .patch(`api/records/record_permission_requests/${id}/`, data)
+      .post('api/records/process_record_deletion_request/', data)
       .subscribe(
-        (response: RecordPermissionRequest) => (this.requests = replaceInArray(this.requests, response) as RecordPermissionRequest[])
+        (response: RecordDeletionRequest) =>
+          (this.deletionRequests = replaceInArray(this.deletionRequests, response) as RecordDeletionRequest[])
       );
   }
 }

@@ -1,7 +1,7 @@
 <div style="display: flex; width: 100%;">
     <mat-card style="width: 100%">
-        <mat-card-title>Record Permit Requests</mat-card-title>
-        <table mat-table [dataSource]="requests" style="width: 100%;">
+        <mat-card-title>Record Deletion Requests</mat-card-title>
+        <table mat-table [dataSource]="deletionRequests" style="width: 100%;">
             <ng-container matColumnDef="requestor">
                 <th mat-header-cell *matHeaderCellDef> Requestor </th>
                 <td mat-cell *matCellDef="let request">
@@ -13,7 +13,8 @@
             </ng-container>
             <ng-container matColumnDef="record">
                 <th mat-header-cell *matHeaderCellDef>Record</th>
-                <td mat-cell *matCellDef="let request">{{ request.record.record_token }}</td>
+                <td mat-cell *matCellDef="let request">{{ request.record ? request.record.record_token : 'DELETED' }}
+                </td>
             </ng-container>
             <ng-container matColumnDef="date">
                 <th mat-header-cell *matHeaderCellDef>Date</th>
@@ -39,10 +40,10 @@
                 <th mat-header-cell *matHeaderCellDef style="text-align: right;"></th>
                 <td mat-cell *matCellDef="let request" style="text-align: right;">
                     <div *ngIf="request.state === 're'">
-                        <button mat-button color="primary" (click)="onRequestAction(request.id, 'gr')">
+                        <button mat-button color="primary" (click)="onDeletionRequestAction(request.id, 'accept')">
                             Accept
                         </button>
-                        <button mat-button color="warn" (click)="onRequestAction(request.id, 'de')">
+                        <button mat-button color="warn" (click)="onDeletionRequestAction(request.id, 'decline')">
                             Decline
                         </button>
                     </div>
@@ -52,4 +53,5 @@
             <tr mat-row *matRowDef="let row; columns: requestsDisplayedColumns;"></tr>
         </table>
     </mat-card>
+
 </div>

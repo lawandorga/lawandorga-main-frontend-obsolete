@@ -44,26 +44,6 @@ export class SidebarComponent implements OnInit {
       link: '/records/',
     },
     {
-      label: 'Create Record',
-      icon: 'create_new_folder',
-      link: '/records/add/',
-    },
-    {
-      label: 'Record Pool',
-      icon: 'library_books',
-      link: '/records/record_pool/',
-    },
-    // {
-    //   label: 'Profiles',
-    //   icon: 'people_outline',
-    //   link: '/profiles/',
-    // },
-    // {
-    //   label: 'Groups',
-    //   icon: 'group',
-    //   link: '/groups/',
-    // },
-    {
       label: 'Files',
       icon: 'folder_open',
       link: '/files/',
@@ -74,35 +54,19 @@ export class SidebarComponent implements OnInit {
       link: 'collab',
     },
     {
-      label: 'Admin',
-      icon: 'lock',
-      items: [
-        {
-          label: 'Records Admin',
-          icon: 'folder',
-          link: '/records/permit_requests/',
-        },
-        {
-          label: 'Statistics',
-          icon: 'analytics',
-          link: '/statistics/',
-        },
-        {
-          label: 'Permissions',
-          icon: 'vpn_key',
-          link: '/permissions/',
-        },
-        {
-          label: 'New Users',
-          icon: 'person_add',
-          link: '/new_user_requests/',
-        },
-      ],
+      label: 'Statistics',
+      icon: 'analytics',
+      link: '/statistics/',
     },
     {
-      label: 'Settings',
+      label: 'Admin',
       icon: 'settings',
-      link: '/settings/',
+      link: '/admin/',
+    },
+    {
+      label: 'Help',
+      icon: 'help',
+      link: '/help/',
     },
   ];
   sidebarItems: SidebarItem[] = [];

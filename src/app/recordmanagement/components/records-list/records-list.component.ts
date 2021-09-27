@@ -1,21 +1,3 @@
-/*
- * law&orga - record and organization management software for refugee law clinics
- * Copyright (C) 2019  Dominik Walser
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>
- */
-
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NewRestrictedRecord } from '../../models/record.model';
 import { MatSort } from '@angular/material/sort';
@@ -24,6 +6,8 @@ import { AppSandboxService } from '../../../core/services/app-sandbox.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { SharedSandboxService } from 'src/app/shared/services/shared-sandbox.service';
 import { HttpClient } from '@angular/common/http';
+import { PERMISSION_CAN_ADD_RECORD_RLC } from 'src/app/statics/permissions.statics';
+import { Rlc } from 'src/app/core/models/rlc.model';
 
 @Component({
   selector: 'app-records',
@@ -34,6 +18,8 @@ export class RecordsListComponent implements OnInit {
   displayedColumns = ['record_token', 'consultants', 'tags', 'note', 'created_on', 'last_edited', 'actions'];
   dataSource: MatTableDataSource<NewRestrictedRecord>;
   records: NewRestrictedRecord[];
+  showCreateRecord = false;
+  showRecordPool = false;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -54,6 +40,14 @@ export class RecordsListComponent implements OnInit {
           this.getTags(data.tags).toLowerCase().includes(filter)
         );
       };
+    });
+
+    this.appSB.getRlc().subscribe((rlc: Rlc) => {
+      this.showRecordPool = rlc.use_record_pool;
+    });
+
+    this.appSB.getUserPermissions().subscribe((permissions: string[]) => {
+      this.showCreateRecord = permissions.includes(PERMISSION_CAN_ADD_RECORD_RLC);
     });
   }
 

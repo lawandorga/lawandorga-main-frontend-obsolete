@@ -26,7 +26,10 @@ import { StatisticsNumberComponent } from './components/statistics-number/statis
 import { AddPermissionComponent } from './components/add-permission/add-permission.component';
 import { AddMemberComponent } from './components/add-member/add-member.component';
 import { ArticleComponent } from './components/article/article.component';
-import { SettingsComponent } from './components/settings/settings.component';
+import { AdminComponent } from './components/admin/admin.component';
+import { AppSandboxService } from './services/app-sandbox.service';
+import { SafeHtmlPipe } from './pipes/safe-html';
+import { HelpComponent } from './components/help/help.component';
 
 @NgModule({
   imports: [
@@ -42,10 +45,12 @@ import { SettingsComponent } from './components/settings/settings.component';
     QuillModule,
   ],
   declarations: [
+    SafeHtmlPipe,
     DashboardComponent,
     ArticleComponent,
     ProfilesListComponent,
     SidebarComponent,
+    HelpComponent,
     ForeignProfileComponent,
     GroupsListComponent,
     GroupComponent,
@@ -57,11 +62,11 @@ import { SettingsComponent } from './components/settings/settings.component';
     NotificationGroupsListComponent,
     NotificationListComponent,
     QuillTestComponent,
-    SettingsComponent,
+    AdminComponent,
     StatisticsPageComponent,
     StatisticsNumberComponent,
   ],
-  providers: [MultilevelMenuService],
+  providers: [MultilevelMenuService, AppSandboxService],
   exports: [SidebarComponent],
 })
 export class CoreModule {}

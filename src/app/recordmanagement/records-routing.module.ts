@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { RecordsListComponent } from './components/record-list/records-list.component';
-import { CreateRecordComponent } from './components/create-record/create-record.component';
-import { RecordComponent } from './components/record/record.component';
+import { RecordsListComponent } from './components/records-list/records-list.component';
+import { CreateRecordComponent } from './components/records-create/create-record.component';
+import { RecordComponent } from './components/records-detail/record.component';
 import { RecordsPermitRequestsComponent } from './components/records-permit-requests/records-permit-requests.component';
-import { RecordPoolComponent } from './components/record-pool/record-pool.component';
-import { TagsComponent } from './components/tags/tags.component';
+import { RecordPoolComponent } from './components/records-pool/record-pool.component';
+import { TagsComponent } from './components/records-tags/tags.component';
+import { RecordsDeletionRequestsComponent } from './components/records-deletion-requests/records-deletion-requests.component';
 
 const recordsRoutes: Routes = [
   {
@@ -18,12 +19,16 @@ const recordsRoutes: Routes = [
     component: CreateRecordComponent,
   },
   {
-    path: 'record_pool',
+    path: 'pool',
     component: RecordPoolComponent,
   },
   {
-    path: 'permit_requests',
+    path: 'permit-requests',
     component: RecordsPermitRequestsComponent,
+  },
+  {
+    path: 'deletion-requests',
+    component: RecordsDeletionRequestsComponent,
   },
   {
     path: 'tags',
