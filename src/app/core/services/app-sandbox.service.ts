@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { select, Store } from '@ngrx/store';
-import { take } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
 import { ForgotPassword, ReloadStaticInformation, ResetPassword, SetUsersPrivateKey, SetToken } from 'src/app/auth/store/actions';
 import { Router } from '@angular/router';
 import { MediaMatcher } from '@angular/cdk/layout';
@@ -17,12 +16,7 @@ export class AppSandboxService {
 
   isAuthenticated(): boolean {
     let isAuthenticated = false;
-    this.store
-      .pipe(
-        take(1),
-        select((state: AppState) => state.auth.authenticated)
-      )
-      .subscribe((authenticated) => (isAuthenticated = authenticated));
+    this.getAuthenticated().subscribe((authenticated) => (isAuthenticated = authenticated));
     return isAuthenticated;
   }
 

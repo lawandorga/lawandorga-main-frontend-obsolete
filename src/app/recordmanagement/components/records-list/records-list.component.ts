@@ -43,7 +43,7 @@ export class RecordsListComponent implements OnInit {
     });
 
     this.appSB.getRlc().subscribe((rlc: Rlc) => {
-      this.showRecordPool = rlc.use_record_pool;
+      if (rlc) this.showRecordPool = rlc.use_record_pool;
     });
 
     this.appSB.getUserPermissions().subscribe((permissions: string[]) => {
