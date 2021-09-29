@@ -26,7 +26,7 @@ import { AppSandboxService } from '../../core/services/app-sandbox.service';
 import { environment } from '../../../environments/environment';
 import { DjangoError } from 'src/app/shared/services/axios';
 import { AppState } from 'src/app/app.state';
-import { ResetTimer, Logout } from 'src/app/auth/store/actions';
+import { Logout } from 'src/app/auth/store/actions';
 
 const errorCodes = (code) => code === 400 || code === 403 || code === 405;
 
@@ -36,8 +36,6 @@ export class AuthInterceptor implements HttpInterceptor {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    this.store.dispatch(ResetTimer());
-
     return this.store.select('auth').pipe(
       take(1),
       switchMap((authState: AuthState) => {

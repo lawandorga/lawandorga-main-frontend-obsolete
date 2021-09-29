@@ -11,15 +11,15 @@ import { ResetPasswordComponent } from '../auth/components/reset-password/reset-
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './store/effects';
-import { reducer } from './store/reducers';
 import { AuthService } from './services/auth.service';
+import { authReducer } from './store/reducers';
 
 @NgModule({
   imports: [
     AuthRoutingModule,
     SharedModule,
     CoreModule,
-    StoreModule.forFeature('auth', reducer),
+    StoreModule.forFeature('auth', authReducer),
     EffectsModule.forFeature([AuthEffects]),
     // nada
   ],

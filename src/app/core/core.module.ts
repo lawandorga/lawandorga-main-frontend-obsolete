@@ -9,7 +9,7 @@ import { QuillTestComponent } from './components/quill-test/quill-test.component
 import { QuillModule } from 'ngx-quill';
 import { CoreRoutingModule } from './core-routing.module';
 import { DashboardComponent } from './components/Dashboard/dashboard.component';
-import { coreReducer } from './store/core.reducers';
+import { coreReducer } from './store/reducers';
 import { SharedModule } from '../shared/shared.module';
 import { ProfilesListComponent } from './components/profiles-list/profiles-list.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
@@ -30,6 +30,8 @@ import { AdminComponent } from './components/admin/admin.component';
 import { AppSandboxService } from './services/app-sandbox.service';
 import { SafeHtmlPipe } from './pipes/safe-html';
 import { HelpComponent } from './components/help/help.component';
+import { EffectsModule } from '@ngrx/effects';
+import { CoreEffects } from './store/effects';
 
 @NgModule({
   imports: [
@@ -38,6 +40,7 @@ import { HelpComponent } from './components/help/help.component';
     FormsModule,
     ReactiveFormsModule,
     StoreModule.forFeature('core', coreReducer),
+    EffectsModule.forFeature([CoreEffects]),
     MatTabsModule,
     MatProgressSpinnerModule,
     NgMaterialMultilevelMenuModule,

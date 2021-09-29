@@ -6,7 +6,7 @@ import { NotificationGroup } from '../../models/notification_group.model';
 import { AppSandboxService } from '../../services/app-sandbox.service';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.state';
-import { DecrementNotificationCounter } from '../../store/core.actions';
+import { DecrementNotificationCounter } from '../../store/actions';
 
 @Component({
   selector: 'app-notification-list',
@@ -40,7 +40,6 @@ export class NotificationListComponent implements OnInit {
           }
         }
         this.notificationGroup.read = true;
-        this.store.dispatch(new DecrementNotificationCounter());
       }
     });
   }

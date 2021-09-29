@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { Rlc } from 'src/app/core/models/rlc.model';
+import { IRlc } from 'src/app/core/models/rlc.model';
 import { DynamicField } from 'src/app/shared/components/dynamic-input/dynamic-input.component';
 import { AppSandboxService } from '../../../core/services/app-sandbox.service';
 
@@ -55,6 +55,6 @@ export class RegisterComponent implements OnInit {
   success = false;
 
   ngOnInit(): void {
-    this.http.get('api/rlcs/').subscribe((response: Rlc[]) => (this.registerFields[0].options = response));
+    this.http.get('api/rlcs/').subscribe((response: IRlc[]) => (this.registerFields[0].options = response));
   }
 }

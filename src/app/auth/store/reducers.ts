@@ -1,5 +1,5 @@
 import { createReducer, on, Action } from '@ngrx/store';
-import { Logout, SetUsersPrivateKey, SetToken, ResetTimer } from './actions';
+import { Logout, SetUsersPrivateKey, SetToken } from './actions';
 
 export interface AuthState {
   token: string;
@@ -15,14 +15,13 @@ const initialState: AuthState = {
   timer: new Date().valueOf(),
 };
 
-const authReducer = createReducer(
+const reducer = createReducer(
   initialState,
   on(SetToken, (state, action) => ({ ...state, token: action.token, authenticated: true })),
   on(SetUsersPrivateKey, (state, action) => ({ ...state, users_private_key: action.privateKey })),
-  on(Logout, () => initialState),
-  on(ResetTimer, (state) => ({ ...state, timer: new Date().valueOf() }))
+  on(Logout, () => initialState)
 );
 
-export function reducer(state: AuthState | undefined, action: Action): AuthState {
-  return authReducer(state, action);
+export function authReducer(state: AuthState | undefined, action: Action): AuthState {
+  return reducer(state, action);
 }

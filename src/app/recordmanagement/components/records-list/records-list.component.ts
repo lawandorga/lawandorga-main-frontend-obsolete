@@ -7,7 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SharedSandboxService } from 'src/app/shared/services/shared-sandbox.service';
 import { HttpClient } from '@angular/common/http';
 import { PERMISSION_CAN_ADD_RECORD_RLC } from 'src/app/statics/permissions.statics';
-import { Rlc } from 'src/app/core/models/rlc.model';
+import { IRlc } from 'src/app/core/models/rlc.model';
 
 @Component({
   selector: 'app-records',
@@ -42,7 +42,7 @@ export class RecordsListComponent implements OnInit {
       };
     });
 
-    this.appSB.getRlc().subscribe((rlc: Rlc) => {
+    this.appSB.getRlc().subscribe((rlc: IRlc) => {
       if (rlc) this.showRecordPool = rlc.use_record_pool;
     });
 

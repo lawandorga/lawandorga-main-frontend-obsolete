@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ForgotPassword, ReloadStaticInformation, ResetPassword, SetUsersPrivateKey, SetToken } from 'src/app/auth/store/actions';
+import { ForgotPassword, ResetPassword, SetUsersPrivateKey, SetToken } from 'src/app/auth/store/actions';
 import { Router } from '@angular/router';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { Permission } from '../models/permission.model';
-import { Rlc } from '../models/rlc.model';
+import { IRlc } from '../models/rlc.model';
 import { AppState } from 'src/app/app.state';
 import { IUser } from '../models/user.model';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { Start } from '../store/actions';
+import { AdminInformation } from '../store/reducers';
 
 @Injectable()
 export class AppSandboxService {
@@ -25,7 +27,7 @@ export class AppSandboxService {
     if (loginInformation.token !== null && loginInformation.token !== '') {
       this.store.dispatch(SetToken({ token: loginInformation.token }));
       this.store.dispatch(SetUsersPrivateKey({ privateKey: loginInformation.users_private_key }));
-      this.store.dispatch(ReloadStaticInformation({ token: loginInformation.token }));
+      this.store.dispatch(Start({ token: loginInformation.token, privateKey: loginInformation.users_private_key }));
     }
   }
 
@@ -53,7 +55,7 @@ export class AppSandboxService {
     localStorage.clear();
   }
 
-  getRlc(): Observable<Rlc> {
+  getRlc(): Observable<IRlc> {
     return this.store.select((state) => state.core.rlc);
   }
 
@@ -63,6 +65,10 @@ export class AppSandboxService {
 
   getAllPermissions(): Observable<Permission[]> {
     return this.store.select((state) => state.core.all_permissions);
+  }
+
+  getAdminInformation(): Observable<AdminInformation> {
+    return this.store.select((state) => state.core.admin);
   }
 
   getAuthenticated(): Observable<boolean> {

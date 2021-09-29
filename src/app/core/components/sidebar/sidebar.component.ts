@@ -10,7 +10,7 @@ import {
 } from '../../../statics/permissions.statics';
 import { Subscription } from 'rxjs';
 import { Logout } from 'src/app/auth/store/actions';
-import { Rlc } from '../../models/rlc.model';
+import { IRlc } from '../../models/rlc.model';
 import { IUser } from '../../models/user.model';
 
 interface SidebarItem {
@@ -71,7 +71,7 @@ export class SidebarComponent implements OnInit {
   ];
   sidebarItems: SidebarItem[] = [];
   permissions: string[];
-  rlc: Rlc;
+  rlc: IRlc;
   config = {
     // interfaceWithRoute: true,
     highlightOnSelect: true,
@@ -85,7 +85,7 @@ export class SidebarComponent implements OnInit {
       .getNotifications()
       .subscribe((number_of_notifications: number) => (this.number_of_notifications = number_of_notifications.toString()));
     this.appSB.getUser().subscribe((user: IUser) => (this.user = user));
-    this.appSB.getRlc().subscribe((rlc: Rlc) => {
+    this.appSB.getRlc().subscribe((rlc: IRlc) => {
       this.rlc = rlc;
       this.recheckSidebarItems();
     });

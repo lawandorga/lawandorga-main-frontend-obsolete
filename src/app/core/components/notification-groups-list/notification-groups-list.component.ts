@@ -13,7 +13,7 @@ import { NotificationGroupType } from '../../models/notification.enum';
 import { Filterable } from '../../../shared/models/filterable.model';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.state';
-import { DecrementNotificationCounter } from '../../store/core.actions';
+import { DecrementNotificationCounter } from '../../store/actions';
 
 @Component({
   selector: 'app-notification-groups-list',
@@ -94,8 +94,6 @@ export class NotificationGroupsListComponent implements AfterViewInit {
       read: true,
     };
     this.httpClient.patch(`${NOTIFICATION_GROUPS_API_URL}${notificationGroup.id}/`, toPost).subscribe((response) => {
-      this.store.dispatch(new DecrementNotificationCounter());
-
       for (const notification of notificationGroup.notifications) {
         notification.read = true;
       }
