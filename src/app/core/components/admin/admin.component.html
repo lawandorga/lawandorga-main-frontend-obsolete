@@ -10,7 +10,7 @@
                     [innerHTML]="setting.icon | safeHtml">
                 </span>
                 <div *ngIf="setting.notifications > 0"
-                    class="flex items-center text-sm font-bold justify-center absolute top-0 text-red-800 left-0 transform translate-x-8 opacity-80 -translate-y-1 w-6 h-6 rounded-full bg-red-200">
+                    class="flex items-center text-sm font-bold justify-center absolute top-0 text-red-800 left-0 transform translate-x-8 -translate-y-1 w-6 h-6 rounded-full bg-red-200">
                     {{ setting.notifications }}
                 </div>
             </div>

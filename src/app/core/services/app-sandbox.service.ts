@@ -11,6 +11,7 @@ import { IUser } from '../models/user.model';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { Start } from '../store/actions';
 import { AdminInformation } from '../store/reducers';
+import { selectAdminNotifications } from '../store/selectors';
 
 @Injectable()
 export class AppSandboxService {
@@ -69,6 +70,10 @@ export class AppSandboxService {
 
   getAdminInformation(): Observable<AdminInformation> {
     return this.store.select((state) => state.core.admin);
+  }
+
+  getAdminNotifications(): Observable<number> {
+    return this.store.select(selectAdminNotifications);
   }
 
   getAuthenticated(): Observable<boolean> {

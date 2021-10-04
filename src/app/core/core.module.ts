@@ -70,6 +70,6 @@ import { CoreEffects } from './store/effects';
     StatisticsNumberComponent,
   ],
   providers: [MultilevelMenuService, AppSandboxService],
-  exports: [SidebarComponent],
+  exports: [SidebarComponent, SafeHtmlPipe],
 })
 export class CoreModule {}
