@@ -3,7 +3,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
 import { StoreModule } from '@ngrx/store';
 import { NgModule } from '@angular/core';
-import { NgMaterialMultilevelMenuModule, MultilevelMenuService } from 'ng-material-multilevel-menu';
 import { CdkTableModule } from '@angular/cdk/table';
 import { QuillTestComponent } from './components/quill-test/quill-test.component';
 import { QuillModule } from 'ngx-quill';
@@ -12,7 +11,6 @@ import { DashboardComponent } from './components/Dashboard/dashboard.component';
 import { coreReducer } from './store/reducers';
 import { SharedModule } from '../shared/shared.module';
 import { ProfilesListComponent } from './components/profiles-list/profiles-list.component';
-import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { ForeignProfileComponent } from './components/foreign-profile/foreign-profile.component';
 import { GroupsListComponent } from './components/groups-list/groups-list.component';
 import { GroupComponent } from './components/group/group.component';
@@ -28,7 +26,6 @@ import { AddMemberComponent } from './components/add-member/add-member.component
 import { ArticleComponent } from './components/article/article.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { AppSandboxService } from './services/app-sandbox.service';
-import { SafeHtmlPipe } from './pipes/safe-html';
 import { HelpComponent } from './components/help/help.component';
 import { EffectsModule } from '@ngrx/effects';
 import { CoreEffects } from './store/effects';
@@ -43,16 +40,13 @@ import { CoreEffects } from './store/effects';
     EffectsModule.forFeature([CoreEffects]),
     MatTabsModule,
     MatProgressSpinnerModule,
-    NgMaterialMultilevelMenuModule,
     CdkTableModule,
     QuillModule,
   ],
   declarations: [
-    SafeHtmlPipe,
     DashboardComponent,
     ArticleComponent,
     ProfilesListComponent,
-    SidebarComponent,
     HelpComponent,
     ForeignProfileComponent,
     GroupsListComponent,
@@ -69,7 +63,6 @@ import { CoreEffects } from './store/effects';
     StatisticsPageComponent,
     StatisticsNumberComponent,
   ],
-  providers: [MultilevelMenuService, AppSandboxService],
-  exports: [SidebarComponent, SafeHtmlPipe],
+  providers: [AppSandboxService],
 })
 export class CoreModule {}

@@ -11,10 +11,12 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { FormDialogComponent } from './components/form-dialog/form-dialog.component';
 import { SharedSandboxService } from './services/shared-sandbox.service';
+import { SafeHtmlPipe } from './pipes/safe-html';
 
 @NgModule({
   imports: [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule, NgxChartsModule],
   declarations: [
+    SafeHtmlPipe,
     ChipAutocompleteComponent,
     AutocompleteComponent,
     DynamicFormComponent,
@@ -24,6 +26,7 @@ import { SharedSandboxService } from './services/shared-sandbox.service';
     FormDialogComponent,
   ],
   exports: [
+    SafeHtmlPipe,
     CommonModule,
     MaterialModule,
     FormsModule,
