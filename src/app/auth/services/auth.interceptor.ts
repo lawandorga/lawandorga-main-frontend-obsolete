@@ -58,7 +58,7 @@ export class AuthInterceptor implements HttpInterceptor {
             // if the backend returned a message show that message
             else if (errorCodes(error.status) && !(error.error instanceof Blob)) {
               const djangoError = error.error as DjangoError;
-              this.appSB.showErrorSnackBar(djangoError.detail);
+              if (djangoError.detail) this.appSB.showErrorSnackBar(djangoError.detail);
             } else if (errorCodes(error.status) && error.error instanceof Blob) {
               const reader = new FileReader();
               const appSB = this.appSB;

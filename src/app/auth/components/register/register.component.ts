@@ -45,12 +45,6 @@ export class RegisterComponent implements OnInit {
       type: 'password',
       required: true,
     },
-    {
-      label: 'Phone',
-      name: 'phone',
-      tag: 'input',
-      type: 'tel',
-    },
   ];
   success = false;
 

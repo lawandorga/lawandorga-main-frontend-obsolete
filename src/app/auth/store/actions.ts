@@ -9,7 +9,7 @@ export const FORGOT_PASSWORD = 'FORGOT_PASSWORD';
 export const RESET_PASSWORD = 'RESET_PASSWORD';
 
 // all actions
-export const TryLogin = createAction(LOGIN, props<{ username: string; password: string }>());
+export const Login = createAction(LOGIN, props<{ token: string; email: string; id: number; private_key: string }>());
 export const SetToken = createAction(SET_TOKEN, props<{ token: string }>());
 export const SetUsersPrivateKey = createAction(SET_USERS_PRIVATE_KEY, props<{ privateKey: string }>());
 export const Logout = createAction(LOGOUT);

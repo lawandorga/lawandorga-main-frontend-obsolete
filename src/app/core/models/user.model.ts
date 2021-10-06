@@ -18,6 +18,7 @@ export class RestrictedUser implements Filterable {
 
 export interface IUser {
   id?: string;
+  rlc_user?: number;
   email: string;
   name: string;
   birthday?: string;

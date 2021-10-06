@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { AppSandboxService } from '../../../core/services/app-sandbox.service';
 import { Store } from '@ngrx/store';
-import { TryLogin } from 'src/app/auth/store/actions';
+import { Login } from 'src/app/auth/store/actions';
 import { Article } from 'src/app/core/models/article';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { RoadmapItem } from 'src/app/core/models/roadmapItem';
 import { GetCheckUserActivationApiUrl } from 'src/app/statics/api_urls.statics';
+import { DjangoError } from 'src/app/shared/services/axios';
 
 @Component({
   selector: 'app-login',
@@ -29,6 +30,7 @@ export class LoginComponent implements OnInit {
       required: true,
     },
   ];
+  errors: DjangoError;
   articles: Article[];
   page: {
     content: string;
@@ -56,18 +58,9 @@ export class LoginComponent implements OnInit {
       const token: string = params['token'] as string;
       const userId: number = params['userid'] as number;
       if (token && userId) {
-        this.http.get(GetCheckUserActivationApiUrl(userId, token)).subscribe(
-          () => {
-            this.appSB.showSuccessSnackBar('Your email was confirmed.');
-          },
-          (error) => {
-            if (error.status === 400) {
-              this.appSB.showErrorSnackBar(error.error.message);
-            } else {
-              this.appSB.showErrorSnackBar('Your activation link is invalid.');
-            }
-          }
-        );
+        this.http.post(`api/profiles/${userId}/activate/${token}/`, {}).subscribe(() => {
+          this.appSB.showSuccessSnackBar('Your email was confirmed.');
+        });
       }
     });
 
@@ -77,6 +70,13 @@ export class LoginComponent implements OnInit {
   }
 
   onSend(data: { email: string; password: string }): void {
-    this.store.dispatch(TryLogin({ username: data.email, password: data.password }));
+    this.http.post('api/profiles/login/', data).subscribe({
+      next: (response: { token: string; email: string; id: number; private_key: string }) => {
+        this.store.dispatch(Login(response));
+      },
+      error: (error: HttpErrorResponse) => {
+        this.errors = error.error as DjangoError;
+      },
+    });
   }
 }

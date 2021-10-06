@@ -5,7 +5,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { LOGIN, FORGOT_PASSWORD, RESET_PASSWORD, LOGOUT, SetToken, SetUsersPrivateKey } from './actions';
 import { DjangoError } from 'src/app/shared/services/axios';
-import { FORGOT_PASSWORD_API_URL, GetResetPasswordApiUrl, LOGIN_API_URL, LOGOUT_API_URL } from 'src/app/statics/api_urls.statics';
+import { FORGOT_PASSWORD_API_URL, GetResetPasswordApiUrl, LOGOUT_API_URL } from 'src/app/statics/api_urls.statics';
 import { AppSandboxService } from 'src/app/core/services/app-sandbox.service';
 import { LOGIN_FRONT_URL } from 'src/app/statics/frontend_links.statics';
 import { Start } from 'src/app/core/store/actions';
@@ -17,25 +17,15 @@ export class AuthEffects {
   login = createEffect(() =>
     this.actions.pipe(
       ofType(LOGIN),
-      mergeMap((payload) =>
-        this.http.post(LOGIN_API_URL, payload).pipe(
-          mergeMap((response: { token: string; users_private_key: string }) => {
-            this.appSB.saveTokenAndUsersPrivateKey(response.token, response.users_private_key);
-            void this.router.navigate(['/dashboard/']);
-
-            return [
-              SetToken({ token: response.token }),
-              SetUsersPrivateKey({ privateKey: response.users_private_key }),
-              Start({ token: response.token, privateKey: response.users_private_key }),
-            ];
-          }),
-          catchError((error: HttpErrorResponse) => {
-            const djangoError = error.error as DjangoError;
-            this.appSB.showErrorSnackBar(djangoError.non_field_errors[0], 5000);
-            return [];
-          })
-        )
-      )
+      mergeMap((payload: { token: string; email: string; id: number; private_key: string }) => {
+        this.appSB.saveTokenAndUsersPrivateKey(payload.token, payload.private_key);
+        void this.router.navigate(['/dashboard/']);
+        return [
+          SetToken({ token: payload.token }),
+          SetUsersPrivateKey({ privateKey: payload.private_key }),
+          Start({ token: payload.token, privateKey: payload.private_key }),
+        ];
+      })
     )
   );
 

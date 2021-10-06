@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
   authenticated = false;
   userMenuOpen = false;
   mobileMenuOpen = false;
-  user: IUser = { name: '', email: '' };
+  user: IUser = null;
   notifications = '0';
 
   show_tab_permissions = {

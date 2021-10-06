@@ -15,10 +15,12 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   @Input() errors: Object; // eslint-disable-line
   @Input() button = 'Save';
   @Input() processing = false;
+  @Input() success = 'Saved';
   @Output() send = new EventEmitter();
   @Output() successful = new EventEmitter();
   form: FormGroup;
   controls: { [key: string]: FormControl } = {};
+  successText: string;
 
   constructor(private fb: FormBuilder, private http: HttpClient) {}
 
@@ -40,6 +42,7 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   }
 
   onSubmit(): void {
+    this.successText = null;
     this.errors = null;
     this.send.emit(this.form.value);
     if (this.url) {
@@ -47,7 +50,11 @@ export class DynamicFormComponent implements OnInit, OnChanges {
       this.http
         .request(this.data ? 'PATCH' : 'POST', this.url, { body: this.form.value as SubmitData })
         .subscribe({
-          next: () => this.successful.emit(),
+          next: () => {
+            this.successText = this.success;
+            setTimeout(() => (this.successText = null), 2000);
+            this.successful.emit();
+          },
           error: (error: HttpErrorResponse) => {
             this.errors = error.error as DjangoError;
           },

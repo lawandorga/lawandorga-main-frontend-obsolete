@@ -11,7 +11,7 @@ import { DashboardComponent } from './components/Dashboard/dashboard.component';
 import { coreReducer } from './store/reducers';
 import { SharedModule } from '../shared/shared.module';
 import { ProfilesListComponent } from './components/profiles-list/profiles-list.component';
-import { ForeignProfileComponent } from './components/foreign-profile/foreign-profile.component';
+import { ForeignProfileComponent } from './components/profiles-detail/profiles-detail.component';
 import { GroupsListComponent } from './components/groups-list/groups-list.component';
 import { GroupComponent } from './components/group/group.component';
 import { PermissionListComponent } from './components/permission-list/permission-list.component';
