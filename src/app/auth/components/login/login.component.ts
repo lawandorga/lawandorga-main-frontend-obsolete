@@ -6,7 +6,6 @@ import { Login } from 'src/app/auth/store/actions';
 import { Article } from 'src/app/core/models/article';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { RoadmapItem } from 'src/app/core/models/roadmapItem';
-import { GetCheckUserActivationApiUrl } from 'src/app/statics/api_urls.statics';
 import { DjangoError } from 'src/app/shared/services/axios';
 
 @Component({
