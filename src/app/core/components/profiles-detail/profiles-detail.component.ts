@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { AppSandboxService } from '../../services/app-sandbox.service';
-import { IUser } from '../../models/user.model';
+import { IUser, RlcUser } from '../../models/user.model';
 import { DjangoError, addToArray, removeFromArray } from '../../../shared/services/axios';
 import { HasPermission } from '../../models/permission.model';
 import { AddPermissionComponent } from '../add-permission/add-permission.component';
@@ -13,7 +13,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
   templateUrl: './profiles-detail.component.html',
 })
 export class ForeignProfileComponent implements OnInit {
-  user: IUser;
+  user: RlcUser;
   id: number;
   permissions: HasPermission[];
   permissionsDisplayedColumns: string[] = ['permission', 'source', 'action'];
@@ -56,12 +56,12 @@ export class ForeignProfileComponent implements OnInit {
     },
   ];
 
-  constructor(private appSB: AppSandboxService, private route: ActivatedRoute, public dialog: MatDialog, private http: HttpClient) {}
+  constructor(private appSB: AppSandboxService, private route: ActivatedRoute, public dialog: MatDialog, private http: HttpClient) { }
 
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
       this.id = params['id'] as number;
-      this.http.get(`api/profiles/${this.id}/`).subscribe((response: IUser) => (this.user = response));
+      this.http.get(`api/profiles/${this.id}/`).subscribe((response: RlcUser) => (this.user = response));
 
       this.http.get(`api/profiles/${this.id}/permissions/`).subscribe((response: HasPermission[]) => (this.permissions = response));
     });
@@ -69,7 +69,7 @@ export class ForeignProfileComponent implements OnInit {
 
   onSend(values: Object): void { // eslint-disable-line
     void this.http.patch(`api/profiles/${this.id}/`, values).subscribe(
-      (response: IUser) => {
+      (response: RlcUser) => {
         this.user = response;
         this.appSB.showSuccessSnackBar('User information saved.');
       },
@@ -100,7 +100,7 @@ export class ForeignProfileComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result: number) => {
       if (result)
         this.http
-          .post('api/has_permission/', { permission: result, user_has_permission: this.id })
+          .post('api/has_permission/', { permission: result, user_has_permission: this.user.user })
           .subscribe((response: HasPermission) => (this.permissions = addToArray(this.permissions, response) as HasPermission[]));
     });
   }

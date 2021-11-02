@@ -33,3 +33,22 @@ export interface IUser {
   is_active?: boolean;
   accepted?: boolean;
 }
+
+export interface RlcUser {
+  id?: string;
+  user: number;
+  rlc_user?: number;
+  email: string;
+  name: string;
+  birthday?: string;
+  phone_number?: string;
+  street?: string;
+  city?: string;
+  postal_code?: string;
+  user_state?: string;
+  user_record_state?: string;
+  locked?: boolean;
+  email_confirmed?: boolean;
+  is_active?: boolean;
+  accepted?: boolean;
+}
