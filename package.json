@@ -45,7 +45,7 @@
     "eslint": "^7.27.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "moment": "^2.27.0",
+    "moment": "^2.29.4",
     "ngx-material-file-input": "^2.1.1",
     "ngx-quill": "^14.0.0",
     "object-hash": "^2.2.0",
